@@ -2,6 +2,8 @@ import type { Metadata, Viewport } from "next";
 import { Nunito } from "next/font/google";
 import { PT_Sans } from "next/font/google";
 import "./globals.css";
+
+// Providers
 import { ThemeProvider } from "@/providers/theme-provider";
 import { MotionProvider } from "@/providers/motion-provider";
 import { ToastProvider } from "@/providers/toast-provider";
