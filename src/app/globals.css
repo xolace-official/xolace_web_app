@@ -38,7 +38,6 @@
   --color-card-foreground: var(--card-foreground);
   --color-card: var(--card);
 
-  
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);
   --radius-lg: var(--radius);
@@ -188,5 +187,54 @@
   body {
     @apply bg-background text-foreground;
     letter-spacing: var(--tracking-normal);
+  }
+
+  .texture {
+    background-image: url(https://matsu-theme.vercel.app/texture.jpg);
+    background-size: 100% 100%;
+    background-repeat: repeat;
+    opacity: 0.12;
+    mix-blend-mode: multiply;
+    z-index: 100;
+    isolation: isolate;
+    position: fixed;
+    inset: 0;
+    width: 100vw;
+    height: 100dvh;
+    pointer-events: none;
+  }
+}
+
+
+/* View Transition API for Theme Switch */
+::view-transition-group(root) {
+  animation-timing-function: cubic-bezier(0.19, 1, 0.22, 1);
+}
+
+::view-transition-new(root) {
+  mask: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 40 40"><defs><filter id="blur"><feGaussianBlur stdDeviation="2"/></filter></defs><circle cx="0" cy="0" r="18" fill="white" filter="url(%23blur)"/></svg>') top left / 0 no-repeat;
+  mask-origin: content-box;
+  animation: scale 1s;
+  animation-fill-mode: both;
+  transform-origin: top left;
+}
+
+::view-transition-old(root),
+.dark::view-transition-old(root) {
+  animation: scale 1s;
+  animation-fill-mode: both;
+  transform-origin: top left;
+  z-index: -1;
+}
+
+.dark::view-transition-new(root) {
+  animation: scale 1s;
+  animation-fill-mode: both;
+  transform-origin: top left;
+}
+
+@keyframes scale {
+  to {
+    mask-size: 350vmax;
   }
 }
