@@ -11,7 +11,8 @@
     "start": "next start",
     "lint": "biome check",
     "lint:safe-fix": "biome lint --write",
-    "format": "biome format --write"
+    "format": "biome format --write",
+    "check-no-assist": "biome check --enforce-assist=false"
   },
   "dependencies": {
     "@dnd-kit/core": "^6.3.1",

@@ -1,30 +1,29 @@
 "use client";
 
-import * as React from "react";
 import {
-  motion,
-  AnimatePresence,
-  LayoutGroup,
-  type Transition,
-  type HTMLMotionProps,
-} from "motion/react";
-import {
-  useFloating,
   autoUpdate,
-  offset as floatingOffset,
-  flip,
-  shift,
-  arrow as floatingArrow,
-  FloatingPortal,
   FloatingArrow,
+  FloatingPortal,
+  flip,
+  arrow as floatingArrow,
+  offset as floatingOffset,
+  shift,
   type UseFloatingReturn,
+  useFloating,
 } from "@floating-ui/react";
-
-import { getStrictContext } from "@/lib/get-strict-context";
+import {
+  AnimatePresence,
+  type HTMLMotionProps,
+  LayoutGroup,
+  motion,
+  type Transition,
+} from "motion/react";
+import * as React from "react";
 import {
   Slot,
   type WithAsChild,
 } from "@/components/animate-ui/primitives/animate/slot";
+import { getStrictContext } from "@/lib/get-strict-context";
 
 type Side = "top" | "bottom" | "left" | "right";
 type Align = "start" | "center" | "end";

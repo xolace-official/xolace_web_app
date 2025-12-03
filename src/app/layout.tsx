@@ -1,13 +1,12 @@
 import type { Metadata, Viewport } from "next";
-import { Nunito } from "next/font/google";
-import { PT_Sans } from "next/font/google";
+import { Nunito, PT_Sans } from "next/font/google";
 import "./globals.css";
 
+import { TooltipProvider } from "@/components/animate-ui/components/animate/tooltip";
+import { MotionProvider } from "@/providers/motion-provider";
 // Providers
 import { ThemeProvider } from "@/providers/theme-provider";
-import { MotionProvider } from "@/providers/motion-provider";
 import { ToastProvider } from "@/providers/toast-provider";
-import { TooltipProvider } from "@/components/animate-ui/components/animate/tooltip";
 
 export const viewport: Viewport = {
   maximumScale: 1,
