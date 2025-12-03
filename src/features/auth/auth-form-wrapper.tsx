@@ -65,8 +65,8 @@ export function AuthHeader({
   description?: string;
 }) {
   return (
-    <div className="flex flex-col items-center text-center">
-      <h1 className="text-4xl font-bold text-gray-800">{title}</h1>
+    <div className="flex flex-col items-start">
+      <h1 className="text-4xl font-bold text-primary-foreground/90">{title}</h1>
       {subtitle && <h2 className="text-2xl font-bold sm:text-5xl">{subtitle}</h2>}
       {description && <p className="text-balance text-gray-600">{description}</p>}
     </div>

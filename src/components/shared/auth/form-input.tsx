@@ -1,6 +1,7 @@
 "use client";
 
 import { IconEye, IconEyeOff } from "@tabler/icons-react";
+import Link from "next/link";
 import * as React from "react";
 
 import {
@@ -15,6 +16,7 @@ import {
   InputGroupButton,
   InputGroupInput,
 } from "@/components/ui/input-group";
+import { cn } from "@/lib/utils";
 
 export interface FormInputProps
   extends Omit<React.ComponentProps<typeof InputGroupInput>, "type"> {
@@ -58,6 +60,10 @@ export interface FormInputProps
    * Whether the field is required
    */
   required?: boolean;
+  /**
+   * The ID of the input field
+   */
+  showForgotPasswordLink?: boolean;
 }
 
 export const FormInput = React.forwardRef<HTMLInputElement, FormInputProps>(
@@ -76,11 +82,12 @@ export const FormInput = React.forwardRef<HTMLInputElement, FormInputProps>(
       id,
       name,
       className,
+      showForgotPasswordLink = false,
       ...props
     },
     ref,
   ) => {
-    const useId = React.useId()
+    const useId = React.useId();
     const [showPassword, setShowPassword] = React.useState(false);
     const hasError = !!error;
     const errorArray = Array.isArray(error) ? error : error ? [error] : [];
@@ -98,12 +105,23 @@ export const FormInput = React.forwardRef<HTMLInputElement, FormInputProps>(
 
     return (
       <Field className={fieldClassName} data-invalid={hasError}>
-        {label && (
-          <FieldLabel htmlFor={inputId}>
-            {label}
-            {required && <span className="text-destructive ml-1">*</span>}
-          </FieldLabel>
-        )}
+        <div className={cn("", showForgotPasswordLink && "flex items-center justify-between")}>
+          {label && (
+            <FieldLabel htmlFor={inputId}>
+              {label}
+              {required && <span className="text-destructive ml-1">*</span>}
+            </FieldLabel>
+          )}
+
+          {showForgotPasswordLink && (
+            <Link
+              href="/forgot-password"
+              className="text-muted-foreground opacity-70 hover:opacity-100 text-xs hover:underline transition-all ease-in-out leading-none"
+            >
+              Forgot password?
+            </Link>
+          )}
+        </div>
 
         <InputGroup className={inputGroupClassName}>
           {/* Left Addon */}
