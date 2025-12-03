@@ -1,7 +1,9 @@
 {
   "name": "xolace_web_app",
   "version": "0.1.0",
-  "trustedDependencies": ["supabase"],
+  "trustedDependencies": [
+    "supabase"
+  ],
   "private": true,
   "scripts": {
     "dev": "next dev",

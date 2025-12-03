@@ -6,7 +6,7 @@ export default function Home() {
   return (
     <div className="flex min-h-screen items-center justify-center bg-background">
       <main className="flex min-h-screen w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-background sm:items-start">
-      <ModeToggle />
+        <ModeToggle />
         <Image
           className="dark:invert"
           src="/next.svg"
@@ -62,9 +62,9 @@ export default function Home() {
             Documentation
           </a>
 
-<Button className="border-primary-border shadow-primary ">
+          <Button className="border-primary-border shadow-primary ">
             Sample Button
-</Button>
+          </Button>
         </div>
       </main>
     </div>

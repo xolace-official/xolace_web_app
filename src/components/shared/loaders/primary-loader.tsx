@@ -1,6 +1,6 @@
-import { Loader } from "lucide-react"
+import { Loader } from "lucide-react";
 
-import { cn } from "@/lib/utils"
+import { cn } from "@/lib/utils";
 
 function PrimarySpinner({ className, ...props }: React.ComponentProps<"svg">) {
   return (
@@ -10,7 +10,7 @@ function PrimarySpinner({ className, ...props }: React.ComponentProps<"svg">) {
       className={cn("size-4 animate-spin", className)}
       {...props}
     />
-  )
+  );
 }
 
-export { PrimarySpinner }
+export { PrimarySpinner };
