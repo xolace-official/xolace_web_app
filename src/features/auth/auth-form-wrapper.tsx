@@ -15,10 +15,10 @@ export function AuthFormWrapper({ children, imageSrc }: Props) {
     <div className="grid lg:grid-cols-5 w-full min-h-screen">
       <div className="relative size-full lg:col-span-2">
         <div className="absolute inset-4 lg:right-2 rounded-2xl overflow-hidden">
-          <div className="h-full flex flex-col gap-6 justify-between p-8">
+          <div className="h-full flex flex-col gap-6 justify-between py-8 md:p-8">
             <motion.div
               animate={{ height: "auto" }}
-              className="max-w-md w-full mx-auto grow flex flex-col justify-center"
+              className="md:max-w-md w-full mx-auto grow flex flex-col justify-center max-lg:px-1"
             >
               <AnimatePresence mode="sync">{children}</AnimatePresence>
             </motion.div>
@@ -57,15 +57,18 @@ export function AuthFormWrapper({ children, imageSrc }: Props) {
 
 export function AuthHeader({
   title,
+  subtitle,
   description,
 }: {
   title: string;
-  description: string;
+  subtitle?: string;
+  description?: string;
 }) {
   return (
     <div className="flex flex-col items-center text-center">
-      <h1 className="text-2xl font-bold text-gray-800">{title}</h1>
-      <p className="text-balance text-gray-600">{description}</p>
+      <h1 className="text-4xl font-bold text-gray-800">{title}</h1>
+      {subtitle && <h2 className="text-2xl font-bold sm:text-5xl">{subtitle}</h2>}
+      {description && <p className="text-balance text-gray-600">{description}</p>}
     </div>
   );
 }
