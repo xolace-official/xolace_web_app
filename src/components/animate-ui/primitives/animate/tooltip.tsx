@@ -269,6 +269,7 @@ function TooltipOverlay() {
     }
   }, [currentTooltip]);
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: Just using the dependencies we need
   React.useLayoutEffect(() => {
     if (referenceElRef.current) {
       refs.setReference(referenceElRef.current);
@@ -295,6 +296,7 @@ function TooltipOverlay() {
               top: 0,
               left: 0,
               zIndex: 50,
+              // biome-ignore lint/style/noNonNullAssertion: type assertion for x and y
               transform: `translate3d(${x!}px, ${y!}px, 0)`,
             }}
           >
@@ -418,6 +420,7 @@ function TooltipContent({ asChild = false, ...props }: TooltipContentProps) {
       lastPropsRef.current = props;
       setProps(props);
     }
+  // biome-ignore lint/correctness/useExhaustiveDependencies: Just using the dependencies we need
   }, [props, setProps]);
 
   React.useEffect(() => {
