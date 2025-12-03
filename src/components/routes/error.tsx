@@ -9,11 +9,11 @@ export function ErrorRoute(props: { message?: string }) {
 		<main className="relative isolate size-full bg-background text-foreground">
 			<div className="mx-auto flex flex-col items-center justify-center max-w-7xl px-6 py-32 text-center sm:py-40 lg:px-8">
 				<Coolshape
-      type="misc"
-      index={9}
-      noise={true}
-      size={100}
-    />
+                    type="misc"
+                    index={9}
+                    noise={true}
+                    size={100}
+                />
 				
 
 				<h1 className="mt-4 text-balance text-3xl font-medium tracking-tight sm:text-4xl">
