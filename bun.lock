@@ -29,6 +29,7 @@
         "@tanstack/react-table": "^8.21.3",
         "class-variance-authority": "^0.7.1",
         "clsx": "^2.1.1",
+        "coolshapes-react": "^1.0.1",
         "hono": "^4.10.7",
         "lucide-react": "^0.555.0",
         "motion": "^12.23.25",
@@ -376,6 +377,8 @@
     "cmd-shim": ["cmd-shim@8.0.0", "", {}, "sha512-Jk/BK6NCapZ58BKUxlSI+ouKRbjH1NLZCgJkYoab+vEHUY3f6OzpNBN9u7HFSv9J6TRDGs4PLOHezoKGaFRSCA=="],
 
     "cookie": ["cookie@1.1.1", "", {}, "sha512-ei8Aos7ja0weRpFzJnEA9UHJ/7XQmqglbRwnf2ATjcB9Wq874VKH9kfjjirM6UhU2/E5fFYadylyhFldcqSidQ=="],
+
+    "coolshapes-react": ["coolshapes-react@1.0.1", "", { "peerDependencies": { "react": ">=16.8", "react-dom": ">=16.8" } }, "sha512-ge6hDrOxKDfZsLGAQa8CgcbtGHMtIc5UMwA94b0/c9uwvDIpVmb/VMXUI8Uu09ZYUa86lvnk3Fui2de6dnFdWw=="],
 
     "csstype": ["csstype@3.2.3", "", {}, "sha512-z1HGKcYy2xA8AGQfwrn0PAy+PB7X/GSj3UVJW9qKyn43xWa+gl5nXmU4qqLMRzWVLFC8KusUX8T/0kCiOYpAIQ=="],
 
