@@ -5,7 +5,6 @@ import { motion } from "motion/react";
 import Form from "next/form";
 import Link from "next/link";
 import { useActionState } from "react";
-import { toast } from "sonner";
 import { signinFormAction } from "@/actions/auth";
 import {
   Tooltip,
@@ -28,7 +27,7 @@ import { AuthHeader } from "@/features/auth/auth-form-wrapper";
 import type { SigninFormState } from "@/validation";
 
 export default function SignInPage() {
-  const [formState, formAction, pending] = useActionState<SigninFormState, FormData>(
+  const [formState, formAction] = useActionState<SigninFormState, FormData>(
     signinFormAction,
     {
       values: {

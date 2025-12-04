@@ -22,12 +22,12 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Field, FieldDescription, FieldGroup, FieldLabel, FieldSet } from "@/components/ui/field";
+import { Field, FieldDescription, FieldGroup,FieldSet } from "@/components/ui/field";
 import { AuthHeader } from "@/features/auth/auth-form-wrapper";
 import type { SignupFormState } from "@/validation";
 
 export default function SignUpPage() {
-  const [formState, formAction, pending] = useActionState<
+  const [formState, formAction] = useActionState<
     SignupFormState,
     FormData
   >(signupFormAction, {

@@ -182,6 +182,7 @@ export const FormInput = React.forwardRef<HTMLInputElement, FormInputProps>(
             ) : (
               <ul className="ml-4 flex list-disc flex-col gap-1">
                 {errorArray.map((err, index) => (
+                  // biome-ignore lint/suspicious/noArrayIndexKey: let's use index for now
                   <li key={index}>{err}</li>
                 ))}
               </ul>
