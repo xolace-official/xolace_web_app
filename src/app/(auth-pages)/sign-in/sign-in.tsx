@@ -6,11 +6,6 @@ import Form from "next/form";
 import Link from "next/link";
 import { useActionState } from "react";
 import { signinFormAction } from "@/actions/auth";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipTrigger,
-} from "@/components/animate-ui/components/animate/tooltip";
 import { FormInput } from "@/components/shared/auth/form-input";
 import { Button } from "@/components/ui/button";
 import {
@@ -24,6 +19,7 @@ import {
 import { FieldGroup } from "@/components/ui/field";
 import { Separators } from "@/components/ui/separators";
 import { AuthHeader } from "@/features/auth/auth-form-wrapper";
+import { ResponsiveInfoTrigger } from "@/components/shared/responsive-info-trigger";
 import type { SigninFormState } from "@/validation";
 
 export default function SignInPage() {
@@ -86,19 +82,14 @@ export default function SignInPage() {
                 enablePasswordToggle
                 showForgotPasswordLink
                 leftAddon={
-                  <Tooltip>
-                    <TooltipTrigger asChild>
-                      <button type="button" className="cursor-help">
-                        <IconInfoCircle className="size-4 text-muted-foreground" />
-                      </button>
-                    </TooltipTrigger>
-                    <TooltipContent>
-                      <p>
-                        Password must be at least 8 characters with one
-                        uppercase and one number
-                      </p>
-                    </TooltipContent>
-                  </Tooltip>
+                 <ResponsiveInfoTrigger
+                                       content={
+                                         <p>
+                                           Password must be at least 8 characters with one
+                                           uppercase and one number
+                                         </p>
+                                       }
+                                     />
                 }
                 error={formState.errors?.password}
               />

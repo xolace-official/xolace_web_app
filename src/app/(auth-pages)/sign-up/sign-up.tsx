@@ -1,18 +1,14 @@
 "use client";
 
-import { IconInfoCircle, IconMail, IconUser } from "@tabler/icons-react";
+import { IconMail, IconUser } from "@tabler/icons-react";
 import { motion } from "motion/react";
 import Form from "next/form";
 import Link from "next/link";
 import { useActionState } from "react";
 import { signupFormAction } from "@/actions/auth";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipTrigger,
-} from "@/components/animate-ui/components/animate/tooltip";
 import { Checkbox } from "@/components/molecule-ui/checkbox";
 import { FormInput } from "@/components/shared/auth/form-input";
+import { ResponsiveInfoTrigger } from "@/components/shared/responsive-info-trigger";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -53,7 +49,7 @@ export default function SignUpPage() {
         title="Holla 👋,"
         subtitle="So glad you're here!"
         titleClassName="max-sm:text-2xl"
-        subtitleClassName="text-xl"
+        subtitleClassName="text-xl sm:text-4xl"
       />
       <Card className="w-full md:max-w-md">
         <CardHeader className="max-sm:px-3">
@@ -79,16 +75,11 @@ export default function SignUpPage() {
                     <IconUser className="size-4 text-muted-foreground" />
                   }
                   rightAddon={
-                    <Tooltip>
-                      <TooltipTrigger asChild>
-                        <button type="button" className="cursor-help">
-                          <IconInfoCircle className="size-4 text-muted-foreground" />
-                        </button>
-                      </TooltipTrigger>
-                      <TooltipContent>
-                        <p>Definitely not the name you mommy gave you 🙂‍↕️</p>
-                      </TooltipContent>
-                    </Tooltip>
+                    <ResponsiveInfoTrigger
+                      content={
+                        <p>Definitely not the name your mommy gave you 🙂‍↕️</p>
+                      }
+                    />
                   }
                   error={formState.errors?.username}
                 />
@@ -120,19 +111,14 @@ export default function SignUpPage() {
                   enablePasswordToggle
                   showForgotPasswordLink
                   leftAddon={
-                    <Tooltip>
-                      <TooltipTrigger asChild>
-                        <button type="button" className="cursor-help">
-                          <IconInfoCircle className="size-4 text-muted-foreground" />
-                        </button>
-                      </TooltipTrigger>
-                      <TooltipContent>
+                    <ResponsiveInfoTrigger
+                      content={
                         <p>
                           Password must be at least 8 characters with one
                           uppercase and one number
                         </p>
-                      </TooltipContent>
-                    </Tooltip>
+                      }
+                    />
                   }
                   error={formState.errors?.password}
                 />

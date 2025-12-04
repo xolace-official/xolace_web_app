@@ -32,7 +32,7 @@ export function AuthFormWrapper({ children, imageSrc }: Props) {
           </div>
         </div>
 
-        <div className="absolute top-6 md:top-10 left-5 md:left-10 z-10 flex gap-4 items-center">
+        <div className="absolute top-3 md:top-10 left-5 md:left-10 z-10 flex gap-4 items-center">
           <HeartPulse size={32} className="text-primary" />
         </div>
       </div>
