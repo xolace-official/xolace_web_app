@@ -2,6 +2,7 @@ import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { ModeToggle } from "@/components/theme-switcher";
 import Link from "next/link";
+import { AnimatedDrawer } from "@/components/spectrumui/animateddrawer";
 
 export default function Home() {
   return (
@@ -11,6 +12,7 @@ export default function Home() {
         <Link href="/sign-in">
           <Button>Sign In</Button>
         </Link>
+        <AnimatedDrawer />
         <Image
           className="dark:invert"
           src="/next.svg"

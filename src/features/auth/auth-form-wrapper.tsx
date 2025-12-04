@@ -3,7 +3,10 @@
 import { HeartPulse } from "lucide-react";
 import { AnimatePresence, motion } from "motion/react";
 import Image from "next/image";
+import Link from "next/link";
 import type { ReactNode } from "react";
+
+import { cn } from "@/lib/utils";
 
 type Props = {
   children: ReactNode;
@@ -24,12 +27,12 @@ export function AuthFormWrapper({ children, imageSrc }: Props) {
             </motion.div>
 
             <div className="text-balance text-center text-xs text-gray-600 [&_button]:underline [&_button]:underline-offset-4 hover:[&_button]:text-gray-900">
-              Provided under the MIT (Personal Use Only) License.
+              If you are in a crisis or any other person may be in danger - don't use this app. <Link className="underline underline-offset-3 text-primary font-semibold" href="https://www.nami.org/" target="_blank" rel="noopener noreferrer">These resources</Link> can provide you with immediate help.
             </div>
           </div>
         </div>
 
-        <div className="absolute top-10 left-10 z-10 flex gap-4 items-center">
+        <div className="absolute top-6 md:top-10 left-5 md:left-10 z-10 flex gap-4 items-center">
           <HeartPulse size={32} className="text-primary" />
         </div>
       </div>
@@ -59,15 +62,19 @@ export function AuthHeader({
   title,
   subtitle,
   description,
+  titleClassName,
+  subtitleClassName,
 }: {
   title: string;
   subtitle?: string;
   description?: string;
+  titleClassName?: string;
+  subtitleClassName?: string;
 }) {
   return (
     <div className="flex flex-col items-start">
-      <h1 className="text-4xl font-bold text-primary-foreground/90">{title}</h1>
-      {subtitle && <h2 className="text-2xl font-bold sm:text-5xl">{subtitle}</h2>}
+      <h1 className={cn("text-4xl font-bold text-foreground/90", titleClassName)}>{title}</h1>
+      {subtitle && <h2 className={cn("text-2xl font-bold sm:text-5xl", subtitleClassName)}>{subtitle}</h2>}
       {description && <p className="text-balance text-gray-600">{description}</p>}
     </div>
   );

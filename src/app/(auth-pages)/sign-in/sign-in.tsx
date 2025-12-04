@@ -10,7 +10,6 @@ import { signinFormAction } from "@/actions/auth";
 import {
   Tooltip,
   TooltipContent,
-  TooltipProvider,
   TooltipTrigger,
 } from "@/components/animate-ui/components/animate/tooltip";
 import { FormInput } from "@/components/shared/auth/form-input";
@@ -26,10 +25,10 @@ import {
 import { FieldGroup } from "@/components/ui/field";
 import { Separators } from "@/components/ui/separators";
 import { AuthHeader } from "@/features/auth/auth-form-wrapper";
-import type { FormState } from "@/validation";
+import type { SigninFormState } from "@/validation";
 
 export default function SignInPage() {
-  const [formState, formAction, pending] = useActionState<FormState, FormData>(
+  const [formState, formAction, pending] = useActionState<SigninFormState, FormData>(
     signinFormAction,
     {
       values: {
