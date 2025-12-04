@@ -4,7 +4,7 @@ import { PrimarySpinner } from "../shared/loaders/primary-loader";
 export function PrimaryFullPageLoading() {
   return (
     <div className="size-full min-h-screen py-12 flex flex-col items-center justify-center">
-      <PrimarySpinner className="size-10" />
+      <PrimarySpinner className="size-8" />
     </div>
   );
 }

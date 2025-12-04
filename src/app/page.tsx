@@ -1,12 +1,18 @@
 import Image from "next/image";
-import { Button } from "@/components/ui/button";
+import Link from "next/link";
+import { AnimatedDrawer } from "@/components/spectrumui/animateddrawer";
 import { ModeToggle } from "@/components/theme-switcher";
+import { Button } from "@/components/ui/button";
 
 export default function Home() {
   return (
     <div className="flex min-h-screen items-center justify-center bg-background">
       <main className="flex min-h-screen w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-background sm:items-start">
         <ModeToggle />
+        <Link href="/sign-in">
+          <Button>Sign In</Button>
+        </Link>
+        <AnimatedDrawer />
         <Image
           className="dark:invert"
           src="/next.svg"

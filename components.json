@@ -19,6 +19,8 @@
     "hooks": "@/hooks"
   },
   "registries": {
-    "@animate-ui": "https://animate-ui.com/r/{name}.json"
+    "@animate-ui": "https://animate-ui.com/r/{name}.json",
+    "@spectrumui": "https://ui.spectrumhq.in/r/{name}.json",
+    "@moleculeui": "https://moleculeui.design/r/{name}.json"
   }
 }
