@@ -1,6 +1,13 @@
 "use server";
 
-import { type SigninFormState, type SignupFormState, signinSchema, signupSchema } from "@/validation";
+import {
+  type ForgotPasswordFormState,
+  forgotPasswordSchema,
+  type SigninFormState,
+  type SignupFormState,
+  signinSchema,
+  signupSchema,
+} from "@/validation";
 
 export async function signinFormAction(
   _prevState: SigninFormState,
@@ -62,6 +69,36 @@ export async function signupFormAction(
       username: "",
       email: "",
       password: "",
+    },
+    errors: null,
+    success: true,
+  };
+}
+
+export async function forgotPasswordFormAction(
+  _prevState: ForgotPasswordFormState,
+  formData: FormData,
+) {
+  const values = {
+    email: formData.get("email") as string,
+  };
+
+  const result = forgotPasswordSchema.safeParse(values);
+
+  if (!result.success) {
+    return {
+      values,
+      success: false,
+      errors: result.error.flatten().fieldErrors,
+    };
+  }
+
+  // Do something with the values.
+  // Call your database or API here.
+
+  return {
+    values: {
+      email: "",
     },
     errors: null,
     success: true,

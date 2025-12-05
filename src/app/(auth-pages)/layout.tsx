@@ -1,5 +1,5 @@
-import { Suspense } from "react";
 import type { ReactNode } from "react";
+import { Suspense } from "react";
 
 import { AuthFormWrapper } from "@/features/auth/auth-form-wrapper";
 import { QueryProvider } from "@/providers/query-provider";

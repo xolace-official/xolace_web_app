@@ -1,7 +1,7 @@
 "use client";
 
-import { CircleArrowOutUpRight } from "lucide-react";
 import { Coolshape } from "coolshapes-react";
+import { CircleArrowOutUpRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 export function ErrorRoute(props: { message?: string }) {

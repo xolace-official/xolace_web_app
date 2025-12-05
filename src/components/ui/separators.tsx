@@ -1,5 +1,4 @@
-
-import { cn } from "@/lib/utils"
+import { cn } from "@/lib/utils";
 
 /**
  * 
@@ -37,13 +36,13 @@ type SeparatorProps = {
   /**
    * @default ""
    */
-  label?: React.ReactNode
+  label?: React.ReactNode;
   /**
    * @default false
    */
-  gradient?: boolean
-  className?: string
-}
+  gradient?: boolean;
+  className?: string;
+};
 //======================================
 export const Separators = ({
   label,
@@ -59,7 +58,7 @@ export const Separators = ({
             gradient
               ? "bg-linear-to-r from-transparent to-zinc-500 dark:from-zinc-800 dark:to-zinc-400"
               : "bg-zinc-300 dark:bg-zinc-800",
-            className
+            className,
           )}
         ></div>
         <div className="w-fit text-nowrap uppercase text-gray-600 dark:text-gray-300">
@@ -71,11 +70,11 @@ export const Separators = ({
             gradient
               ? "bg-linear-to-r from-zinc-500 to-transparent dark:from-zinc-200 dark:to-zinc-700"
               : "bg-zinc-300 dark:bg-zinc-800",
-            className
+            className,
           )}
         ></div>
       </div>
-    )
+    );
   }
   return (
     <div
@@ -84,8 +83,8 @@ export const Separators = ({
         gradient
           ? "bg-linear-to-r from-transparent via-zinc-500 to-transparent dark:from-zinc-800 dark:via-zinc-200 dark:to-zinc-700"
           : "bg-zinc-300 dark:bg-zinc-800",
-        className
+        className,
       )}
     />
-  )
-}
+  );
+};

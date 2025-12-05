@@ -1,10 +1,10 @@
-"use client"
+"use client";
 
-import React from "react"
-import * as CheckboxPrimitive from "@radix-ui/react-checkbox"
-import { motion } from "motion/react"
+import * as CheckboxPrimitive from "@radix-ui/react-checkbox";
+import { motion } from "motion/react";
+import React from "react";
 
-import { cn } from "@/lib/utils"
+import { cn } from "@/lib/utils";
 
 export function Checkbox({
   className,
@@ -15,9 +15,9 @@ export function Checkbox({
   ...props
 }: React.ComponentProps<typeof CheckboxPrimitive.Root>) {
   const [_checked, _setChecked] =
-    React.useState<CheckboxPrimitive.CheckedState>(defaultChecked ?? false)
+    React.useState<CheckboxPrimitive.CheckedState>(defaultChecked ?? false);
 
-  const checked = checkedProp ?? _checked
+  const checked = checkedProp ?? _checked;
 
   const setChecked = React.useCallback(
     (
@@ -25,15 +25,15 @@ export function Checkbox({
         | CheckboxPrimitive.CheckedState
         | ((value: CheckboxPrimitive.CheckedState) => boolean),
     ) => {
-      const checkedState = typeof value === "function" ? value(checked) : value
+      const checkedState = typeof value === "function" ? value(checked) : value;
       if (setCheckedProp) {
-        setCheckedProp(checkedState)
+        setCheckedProp(checkedState);
       } else {
-        _setChecked(checkedState)
+        _setChecked(checkedState);
       }
     },
     [setCheckedProp, checked],
-  )
+  );
 
   return (
     <motion.div
@@ -56,6 +56,8 @@ export function Checkbox({
         {...props}
       >
         <motion.svg
+          role="img"
+          aria-label="Checkbox"
           className="h-full w-full"
           viewBox="0 0 12 12"
           fill="none"
@@ -104,5 +106,5 @@ export function Checkbox({
         </motion.svg>
       </CheckboxPrimitive.Root>
     </motion.div>
-  )
+  );
 }
