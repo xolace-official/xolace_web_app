@@ -6,6 +6,12 @@ export type SigninFormState = {
   success: boolean
 }
 
+export type ForgotPasswordFormState = {
+  values?: z.infer<typeof forgotPasswordSchema>
+  errors: null | Partial<Record<keyof z.infer<typeof forgotPasswordSchema>, string[]>>
+  success: boolean
+}
+
 export type SignupFormState = {
   values?: z.infer<typeof signupSchema>
   errors: null | Partial<Record<keyof z.infer<typeof signupSchema>, string[]>>
@@ -56,3 +62,8 @@ export const signupSchema = z.object({
       },
     ),
 });
+
+export const forgotPasswordSchema = z.object({
+  email: z.email(),
+});
+

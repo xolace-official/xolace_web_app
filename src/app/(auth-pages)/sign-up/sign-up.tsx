@@ -109,7 +109,6 @@ export default function SignUpPage() {
                   placeholder="Enter your password"
                   required
                   enablePasswordToggle
-                  showForgotPasswordLink
                   leftAddon={
                     <ResponsiveInfoTrigger
                       content={
