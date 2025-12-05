@@ -13,6 +13,7 @@
     "lint:safe-fix": "biome lint --write ./src",
     "format": "biome format --write ./src",
     "check-no-assist": "biome check --enforce-assist=true",
+    "add-component": "bunx --bun shadcn@latest add",
     "prepare": "husky"
   },
   "dependencies": {
@@ -38,6 +39,7 @@
     "@radix-ui/react-visually-hidden": "^1.2.4",
     "@supabase/ssr": "^0.8.0",
     "@supabase/supabase-js": "^2.86.0",
+    "@t3-oss/env-nextjs": "^0.13.8",
     "@tabler/icons-react": "^3.35.0",
     "@tanstack/react-query": "^5.90.11",
     "@tanstack/react-query-devtools": "^5.91.1",
@@ -78,8 +80,8 @@
     "*.{js,ts,cjs,mjs,d.cts,d.mts,jsx,tsx,json,jsonc}": [
       "biome format --write --no-errors-on-unmatched",
       "biome lint --write --no-errors-on-unmatched",
-      "biome check --files-ignore-unknown=true",
-      "biome check --write --no-errors-on-unmatched"
+      "biome check --write --no-errors-on-unmatched",
+      "biome check --files-ignore-unknown=true"
     ]
   }
 }

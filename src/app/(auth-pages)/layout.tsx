@@ -1,6 +1,6 @@
 import type { ReactNode } from "react";
 import { Suspense } from "react";
-
+import { env } from "@/env/client";
 import { AuthFormWrapper } from "@/features/auth/auth-form-wrapper";
 import { QueryProvider } from "@/providers/query-provider";
 
@@ -9,7 +9,7 @@ export default function AuthLayout({
 }: Readonly<{
   children: ReactNode;
 }>) {
-  const AUTH_IMAGE_SRC = process.env.NEXT_PUBLIC_AUTH_IMAGE_URL;
+  const AUTH_IMAGE_SRC = env.NEXT_PUBLIC_AUTH_IMAGE_URL;
 
   if (!AUTH_IMAGE_SRC) {
     throw new Error("NEXT_PUBLIC_AUTH_IMAGE_URL is not set");
