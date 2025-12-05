@@ -27,7 +27,17 @@ export function AuthFormWrapper({ children, imageSrc }: Props) {
             </motion.div>
 
             <div className="text-balance text-center text-xs text-gray-600 [&_button]:underline [&_button]:underline-offset-4 hover:[&_button]:text-gray-900">
-              If you are in a crisis or any other person may be in danger - don't use this app. <Link className="underline underline-offset-3 text-primary font-semibold" href="https://www.nami.org/" target="_blank" rel="noopener noreferrer">These resources</Link> can provide you with immediate help.
+              If you are in a crisis or any other person may be in danger -
+              don't use this app.{" "}
+              <Link
+                className="underline underline-offset-3 text-primary font-semibold"
+                href="https://www.nami.org/"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                These resources
+              </Link>{" "}
+              can provide you with immediate help.
             </div>
           </div>
         </div>
@@ -73,9 +83,19 @@ export function AuthHeader({
 }) {
   return (
     <div className="flex flex-col items-start">
-      <h1 className={cn("text-4xl font-bold text-foreground/90", titleClassName)}>{title}</h1>
-      {subtitle && <h2 className={cn("text-2xl font-bold sm:text-5xl", subtitleClassName)}>{subtitle}</h2>}
-      {description && <p className="text-balance text-gray-600">{description}</p>}
+      <h1
+        className={cn("text-4xl font-bold text-foreground/90", titleClassName)}
+      >
+        {title}
+      </h1>
+      {subtitle && (
+        <h2 className={cn("text-2xl font-bold sm:text-5xl", subtitleClassName)}>
+          {subtitle}
+        </h2>
+      )}
+      {description && (
+        <p className="text-balance text-gray-600">{description}</p>
+      )}
     </div>
   );
 }

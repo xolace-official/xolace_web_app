@@ -1,5 +1,5 @@
-import { SignInFormExample } from "@/components/shared/auth/examples/signin-form-example"
-import { SignUpFormExample } from "@/components/shared/auth/examples/signup-form-example"
+import { SignInFormExample } from "@/components/shared/auth/examples/signin-form-example";
+import { SignUpFormExample } from "@/components/shared/auth/examples/signup-form-example";
 
 export default function FormInputDemoPage() {
   return (
@@ -23,5 +23,5 @@ export default function FormInputDemoPage() {
         </div>
       </div>
     </div>
-  )
+  );
 }

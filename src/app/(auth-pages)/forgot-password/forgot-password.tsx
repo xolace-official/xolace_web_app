@@ -17,21 +17,19 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { FieldGroup } from "@/components/ui/field";
-import type { ForgotPasswordFormState} from "@/validation/auth";
+import type { ForgotPasswordFormState } from "@/validation/auth";
 
 const ForgotPasswordPage = () => {
-  const [formState, formAction] = useActionState<ForgotPasswordFormState, FormData>(
-    forgotPasswordFormAction,
-    {
-      values: {
-        email: "",
-      },
-      errors: null,
-      success: false,
+  const [formState, formAction] = useActionState<
+    ForgotPasswordFormState,
+    FormData
+  >(forgotPasswordFormAction, {
+    values: {
+      email: "",
     },
-  );
-
-
+    errors: null,
+    success: false,
+  });
 
   return (
     <motion.div
@@ -67,29 +65,27 @@ const ForgotPasswordPage = () => {
                 }
                 error={formState.errors?.email}
               />
-
             </FieldGroup>
           </Form>
         </CardContent>
         <CardFooter className="flex flex-col gap-3 max-sm:px-3">
           <Button type="submit" form="signin-form" className="w-full">
-           Reset Password
+            Reset Password
           </Button>
 
-
           <div className="text-center text-sm text-muted-foreground">
-							Remember your password?{" "}
-							<Link
-								href="/sign-in"
-								className="underline underline-offset-4 hover:text-primary"
-							>
-								Sign In
-							</Link>
-						</div>
+            Remember your password?{" "}
+            <Link
+              href="/sign-in"
+              className="underline underline-offset-4 hover:text-primary"
+            >
+              Sign In
+            </Link>
+          </div>
         </CardFooter>
       </Card>
     </motion.div>
-  )
-}
+  );
+};
 
-export default ForgotPasswordPage
+export default ForgotPasswordPage;

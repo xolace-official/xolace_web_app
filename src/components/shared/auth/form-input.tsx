@@ -105,7 +105,12 @@ export const FormInput = React.forwardRef<HTMLInputElement, FormInputProps>(
 
     return (
       <Field className={fieldClassName} data-invalid={hasError}>
-        <div className={cn("", showForgotPasswordLink && "flex items-center justify-between")}>
+        <div
+          className={cn(
+            "",
+            showForgotPasswordLink && "flex items-center justify-between",
+          )}
+        >
           {label && (
             <FieldLabel htmlFor={inputId}>
               {label}

@@ -18,23 +18,28 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Field, FieldDescription, FieldGroup,FieldSet } from "@/components/ui/field";
+import {
+  Field,
+  FieldDescription,
+  FieldGroup,
+  FieldSet,
+} from "@/components/ui/field";
 import { AuthHeader } from "@/features/auth/auth-form-wrapper";
 import type { SignupFormState } from "@/validation";
 
 export default function SignUpPage() {
-  const [formState, formAction] = useActionState<
-    SignupFormState,
-    FormData
-  >(signupFormAction, {
-    values: {
-      username: "",
-      email: "",
-      password: "",
+  const [formState, formAction] = useActionState<SignupFormState, FormData>(
+    signupFormAction,
+    {
+      values: {
+        username: "",
+        email: "",
+        password: "",
+      },
+      errors: null,
+      success: false,
     },
-    errors: null,
-    success: false,
-  });
+  );
 
   return (
     <motion.div
@@ -127,8 +132,14 @@ export default function SignUpPage() {
                 <Field orientation="horizontal">
                   <Checkbox id="sign-up-form-agree-to-terms" defaultChecked />
                   <FieldDescription className="text-xs font-extralight">
-                    I am not in crisis or suicidal
-                    and I agree to the Xolace <Link href="/terms" className="underline">Terms of Service</Link> & <Link href="/privacy" className="underline">Privacy Policy</Link>
+                    I am not in crisis or suicidal and I agree to the Xolace{" "}
+                    <Link href="/terms" className="underline">
+                      Terms of Service
+                    </Link>{" "}
+                    &{" "}
+                    <Link href="/privacy" className="underline">
+                      Privacy Policy
+                    </Link>
                   </FieldDescription>
                 </Field>
               </FieldGroup>

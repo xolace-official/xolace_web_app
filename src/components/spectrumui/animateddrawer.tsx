@@ -16,7 +16,7 @@ import { useMemo, useState } from "react";
 import useMeasure from "react-use-measure";
 import { Drawer } from "vaul";
 import { VisuallyHidden } from "@radix-ui/react-visually-hidden";
-import { Button } from "@/components/ui/button"
+import { Button } from "@/components/ui/button";
 export const AnimatedDrawer = () => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [view, setView] = useState("default");

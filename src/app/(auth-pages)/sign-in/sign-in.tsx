@@ -1,12 +1,13 @@
 "use client";
 
-import { IconInfoCircle, IconMail } from "@tabler/icons-react";
+import { IconMail } from "@tabler/icons-react";
 import { motion } from "motion/react";
 import Form from "next/form";
 import Link from "next/link";
 import { useActionState } from "react";
 import { signinFormAction } from "@/actions/auth";
 import { FormInput } from "@/components/shared/auth/form-input";
+import { ResponsiveInfoTrigger } from "@/components/shared/responsive-info-trigger";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -19,7 +20,6 @@ import {
 import { FieldGroup } from "@/components/ui/field";
 import { Separators } from "@/components/ui/separators";
 import { AuthHeader } from "@/features/auth/auth-form-wrapper";
-import { ResponsiveInfoTrigger } from "@/components/shared/responsive-info-trigger";
 import type { SigninFormState } from "@/validation";
 
 export default function SignInPage() {
@@ -82,14 +82,14 @@ export default function SignInPage() {
                 enablePasswordToggle
                 showForgotPasswordLink
                 leftAddon={
-                 <ResponsiveInfoTrigger
-                                       content={
-                                         <p>
-                                           Password must be at least 8 characters with one
-                                           uppercase and one number
-                                         </p>
-                                       }
-                                     />
+                  <ResponsiveInfoTrigger
+                    content={
+                      <p>
+                        Password must be at least 8 characters with one
+                        uppercase and one number
+                      </p>
+                    }
+                  />
                 }
                 error={formState.errors?.password}
               />
@@ -115,14 +115,14 @@ export default function SignInPage() {
           </Button>
 
           <div className="text-center text-sm text-muted-foreground">
-							Don&apos;t have an account?{" "}
-							<Link
-								href="/sign-up"
-								className="underline underline-offset-4 hover:text-primary"
-							>
-								Sign up
-							</Link>
-						</div>
+            Don&apos;t have an account?{" "}
+            <Link
+              href="/sign-up"
+              className="underline underline-offset-4 hover:text-primary"
+            >
+              Sign up
+            </Link>
+          </div>
         </CardFooter>
       </Card>
     </motion.div>
