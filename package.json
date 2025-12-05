@@ -9,9 +9,9 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "biome check",
-    "lint:safe-fix": "biome lint --write",
-    "format": "biome format --write",
+    "lint": "biome check ./src",
+    "lint:safe-fix": "biome lint --write ./src",
+    "format": "biome format --write ./src",
     "check-no-assist": "biome check --enforce-assist=true"
   },
   "dependencies": {
