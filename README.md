@@ -1,36 +1,199 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+<a href="https://www.xolace.app/">
+  <img alt="Next.js and Supabase Starter Kit - the fastest way to build apps with Next.js and Supabase" src="https://www.xolace.app/opengraph-image.jpg">
+</a>
+
+# 🌌 XOLACE
+
+**Welcome to the official repo of Xolace — a safe space to express your thoughts, explore your emotions, and connect authentically.**
+
+---
+
+## ✨ What is Xolace?
+
+Xolace is a modern, mental-health-conscious social platform where users can post freely (anonymously or not), interact in real time, and stay in control of their privacy. It blends **Twitter-like expressiveness** with **Reddit-level anonymity**, backed by **powerful moderation tools** and **AI-assisted content creation**.
+
+---
+
+## 👥 Who is it for?
+
+- Users seeking a space to express emotions and thoughts safely.
+- Moderators ("Blue Team") ensuring a healthy community.
+- Help Professionals providing mental wellness support.
+- Anonymous users who want to interact lightly without a full profile.
+
+---
+
+
+## ⚙️ Tech Stack
+
+| Layer           | Stack                       |
+|----------------|-----------------------------|
+| Frontend       | Next.js, Tailwind CSS, Shadcn UI       |
+| Backend        | Next.js (Hono), Supabase (PostgreSQL, Auth) , OpenAPI spec |
+| Database       | Supabase (PostgreSQL) |
+| Auth           | Supabase Auth (Email + Anonymous) |
+| Real-time      | Supabase Realtime, Listeners, Broadcast |
+| AI Integrations| OpenAI(moderator), AssemblyAI(text processing), ElevenLabs(text to speech, voice agents) |
+| DevOps(deployment)         | Vercel, GitHub Actions (CI/CD) |
+| DevOps(development)         | Bun (package manager), Biome (code formatter) |
+
+---
+### Technologies
+
+This repo core foundations(links):
+
+- [Next.js](https://nextjs.org/) - React Native development environment
+- [Supabase](https://supabase.com/) - Authentication and database management
+- [Tailwind CSS](https://tailwindcss.com/) - Utility-first CSS framework
+- [Shadcn UI Components](https://ui.shadcn.com/) -
+  Reusable React components
+- [TypeScript](https://www.typescriptlang.org/) - Typed JavaScript
+- [Biome](https://biomejs.dev/) - Linting and code formatting
+- [Husky](https://typicode.github.io/husky/#/) - Git hooks
+- [Lint-staged](https://github.com/okonet/lint-staged) - Linting and code formatting
+
+---
+
+## 🧠 Core Features
+
+- 📝 Post creation with mood tagging, 24hr expiration, and anonymous option.
+- 💬 Real-time upvotes and downvotes, comments, and anonymous replies.
+- 🛡️ Robust user roles: Verified, Moderator (Blue Team), Help Professional.
+- 🔍 Tag system and post tagging with frequency tracking.
+- 📄 Activity logging with trigger-based auto-logging.
+- 📋 Reporting system to maintain safe content.
+- 🔐 Full privacy settings and user preferences.
+- 🧙‍♂️ AI-powered flux comment on posts.
+- 🏥 Health Tips articles 
+- 📹 Glimpse - videos of mental health professionals/mentors sharing advice.
+- 🎨 Theming - Only dark and light mode (for now).
+- 🌍 Multi-language support (coming soon).
+- 📊 Analytics (coming soon)
+- 🤖 AI voice companions (coming soon)
+- Online sessions with mental health professionals and mentors (coming soon)
+
+---
+## Preview
+
+### Coming soon!
+
+## Requirements
+
+- Node.js 18.x
+- bun
+- Docker (for Supabase) or  connect to your remote Supabase
 
 ## Getting Started
 
-First, run the development server:
+Below are the steps to get started
+
+### Installation
+
+1. Clone the repository
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+git clone https://github.com/xolace-official/xolace_web_app.git <your-project-name>
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+2. Install dependencies (always run installation from the root)
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```bash
+cd <your-project-name>
+bun install
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+3. Create .env file
 
-## Learn More
+Using the env.template file as a template, create a .env file in the root directory
 
-To learn more about Next.js, take a look at the following resources:
+First:
+```bash
+cd <your-project-name>
+cp env.template .env
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+4. Start the development server
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+```bash
+pnpm dev
+```
 
-## Deploy on Vercel
+5. Start Supabase (if you connected to remote you can skipp the following steps)
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+Run the following command to start Supabase:
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+```
+pnpm run supabase:start
+```
+
+6. Stop Supabase
+
+Run the following command to stop Supabase:
+
+```
+pnpm run supabase:stop
+```
+
+
+## Project Structure
+
+The below is the Next.js app structure:
+
+```
+- backend   # Hono api
+- src
+-- __tests__      # tests
+-- actions        # Server actions
+-- app
+--- (protected)      # protected routes
+--- (auth-pages)        # auth pages
+--- api         # Nextjs api routes
+-- components   # global components
+--- app         # app container (much more bigger components like wrappers and stuff)
+--- animate-ui   # animated components that use the shadcn registry (that means it somehow just extend shadcn ui components)
+--- builders   # components that extend the base ui components
+--- molecule-ai  # components that use the shadcn registry (that means it somehow just extend shadcn ui) 
+--- routes      # containers that affect routes (like loading and errors)
+--- spectrumui  # components that use the spectrumui registry (that means it somehow just extend spectrumui ui)
+--- shared      # shared components (like modals and stuff)
+--- ui        # Shadcn UI components
+-- lib       # api calls, helpers, utils
+-- hooks     # houses all hooks 
+-- supabase     # supabase root
+-- store        #zustand store
+-- providers     # Providers
+-- validation     # all zod related schemas
+```
+
+
+---
+
+### Code Standards
+
+- Files
+  - Always use kebab-case for components/builders
+- Naming
+  - Functions/Vars: camelCase
+  - Constants: UPPER_SNAKE_CASE
+  - Types/Classes: PascalCase
+- TypeScript
+  - Use type inference whenever possible
+  - Avoid any, any[], unknown, or any other generic type as much as possible unless you have a good reason to use it
+- Hooks
+  - Always check the shadcn hooks to see if you find what you are looking before you manually write one [Shadcn hooks from shadcn.io](https://www.shadcn.io/hooks) , [Shadcn Hooks](https://shadcn-hooks.vercel.app/)
+
+### Third Party
+- Becareful with the packages you install , always check if it is actively maintained
+
+### Styling
+
+- Styling is done using Tailwind CSS. Always use the "cn" function from the utils file to write classNames that take className props or dynamically adding className.
+- Avoid fixes classes such as "bg-gray-500". Instead, use Shadcn classes such as "bg-background", "text-secondary-foreground", "text-muted-foreground", etc. Hence using our design token
+
+### Data Fetching
+
+- In a Client Component context, please use the `useQuery` hook from the "@tanstack/react-query" package to wrap any async data fetching.
+
+
+## Thanks and Attributions
+- At the end of the day we are building with passion for the cause , so we should all try to give our best 💙
