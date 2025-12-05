@@ -165,3 +165,35 @@ The below is the Next.js app structure:
 -- validation     # all zod related schemas
 ```
 
+
+---
+
+### Code Standards
+
+- Files
+  - Always use kebab-case for components/builders
+- Naming
+  - Functions/Vars: camelCase
+  - Constants: UPPER_SNAKE_CASE
+  - Types/Classes: PascalCase
+- TypeScript
+  - Use type inference whenever possible
+  - Avoid any, any[], unknown, or any other generic type as much as possible unless you have a good reason to use it
+- Hooks
+  - Always check the shadcn hooks to see if uyou find what you are looking before you manually write one [Shadcn hooks from shadcn.io](https://www.shadcn.io/hooks) , [Shadcn Hooks](https://shadcn-hooks.vercel.app/)
+
+### Third Party
+- Becareful with the packages you install , always check if it is actively maintained
+
+### Styling
+
+- Styling is done using Tailwind CSS. We use the "cn" function from the utils file to write classNames that take className props or dynamically adding className.
+- Avoid fixes classes such as "bg-gray-500". Instead, use Shadcn classes such as "bg-background", "text-secondary-foreground", "text-muted-foreground", etc. Hence using our design token
+
+### Data Fetching
+
+- In a Client Component context, please use the `useQuery` hook from the "@tanstack/react-query" package to wrap any async data fetching.
+
+
+## Thanks and Attributions
+- At the end of the day we are building with passion for the cause , so we should all try to give our best 💙
