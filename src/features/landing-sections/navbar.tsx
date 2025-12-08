@@ -1,5 +1,4 @@
 "use client";
-import { IconBrandWhatsapp } from "@tabler/icons-react";
 import { ChevronsDown, Menu } from "lucide-react";
 import Link from "next/link";
 import React from "react";
@@ -82,7 +81,7 @@ export const Navbar = () => {
               </SheetHeader>
 
               {/* MENU ITEMS */}
-              <div className="flex flex-col gap-2 px-4 overflow-y-auto max-h-[calc(100vh-6rem)]">
+              <div className="flex flex-col gap-4 px-4 overflow-y-auto max-h-[calc(100vh-6rem)]">
                 {routeList.map(({ href, label }) => (
                   <Button
                     key={href}
@@ -108,7 +107,7 @@ export const Navbar = () => {
       {/* <!-- Desktop --> */}
       <NavigationMenu className="hidden lg:block mx-auto">
         <NavigationMenuList>
-          <NavigationMenuItem className={"w-full flex flex-row"}>
+          <NavigationMenuItem className={"w-full flex flex-row gap-4"}>
             {routeList.map(({ href, label }) => (
               <NavigationMenuLink key={href} asChild>
                 <Link href={href} className="px-2">
@@ -122,15 +121,6 @@ export const Navbar = () => {
 
       <div className="hidden lg:flex">
         <ModeToggle />
-        <Button asChild size="sm" variant="ghost" aria-label="View on GitHub">
-          <Link
-            aria-label="View on GitHub"
-            href="https://github.com/nobruf/shadcn-landing-page.git"
-            target="_blank"
-          >
-            <IconBrandWhatsapp className="size-5" />
-          </Link>
-        </Button>
       </div>
     </header>
   );
