@@ -8,6 +8,7 @@ import {
   signinSchema,
   signupSchema,
 } from "@/validation";
+import { type ContactFormState, contactSchema } from "@/validation/landing";
 
 export async function signinFormAction(
   _prevState: SigninFormState,
@@ -99,6 +100,42 @@ export async function forgotPasswordFormAction(
   return {
     values: {
       email: "",
+    },
+    errors: null,
+    success: true,
+  };
+}
+
+export async function contactFormAction(
+  _prev: ContactFormState,
+  formData: FormData,
+) {
+  const values = {
+    fullName: formData.get("fullName") as string,
+    email: formData.get("email") as string,
+    subject: formData.get("subject") as string,
+    description: formData.get("description") as string,
+  };
+
+  const result = contactSchema.safeParse(values);
+
+  if (!result.success) {
+    return {
+      values,
+      success: false,
+      errors: result.error.flatten().fieldErrors,
+    };
+  }
+
+  // Do something with the values.
+  // Call your database or API here.
+
+  return {
+    values: {
+      fullName: "",
+      email: "",
+      subject: "",
+      description: "",
     },
     errors: null,
     success: true,
