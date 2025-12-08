@@ -7,8 +7,9 @@ import {
 } from "@tabler/icons-react";
 import { ChevronsDown } from "lucide-react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import type React from "react";
-import { Button } from "@/components/ui/button";
+import { CtaButton } from "@/components/shared/layout/cta-button";
 import { Separator } from "@/components/ui/separator";
 
 const footerColumns = [
@@ -59,6 +60,8 @@ const socialPlatforms: { name: string; url: string; icon: React.ReactNode }[] =
   ];
 
 export const FooterSection = () => {
+  const router = useRouter();
+
   return (
     <footer id={"footer"} className="relative w-full">
       {/* CTA Card */}
@@ -71,9 +74,10 @@ export const FooterSection = () => {
             <h2 className="text-3xl md:text-5xl lg:text-6xl font-bold text-foreground mb-8">
               Start involving your thought today.
             </h2>
-            <Button size="lg" className="font-bold text-lg">
-              Get started for free
-            </Button>
+            <CtaButton
+              label={"Get started for free"}
+              onClick={() => router.push("/sign-up")}
+            />
           </div>
         </div>
       </div>

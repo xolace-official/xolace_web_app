@@ -1,6 +1,7 @@
 "use client";
-import { ArrowRight } from "lucide-react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { CtaButton } from "@/components/shared/layout/cta-button";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import Iphone15Pro from "@/components/ui/shadcn-io/iphone-15-pro";
@@ -8,6 +9,7 @@ import { RollingText } from "@/components/ui/shadcn-io/rolling-text";
 import { Safari } from "@/components/ui/shadcn-io/safari";
 
 export const HeroSection = () => {
+  const router = useRouter();
   return (
     <section id={"hero"} className="w-full relative">
       <div className="sticky top-0 flex overflow-hidden section mb-24">
@@ -45,10 +47,10 @@ export const HeroSection = () => {
           </p>
 
           <div className="flex flex-col md:flex-row place-items-center justify-center gap-4">
-            <Button className="w-5/6 md:w-1/4 font-bold group/arrow">
-              Join the Circle
-              <ArrowRight className="size-5 ml-2 group-hover/arrow:translate-x-1 transition-transform" />
-            </Button>
+            <CtaButton
+              label={"Join the Circle"}
+              onClick={() => router.push("/sign-up")}
+            />
 
             <Button
               asChild

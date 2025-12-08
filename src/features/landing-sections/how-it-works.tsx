@@ -1,8 +1,8 @@
 "use client";
 
-import { ArrowRight } from "lucide-react";
+import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import { Button } from "@/components/ui/button";
+import { CtaButton } from "@/components/shared/layout/cta-button";
 import Iphone15Pro from "@/components/ui/shadcn-io/iphone-15-pro";
 
 type HowItWorksProps = {
@@ -53,6 +53,7 @@ const videoList = [
 export const HowItWorksSection = () => {
   const [currentVideoIndex, setCurrentVideoIndex] = useState(0);
   const [isRotating, setIsRotating] = useState(false);
+  const router = useRouter();
 
   useEffect(() => {
     // Change video every 5 seconds
@@ -113,10 +114,12 @@ export const HowItWorksSection = () => {
               </div>
             </div>
           ))}
-          <Button className="w-fit font-bold group/arrow ml-8 mt-8">
-            Step Into the Circle
-            <ArrowRight className="size-5 ml-2 group-hover/arrow:translate-x-1 transition-transform" />
-          </Button>
+          <div className={"ml-8"}>
+            <CtaButton
+              label={"Step Into the Circle"}
+              onClick={() => router.push("sign-up")}
+            />
+          </div>
         </div>
       </div>
     </section>

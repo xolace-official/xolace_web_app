@@ -12,7 +12,7 @@ import { useActionState } from "react";
 import { contactFormAction } from "@/actions/auth";
 import { FormInput } from "@/components/shared/auth/form-input";
 import { FormTextarea } from "@/components/shared/auth/form-textarea";
-import { Button } from "@/components/ui/button";
+import { CtaButton } from "@/components/shared/layout/cta-button";
 import {
   Card,
   CardContent,
@@ -121,10 +121,13 @@ export default function ContactUsForm() {
                 error={formState.errors?.description}
               />
             </FieldGroup>
-
-            <Button type="submit" form="contact-form" className="w-full mt-6">
-              Send Message
-            </Button>
+            <CtaButton
+              label={"Send Message"}
+              form="contact-form"
+              type="submit"
+              showArrow={false}
+              className={"w-full mt-6"}
+            />
 
             <Separator className="opacity-50" />
 
