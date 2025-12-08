@@ -239,6 +239,18 @@
     height: 100dvh;
     pointer-events: none;
   }
+
+  .section-parent-header {
+    @apply flex flex-col gap-4 md:gap-8 mb-4 md:mb-8;
+  }
+
+  .section {
+    @apply w-full  px-4 md:px-8 py-12 sm:py-16;
+  }
+
+  .section-header {
+    @apply text-3xl md:text-5xl font-bold;
+  }
 }
 
 /* View Transition API for Theme Switch */
