@@ -50,6 +50,7 @@ export const HeroSection = () => {
             <CtaButton
               label={"Join the Circle"}
               onClick={() => router.push("/sign-up")}
+              className="w-5/6 md:w-1/4 font-bold"
             />
 
             <Button

@@ -51,7 +51,7 @@ const routeList: RouteProps[] = [
 export const Navbar = () => {
   const [isOpen, setIsOpen] = React.useState(false);
   return (
-    <header className="shadow-inner bg-opacity-15 w-full top-0 sticky z-40 flex justify-between items-center py-4 px-4 md:px-8 bg-muted dark:bg-card">
+    <header className="shadow-inner bg-opacity-15 w-full top-0 m-0 sticky z-40 flex justify-between items-center py-4 px-4 md:px-8 bg-muted dark:bg-card overflow-x-hidden">
       <Link href="/" className="font-bold text-lg flex items-center">
         <ChevronsDown className="bg-gradient-to-tr border-secondary from-primary via-primary/70 to-primary rounded-lg w-9 h-9 mr-2 border text-white" />
         XOLACE
@@ -67,7 +67,7 @@ export const Navbar = () => {
           </SheetTrigger>
 
           <SheetContent
-            side="left"
+            side="top"
             className="flex flex-col justify-between h-screen rounded-tr-lg rounded-br-lg bg-card"
           >
             <div>
@@ -81,17 +81,21 @@ export const Navbar = () => {
               </SheetHeader>
 
               {/* MENU ITEMS */}
-              <div className="flex flex-col gap-4 px-4 overflow-y-auto max-h-[calc(100vh-6rem)]">
+              <div className="flex flex-col px-4 max-h-[calc(100vh-6rem)] space-y-4">
+                <Separator />
                 {routeList.map(({ href, label }) => (
-                  <Button
-                    key={href}
-                    onClick={() => setIsOpen(false)}
-                    asChild
-                    variant="ghost"
-                    className="justify-start text-base"
-                  >
-                    <Link href={href}>{label}</Link>
-                  </Button>
+                  <div key={href} className="flex flex-col gap-4">
+                    <Button
+                      onClick={() => setIsOpen(false)}
+                      asChild
+                      variant="ghost"
+                      className="justify-start text-base"
+                    >
+                      <Link href={href}>{label}</Link>
+                    </Button>
+
+                    <Separator />
+                  </div>
                 ))}
               </div>
             </div>

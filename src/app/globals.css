@@ -240,6 +240,10 @@
     pointer-events: none;
   }
 
+  .main {
+    @apply w-full m-0 p-0 overflow-x-hidden;
+  }
+
   .section-parent-header {
     @apply flex flex-col gap-4 md:gap-8 mb-4 md:mb-8;
   }
@@ -251,6 +255,8 @@
   .section-header {
     @apply text-3xl md:text-5xl font-bold;
   }
+
+  /* In your globals.css or tailwind.css */
 }
 
 /* View Transition API for Theme Switch */
