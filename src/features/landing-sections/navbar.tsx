@@ -1,4 +1,5 @@
 "use client";
+
 import { ChevronsDown, Menu } from "lucide-react";
 import Link from "next/link";
 import React from "react";
@@ -51,7 +52,7 @@ const routeList: RouteProps[] = [
 export const Navbar = () => {
   const [isOpen, setIsOpen] = React.useState(false);
   return (
-    <header className="shadow-inner bg-opacity-15 w-full top-0 m-0 sticky z-40 flex justify-between items-center py-4 px-4 md:px-8 bg-muted dark:bg-card overflow-x-hidden">
+    <header className="shadow-inner bg-opacity-15 w-full top-0 mx-auto sticky border border-secondary z-40 flex justify-between items-center py-4 px-4 md:px-8 bg-muted dark:bg-card">
       <Link href="/" className="font-bold text-lg flex items-center">
         <ChevronsDown className="bg-gradient-to-tr border-secondary from-primary via-primary/70 to-primary rounded-lg w-9 h-9 mr-2 border text-white" />
         XOLACE
@@ -67,20 +68,19 @@ export const Navbar = () => {
           </SheetTrigger>
 
           <SheetContent
-            side="top"
-            className="flex flex-col justify-between h-screen rounded-tr-lg rounded-br-lg bg-card"
+            side="left"
+            className="flex flex-col justify-between rounded-tr-2xl rounded-br-2xl bg-card border-secondary"
           >
             <div>
               <SheetHeader className="mb-4 ml-4">
                 <SheetTitle className="flex items-center">
                   <Link href="/" className="flex items-center">
                     <ChevronsDown className="bg-gradient-to-tr border-secondary from-primary via-primary/70 to-primary rounded-lg w-9 h-9 mr-2 border text-white" />
-                    Shadcn
+                    XOLACE
                   </Link>
                 </SheetTitle>
               </SheetHeader>
 
-              {/* MENU ITEMS */}
               <div className="flex flex-col px-4 max-h-[calc(100vh-6rem)] space-y-4">
                 <Separator />
                 {routeList.map(({ href, label }) => (
@@ -93,15 +93,15 @@ export const Navbar = () => {
                     >
                       <Link href={href}>{label}</Link>
                     </Button>
-
                     <Separator />
                   </div>
                 ))}
               </div>
             </div>
 
-            <SheetFooter className="flex-col w-full justify-start items-start mt-2 px-4">
-              <Separator />
+            <SheetFooter className="flex-col sm:flex-col justify-start items-start">
+              <Separator className="mb-2" />
+
               <ModeToggle />
             </SheetFooter>
           </SheetContent>
