@@ -67,7 +67,7 @@ export const Navbar = () => {
           </SheetTrigger>
 
           <SheetContent
-            side="top"
+            side="left"
             className="flex flex-col justify-between h-screen bg-card z-[100]"
           >
             <div>
