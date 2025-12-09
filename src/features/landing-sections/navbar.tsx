@@ -80,7 +80,6 @@ export const Navbar = () => {
                   </Link>
                 </SheetTitle>
               </SheetHeader>
-
               <div className="flex flex-col px-4 max-h-[calc(100vh-6rem)] space-y-4">
                 <Separator />
                 {routeList.map(({ href, label }) => (
