@@ -39,7 +39,7 @@ export function PageContainer(props: {
 }) {
   return (
     <div className={cn("flex flex-col size-full", props.className)}>
-      <div className="w-full flex items-center justify-between px-3 py-3 bg-background relative z-50">
+      <div className="w-full flex items-center justify-between px-3 py-3 bg-primary relative z-50 header-height">
         <div className="flex items-center gap-2">
           {!props.disableSidebarToggle && (
             <>
@@ -62,13 +62,13 @@ export function PageContainer(props: {
 
       <div
         id="scrollable-body"
-        className={cn("overflow-scroll flex-1", props.containerClassName)}
+        className={cn("overflow-y-auto flex-1", props.containerClassName)}
       >
         {props.externalContent}
 
         <div
           className={cn(
-            "max-w-3xl mx-auto overflow-hidden flex flex-col gap-10 py-16 px-5",
+            "max-w-3xl mx-auto overflow-hidden flex flex-col gap-10 py-10 px-5",
             props.contentClassName,
           )}
         >

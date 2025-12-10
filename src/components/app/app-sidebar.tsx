@@ -40,12 +40,13 @@ import {
 import { DEFAULT_PROFILE_IMAGE } from "@/constants";
 import { settingsNavigation } from "@/features/settings/navigation";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
+import { DesktopSidebarToggler } from "./desktop-sidebar-toggler";
 
 export function AppSidebar() {
   const router = useRouter();
   const pathname = usePathname();
 
-  const sidebarVariant: "default" | "inset" = "inset";
+  const sidebarVariant: "default" | "inset" = "default";
   const search = false;
 
   return (
@@ -54,7 +55,8 @@ export function AppSidebar() {
       collapsible={"icon"}
       variant={sidebarVariant === "default" ? "sidebar" : sidebarVariant}
     >
-      <SidebarHeader>
+      <SidebarHeader className="relative">
+        <DesktopSidebarToggler />
         <div className="flex items-center gap-2 text-primary">
           <div className="h-8 w-8 flex items-center justify-center shrink-0">
             <PenIcon className="h-5 w-5" />
@@ -231,6 +233,7 @@ export function SidebarToggle() {
       variant="ghost"
       size="iconSm"
       onClick={toggleSidebar}
+      className=" sm:hidden "
     >
       <ChevronLeft size={16} />
     </Button>
