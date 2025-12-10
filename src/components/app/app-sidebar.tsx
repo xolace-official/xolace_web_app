@@ -5,8 +5,6 @@ import {
   ChevronLeft,
   CommandIcon,
   GemIcon,
-  HouseIcon,
-  MagnetIcon,
   PenIcon,
   ShrubIcon,
   SignalIcon,
@@ -37,9 +35,14 @@ import {
   SidebarRail,
   useSidebar,
 } from "@/components/ui/sidebar";
-import { DEFAULT_PROFILE_IMAGE } from "@/constants";
+import {
+  COLLAPSIBLE_CAMPFIRE_NAV_LINKS,
+  DEFAULT_PROFILE_IMAGE,
+} from "@/constants";
 import { settingsNavigation } from "@/features/settings/navigation";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
+import { Separators } from "../ui/separators";
+import { CollapsibleNav } from "./collapsible-nav";
 import { DesktopSidebarToggler } from "./desktop-sidebar-toggler";
 import { NavMain } from "./nav-main";
 
@@ -106,11 +109,16 @@ export function AppSidebar() {
             </SidebarGroup>
           </>
         ) : (
-          <SidebarGroup>
-            <SidebarContent>
-              <NavMain />
-            </SidebarContent>
-          </SidebarGroup>
+          <>
+            <SidebarGroup>
+              <SidebarContent>
+                <NavMain />
+              </SidebarContent>
+            </SidebarGroup>
+
+            <Separators />
+            <CollapsibleNav items={COLLAPSIBLE_CAMPFIRE_NAV_LINKS} />
+          </>
         )}
       </SidebarContent>
       <SidebarFooter>
