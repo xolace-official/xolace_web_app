@@ -89,7 +89,7 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body
-        className={`min-h-screen bg-background ${nunito.variable} ${ptSans.variable} antialiased scroll-smooth relative`}
+        className={`${nunito.variable} ${ptSans.variable} antialiased scroll-smooth relative`}
       >
         <ThemeProvider
           attribute="class"
