@@ -46,7 +46,7 @@ const serviceList: ServiceProps[] = [
 
 export const FeaturesSection = () => {
   return (
-    <section id="features" className="section">
+    <section id="whyXolace" className="section">
       <div className={"section-parent-header"}>
         <h2 className="section-header text-center">What Makes Us Different</h2>
 
