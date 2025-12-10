@@ -5,7 +5,6 @@ import { CtaButton } from "@/components/shared/layout/cta-button";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import Iphone15Pro from "@/components/ui/shadcn-io/iphone-15-pro";
-import { RollingText } from "@/components/ui/shadcn-io/rolling-text";
 import { Safari } from "@/components/ui/shadcn-io/safari";
 
 export const HeroSection = () => {
@@ -26,19 +25,7 @@ export const HeroSection = () => {
           </Badge>
 
           <h1 className="text-4xl md:text-6xl font-bold flex flex-wrap items-center justify-center gap-x-3">
-            <RollingText
-              text="The Internet"
-              transition={{ duration: 0.6, delay: 0, ease: "easeOut" }}
-            />
-            <RollingText
-              text="Inner"
-              className={"text-primary"}
-              transition={{ duration: 0.6, delay: 0.2, ease: "easeOut" }}
-            />
-            <RollingText
-              text="Voice"
-              transition={{ duration: 0.6, delay: 0.4, ease: "easeOut" }}
-            />
+            The Internet <span className={"text-primary"}>Inner</span> Voice
           </h1>
 
           <p className="max-w-screen-sm mx-auto text-xl text-muted-foreground">
