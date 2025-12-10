@@ -41,13 +41,14 @@ import { DEFAULT_PROFILE_IMAGE } from "@/constants";
 import { settingsNavigation } from "@/features/settings/navigation";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import { DesktopSidebarToggler } from "./desktop-sidebar-toggler";
+import { NavMain } from "./nav-main";
 
 export function AppSidebar() {
   const router = useRouter();
   const pathname = usePathname();
 
   const sidebarVariant: "default" | "inset" = "default";
-  const search = false;
+  const search = true;
 
   return (
     <Sidebar
@@ -107,35 +108,7 @@ export function AppSidebar() {
         ) : (
           <SidebarGroup>
             <SidebarContent>
-              <SidebarMenu>
-                {search && (
-                  <SidebarMenuItem>
-                    <SidebarMenuButton
-                      tooltip="Search"
-                      isActive={pathname === "/search"}
-                      asChild
-                    >
-                      <Link href="/search">
-                        <MagnetIcon />
-                        <span>Search</span>
-                      </Link>
-                    </SidebarMenuButton>
-                  </SidebarMenuItem>
-                )}
-
-                <SidebarMenuItem>
-                  <SidebarMenuButton
-                    tooltip="Entries"
-                    isActive={pathname === "/"}
-                    asChild
-                  >
-                    <Link href="/">
-                      <HouseIcon />
-                      <span>Home</span>
-                    </Link>
-                  </SidebarMenuButton>
-                </SidebarMenuItem>
-              </SidebarMenu>
+              <NavMain />
             </SidebarContent>
           </SidebarGroup>
         )}
