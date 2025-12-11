@@ -37,6 +37,7 @@ import {
 } from "@/components/ui/sidebar";
 import {
   COLLAPSIBLE_CAMPFIRE_NAV_LINKS,
+  COLLAPSIBLE_HEALTH_SPACE_NAV_LINKS,
   DEFAULT_PROFILE_IMAGE,
 } from "@/constants";
 import { settingsNavigation } from "@/features/settings/navigation";
@@ -118,6 +119,9 @@ export function AppSidebar() {
 
             <Separators />
             <CollapsibleNav items={COLLAPSIBLE_CAMPFIRE_NAV_LINKS} />
+
+            <Separators />
+            <CollapsibleNav items={COLLAPSIBLE_HEALTH_SPACE_NAV_LINKS} />
           </>
         )}
       </SidebarContent>
