@@ -16,10 +16,6 @@ export const FeedPage = () => {
             </div>
           </div>
           <div className="bg-card border p-4 rounded-xl shadow-xs h-64" />
-          <div className="bg-card border p-4 rounded-xl shadow-xs h-64" />
-          <div className="bg-card border p-4 rounded-xl shadow-xs h-64" />
-          <div className="bg-card border p-4 rounded-xl shadow-xs h-64" />
-          <div className="bg-card border p-4 rounded-xl shadow-xs h-64" />
         </div>
       }
     >

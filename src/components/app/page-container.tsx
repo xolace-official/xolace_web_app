@@ -1,6 +1,7 @@
 import { cn } from "@/lib/utils";
 import { Separator } from "../ui/separator";
 import { SidebarToggle } from "./app-sidebar";
+import { StickySidebar } from "./sticky-sidebar";
 
 /**
  * The main container for a page.
@@ -64,7 +65,7 @@ export function PageContainer(props: {
         id="scrollable-body"
         className={cn("overflow-y-auto flex-1", props.containerClassName)}
       >
-        <div className="flex justify-center items-start gap-6 px-4 py-6">
+        <div className="flex justify-center items-start gap-6 sm:px-4 py-6">
           <div
             className={cn(
               "w-full max-w-3xl flex flex-col gap-10 min-w-0",
@@ -75,9 +76,9 @@ export function PageContainer(props: {
           </div>
 
           {props.externalContent && (
-            <div className="hidden xl:block w-80 shrink-0 sticky top-6">
+            <StickySidebar className="hidden xl:block w-80 shrink-0">
               {props.externalContent}
-            </div>
+            </StickySidebar>
           )}
         </div>
       </div>
