@@ -3,9 +3,9 @@
 import { SidebarInset } from "../ui/sidebar";
 
 export const MainContainer = ({ children }: { children: React.ReactNode }) => {
-  const sidebarVariant = "inset";
+  const sidebarVariant = "default";
 
-  if (sidebarVariant === "inset") {
+  if (sidebarVariant !== "default") {
     return (
       <SidebarInset>
         <div className="absolute inset-0 isolate @container">{children}</div>

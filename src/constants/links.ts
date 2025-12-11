@@ -3,11 +3,14 @@ import {
   Cog,
   Flame,
   FlameKindling,
+  HandHelping,
+  HeartPulse,
   LibraryBig,
   Mailbox,
   MessageSquareDiff,
   Plus,
   Search,
+  TvMinimalPlay,
 } from "lucide-react";
 
 export const sidebarLinks = [
@@ -70,6 +73,34 @@ export const COLLAPSIBLE_CAMPFIRE_NAV_LINKS = [
         url: "/campfires/discover",
         icon: Search,
         isNew: false,
+        isBeta: false,
+      },
+    ],
+  },
+];
+
+export const COLLAPSIBLE_HEALTH_SPACE_NAV_LINKS = [
+  {
+    key: "healthSpace",
+    title: "Health Space",
+    url: "#",
+    icon: HandHelping,
+    isActive: true,
+    items: [
+      {
+        key: "healthTips",
+        title: "Health Tips",
+        url: "/health-tips",
+        icon: HeartPulse,
+        isNew: true,
+        isBeta: false,
+      },
+      {
+        key: "glimpse",
+        title: "Glimpse",
+        url: "/glimpse",
+        icon: TvMinimalPlay,
+        isNew: true,
         isBeta: false,
       },
     ],
