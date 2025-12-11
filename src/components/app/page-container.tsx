@@ -64,15 +64,21 @@ export function PageContainer(props: {
         id="scrollable-body"
         className={cn("overflow-y-auto flex-1", props.containerClassName)}
       >
-        {props.externalContent}
+        <div className="flex justify-center items-start gap-6 px-4 py-6">
+          <div
+            className={cn(
+              "w-full max-w-3xl flex flex-col gap-10 min-w-0",
+              props.contentClassName,
+            )}
+          >
+            {props.children}
+          </div>
 
-        <div
-          className={cn(
-            "max-w-3xl mx-auto overflow-hidden flex flex-col gap-10 py-8 px-5",
-            props.contentClassName,
+          {props.externalContent && (
+            <div className="hidden xl:block w-80 shrink-0 sticky top-6">
+              {props.externalContent}
+            </div>
           )}
-        >
-          {props.children}
         </div>
       </div>
     </div>
