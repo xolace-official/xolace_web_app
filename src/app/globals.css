@@ -214,6 +214,10 @@
     letter-spacing: var(--tracking-normal);
   }
 
+  .header-height{
+    height: 60px;
+  }
+
   .shadow-primary {
     box-shadow: 0px 2px 0px 0px var(--primary-border);
     border-width: 2px !important;
