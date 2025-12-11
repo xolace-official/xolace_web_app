@@ -52,7 +52,7 @@ export function AppSidebar() {
   const pathname = usePathname();
 
   const sidebarVariant: "default" | "inset" = "default";
-  const search = true;
+  //const search = true;
 
   return (
     <Sidebar
