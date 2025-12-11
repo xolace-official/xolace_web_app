@@ -1,6 +1,13 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import {
+  type RefObject,
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
+import { useResizeObserver } from "@/hooks/use-resize-observer";
 import { cn } from "@/lib/utils";
 
 interface StickySidebarProps extends React.HTMLAttributes<HTMLDivElement> {
@@ -17,33 +24,27 @@ export function StickySidebar({
   const sidebarRef = useRef<HTMLDivElement>(null);
   const [isTall, setIsTall] = useState(false);
 
-  useEffect(() => {
-    const checkHeight = () => {
-      if (!sidebarRef.current) return;
-      const sidebarHeight = sidebarRef.current.offsetHeight;
-      const viewportHeight = window.innerHeight;
-      // If sidebar is taller than viewport (minus some buffer), stick to bottom
-      setIsTall(sidebarHeight + offset * 2 > viewportHeight);
-    };
-
-    // Initial check
-    checkHeight();
-
-    // Re-check on resize and mutation
-    const handleResize = () => checkHeight();
-    window.addEventListener("resize", handleResize);
-
-    // Observer for content changes
-    const observer = new ResizeObserver(checkHeight);
-    if (sidebarRef.current) {
-      observer.observe(sidebarRef.current);
-    }
-
-    return () => {
-      window.removeEventListener("resize", handleResize);
-      observer.disconnect();
-    };
+  // Common logic to determine if the sidebar triggers "sticky-bottom"
+  const checkSticky = useCallback(() => {
+    if (!sidebarRef.current) return;
+    const sidebarHeight = sidebarRef.current.offsetHeight;
+    const viewportHeight = window.innerHeight;
+    // If sidebar is taller than viewport (minus some buffer), stick to bottom
+    setIsTall(sidebarHeight + offset * 2 > viewportHeight);
   }, [offset]);
+
+  // Observe element resizing
+  useResizeObserver<HTMLDivElement>({
+    ref: sidebarRef as RefObject<HTMLDivElement>,
+    onResize: checkSticky,
+  });
+
+  // Observe window resizing
+  useEffect(() => {
+    checkSticky();
+    window.addEventListener("resize", checkSticky);
+    return () => window.removeEventListener("resize", checkSticky);
+  }, [checkSticky]);
 
   return (
     <div
