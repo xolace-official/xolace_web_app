@@ -47,7 +47,7 @@ export function CollapsibleNav({
   const { setOpenMobile } = useSidebar();
   return (
     <SidebarGroup>
-      <SidebarMenu>
+      <SidebarMenu className="px-4">
         {items.map((item) => (
           <Collapsible
             key={item.key}
