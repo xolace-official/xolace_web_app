@@ -77,7 +77,7 @@ export function AppSidebar() {
                 <SidebarMenu>
                   <SidebarMenuItem>
                     <SidebarMenuButton tooltip="Back to app" asChild>
-                      <Link href="/">
+                      <Link href="/feed">
                         <ChevronLeft size={16} />
                         <span>Back to app</span>
                       </Link>
