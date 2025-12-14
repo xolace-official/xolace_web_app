@@ -28,7 +28,13 @@ export default async function ProtectedLayout({
       </Head>
       <QueryProvider>
         <div className="bg-background tracking-normal">
-          <SidebarProvider>
+          <SidebarProvider
+            style={
+              {
+                "--sidebar-width": "calc(var(--spacing) * 72)",
+              } as React.CSSProperties
+            }
+          >
             <AppSidebar />
             <MainContainer>{children}</MainContainer>
           </SidebarProvider>
