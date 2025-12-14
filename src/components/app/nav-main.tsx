@@ -34,7 +34,7 @@ export function NavMain() {
   const pathName = usePathname();
   const { setOpenMobile } = useSidebar();
   return (
-    <SidebarMenu className="gap-1 pt-5 md:gap-3">
+    <SidebarMenu className="gap-1 pt-5 md:gap-3 pr-4">
       {sidebarLinks.map((item: SidebarLinkInterface) => {
         const isActive =
           (pathName.includes(item.route) && item.route.length > 1) ||
