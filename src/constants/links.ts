@@ -70,7 +70,7 @@ export const COLLAPSIBLE_CAMPFIRE_NAV_LINKS = [
       {
         key: "discoverCampfires",
         title: "Discover Campfires",
-        url: "/campfires/discover",
+        url: "/campfires/discovery",
         icon: Search,
         isNew: false,
         isBeta: false,
