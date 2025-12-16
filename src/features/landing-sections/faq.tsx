@@ -1,5 +1,6 @@
 "use client";
 import { Plus } from "lucide-react";
+import { Suspense } from "react";
 import {
   Accordion,
   AccordionContent,
@@ -89,7 +90,9 @@ export const FAQSection = () => {
             <div className="absolute -inset-8 bg-gradient-to-br from-primary/20 via-accent/20 to-primary/20 rounded-3xl blur-3xl opacity-60"></div>
 
             <div className="relative bg-card border-2 border-border rounded-2xl overflow-hidden shadow-2xl">
-              <ContactUsForm />
+              <Suspense fallback={<div className="p-6">Loading form...</div>}>
+                <ContactUsForm />
+              </Suspense>
             </div>
           </div>
         </div>
