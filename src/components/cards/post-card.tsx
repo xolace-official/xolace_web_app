@@ -36,6 +36,9 @@ type PostCardCommunity = {
   iconSrc?: string;
 };
 
+const POST_CARD_MEDIA_BLUR_DATA_URL =
+  "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP089tTDwAEIwHZgAAAcQAAAABJRU5ErkJggg==";
+
 export type PostCardProps = {
   title: string;
   community?: PostCardCommunity;
@@ -85,21 +88,54 @@ function formatRelativeTime(input: Date | string | number) {
   return rtf.format(years, "year");
 }
 
+function BlurredContainedImage({
+  src,
+  alt,
+  sizes,
+  className,
+}: PostCardMedia & { sizes: string; className?: string }) {
+  return (
+    <div
+      className={cn("relative size-full overflow-hidden bg-muted", className)}
+    >
+      <Image
+        src={src}
+        alt=""
+        aria-hidden="true"
+        fill
+        sizes={sizes}
+        className="pointer-events-none select-none object-cover opacity-30 blur-2xl scale-[1.15] transform-gpu"
+        priority={false}
+      />
+
+      <div className="pointer-events-none absolute inset-0 bg-linear-to-b from-background/0 via-background/0 to-background/20" />
+
+      <Image
+        src={src}
+        alt={alt}
+        placeholder="blur"
+        blurDataURL={POST_CARD_MEDIA_BLUR_DATA_URL}
+        fill
+        sizes={sizes}
+        className="object-contain"
+        priority={false}
+      />
+    </div>
+  );
+}
+
 function PostCardMedia({ media }: { media: PostCardMedia[] }) {
   if (media.length === 0) return null;
 
   if (media.length === 1) {
     const item = media[0];
     return (
-      <div className="relative mt-4 overflow-hidden rounded-[20px] bg-muted">
-        <div className="relative aspect-[16/10] w-full">
-          <Image
+      <div className="relative mt-4 overflow-hidden rounded-3xl">
+        <div className="relative aspect-16/10 w-full">
+          <BlurredContainedImage
             src={item.src}
             alt={item.alt}
-            fill
             sizes="(min-width: 768px) 640px, 100vw"
-            className="object-contain"
-            priority={false}
           />
         </div>
       </div>
@@ -112,15 +148,12 @@ function PostCardMedia({ media }: { media: PostCardMedia[] }) {
         <CarouselContent className="ml-0">
           {media.map((item) => (
             <CarouselItem key={item.src} className="pl-0">
-              <div className="relative overflow-hidden rounded-[20px] bg-muted">
-                <div className="relative aspect-[16/10] w-full">
-                  <Image
+              <div className="relative overflow-hidden rounded-[20px]">
+                <div className="relative aspect-16/10 w-full">
+                  <BlurredContainedImage
                     src={item.src}
                     alt={item.alt}
-                    fill
                     sizes="(min-width: 768px) 640px, 100vw"
-                    className="object-cover"
-                    priority={false}
                   />
                 </div>
               </div>
@@ -144,7 +177,7 @@ export function PostCard({
   vote,
   onVoteChange,
   onCommentsClick,
-  onShareClick,
+  onShareClick: _onShareClick,
   onSaveClick,
   footer,
   className,

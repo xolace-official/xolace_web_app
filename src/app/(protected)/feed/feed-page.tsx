@@ -71,7 +71,18 @@ export const FeedPage = () => {
       media: [{ src: "/assets/images/screen1.jpg", alt: "Demo post media 5" }],
       metrics: { score: 630, comments: 46 },
     },
-  ] as const;
+    {
+      title: "Screen Shot 2",
+      createdAtLabel: "5 hours ago",
+      community: {
+        name: "r/designsystems",
+        href: "/",
+        iconSrc: "/assets/demo-community-2.svg",
+      },
+      metrics: { score: 630, comments: 46 },
+      media: undefined,
+    },
+  ];
 
   return (
     <PageContainer
@@ -98,7 +109,7 @@ export const FeedPage = () => {
             title={post.title}
             createdAtLabel={post.createdAtLabel}
             community={post.community}
-            media={[...post.media]}
+            media={post.media}
             metrics={post.metrics}
           />
         ))}
