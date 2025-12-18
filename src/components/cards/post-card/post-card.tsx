@@ -11,21 +11,16 @@ import {
 } from "@/components/shared/post-metrics";
 import { Button } from "@/components/ui/button";
 import {
-  Carousel,
-  CarouselContent,
-  CarouselItem,
-  CarouselNext,
-  CarouselPrevious,
-} from "@/components/ui/carousel";
-import {
   MinimalCard,
   MinimalCardContent,
   MinimalCardFooter,
   MinimalCardTitle,
 } from "@/components/ui/minimal-card";
 import { cn } from "@/lib/utils";
+import { formatRelativeTime } from "@/utils";
+import { PostCardMedia } from "./components/post-card-media";
 
-type PostCardMedia = {
+export type PostCardMediaType = {
   src: string;
   alt: string;
 };
@@ -36,15 +31,12 @@ type PostCardCommunity = {
   iconSrc?: string;
 };
 
-const POST_CARD_MEDIA_BLUR_DATA_URL =
-  "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP089tTDwAEIwHZgAAAcQAAAABJRU5ErkJggg==";
-
 export type PostCardProps = {
   title: string;
   community?: PostCardCommunity;
   createdAt?: Date | string | number;
   createdAtLabel?: string;
-  media?: PostCardMedia[];
+  media?: PostCardMediaType[];
   metrics?: {
     score: number;
     comments: number;
@@ -58,114 +50,6 @@ export type PostCardProps = {
   footer?: React.ReactNode;
   className?: string;
 };
-
-function toDate(input: Date | string | number) {
-  const date = input instanceof Date ? input : new Date(input);
-  return Number.isNaN(date.getTime()) ? null : date;
-}
-
-function formatRelativeTime(input: Date | string | number) {
-  const date = toDate(input);
-  if (!date) return "";
-
-  const deltaSeconds = Math.round((date.getTime() - Date.now()) / 1000);
-  const abs = Math.abs(deltaSeconds);
-
-  const rtf = new Intl.RelativeTimeFormat("en", { numeric: "auto" });
-
-  if (abs < 60) return rtf.format(deltaSeconds, "second");
-  const minutes = Math.round(deltaSeconds / 60);
-  if (Math.abs(minutes) < 60) return rtf.format(minutes, "minute");
-  const hours = Math.round(minutes / 60);
-  if (Math.abs(hours) < 24) return rtf.format(hours, "hour");
-  const days = Math.round(hours / 24);
-  if (Math.abs(days) < 7) return rtf.format(days, "day");
-  const weeks = Math.round(days / 7);
-  if (Math.abs(weeks) < 5) return rtf.format(weeks, "week");
-  const months = Math.round(days / 30);
-  if (Math.abs(months) < 12) return rtf.format(months, "month");
-  const years = Math.round(days / 365);
-  return rtf.format(years, "year");
-}
-
-function BlurredContainedImage({
-  src,
-  alt,
-  sizes,
-  className,
-}: PostCardMedia & { sizes: string; className?: string }) {
-  return (
-    <div
-      className={cn("relative size-full overflow-hidden bg-muted", className)}
-    >
-      <Image
-        src={src}
-        alt=""
-        aria-hidden="true"
-        fill
-        sizes={sizes}
-        className="pointer-events-none select-none object-cover opacity-30 blur-2xl scale-[1.15] transform-gpu"
-        priority={false}
-      />
-
-      <div className="pointer-events-none absolute inset-0 bg-linear-to-b from-background/0 via-background/0 to-background/20" />
-
-      <Image
-        src={src}
-        alt={alt}
-        placeholder="blur"
-        blurDataURL={POST_CARD_MEDIA_BLUR_DATA_URL}
-        fill
-        sizes={sizes}
-        className="object-contain"
-        priority={false}
-      />
-    </div>
-  );
-}
-
-function PostCardMedia({ media }: { media: PostCardMedia[] }) {
-  if (media.length === 0) return null;
-
-  if (media.length === 1) {
-    const item = media[0];
-    return (
-      <div className="relative mt-4 overflow-hidden rounded-3xl">
-        <div className="relative aspect-16/10 w-full">
-          <BlurredContainedImage
-            src={item.src}
-            alt={item.alt}
-            sizes="(min-width: 768px) 640px, 100vw"
-          />
-        </div>
-      </div>
-    );
-  }
-
-  return (
-    <div className="mt-4">
-      <Carousel className="relative">
-        <CarouselContent className="ml-0">
-          {media.map((item) => (
-            <CarouselItem key={item.src} className="pl-0">
-              <div className="relative overflow-hidden rounded-[20px]">
-                <div className="relative aspect-16/10 w-full">
-                  <BlurredContainedImage
-                    src={item.src}
-                    alt={item.alt}
-                    sizes="(min-width: 768px) 640px, 100vw"
-                  />
-                </div>
-              </div>
-            </CarouselItem>
-          ))}
-        </CarouselContent>
-        <CarouselPrevious className="left-2 top-1/2 -translate-y-1/2 bg-background/70 backdrop-blur" />
-        <CarouselNext className="right-2 top-1/2 -translate-y-1/2 bg-background/70 backdrop-blur" />
-      </Carousel>
-    </div>
-  );
-}
 
 export function PostCard({
   title,

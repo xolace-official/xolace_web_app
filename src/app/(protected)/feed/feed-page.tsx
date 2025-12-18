@@ -1,5 +1,5 @@
 import { PageContainer } from "@/components/app/page-container";
-import PostCard from "@/components/cards/post-card";
+import PostCard from "@/components/cards/post-card/post-card";
 
 export const FeedPage = () => {
   const posts = [
