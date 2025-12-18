@@ -9,6 +9,7 @@ import { ChevronsDown } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import type React from "react";
+import { Suspense } from "react";
 import { CtaButton } from "@/components/shared/layout/cta-button";
 import { Separator } from "@/components/ui/separator";
 
@@ -59,8 +60,13 @@ const socialPlatforms: { name: string; url: string; icon: React.ReactNode }[] =
     },
   ];
 
+export function CurrentYear() {
+  return <span>{new Date().getFullYear()}</span>;
+}
+
 export const FooterSection = () => {
   const router = useRouter();
+  //const currentYear = <CurrentYear />;
 
   return (
     <footer id={"footer"} className="relative w-full">
@@ -90,8 +96,12 @@ export const FooterSection = () => {
               <ChevronsDown className="bg-gradient-to-tr border-secondary from-primary via-primary/70 to-primary rounded-lg w-9 h-9 mr-2 border" />
               XOLACE
             </Link>
-            <p className="text-sm text-foreground/70 mt-2">
-              &copy; {new Date().getFullYear()} All rights reserved.
+            <p className="text-sm text-foreground/70 mt-2 flex gap-1">
+              <span>&copy;</span>
+              <Suspense fallback={<span>—</span>}>
+                <CurrentYear />
+              </Suspense>
+              <span>All rights reserved.</span>
             </p>
           </div>
 
