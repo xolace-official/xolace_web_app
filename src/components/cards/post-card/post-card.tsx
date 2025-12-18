@@ -132,7 +132,14 @@ export function PostCard({
 
                 <Pill
                   variant="default"
-                  className="py-0 px-1 text-[10px] text-foreground bg-chart-3"
+                  className="py-0 px-1 text-[10px] text-black bg-chart-3"
+                >
+                  verified
+                </Pill>
+
+                <Pill
+                  variant="default"
+                  className="py-0 px-1 text-[10px] text-black bg-chart-5"
                 >
                   mentor
                 </Pill>
