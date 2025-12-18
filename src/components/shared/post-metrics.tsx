@@ -148,7 +148,7 @@ export function PostMetricsVote({
         className={cn(
           "inline-flex size-7 items-center justify-center rounded-full transition-colors",
           "hover:bg-accent",
-          "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/50",
+          "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/50 cursor-pointer",
           upActive ? "text-primary" : "text-muted-foreground",
         )}
         aria-pressed={upActive}
@@ -168,7 +168,7 @@ export function PostMetricsVote({
         className={cn(
           "inline-flex size-7 items-center justify-center rounded-full transition-colors",
           "hover:bg-muted",
-          "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/50",
+          "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/50 cursor-pointer",
           downActive ? "text-destructive" : "text-muted-foreground",
         )}
         aria-pressed={downActive}

@@ -1,7 +1,12 @@
+"use client";
+
+import { useState } from "react";
 import { PageContainer } from "@/components/app/page-container";
 import PostCard from "@/components/cards/post-card/post-card";
+import type { PostMetricsVoteState } from "@/components/shared/post-metrics";
 
 export const FeedPage = () => {
+  const [vote, setVote] = useState<PostMetricsVoteState | null>(null);
   const posts = [
     {
       title: "they can't keep getting away with this",
@@ -84,6 +89,10 @@ export const FeedPage = () => {
     },
   ];
 
+  const onVoteChange = (nextVote: PostMetricsVoteState) => {
+    setVote(nextVote);
+  };
+
   return (
     <PageContainer
       title="Fireside 🔥"
@@ -111,6 +120,8 @@ export const FeedPage = () => {
             community={post.community}
             media={post.media}
             metrics={post.metrics}
+            vote={vote}
+            onVoteChange={onVoteChange}
           />
         ))}
       </div>
