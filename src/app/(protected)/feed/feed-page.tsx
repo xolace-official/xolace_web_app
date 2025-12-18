@@ -4,6 +4,8 @@ import { useState } from "react";
 import { PageContainer } from "@/components/app/page-container";
 import PostCard from "@/components/cards/post-card/post-card";
 import type { PostMetricsVoteState } from "@/components/shared/post-metrics";
+import { ThemeSwitcher } from "@/components/shared/theme-switcher";
+import { RightSideContent } from "@/features/feed/right-side-content";
 
 export const FeedPage = () => {
   const [vote, setVote] = useState<PostMetricsVoteState | null>(null);
@@ -97,19 +99,8 @@ export const FeedPage = () => {
     <PageContainer
       title="Fireside 🔥"
       contentClassName="max-sm:px-2"
-      externalContent={
-        <div className="space-y-4">
-          <div className="bg-card border p-4 rounded-xl shadow-xs">
-            <h3 className="font-semibold mb-2">Trending</h3>
-            <div className="space-y-2">
-              <div className="h-2 bg-muted rounded w-3/4" />
-              <div className="h-2 bg-muted rounded w-1/2" />
-            </div>
-          </div>
-          <div className="bg-card border p-4 rounded-xl shadow-xs h-64" />
-          <div className="bg-card border p-4 rounded-xl shadow-xs h-64" />
-        </div>
-      }
+      externalContent={<RightSideContent />}
+      actions={<ThemeSwitcher />}
     >
       <div className="grid grid-cols-1 gap-3">
         {posts.map((post) => (
