@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from "next";
 import { Nunito, PT_Sans } from "next/font/google";
 import "./globals.css";
 
+import { NuqsAdapter } from "nuqs/adapters/next/app";
 import { TooltipProvider } from "@/components/animate-ui/components/animate/tooltip";
 import { MotionProvider } from "@/providers/motion-provider";
 // Providers
@@ -91,21 +92,23 @@ export default function RootLayout({
       <body
         className={`${nunito.variable} ${ptSans.variable} antialiased scroll-smooth relative`}
       >
-        <ThemeProvider
-          attribute="class"
-          defaultTheme="light"
-          enableSystem
-          disableTransitionOnChange
-        >
-          <ToastProvider>
-            <MotionProvider>
-              <TooltipProvider>
-                <div className="texture" />
-                {children}
-              </TooltipProvider>
-            </MotionProvider>
-          </ToastProvider>
-        </ThemeProvider>
+        <NuqsAdapter>
+          <ThemeProvider
+            attribute="class"
+            defaultTheme="light"
+            enableSystem
+            disableTransitionOnChange
+          >
+            <ToastProvider>
+              <MotionProvider>
+                <TooltipProvider>
+                  <div className="texture" />
+                  {children}
+                </TooltipProvider>
+              </MotionProvider>
+            </ToastProvider>
+          </ThemeProvider>
+        </NuqsAdapter>
       </body>
     </html>
   );
