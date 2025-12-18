@@ -7,7 +7,7 @@
   "private": true,
   "scripts": {
     "dev": "bun run --bun next dev",
-    "build:next": "bun run --bun next build",
+    "build:next": "next build",
     "start": "bun run --bun next start",
     "lint": "biome check ./src",
     "lint:safe-fix": "biome lint --write ./src",
