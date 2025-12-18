@@ -1,7 +1,35 @@
 import { PageContainer } from "@/components/app/page-container";
-import DummyCard from "@/components/extras/dummy-card";
+import PostCard from "@/components/cards/post-card";
 
 export const FeedPage = () => {
+  const posts = [
+    {
+      title: "they can't keep getting away with this",
+      createdAtLabel: "2 days ago",
+      community: {
+        name: "r/OnePunchMan",
+        href: "/",
+        iconSrc: "/assets/demo-community-1.svg",
+      },
+      media: [
+        { src: "/assets/demo-post-1.svg", alt: "Demo post media 1" },
+        { src: "/assets/demo-post-2.svg", alt: "Demo post media 2" },
+      ],
+      metrics: { score: 2800, comments: 223 },
+    },
+    {
+      title: "Minimal cards are underrated for high-signal feeds",
+      createdAtLabel: "5 hours ago",
+      community: {
+        name: "r/designsystems",
+        href: "/",
+        iconSrc: "/assets/demo-community-2.svg",
+      },
+      media: [{ src: "/assets/demo-post-3.svg", alt: "Demo post media 3" }],
+      metrics: { score: 630, comments: 46 },
+    },
+  ] as const;
+
   return (
     <PageContainer
       title="Fireside 🔥"
@@ -24,27 +52,17 @@ export const FeedPage = () => {
         </div>
       }
     >
-      <div className="*:data-[slot=card]:from-primary/5 *:data-[slot=card]:to-card dark:*:data-[slot=card]:bg-card grid grid-cols-1 gap-3 *:data-[slot=card]:bg-linear-to-t *:data-[slot=card]:shadow-xs">
-        <DummyCard />
-        <DummyCard />
-        <DummyCard />
-        <DummyCard />
-        <DummyCard />
-        <DummyCard />
-        <DummyCard />
-        <DummyCard />
-        <DummyCard />
-        <DummyCard />
-        <DummyCard />
-        <DummyCard />
-        <DummyCard />
-        <DummyCard />
-        <DummyCard />
-        <DummyCard />
-        <DummyCard />
-        <DummyCard />
-        <DummyCard />
-        <DummyCard />
+      <div className="grid grid-cols-1 gap-3">
+        {posts.map((post) => (
+          <PostCard
+            key={`${post.community.name}:${post.title}`}
+            title={post.title}
+            createdAtLabel={post.createdAtLabel}
+            community={post.community}
+            media={[...post.media]}
+            metrics={post.metrics}
+          />
+        ))}
       </div>
     </PageContainer>
   );

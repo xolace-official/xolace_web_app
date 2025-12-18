@@ -123,7 +123,7 @@ function composeEventHandlers<E extends React.SyntheticEvent<unknown>>(
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-type AnyProps = Record<string, any>;
+type AnyProps = Record<string, unknown>;
 
 function AnimateIcon({
   asChild = false,
