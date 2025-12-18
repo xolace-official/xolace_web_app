@@ -1,16 +1,16 @@
-import { IconBookmark, IconDots, IconMessageCircle } from "@tabler/icons-react";
+import { IconBookmark, IconMessageCircle } from "@tabler/icons-react";
 import { CheckCircleIcon } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import type * as React from "react";
-import { Pill, PillIcon, PillStatus } from "@/components/kibo-ui/pill";
+import { Pill, PillIcon } from "@/components/kibo-ui/pill";
+import { Demo } from "@/components/shared/entity-actions-menu/demo";
 import {
   PostMetrics,
   PostMetricsAction,
   PostMetricsVote,
   type PostMetricsVoteState,
 } from "@/components/shared/post-metrics";
-import { Button } from "@/components/ui/button";
 import {
   MinimalCard,
   MinimalCardContent,
@@ -148,14 +148,15 @@ export function PostCard({
           </div>
         </div>
 
-        <Button
+        {/* <Button
           variant="ghost"
           size="iconSm"
           className="rounded-full text-muted-foreground"
           tooltip="More"
         >
           <IconDots className="size-5" />
-        </Button>
+        </Button> */}
+        <Demo />
       </div>
 
       <MinimalCardContent className="px-1 pb-2 pt-3">
