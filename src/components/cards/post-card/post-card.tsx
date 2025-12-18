@@ -1,8 +1,9 @@
 import { IconBookmark, IconDots, IconMessageCircle } from "@tabler/icons-react";
+import { CheckCircleIcon } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import type * as React from "react";
-
+import { Pill, PillIcon, PillStatus } from "@/components/kibo-ui/pill";
 import {
   PostMetrics,
   PostMetricsAction,
@@ -86,25 +87,57 @@ export function PostCard({
               </span>
             ) : null}
 
-            {community?.href ? (
-              <Link
-                href={community.href}
-                className="truncate font-semibold text-foreground hover:underline"
-              >
-                {community.name}
-              </Link>
-            ) : community?.name ? (
-              <span className="truncate font-semibold text-foreground">
-                {community.name}
-              </span>
-            ) : null}
+            <div className="flex flex-col gap-1">
+              <div className="flex items-center gap-2">
+                {community?.href ? (
+                  <Link
+                    href={community.href}
+                    className="truncate font-semibold text-foreground hover:underline"
+                  >
+                    {community.name}
+                  </Link>
+                ) : community?.name ? (
+                  <span className="truncate font-semibold text-foreground">
+                    {community.name}
+                  </span>
+                ) : null}
 
-            {renderedCreatedAtLabel ? (
-              <>
-                <span aria-hidden="true">·</span>
-                <time className="truncate">{renderedCreatedAtLabel}</time>
-              </>
-            ) : null}
+                {renderedCreatedAtLabel ? (
+                  <>
+                    <span aria-hidden="true">·</span>
+                    <time className="truncate">{renderedCreatedAtLabel}</time>
+                  </>
+                ) : null}
+              </div>
+
+              <div className="flex items-center gap-1">
+                <Pill
+                  variant="default"
+                  className="py-0 px-1 text-[10px] text-foreground"
+                >
+                  camper🔥
+                </Pill>
+
+                <Pill
+                  variant="default"
+                  className="py-0 px-1 text-[10px] text-accent-foreground bg-accent"
+                >
+                  {/* <PillStatus>
+                    <CheckCircleIcon className="text-emerald-500" size={10} />
+                    professional
+                  </PillStatus> */}
+                  <PillIcon icon={CheckCircleIcon} size={10} />
+                  professional
+                </Pill>
+
+                <Pill
+                  variant="default"
+                  className="py-0 px-1 text-[10px] text-foreground bg-chart-3"
+                >
+                  mentor
+                </Pill>
+              </div>
+            </div>
           </div>
         </div>
 
