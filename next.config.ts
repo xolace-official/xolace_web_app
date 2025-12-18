@@ -16,6 +16,13 @@ const nextConfig: NextConfig = {
         protocol: "https",
         hostname: "images.unsplash.com",
       },
+      {
+        //domain is for dev only
+        protocol: "https",
+        hostname: "unsplash.com",
+        port: "",
+        pathname: "/**",
+      },
     ],
   },
 };

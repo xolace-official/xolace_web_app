@@ -123,7 +123,7 @@ function composeEventHandlers<E extends React.SyntheticEvent<unknown>>(
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-type AnyProps = Record<string, any>;
+type AnyProps = Record<string, unknown>;
 
 function AnimateIcon({
   asChild = false,
@@ -380,14 +380,14 @@ function AnimateIcon({
   ) as AnyProps;
 
   const handleMouseEnter = composeEventHandlers<React.MouseEvent<HTMLElement>>(
-    childProps.onMouseEnter,
+    childProps.onMouseEnter as any,
     () => {
       if (animateOnHover) startAnimation(animateOnHover);
     },
   );
 
   const handleMouseLeave = composeEventHandlers<React.MouseEvent<HTMLElement>>(
-    childProps.onMouseLeave,
+    childProps.onMouseLeave as any,
     () => {
       if (animateOnHover || animateOnTap) stopAnimation();
     },
@@ -395,12 +395,12 @@ function AnimateIcon({
 
   const handlePointerDown = composeEventHandlers<
     React.PointerEvent<HTMLElement>
-  >(childProps.onPointerDown, () => {
+  >(childProps.onPointerDown as any, () => {
     if (animateOnTap) startAnimation(animateOnTap);
   });
 
   const handlePointerUp = composeEventHandlers<React.PointerEvent<HTMLElement>>(
-    childProps.onPointerUp,
+    childProps.onPointerUp as any,
     () => {
       if (animateOnTap) stopAnimation();
     },
