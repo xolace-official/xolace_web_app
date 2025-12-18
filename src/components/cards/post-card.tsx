@@ -1,9 +1,4 @@
-import {
-  IconBookmark,
-  IconDots,
-  IconMessageCircle,
-  IconShare3,
-} from "@tabler/icons-react";
+import { IconBookmark, IconDots, IconMessageCircle } from "@tabler/icons-react";
 import Image from "next/image";
 import Link from "next/link";
 import type * as React from "react";
@@ -103,7 +98,7 @@ function PostCardMedia({ media }: { media: PostCardMedia[] }) {
             alt={item.alt}
             fill
             sizes="(min-width: 768px) 640px, 100vw"
-            className="object-cover"
+            className="object-contain"
             priority={false}
           />
         </div>
@@ -158,7 +153,7 @@ export function PostCard({
     createdAtLabel ?? (createdAt ? formatRelativeTime(createdAt) : "");
 
   return (
-    <MinimalCard className={cn("p-3 sm:p-4", className)}>
+    <MinimalCard className={cn("p-3 sm:p-4 bg-card! shadow-md!", className)}>
       <div className="flex items-start justify-between gap-3 px-1">
         <div className="min-w-0">
           <div className="flex items-center gap-2 text-xs text-muted-foreground">
@@ -231,24 +226,24 @@ export function PostCard({
                 count={metrics.comments}
                 srLabel="Comments"
                 onClick={onCommentsClick}
-                disabled={!onCommentsClick}
+                // disabled={!onCommentsClick}
               />
             ) : null}
 
-            <PostMetricsAction
+            {/* <PostMetricsAction
               icon={<IconShare3 className="size-4.5" />}
               label="Share"
               srLabel="Share"
               onClick={onShareClick}
               disabled={!onShareClick}
-            />
+            /> */}
 
             <PostMetricsAction
               icon={<IconBookmark className="size-4.5" />}
               label="Save"
               srLabel="Save"
               onClick={onSaveClick}
-              disabled={!onSaveClick}
+              //   disabled={!onSaveClick}
             />
           </PostMetrics>
         )}

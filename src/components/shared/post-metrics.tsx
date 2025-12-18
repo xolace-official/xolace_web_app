@@ -1,8 +1,8 @@
 "use client";
 
 import { Slot } from "@radix-ui/react-slot";
-import { IconArrowBigDown, IconArrowBigUp } from "@tabler/icons-react";
 import { cva, type VariantProps } from "class-variance-authority";
+import { ArrowBigDownDash, ArrowBigUpDash } from "lucide-react";
 import type * as React from "react";
 
 import { cn } from "@/lib/utils";
@@ -20,7 +20,7 @@ function formatCompactNumber(value: number) {
 
 const pillVariants = cva(
   [
-    "inline-flex items-center gap-2 whitespace-nowrap rounded-full border",
+    "inline-flex items-center gap-1 whitespace-nowrap rounded-full border",
     "bg-background/50 text-foreground shadow-sm",
     "transition-colors",
     "hover:bg-muted/60",
@@ -30,12 +30,12 @@ const pillVariants = cva(
   {
     variants: {
       size: {
-        sm: "h-8 px-2.5 text-xs",
+        sm: "h-8 px-2 text-xs",
         md: "h-9 px-3 text-sm",
       },
     },
     defaultVariants: {
-      size: "md",
+      size: "sm",
     },
   },
 );
@@ -142,15 +142,12 @@ export function PostMetricsVote({
   const downActive = vote === "down";
 
   return (
-    <div
-      className={cn(pillVariants({ size }), "gap-1 px-1", className)}
-      {...props}
-    >
+    <div className={cn(pillVariants({ size }), "px-1", className)} {...props}>
       <button
         type="button"
         className={cn(
           "inline-flex size-7 items-center justify-center rounded-full transition-colors",
-          "hover:bg-muted",
+          "hover:bg-accent",
           "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/50",
           upActive ? "text-primary" : "text-muted-foreground",
         )}
@@ -159,10 +156,10 @@ export function PostMetricsVote({
         disabled={!isInteractive}
         onClick={() => onVoteChange?.(upActive ? null : "up")}
       >
-        <IconArrowBigUp className="size-4.5" />
+        <ArrowBigUpDash className="size-4.5" />
       </button>
 
-      <span className="min-w-9 px-1 text-center tabular-nums font-medium">
+      <span className="min-w-7 text-center tabular-nums font-medium">
         {displayScore}
       </span>
 
@@ -179,7 +176,7 @@ export function PostMetricsVote({
         disabled={!isInteractive}
         onClick={() => onVoteChange?.(downActive ? null : "down")}
       >
-        <IconArrowBigDown className="size-4.5" />
+        <ArrowBigDownDash className="size-4.5" />
       </button>
     </div>
   );

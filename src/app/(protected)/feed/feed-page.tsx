@@ -28,6 +28,49 @@ export const FeedPage = () => {
       media: [{ src: "/assets/demo-post-3.svg", alt: "Demo post media 3" }],
       metrics: { score: 630, comments: 46 },
     },
+    {
+      title: "high-signal feeds",
+      createdAtLabel: "5 hours ago",
+      community: {
+        name: "r/designsystems",
+        href: "/",
+        iconSrc: "/assets/demo-community-2.svg",
+      },
+      media: [
+        {
+          src: "/assets/images/slime-seventh-prince.png",
+          alt: "Demo post media 3",
+        },
+      ],
+      metrics: { score: 630, comments: 46 },
+    },
+    {
+      title: "The best Quote",
+      createdAtLabel: "5 hours ago",
+      community: {
+        name: "r/designsystems",
+        href: "/",
+        iconSrc: "/assets/demo-community-2.svg",
+      },
+      media: [
+        {
+          src: "/assets/images/Steve-Jobs-Quote.jpeg",
+          alt: "Demo post media 4",
+        },
+      ],
+      metrics: { score: 630, comments: 46 },
+    },
+    {
+      title: "Screen Shot 1",
+      createdAtLabel: "5 hours ago",
+      community: {
+        name: "r/designsystems",
+        href: "/",
+        iconSrc: "/assets/demo-community-2.svg",
+      },
+      media: [{ src: "/assets/images/screen1.jpg", alt: "Demo post media 5" }],
+      metrics: { score: 630, comments: 46 },
+    },
   ] as const;
 
   return (
@@ -43,10 +86,6 @@ export const FeedPage = () => {
               <div className="h-2 bg-muted rounded w-1/2" />
             </div>
           </div>
-          <div className="bg-card border p-4 rounded-xl shadow-xs h-64" />
-          <div className="bg-card border p-4 rounded-xl shadow-xs h-64" />
-          <div className="bg-card border p-4 rounded-xl shadow-xs h-64" />
-          <div className="bg-card border p-4 rounded-xl shadow-xs h-64" />
           <div className="bg-card border p-4 rounded-xl shadow-xs h-64" />
           <div className="bg-card border p-4 rounded-xl shadow-xs h-64" />
         </div>
