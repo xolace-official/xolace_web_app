@@ -1,3 +1,5 @@
+"use client";
+
 import { useState } from "react";
 import PostCard from "@/components/cards/post-card/post-card";
 import type { PostMetricsVoteState } from "@/components/shared/post-metrics";

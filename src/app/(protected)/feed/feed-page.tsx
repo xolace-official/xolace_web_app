@@ -1,5 +1,3 @@
-"use client";
-
 import { PageContainer } from "@/components/app/page-container";
 import { CompleteProfileCard } from "@/components/cards/complete-profile-card";
 import { ThemeSwitcher } from "@/components/shared/theme-switcher";
@@ -12,7 +10,7 @@ export const FeedPage = () => {
       title="Fireside 🔥"
       contentClassName="max-sm:px-2"
       externalContent={<RightSideContent />}
-      actions={<ThemeSwitcher />}
+      actions={<ThemeSwitcher key={"theme-switcher"} />}
     >
       <div className="flex flex-col gap-6">
         <CompleteProfileCard />

@@ -1,14 +1,13 @@
-"use client";
-
-import { motion } from "framer-motion";
 import { ArrowRight } from "lucide-react";
 import Link from "next/link";
 
 import { Button } from "@/components/ui/button";
 import { MinimalCard, MinimalCardContent } from "@/components/ui/minimal-card";
 import { cn } from "@/lib/utils";
+import { MotionDiv } from "../shared/motion-wrappers";
 
 // Simple Circular Progress Component
+// TODO: Any data fetching should be done in the circular progress component
 const CircularProgress = ({
   value,
   size = 60,
@@ -65,9 +64,14 @@ const CircularProgress = ({
   );
 };
 
-export function CompleteProfileCard({ className }: { className?: string }) {
+export async function CompleteProfileCard({
+  className,
+}: {
+  className?: string;
+}) {
+  "use cache";
   return (
-    <motion.div
+    <MotionDiv
       initial={{ opacity: 0, y: -20, scale: 0.95 }}
       animate={{ opacity: 1, y: 0, scale: 1 }}
       transition={{ duration: 0.5, ease: "easeOut" }}
@@ -104,6 +108,6 @@ export function CompleteProfileCard({ className }: { className?: string }) {
           </div>
         </MinimalCardContent>
       </MinimalCard>
-    </motion.div>
+    </MotionDiv>
   );
 }
