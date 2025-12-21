@@ -3,7 +3,7 @@
 import { motion } from "framer-motion";
 import { ArrowRight } from "lucide-react";
 import Link from "next/link";
-import * as React from "react";
+
 import { Button } from "@/components/ui/button";
 import { MinimalCard, MinimalCardContent } from "@/components/ui/minimal-card";
 import { cn } from "@/lib/utils";
@@ -31,8 +31,9 @@ const CircularProgress = ({
         height={size}
         viewBox={`0 0 ${size} ${size}`}
         className="transform -rotate-90"
+        role="img"
+        aria-label={`Progress: ${value}%`}
       >
-        <title>Progress: {value}%</title>
         {/* Background Circle */}
         <circle
           cx={size / 2}
