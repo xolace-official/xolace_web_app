@@ -26,3 +26,8 @@ export function formatRelativeTime(input: Date | string | number) {
   const years = Math.round(days / 365);
   return rtf.format(years, "year");
 }
+
+// Default URL
+export const defaultUrl = process.env.VERCEL_URL
+  ? `https://${process.env.VERCEL_URL}`
+  : "http://localhost:3000";
