@@ -1,6 +1,5 @@
 import { cn } from "@/lib/utils";
-import { Separator } from "../ui/separator";
-import { SidebarToggle } from "./app-sidebar";
+import SiteHeader from "./site-header";
 import { StickySidebar } from "./sticky-sidebar";
 
 /**
@@ -40,26 +39,11 @@ export function PageContainer(props: {
 }) {
   return (
     <div className={cn("flex flex-col size-full", props.className)}>
-      <div className="sticky top-0 w-full flex items-center justify-between px-3 py-3 bg-background lg:relative z-50 header-height">
-        <div className="flex items-center gap-2">
-          {!props.disableSidebarToggle && (
-            <>
-              <SidebarToggle />
-
-              <Separator
-                orientation="vertical"
-                className="data-[orientation=vertical]:h-5"
-              />
-            </>
-          )}
-
-          <h1 className="text-sm font-medium pl-1 max-w-sm line-clamp-1">
-            {props.title}
-          </h1>
-        </div>
-
-        {props.actions}
-      </div>
+      <SiteHeader
+        disableSidebarToggle={props.disableSidebarToggle}
+        title={props.title}
+        actions={props.actions}
+      />
 
       <div
         id="scrollable-body"
