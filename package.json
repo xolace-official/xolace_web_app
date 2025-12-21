@@ -18,7 +18,8 @@
     "test": "jest",
     "test:watch": "jest --watch",
     "supabase:init": "bunx supabase init",
-    "supabase:start": "bunx supabase start"
+    "supabase:start": "bunx supabase start",
+    "supabase:generate-types": "bunx supabase gen types typescript --local --schema public > types_db.ts"
   },
   "dependencies": {
     "@dnd-kit/core": "^6.3.1",
@@ -90,6 +91,7 @@
     "jest": "^30.2.0",
     "jest-environment-jsdom": "^30.2.0",
     "lint-staged": "^16.2.7",
+    "orval": "^7.17.2",
     "supabase": "^2.67.3",
     "tailwindcss": "^4.1.18",
     "ts-node": "^10.9.2",

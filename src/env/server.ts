@@ -5,6 +5,9 @@ export const env = createEnv({
   server: {
     APP_URL: z.url(),
     NODE_ENV: z.enum(["development", "production", "test"]),
+    SUPABASE_PUBLISHABLE_KEY: z.string(),
+    SUPABASE_SECRET_KEY: z.string(),
+    SUPABASE_URL: z.string(),
   },
   // If you're using Next.js < 13.4.4, you'll need to specify the runtimeEnv manually
   // runtimeEnv: {
