@@ -7,6 +7,8 @@ import type { Database } from "./types_db";
  * Especially important if using Fluid compute: Don't put this client in a
  * global variable. Always create a new client within each function when using
  * it.
+ * Will be mostly used on the Nextjs side of things. Not the api layer.
+ * For Api , import createAuthedSupabase from server-api.ts
  */
 export async function createClient(props?: { admin?: boolean }) {
   const cookieStore = await cookies();
