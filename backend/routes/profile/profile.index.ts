@@ -7,6 +7,7 @@ const router = createRouter();
 // Define routes
 router.openapi(routes.getOwnProfile, handlers.getOwnProfile);
 router.openapi(routes.getOwnPublicProfile, handlers.getOwnPublicProfile);
+router.openapi(routes.getOwnPrivateProfile, handlers.getOwnPrivateProfile);
 router.openapi(
   routes.updateUserPublicProfile,
   handlers.updateUserPublicProfile,

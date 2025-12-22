@@ -3,6 +3,7 @@ import * as HttpStatusPhrases from "stoker/http-status-phrases";
 import { createServiceSupabase } from "@/lib/supabase/admin";
 import type { AppRouteHandler } from "../../types";
 import type {
+  GetOwnPrivateProfileRoute,
   GetOwnProfileRoute,
   GetOwnPublicProfileRoute,
   UpdateUserPrivateRoute,
@@ -64,7 +65,7 @@ export const getOwnPublicProfile: AppRouteHandler<
     const { data, error } = await supabase
       .from("profiles")
       .select("*")
-      .eq("user_id", userId)
+      .eq("id", userId)
       .single();
 
     if (error) {
@@ -76,6 +77,44 @@ export const getOwnPublicProfile: AppRouteHandler<
 
   try {
     const profileData = await fetchPublicProfile();
+
+    return c.json(profileData, HttpStatusCodes.OK);
+  } catch (error) {
+    console.log(error);
+    return c.json(
+      {
+        message: HttpStatusPhrases.INTERNAL_SERVER_ERROR,
+      },
+      HttpStatusCodes.INTERNAL_SERVER_ERROR,
+    );
+  }
+};
+
+export const getOwnPrivateProfile: AppRouteHandler<
+  GetOwnPrivateProfileRoute
+> = async (c) => {
+  const supabase = createServiceSupabase();
+  const userId = c.get("userId");
+
+  const fetchPrivateProfile = async () => {
+    const { data, error } = await supabase
+      .schema("private")
+      .from("profile_private")
+      .select(
+        "user_id, consent_version, has_consented, location_country_code, location_region , location_city ",
+      )
+      .eq("user_id", userId)
+      .single();
+
+    if (error) {
+      throw new Error(error.message);
+    }
+
+    return data;
+  };
+
+  try {
+    const profileData = await fetchPrivateProfile();
 
     return c.json(profileData, HttpStatusCodes.OK);
   } catch (error) {

@@ -65,14 +65,8 @@ export const publicProfileResponse = publicProfileSchema.openapi({
 
 export const privateProfileSchema = z.object({
   user_id: z.uuid(),
-  created_at: z.iso.datetime(),
-  updated_at: z.iso.datetime(),
-  email: z.email().nullable(),
   consent_version: z.number().int().min(0).default(0),
   has_consented: z.boolean().default(false),
-  account_state: accountStateSchema,
-  restricted_reason: z.string().nullable(),
-  restricted_until: z.iso.datetime().nullable(),
   location_country_code: countryCodeSchema,
   location_region: locationTextSchema("Region", 100),
   location_city: locationTextSchema("City", 100),

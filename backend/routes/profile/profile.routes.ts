@@ -5,6 +5,7 @@ import { jsonContent } from "stoker/openapi/helpers";
 import { createMessageObjectSchema } from "stoker/openapi/schemas";
 import {
   fullProfileResponse,
+  privateProfileResponse,
   publicProfileResponse,
   updatePrivateProfileBody,
   updatePublicProfileBody,
@@ -53,6 +54,27 @@ export const getOwnPublicProfile = createRoute({
     [HttpStatusCodes.OK]: jsonContent(
       publicProfileResponse,
       "The requested Public profile",
+    ),
+    [HttpStatusCodes.UNAUTHORIZED]: jsonContent(
+      unauthorizedErrorSchema,
+      "Authentication required",
+    ),
+    [HttpStatusCodes.INTERNAL_SERVER_ERROR]: jsonContent(
+      internalServerErrorSchema,
+      "Internal Server Error",
+    ),
+  },
+});
+
+export const getOwnPrivateProfile = createRoute({
+  path: "/mine",
+  summary: "Get private profile data",
+  description: "The private profile of the user",
+  method: "get",
+  responses: {
+    [HttpStatusCodes.OK]: jsonContent(
+      privateProfileResponse,
+      "The requested profile",
     ),
     [HttpStatusCodes.UNAUTHORIZED]: jsonContent(
       unauthorizedErrorSchema,
@@ -126,5 +148,6 @@ export const updateUserPrivateProfile = createRoute({
 //types
 export type GetOwnProfileRoute = typeof getOwnProfile;
 export type GetOwnPublicProfileRoute = typeof getOwnPublicProfile;
+export type GetOwnPrivateProfileRoute = typeof getOwnPrivateProfile;
 export type UpdateUserPublicRoute = typeof updateUserPublicProfile;
 export type UpdateUserPrivateRoute = typeof updateUserPrivateProfile;
