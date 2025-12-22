@@ -6,7 +6,15 @@ const router = createRouter();
 
 // Define routes
 router.openapi(routes.getOwnProfile, handlers.getOwnProfile);
-// router.openapi(routes.updateUserProfile, handlers.updateUserProfile);
+router.openapi(routes.getOwnPublicProfile, handlers.getOwnPublicProfile);
+router.openapi(
+  routes.updateUserPublicProfile,
+  handlers.updateUserPublicProfile,
+);
+router.openapi(
+  routes.updateUserPrivateProfile,
+  handlers.updateUserPrivateProfile,
+);
 // router.openapi(routes.deleteUserProfile, handlers.deleteUserProfile);
 
 export default router;
