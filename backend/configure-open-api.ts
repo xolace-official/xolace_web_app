@@ -3,7 +3,7 @@ import { defaultUrl } from "@/utils";
 import type { AppOpenAPI } from "./types";
 
 export default function configureOpenAPI(app: AppOpenAPI) {
-  app.doc("api/v1/doc", {
+  app.doc("api/doc", {
     openapi: "3.0.0",
     info: {
       version: "1.0.0",
@@ -12,7 +12,7 @@ export default function configureOpenAPI(app: AppOpenAPI) {
   });
 
   app.get(
-    "api/v1/reference",
+    "api/reference",
     Scalar({
       url: `${defaultUrl}/api/doc`,
       theme: "fastify",

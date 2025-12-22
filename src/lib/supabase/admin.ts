@@ -1,6 +1,6 @@
 import { createClient } from "@supabase/supabase-js";
 import { env } from "@/env/server";
-import type { Database } from "./types_db";
+import type { FullDatabase } from "./types_private";
 
 /**
  * Service-role Supabase client
@@ -13,7 +13,7 @@ export function createServiceSupabase() {
     throw new Error("SUPABASE_SECRET_KEY is missing");
   }
 
-  return createClient<Database>(env.SUPABASE_URL, env.SUPABASE_SECRET_KEY, {
+  return createClient(env.SUPABASE_URL, env.SUPABASE_SECRET_KEY, {
     auth: {
       persistSession: false,
       autoRefreshToken: false,
