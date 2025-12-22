@@ -70,5 +70,7 @@ export const authMiddleware = createMiddleware<AppBindings>(async (c, next) => {
   c.set("userId", user.id);
   c.set("supabase", supabase);
 
+  console.log("Auth middleware passed");
+
   await next();
 });

@@ -13,13 +13,18 @@ export const getOwnProfile: AppRouteHandler<GetOwnProfileRoute> = async (c) => {
     const [publicData, privateData] = await Promise.all([
       supabase.from("profiles").select("*").eq("id", userId).single(),
       adminSupabase
-        .from("private.profile_private")
+        .schema("private")
+        .from("profile_private")
         .select("*")
         .eq("user_id", userId)
         .single(),
     ]);
+    console.log("publicData", publicData);
+    console.log("privateData", privateData);
 
     if (publicData.error || privateData.error) {
+      console.log(publicData.error?.message);
+      console.log("private ", privateData.error?.message);
       throw new Error(publicData.error?.message);
     }
 

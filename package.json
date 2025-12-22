@@ -19,6 +19,7 @@
     "test:watch": "jest --watch",
     "supabase:init": "bunx supabase init",
     "supabase:start": "bunx supabase start",
+    "supabase:restart": "bunx supabase stop && bunx supabase start",
     "supabase:generate-types": "bunx supabase gen types typescript --local --schema public > types_db.ts"
   },
   "dependencies": {
