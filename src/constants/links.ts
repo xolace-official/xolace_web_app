@@ -106,3 +106,29 @@ export const COLLAPSIBLE_HEALTH_SPACE_NAV_LINKS = [
     ],
   },
 ];
+
+// Legal links
+export type LegalLink = {
+  label: string;
+  href: string;
+  external?: boolean;
+};
+
+export const LEGAL_LINKS: LegalLink[] = [
+  {
+    label: "Xolace Rules",
+    href: "#",
+  },
+  {
+    label: "Privacy Policy",
+    href: "/policies",
+  },
+  {
+    label: "User Agreement",
+    href: "/policy",
+  },
+  {
+    label: "Xolace, Inc. © 2025. All rights reserved.",
+    href: "#",
+  },
+];
