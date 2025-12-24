@@ -391,6 +391,8 @@ function DropDrawerContent({
   );
 }
 
+const DropDrawerGroupContext = React.createContext<boolean>(false);
+
 function DropDrawerItem({
   className,
   children,
@@ -405,43 +407,7 @@ function DropDrawerItem({
   icon?: React.ReactNode;
 }) {
   const { isMobile } = useDropDrawerContext();
-
-  // Define hooks outside of conditionals to follow React rules
-  // Check if this item is inside a group by looking at parent elements
-  const isInGroup = React.useCallback(
-    (element: HTMLElement | null): boolean => {
-      if (!element) return false;
-
-      // Check if any parent has a data-drop-drawer-group attribute
-      let parent = element.parentElement;
-      while (parent) {
-        if (parent.hasAttribute("data-drop-drawer-group")) {
-          return true;
-        }
-        parent = parent.parentElement;
-      }
-      return false;
-    },
-    [],
-  );
-
-  // Create a ref to check if the item is in a group
-  const itemRef = React.useRef<HTMLDivElement>(null);
-  const [isInsideGroup, setIsInsideGroup] = React.useState(false);
-
-  React.useEffect(() => {
-    // Only run this effect in mobile mode
-    if (!isMobile) return;
-
-    // Use a short timeout to ensure the DOM is fully rendered
-    const timer = setTimeout(() => {
-      if (itemRef.current) {
-        setIsInsideGroup(isInGroup(itemRef.current));
-      }
-    }, 0);
-
-    return () => clearTimeout(timer);
-  }, [isInGroup, isMobile]);
+  const isInsideGroup = React.useContext(DropDrawerGroupContext);
 
   if (isMobile) {
     const handleClick = (e: React.MouseEvent<HTMLDivElement>) => {
@@ -455,7 +421,6 @@ function DropDrawerItem({
       // biome-ignore lint/a11y/useKeyWithClickEvents: well ignore
       // biome-ignore lint/a11y/noStaticElementInteractions: well ignore
       <div
-        ref={itemRef}
         data-slot="drop-drawer-item"
         data-variant={variant}
         data-inset={inset}
@@ -639,34 +604,38 @@ function DropDrawerGroup({
 
   if (isMobile) {
     return (
-      // biome-ignore lint/a11y/useSemanticElements: well ignore
-      <div
-        data-drop-drawer-group
-        data-slot="drop-drawer-group"
-        role="group"
-        className={cn(
-          "bg-secondary dark:bg-secondary mx-2 my-3 overflow-hidden rounded-xl",
-          className,
-        )}
-        {...props}
-      >
-        {childrenWithSeparators}
-      </div>
+      <DropDrawerGroupContext.Provider value={true}>
+        {/* biome-ignore lint/a11y/useSemanticElements: well ignore */}
+        <div
+          data-drop-drawer-group
+          data-slot="drop-drawer-group"
+          role="group"
+          className={cn(
+            "bg-secondary dark:bg-secondary mx-2 my-3 overflow-hidden rounded-xl",
+            className,
+          )}
+          {...props}
+        >
+          {childrenWithSeparators}
+        </div>
+      </DropDrawerGroupContext.Provider>
     );
   }
 
   // On desktop, use a div with proper role and attributes
   return (
-    // biome-ignore lint/a11y/useSemanticElements: well ignore
-    <div
-      data-drop-drawer-group
-      data-slot="drop-drawer-group"
-      role="group"
-      className={className}
-      {...props}
-    >
-      {children}
-    </div>
+    <DropDrawerGroupContext.Provider value={true}>
+      {/* biome-ignore lint/a11y/useSemanticElements: well ignore */}
+      <div
+        data-drop-drawer-group
+        data-slot="drop-drawer-group"
+        role="group"
+        className={className}
+        {...props}
+      >
+        {children}
+      </div>
+    </DropDrawerGroupContext.Provider>
   );
 }
 
