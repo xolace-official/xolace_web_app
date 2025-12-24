@@ -43,7 +43,7 @@ export function EntityActionsMenu({
   onOpenChange,
 }: EntityActionsMenuProps) {
   return (
-    <DropDrawer modal={false} onOpenChange={onOpenChange}>
+    <DropDrawer onOpenChange={onOpenChange}>
       <DropDrawerTrigger aria-label="Open actions menu">
         {/* keep your existing trigger icon for now */}
         {/** biome-ignore lint/a11y/noSvgWithoutTitle: Well props not available */}

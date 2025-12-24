@@ -1,5 +1,5 @@
-import { DrawerDemo } from "@/components/extras/demo-drawer";
+import { PostExample } from "@/components/extras/post-example";
 
 export const CreatePostPage = () => {
-  return <DrawerDemo />;
+  return <PostExample />;
 };
