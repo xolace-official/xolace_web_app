@@ -11,11 +11,11 @@
 import {
   DropDrawer,
   DropDrawerContent,
+  DropDrawerGroup,
   DropDrawerItem,
-  DropDrawerTrigger,
   DropDrawerLabel,
   DropDrawerSeparator,
-  DropDrawerGroup
+  DropDrawerTrigger,
 } from "@/components/ui/dropdrawer";
 import type {
   EntityActionDescriptor,
@@ -60,27 +60,27 @@ export function EntityActionsMenu({
       <DropDrawerContent align="end" className="">
         <DropDrawerLabel>Actions</DropDrawerLabel>
         <DropDrawerSeparator />
-         <DropDrawerGroup>
-        {actions.map((action) => (
-          <DropDrawerItem
-            key={action.key}
-            disabled={action.disabled}
-            className={
-              action.destructive
-                ? "text-red-400 hover:cursor-pointer hover:text-red-500"
-                : "hover:cursor-pointer"
-            }
-            onSelect={async () => {
-              // Dumb renderer: just run what it receives
-              await action.run({ target, context, ui });
-            }}
-            icon={action.icon}
-          >
-            {/* {action.icon ? <span className="mr-2">{action.icon}</span> : null} */}
-            <span>{action.label}</span>
-          </DropDrawerItem>
-        ))}
-         </DropDrawerGroup>
+        <DropDrawerGroup>
+          {actions.map((action) => (
+            <DropDrawerItem
+              key={action.key}
+              disabled={action.disabled}
+              className={
+                action.destructive
+                  ? "text-red-400 hover:cursor-pointer hover:text-red-500"
+                  : "hover:cursor-pointer"
+              }
+              onSelect={async () => {
+                // Dumb renderer: just run what it receives
+                await action.run({ target, context, ui });
+              }}
+              icon={action.icon}
+            >
+              {/* {action.icon ? <span className="mr-2">{action.icon}</span> : null} */}
+              <span>{action.label}</span>
+            </DropDrawerItem>
+          ))}
+        </DropDrawerGroup>
       </DropDrawerContent>
     </DropDrawer>
   );

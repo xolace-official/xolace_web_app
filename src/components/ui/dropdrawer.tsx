@@ -1,8 +1,8 @@
 /** biome-ignore-all lint/suspicious/noArrayIndexKey:   well ignore */
 "use client";
 
-import { AnimatePresence, motion, type Easing } from "motion/react";
 import { ChevronLeftIcon, ChevronRightIcon } from "lucide-react";
+import { AnimatePresence, type Easing, motion } from "motion/react";
 import * as React from "react";
 
 import {
@@ -36,7 +36,7 @@ const useDropDrawerContext = () => {
   const context = React.useContext(DropDrawerContext);
   if (!context) {
     throw new Error(
-      "DropDrawer components cannot be rendered outside the DropDrawer Context"
+      "DropDrawer components cannot be rendered outside the DropDrawer Context",
     );
   }
   return context;
@@ -105,7 +105,7 @@ function DropDrawerContent({
 
   // Create a ref to store submenu content by ID
   const submenuContentRef = React.useRef<Map<string, React.ReactNode[]>>(
-    new Map()
+    new Map(),
   );
 
   // Function to navigate to a submenu
@@ -143,7 +143,7 @@ function DropDrawerContent({
     (id: string, content: React.ReactNode[]) => {
       submenuContentRef.current.set(id, content);
     },
-    []
+    [],
   );
 
   // Function to extract submenu content
@@ -188,7 +188,7 @@ function DropDrawerContent({
                       subContentProps.children,
                       (contentChild) => {
                         result.push(contentChild);
-                      }
+                      },
                     );
                   }
                 }
@@ -221,7 +221,7 @@ function DropDrawerContent({
 
       return result;
     },
-    []
+    [],
   );
 
   // Get submenu content (either from cache or extract it)
@@ -247,7 +247,7 @@ function DropDrawerContent({
 
       return submenuContent;
     },
-    [children, extractSubmenuContent]
+    [children, extractSubmenuContent],
   );
 
   // Animation variants for Framer Motion
@@ -300,7 +300,7 @@ function DropDrawerContent({
               <DrawerHeader>
                 <div className="flex items-center gap-2">
                   <button
-                  type="button"
+                    type="button"
                     onClick={goBack}
                     className="hover:bg-muted/50 rounded-full p-1"
                   >
@@ -381,7 +381,7 @@ function DropDrawerContent({
         sideOffset={4}
         className={cn(
           "max-h-(--radix-dropdown-menu-content-available-height) min-w-[220px] overflow-y-auto",
-          className
+          className,
         )}
         {...props}
       >
@@ -422,7 +422,7 @@ function DropDrawerItem({
       }
       return false;
     },
-    []
+    [],
   );
 
   // Create a ref to check if the item is in a group
@@ -454,7 +454,7 @@ function DropDrawerItem({
     const content = (
       // biome-ignore lint/a11y/useKeyWithClickEvents: well ignore
       // biome-ignore lint/a11y/noStaticElementInteractions: well ignore
-<div
+      <div
         ref={itemRef}
         data-slot="drop-drawer-item"
         data-variant={variant}
@@ -469,7 +469,7 @@ function DropDrawerItem({
           inset && "pl-8",
           variant === "destructive" && "text-destructive dark:text-destructive",
           disabled && "pointer-events-none opacity-50",
-          className
+          className,
         )}
         onClick={handleClick}
         aria-disabled={disabled}
@@ -550,7 +550,7 @@ function DropDrawerLabel({
           data-slot="drop-drawer-label"
           className={cn(
             "text-muted-foreground px-4 py-2 text-sm font-medium",
-            className
+            className,
           )}
           {...props}
         >
@@ -620,7 +620,7 @@ function DropDrawerGroup({
     // Filter out any existing separators
     const filteredChildren = childArray.filter(
       (child) =>
-        React.isValidElement(child) && child.type !== DropDrawerSeparator
+        React.isValidElement(child) && child.type !== DropDrawerSeparator,
     );
 
     // Add separators between items
@@ -640,13 +640,13 @@ function DropDrawerGroup({
   if (isMobile) {
     return (
       // biome-ignore lint/a11y/useSemanticElements: well ignore
-<div
+      <div
         data-drop-drawer-group
         data-slot="drop-drawer-group"
         role="group"
         className={cn(
           "bg-secondary dark:bg-secondary mx-2 my-3 overflow-hidden rounded-xl",
-          className
+          className,
         )}
         {...props}
       >
@@ -658,7 +658,7 @@ function DropDrawerGroup({
   // On desktop, use a div with proper role and attributes
   return (
     // biome-ignore lint/a11y/useSemanticElements: well ignore
-<div
+    <div
       data-drop-drawer-group
       data-slot="drop-drawer-group"
       role="group"
@@ -720,7 +720,7 @@ function DropDrawerSub({
           (child.props as { children?: React.ReactNode }).children,
           (contentChild) => {
             contentItems.push(contentChild);
-          }
+          },
         );
       }
     });
@@ -746,7 +746,7 @@ function DropDrawerSub({
             "data-submenu-id": submenuId,
             // Use only data attributes, not custom props
             "data-parent-submenu": submenuId,
-          } as React.HTMLAttributes<HTMLElement>
+          } as React.HTMLAttributes<HTMLElement>,
         );
       }
 
@@ -759,7 +759,7 @@ function DropDrawerSub({
             "data-submenu-id": submenuId,
             // Use only data attributes, not custom props
             "data-parent-submenu": submenuId,
-          } as React.HTMLAttributes<HTMLElement>
+          } as React.HTMLAttributes<HTMLElement>,
         );
       }
 
@@ -817,7 +817,7 @@ function DropDrawerSubTrigger({
       }
       return false;
     },
-    []
+    [],
   );
 
   // Create a ref to check if the item is in a group
@@ -911,7 +911,7 @@ function DropDrawerSubTrigger({
           // For items in a group, don't add background but add more padding
           isInsideGroup && "bg-transparent py-4",
           inset && "pl-8",
-          className
+          className,
         )}
         onClick={combinedOnClick}
         {...restProps}
@@ -955,7 +955,7 @@ function DropDrawerSubContent({
       sideOffset={sideOffset}
       className={cn(
         "z-50 min-w-[8rem] overflow-hidden rounded-md border p-1 shadow-lg",
-        className
+        className,
       )}
       {...props}
     >
