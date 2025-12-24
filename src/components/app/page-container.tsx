@@ -52,7 +52,7 @@ export function PageContainer(props: {
         <div className="flex justify-center items-start gap-6 sm:px-4 py-6">
           <div
             className={cn(
-              "w-full max-w-3xl flex flex-col gap-10 min-w-0",
+              "w-full max-w-3xl flex flex-col gap-4 md:gap-6 min-w-0",
               props.contentClassName,
             )}
           >

@@ -1,7 +1,8 @@
 import { PageContainer } from "@/components/app/page-container";
-import { ManageCampfireCardDemo } from "@/components/cards/campfires/manage-card-demo";
 import { PageHeading } from "@/components/shared/layout/page-heading";
+import { SearchBar } from "@/components/shared/search-bar";
 import { ThemeSwitcher } from "@/components/shared/theme-switcher";
+import { Separator } from "@/components/ui/separator";
 import { ManageCampfireList } from "@/features/campfires/manage/manage-list";
 import { RightSideSection } from "@/features/campfires/manage/right-side-section";
 
@@ -15,9 +16,15 @@ export const ManageCampfires = () => {
       <PageHeading
         title="Manage your Campfires"
         description="Manage your campfires"
-        actions={<p className="text-sm text-muted-foreground">10 joined</p>}
+        actions={
+          <p className="text-sm hidden md:block text-muted-foreground">
+            10 joined
+          </p>
+        }
       />
-      <div>
+      <div className="flex flex-col gap-4 px-2 md:px-0">
+        <SearchBar />
+        <Separator />
         <ManageCampfireList />
       </div>
     </PageContainer>

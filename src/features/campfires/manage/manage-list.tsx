@@ -56,11 +56,89 @@ const DUMMY_CAMPFIRES: UserCampfireFavoriteJoin[] = [
     isFavorite: false,
     isJoined: true,
   },
+  {
+    campfireId: "6",
+    name: "React Developers",
+    slug: "react-devs",
+    description: "Server components, app router, and everything Next.js 14+",
+    iconURL: "https://api.dicebear.com/7.x/shapes/svg?seed=nextjs",
+    isFavorite: false,
+    isJoined: true,
+  },
+  {
+    campfireId: "7",
+    name: "React Developers",
+    slug: "react-devs",
+    description: "Server components, app router, and everything Next.js 14+",
+    iconURL: "https://api.dicebear.com/7.x/shapes/svg?seed=nextjs",
+    isFavorite: false,
+    isJoined: true,
+  },
+  {
+    campfireId: "8",
+    name: "React Developers",
+    slug: "react-devs",
+    description: "Server components, app router, and everything Next.js 14+",
+    iconURL: "https://api.dicebear.com/7.x/shapes/svg?seed=nextjs",
+    isFavorite: false,
+    isJoined: true,
+  },
+  {
+    campfireId: "9",
+    name: "React Developers",
+    slug: "react-devs",
+    description: "Server components, app router, and everything Next.js 14+",
+    iconURL: "https://api.dicebear.com/7.x/shapes/svg?seed=nextjs",
+    isFavorite: false,
+    isJoined: true,
+  },
+  {
+    campfireId: "10",
+    name: "React Developers",
+    slug: "react-devs",
+    description: "Server components, app router, and everything Next.js 14+",
+    iconURL: "https://api.dicebear.com/7.x/shapes/svg?seed=nextjs",
+    isFavorite: false,
+    isJoined: true,
+  },
+  {
+    campfireId: "11",
+    name: "React Developers",
+    slug: "react-devs",
+    description: "Server components, app router, and everything Next.js 14+",
+    iconURL: "https://api.dicebear.com/7.x/shapes/svg?seed=nextjs",
+    isFavorite: false,
+    isJoined: true,
+  },
+  {
+    campfireId: "12",
+    name: "React Developers",
+    slug: "react-devs",
+    description: "Server components, app router, and everything Next.js 14+",
+    iconURL: "https://api.dicebear.com/7.x/shapes/svg?seed=nextjs",
+    isFavorite: false,
+    isJoined: true,
+  },
+  {
+    campfireId: "13",
+    name: "React Developers",
+    slug: "react-devs",
+    description: "Server components, app router, and everything Next.js 14+",
+    iconURL: "https://api.dicebear.com/7.x/shapes/svg?seed=nextjs",
+    isFavorite: false,
+    isJoined: true,
+  },
+  {
+    campfireId: "14",
+    name: "React Developers",
+    slug: "react-devs",
+    description: "Server components, app router, and everything Next.js 14+",
+    iconURL: "https://api.dicebear.com/7.x/shapes/svg?seed=nextjs",
+    isFavorite: false,
+    isJoined: true,
+  },
 ];
 
-/**
- * Demo component showcasing the ManageCampfireCard
- */
 export function ManageCampfireList() {
   const [campfires, setCampfires] = useState(DUMMY_CAMPFIRES);
   const [togglingId, setTogglingId] = useState<string | null>(null);
@@ -104,7 +182,7 @@ export function ManageCampfireList() {
   };
 
   return (
-    <div className="flex flex-col gap-6">
+    <div className="flex flex-col gap-4">
       {campfires.map((campfire) => (
         <ManageCampfireCard
           key={campfire.campfireId}
