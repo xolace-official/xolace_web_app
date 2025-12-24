@@ -4,7 +4,7 @@ import { useState } from "react";
 import { LegalFooter } from "@/components/shared/legal-footer";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 
-const tabOptions: { key: string; label: string }[] = [
+export const tabOptions: { key: string; label: string }[] = [
   { key: "allCampfires", label: "All Campfires" },
   { key: "favorites", label: "Favorites" },
 ];
