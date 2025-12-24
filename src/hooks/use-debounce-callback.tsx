@@ -1,3 +1,4 @@
+/** biome-ignore-all lint/suspicious/noExplicitAny: ignore any for now */
 import debounce from "lodash.debounce";
 import * as React from "react";
 
