@@ -114,7 +114,7 @@ const ManageCampfireCard = ({
           onClick={handleFavoriteClick}
           disabled={isTogglingFavorite}
           className={cn(
-            "transition-all duration-300",
+            "transition-all duration-300 hover:bg-transparent cursor-pointer",
             isAnimating && "scale-125",
             !isTogglingFavorite && "hover:scale-110",
           )}
