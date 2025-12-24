@@ -1,3 +1,5 @@
+import { PostExample } from "@/components/extras/post-example";
+
 export const CreatePostPage = () => {
-  return <div>CreatePost</div>;
+  return <PostExample />;
 };

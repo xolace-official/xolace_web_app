@@ -1,13 +1,22 @@
 "use client";
 
+// import {
+//   DropdownMenu,
+//   DropdownMenuContent,
+//   DropdownMenuItem,
+//   DropdownMenuLabel,
+//   DropdownMenuSeparator,
+//   DropdownMenuTrigger,
+// } from "@/components/ui/dropdown-menu";
 import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
+  DropDrawer,
+  DropDrawerContent,
+  DropDrawerGroup,
+  DropDrawerItem,
+  DropDrawerLabel,
+  DropDrawerSeparator,
+  DropDrawerTrigger,
+} from "@/components/ui/dropdrawer";
 import type {
   EntityActionDescriptor,
   EntityActionsContext,
@@ -34,8 +43,8 @@ export function EntityActionsMenu({
   onOpenChange,
 }: EntityActionsMenuProps) {
   return (
-    <DropdownMenu modal={false} onOpenChange={onOpenChange}>
-      <DropdownMenuTrigger aria-label="Open actions menu">
+    <DropDrawer onOpenChange={onOpenChange}>
+      <DropDrawerTrigger aria-label="Open actions menu">
         {/* keep your existing trigger icon for now */}
         {/** biome-ignore lint/a11y/noSvgWithoutTitle: Well props not available */}
         <svg
@@ -46,31 +55,33 @@ export function EntityActionsMenu({
         >
           <path d="M6 10a2 2 0 11-4 0 2 2 0 014 0zM12 10a2 2 0 11-4 0 2 2 0 014 0zM16 12a2 2 0 100-4 2 2 0 000 4z" />
         </svg>
-      </DropdownMenuTrigger>
+      </DropDrawerTrigger>
 
-      <DropdownMenuContent align="end" className="">
-        <DropdownMenuLabel>Actions</DropdownMenuLabel>
-        <DropdownMenuSeparator />
-
-        {actions.map((action) => (
-          <DropdownMenuItem
-            key={action.key}
-            disabled={action.disabled}
-            className={
-              action.destructive
-                ? "text-red-400 hover:cursor-pointer hover:text-red-500"
-                : "hover:cursor-pointer"
-            }
-            onSelect={async () => {
-              // Dumb renderer: just run what it receives
-              await action.run({ target, context, ui });
-            }}
-          >
-            {action.icon ? <span className="mr-2">{action.icon}</span> : null}
-            <span>{action.label}</span>
-          </DropdownMenuItem>
-        ))}
-      </DropdownMenuContent>
-    </DropdownMenu>
+      <DropDrawerContent align="end" className="">
+        <DropDrawerLabel>Actions</DropDrawerLabel>
+        <DropDrawerSeparator />
+        <DropDrawerGroup>
+          {actions.map((action) => (
+            <DropDrawerItem
+              key={action.key}
+              disabled={action.disabled}
+              className={
+                action.destructive
+                  ? "text-red-400 hover:cursor-pointer hover:text-red-500"
+                  : "hover:cursor-pointer"
+              }
+              onSelect={async () => {
+                // Dumb renderer: just run what it receives
+                await action.run({ target, context, ui });
+              }}
+              icon={action.icon}
+            >
+              {/* {action.icon ? <span className="mr-2">{action.icon}</span> : null} */}
+              <span>{action.label}</span>
+            </DropDrawerItem>
+          ))}
+        </DropDrawerGroup>
+      </DropDrawerContent>
+    </DropDrawer>
   );
 }
