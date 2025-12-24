@@ -1,6 +1,8 @@
 import { PageContainer } from "@/components/app/page-container";
+import { ManageCampfireCardDemo } from "@/components/cards/campfires/manage-card-demo";
 import { PageHeading } from "@/components/shared/layout/page-heading";
 import { ThemeSwitcher } from "@/components/shared/theme-switcher";
+import { ManageCampfireList } from "@/features/campfires/manage/manage-list";
 import { RightSideSection } from "@/features/campfires/manage/right-side-section";
 
 export const ManageCampfires = () => {
@@ -16,7 +18,7 @@ export const ManageCampfires = () => {
         actions={<p className="text-sm text-muted-foreground">10 joined</p>}
       />
       <div>
-        <p>Manage your campfires</p>
+        <ManageCampfireList />
       </div>
     </PageContainer>
   );
