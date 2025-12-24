@@ -1,3 +1,6 @@
+
+import { DrawerDemo } from "@/components/extras/demo-drawer"
+
 export const CreatePostPage = () => {
-  return <div>CreatePost</div>;
+  return <DrawerDemo/>
 };

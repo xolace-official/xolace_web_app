@@ -1,13 +1,22 @@
 "use client";
 
+// import {
+//   DropdownMenu,
+//   DropdownMenuContent,
+//   DropdownMenuItem,
+//   DropdownMenuLabel,
+//   DropdownMenuSeparator,
+//   DropdownMenuTrigger,
+// } from "@/components/ui/dropdown-menu";
 import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
+  DropDrawer,
+  DropDrawerContent,
+  DropDrawerItem,
+  DropDrawerTrigger,
+  DropDrawerLabel,
+  DropDrawerSeparator,
+  DropDrawerGroup
+} from "@/components/ui/dropdrawer";
 import type {
   EntityActionDescriptor,
   EntityActionsContext,
@@ -34,8 +43,8 @@ export function EntityActionsMenu({
   onOpenChange,
 }: EntityActionsMenuProps) {
   return (
-    <DropdownMenu modal={false} onOpenChange={onOpenChange}>
-      <DropdownMenuTrigger aria-label="Open actions menu">
+    <DropDrawer modal={false} onOpenChange={onOpenChange}>
+      <DropDrawerTrigger aria-label="Open actions menu">
         {/* keep your existing trigger icon for now */}
         {/** biome-ignore lint/a11y/noSvgWithoutTitle: Well props not available */}
         <svg
@@ -46,14 +55,14 @@ export function EntityActionsMenu({
         >
           <path d="M6 10a2 2 0 11-4 0 2 2 0 014 0zM12 10a2 2 0 11-4 0 2 2 0 014 0zM16 12a2 2 0 100-4 2 2 0 000 4z" />
         </svg>
-      </DropdownMenuTrigger>
+      </DropDrawerTrigger>
 
-      <DropdownMenuContent align="end" className="">
-        <DropdownMenuLabel>Actions</DropdownMenuLabel>
-        <DropdownMenuSeparator />
-
+      <DropDrawerContent align="end" className="">
+        <DropDrawerLabel>Actions</DropDrawerLabel>
+        <DropDrawerSeparator />
+         <DropDrawerGroup>
         {actions.map((action) => (
-          <DropdownMenuItem
+          <DropDrawerItem
             key={action.key}
             disabled={action.disabled}
             className={
@@ -65,12 +74,14 @@ export function EntityActionsMenu({
               // Dumb renderer: just run what it receives
               await action.run({ target, context, ui });
             }}
+            icon={action.icon}
           >
-            {action.icon ? <span className="mr-2">{action.icon}</span> : null}
+            {/* {action.icon ? <span className="mr-2">{action.icon}</span> : null} */}
             <span>{action.label}</span>
-          </DropdownMenuItem>
+          </DropDrawerItem>
         ))}
-      </DropdownMenuContent>
-    </DropdownMenu>
+         </DropDrawerGroup>
+      </DropDrawerContent>
+    </DropDrawer>
   );
 }
