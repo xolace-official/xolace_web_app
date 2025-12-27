@@ -50,6 +50,7 @@ export const getOwnPublicProfile = createRoute({
   summary: "Get Public facing profile data",
   description: "The profile is visible to all users",
   method: "get",
+  tags,
   responses: {
     [HttpStatusCodes.OK]: jsonContent(
       publicProfileResponse,
@@ -71,6 +72,7 @@ export const getOwnPrivateProfile = createRoute({
   summary: "Get private profile data",
   description: "The private profile of the user",
   method: "get",
+  tags,
   responses: {
     [HttpStatusCodes.OK]: jsonContent(
       privateProfileResponse,
