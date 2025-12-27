@@ -9,6 +9,274 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
+      campfire_guide_resources: {
+        Row: {
+          campfire_id: string;
+          created_at: string;
+          id: number;
+          label: string;
+          sort_order: number;
+          url: string | null;
+        };
+        Insert: {
+          campfire_id: string;
+          created_at?: string;
+          id?: number;
+          label: string;
+          sort_order?: number;
+          url?: string | null;
+        };
+        Update: {
+          campfire_id?: string;
+          created_at?: string;
+          id?: number;
+          label?: string;
+          sort_order?: number;
+          url?: string | null;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "campfire_guide_resources_campfire_id_fkey";
+            columns: ["campfire_id"];
+            isOneToOne: false;
+            referencedRelation: "campfires";
+            referencedColumns: ["id"];
+          },
+        ];
+      };
+      campfire_lanes: {
+        Row: {
+          created_at: string;
+          description: string | null;
+          id: string;
+          is_active: boolean;
+          is_high_safety: boolean | null;
+          key: string;
+          name: string;
+          realm_id: string;
+          sort_order: number;
+        };
+        Insert: {
+          created_at?: string;
+          description?: string | null;
+          id?: string;
+          is_active?: boolean;
+          is_high_safety?: boolean | null;
+          key: string;
+          name: string;
+          realm_id: string;
+          sort_order?: number;
+        };
+        Update: {
+          created_at?: string;
+          description?: string | null;
+          id?: string;
+          is_active?: boolean;
+          is_high_safety?: boolean | null;
+          key?: string;
+          name?: string;
+          realm_id?: string;
+          sort_order?: number;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "campfire_lanes_realm_id_fkey";
+            columns: ["realm_id"];
+            isOneToOne: false;
+            referencedRelation: "campfire_realms";
+            referencedColumns: ["id"];
+          },
+        ];
+      };
+      campfire_members: {
+        Row: {
+          campfire_id: string;
+          is_favorite: boolean;
+          joined_at: string;
+          role: Database["public"]["Enums"]["campfire_role"];
+          status: Database["public"]["Enums"]["campfire_member_status"];
+          user_id: string;
+        };
+        Insert: {
+          campfire_id: string;
+          is_favorite?: boolean;
+          joined_at?: string;
+          role?: Database["public"]["Enums"]["campfire_role"];
+          status?: Database["public"]["Enums"]["campfire_member_status"];
+          user_id: string;
+        };
+        Update: {
+          campfire_id?: string;
+          is_favorite?: boolean;
+          joined_at?: string;
+          role?: Database["public"]["Enums"]["campfire_role"];
+          status?: Database["public"]["Enums"]["campfire_member_status"];
+          user_id?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "campfire_members_campfire_id_fkey";
+            columns: ["campfire_id"];
+            isOneToOne: false;
+            referencedRelation: "campfires";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "campfire_members_user_id_fkey";
+            columns: ["user_id"];
+            isOneToOne: false;
+            referencedRelation: "profiles";
+            referencedColumns: ["id"];
+          },
+        ];
+      };
+      campfire_realms: {
+        Row: {
+          created_at: string;
+          description: string | null;
+          id: string;
+          is_active: boolean;
+          is_high_safety: boolean | null;
+          key: string;
+          name: string;
+          sort_order: number;
+        };
+        Insert: {
+          created_at?: string;
+          description?: string | null;
+          id?: string;
+          is_active?: boolean;
+          is_high_safety?: boolean | null;
+          key: string;
+          name: string;
+          sort_order?: number;
+        };
+        Update: {
+          created_at?: string;
+          description?: string | null;
+          id?: string;
+          is_active?: boolean;
+          is_high_safety?: boolean | null;
+          key?: string;
+          name?: string;
+          sort_order?: number;
+        };
+        Relationships: [];
+      };
+      campfire_settings: {
+        Row: {
+          campfire_id: string;
+          created_at: string;
+          guide_enabled: boolean;
+          guide_header_image: string | null;
+          guide_header_layout: string | null;
+          guide_show_on_join: boolean;
+          guide_welcome_message: string;
+          updated_at: string;
+        };
+        Insert: {
+          campfire_id: string;
+          created_at?: string;
+          guide_enabled?: boolean;
+          guide_header_image?: string | null;
+          guide_header_layout?: string | null;
+          guide_show_on_join?: boolean;
+          guide_welcome_message?: string;
+          updated_at?: string;
+        };
+        Update: {
+          campfire_id?: string;
+          created_at?: string;
+          guide_enabled?: boolean;
+          guide_header_image?: string | null;
+          guide_header_layout?: string | null;
+          guide_show_on_join?: boolean;
+          guide_welcome_message?: string;
+          updated_at?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "campfire_settings_campfire_id_fkey";
+            columns: ["campfire_id"];
+            isOneToOne: true;
+            referencedRelation: "campfires";
+            referencedColumns: ["id"];
+          },
+        ];
+      };
+      campfires: {
+        Row: {
+          banner_path: string | null;
+          created_at: string;
+          created_by: string;
+          description: string | null;
+          icon_path: string | null;
+          id: string;
+          interaction_style: Database["public"]["Enums"]["interaction_style_enum"];
+          lane_id: string | null;
+          member_count: number;
+          name: string;
+          realm_id: string;
+          slug: string;
+          updated_at: string;
+          visibility: Database["public"]["Enums"]["campfire_visibility"];
+        };
+        Insert: {
+          banner_path?: string | null;
+          created_at?: string;
+          created_by: string;
+          description?: string | null;
+          icon_path?: string | null;
+          id?: string;
+          interaction_style?: Database["public"]["Enums"]["interaction_style_enum"];
+          lane_id?: string | null;
+          member_count?: number;
+          name: string;
+          realm_id: string;
+          slug: string;
+          updated_at?: string;
+          visibility?: Database["public"]["Enums"]["campfire_visibility"];
+        };
+        Update: {
+          banner_path?: string | null;
+          created_at?: string;
+          created_by?: string;
+          description?: string | null;
+          icon_path?: string | null;
+          id?: string;
+          interaction_style?: Database["public"]["Enums"]["interaction_style_enum"];
+          lane_id?: string | null;
+          member_count?: number;
+          name?: string;
+          realm_id?: string;
+          slug?: string;
+          updated_at?: string;
+          visibility?: Database["public"]["Enums"]["campfire_visibility"];
+        };
+        Relationships: [
+          {
+            foreignKeyName: "campfires_created_by_fkey";
+            columns: ["created_by"];
+            isOneToOne: false;
+            referencedRelation: "profiles";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "campfires_lane_id_fkey";
+            columns: ["lane_id"];
+            isOneToOne: false;
+            referencedRelation: "campfire_lanes";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "campfires_realm_id_fkey";
+            columns: ["realm_id"];
+            isOneToOne: false;
+            referencedRelation: "campfire_realms";
+            referencedColumns: ["id"];
+          },
+        ];
+      };
       profiles: {
         Row: {
           avatar_url: string | null;
@@ -112,9 +380,16 @@ export type Database = {
       [_ in never]: never;
     };
     Functions: {
-      [_ in never]: never;
+      recount_campfire_members: {
+        Args: { p_campfire_id: string };
+        Returns: undefined;
+      };
     };
     Enums: {
+      campfire_member_status: "pending" | "approved" | "rejected";
+      campfire_role: "camper" | "firekeeper" | "firestarter";
+      campfire_visibility: "public" | "private";
+      interaction_style_enum: "support" | "discussion" | "guided" | "creative";
       loading_experience_types: "none" | "breathing" | "affirmation";
       sensitive_content_mode: "show" | "blur" | "hide";
       theme_options: "system" | "light" | "dark";
@@ -248,6 +523,10 @@ export type CompositeTypes<
 export const Constants = {
   public: {
     Enums: {
+      campfire_member_status: ["pending", "approved", "rejected"],
+      campfire_role: ["camper", "firekeeper", "firestarter"],
+      campfire_visibility: ["public", "private"],
+      interaction_style_enum: ["support", "discussion", "guided", "creative"],
       loading_experience_types: ["none", "breathing", "affirmation"],
       sensitive_content_mode: ["show", "blur", "hide"],
       theme_options: ["system", "light", "dark"],
