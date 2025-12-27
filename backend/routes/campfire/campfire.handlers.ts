@@ -45,8 +45,7 @@ export const getManageCampfires: AppRouteHandler<
         { count: "exact", head: false },
       )
       .eq("user_id", userId)
-      .eq("status", "approved")
-      .range(pageNumber * pageSize, pageNumber * pageSize + pageSize - 1);
+      .eq("status", "approved");
 
     // ─────────────────────────────────────────────
     // Filters
@@ -64,12 +63,14 @@ export const getManageCampfires: AppRouteHandler<
       query = query.eq("campfires.visibility", visibility);
     }
 
-    // Favorites first, then most recent join
-    query = query
-      .order("is_favorite", { ascending: false })
-      .order("joined_at", { ascending: false });
+    // ─────────────────────────────────────────────
+    // Order & Pagination (Apply last)
+    // ─────────────────────────────────────────────
 
-    const { data, error, count } = await query;
+    const { data, error, count } = await query
+      .order("is_favorite", { ascending: false })
+      .order("joined_at", { ascending: false })
+      .range(pageNumber * pageSize, pageNumber * pageSize + pageSize - 1);
 
     if (error) {
       console.error("getManageCampfires error:", error);
