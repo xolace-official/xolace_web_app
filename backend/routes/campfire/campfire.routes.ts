@@ -7,7 +7,6 @@ import { createMessageObjectSchema } from "stoker/openapi/schemas";
 import {
   batchCampfireMembershipResponse,
   batchMembershipBody,
-  batchMembershipResponse,
   discoveryCampfiresQuery,
   discoveryCampfiresResponse,
   manageCampfiresPaginatedResponse,
