@@ -101,6 +101,10 @@ export const getHealthTipBySlug = createRoute({
       createMessageObjectSchema("Bad request"),
       "Invalid slug format",
     ),
+    [HttpStatusCodes.UNAUTHORIZED]: jsonContent(
+      createMessageObjectSchema("Missing or invalid Authorization header"),
+      "Authentication required",
+    ),
     [HttpStatusCodes.NOT_FOUND]: jsonContent(
       createMessageObjectSchema("Health tip not found"),
       "Health tip does not exist or is not published",
@@ -135,6 +139,10 @@ export const getHealthTipById = createRoute({
       createMessageObjectSchema("Bad request"),
       "Invalid health tip ID",
     ),
+    [HttpStatusCodes.UNAUTHORIZED]: jsonContent(
+      createMessageObjectSchema("Missing or invalid Authorization header"),
+      "Authentication required",
+    ),
     [HttpStatusCodes.NOT_FOUND]: jsonContent(
       createMessageObjectSchema("Health tip not found"),
       "Health tip does not exist or is not published",
@@ -168,6 +176,10 @@ export const getHealthTipSources = createRoute({
     [HttpStatusCodes.BAD_REQUEST]: jsonContent(
       createMessageObjectSchema("Bad request"),
       "Invalid health tip ID",
+    ),
+    [HttpStatusCodes.UNAUTHORIZED]: jsonContent(
+      createMessageObjectSchema("Missing or invalid Authorization header"),
+      "Authentication required",
     ),
     [HttpStatusCodes.NOT_FOUND]: jsonContent(
       createMessageObjectSchema("Health tip not found"),
