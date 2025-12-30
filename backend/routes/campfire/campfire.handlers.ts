@@ -129,7 +129,7 @@ export const getDiscoveryCampfires: AppRouteHandler<
     let query = supabase
       .from("campfires")
       .select(
-        "id, name, slug, description, member_count, icon_path, visibility",
+        "id, name, slug, description, member_count, icon_path, interaction_style",
         { count: "exact" },
       )
       .eq("visibility", "public");
@@ -204,7 +204,7 @@ export const getBatchMembership: AppRouteHandler<
   }
 
   if (campfire_ids.length === 0) {
-    return c.json({}, HttpStatusCodes.OK);
+    return c.json({ memberships: {} }, HttpStatusCodes.OK);
   }
 
   try {
@@ -222,19 +222,33 @@ export const getBatchMembership: AppRouteHandler<
       );
     }
 
-    const membershipMap: Record<string, any> = {};
-    if (data) {
-      for (const member of data) {
-        membershipMap[member.campfire_id] = {
-          role: member.role,
-          status: member.status,
-          is_favorite: member.is_favorite,
-          joined_at: member.joined_at,
-        };
-      }
+    // const membershipMap: Record<string, any> = {};
+    // if (data) {
+    //   for (const member of data) {
+    //     membershipMap[member.campfire_id] = {
+    //       role: member.role,
+    //       status: member.status,
+    //       is_favorite: member.is_favorite,
+    //       joined_at: member.joined_at,
+    //     };
+    //   }
+    // }
+
+    // return c.json(membershipMap, HttpStatusCodes.OK);
+
+    // -------------------------------------------------------------------------
+    // Build lookup map
+    // -------------------------------------------------------------------------
+
+    const membershipSet = new Set((data ?? []).map((row) => row.campfire_id));
+
+    const memberships: Record<string, boolean> = {};
+
+    for (const id of campfire_ids) {
+      memberships[id] = membershipSet.has(id);
     }
 
-    return c.json(membershipMap, HttpStatusCodes.OK);
+    return c.json({ memberships }, HttpStatusCodes.OK);
   } catch (error) {
     console.error("getBatchMembership exception:", error);
     return c.json(

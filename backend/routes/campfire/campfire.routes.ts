@@ -5,6 +5,7 @@ import { jsonContent } from "stoker/openapi/helpers";
 import { createMessageObjectSchema } from "stoker/openapi/schemas";
 
 import {
+  batchCampfireMembershipResponse,
   batchMembershipBody,
   batchMembershipResponse,
   discoveryCampfiresQuery,
@@ -116,7 +117,7 @@ export const getBatchMembership = createRoute({
   tags,
   responses: {
     [HttpStatusCodes.OK]: jsonContent(
-      batchMembershipResponse,
+      batchCampfireMembershipResponse,
       "Map of campfire IDs to membership status",
     ),
     [HttpStatusCodes.UNAUTHORIZED]: jsonContent(

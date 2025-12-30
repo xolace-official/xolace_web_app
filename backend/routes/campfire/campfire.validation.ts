@@ -135,7 +135,6 @@ export const discoveryCampfiresQuery = z.object({
     }),
 
   realm_id: z
-    .string()
     .uuid()
     .optional()
     .openapi({
@@ -170,8 +169,18 @@ export const discoveryCampfiresQuery = z.object({
     }),
 });
 
+export const discoverCampfireItemSchema = z.object({
+  id: uuidSchema,
+  name: z.string(),
+  slug: z.string(),
+  description: z.string().nullable(),
+  icon_path: z.string().nullable(),
+  member_count: z.number().int(),
+  interaction_style: z.enum(["support", "discussion", "guided", "creative"]),
+});
+
 export const discoveryCampfiresResponse = z.object({
-  data: z.array(manageCampfireListItemSchema),
+  data: z.array(discoverCampfireItemSchema),
   meta: z.object({
     totalCount: z.number().int(),
     currentPage: z.number().int(),
@@ -211,3 +220,6 @@ export type ManageCampfiresQuery = z.infer<typeof manageCampfiresQuery>;
 export type DiscoveryCampfiresQuery = z.infer<typeof discoveryCampfiresQuery>;
 export type BatchMembershipBody = z.infer<typeof batchMembershipBody>;
 export type BatchMembershipResponse = z.infer<typeof batchMembershipResponse>;
+export type BatchCampfireMembershipResponse = z.infer<
+  typeof batchCampfireMembershipResponse
+>;
