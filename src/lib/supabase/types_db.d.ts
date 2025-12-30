@@ -277,6 +277,801 @@ export type Database = {
           },
         ];
       };
+      collection_items: {
+        Row: {
+          collection_id: string;
+          created_at: string;
+          entity_id: string;
+          entity_type: string;
+          id: string;
+          is_pinned: boolean;
+          position: number;
+          user_id: string;
+        };
+        Insert: {
+          collection_id: string;
+          created_at?: string;
+          entity_id: string;
+          entity_type: string;
+          id?: string;
+          is_pinned?: boolean;
+          position?: number;
+          user_id: string;
+        };
+        Update: {
+          collection_id?: string;
+          created_at?: string;
+          entity_id?: string;
+          entity_type?: string;
+          id?: string;
+          is_pinned?: boolean;
+          position?: number;
+          user_id?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "collection_items_collection_id_fkey";
+            columns: ["collection_id"];
+            isOneToOne: false;
+            referencedRelation: "collections";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "collection_items_user_id_fkey";
+            columns: ["user_id"];
+            isOneToOne: false;
+            referencedRelation: "profiles";
+            referencedColumns: ["id"];
+          },
+        ];
+      };
+      collections: {
+        Row: {
+          created_at: string;
+          id: string;
+          is_pinned: boolean;
+          name: string;
+          name_normalized: string;
+          position: number;
+          updated_at: string;
+          user_id: string;
+        };
+        Insert: {
+          created_at?: string;
+          id?: string;
+          is_pinned?: boolean;
+          name: string;
+          name_normalized: string;
+          position?: number;
+          updated_at?: string;
+          user_id: string;
+        };
+        Update: {
+          created_at?: string;
+          id?: string;
+          is_pinned?: boolean;
+          name?: string;
+          name_normalized?: string;
+          position?: number;
+          updated_at?: string;
+          user_id?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "collections_user_id_fkey";
+            columns: ["user_id"];
+            isOneToOne: false;
+            referencedRelation: "profiles";
+            referencedColumns: ["id"];
+          },
+        ];
+      };
+      comment_edits: {
+        Row: {
+          comment_id: number;
+          edited_at: string;
+          edited_by: string;
+          id: number;
+          previous_body: string;
+        };
+        Insert: {
+          comment_id: number;
+          edited_at?: string;
+          edited_by: string;
+          id?: number;
+          previous_body: string;
+        };
+        Update: {
+          comment_id?: number;
+          edited_at?: string;
+          edited_by?: string;
+          id?: number;
+          previous_body?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "comment_edits_comment_id_fkey";
+            columns: ["comment_id"];
+            isOneToOne: false;
+            referencedRelation: "comments";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "comment_edits_edited_by_fkey";
+            columns: ["edited_by"];
+            isOneToOne: false;
+            referencedRelation: "profiles";
+            referencedColumns: ["id"];
+          },
+        ];
+      };
+      comment_pins: {
+        Row: {
+          comment_id: number;
+          id: number;
+          pin_type: string;
+          pinned_at: string;
+          pinned_by: string;
+          post_id: string;
+        };
+        Insert: {
+          comment_id: number;
+          id?: number;
+          pin_type: string;
+          pinned_at?: string;
+          pinned_by: string;
+          post_id: string;
+        };
+        Update: {
+          comment_id?: number;
+          id?: number;
+          pin_type?: string;
+          pinned_at?: string;
+          pinned_by?: string;
+          post_id?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "comment_pins_comment_id_fkey";
+            columns: ["comment_id"];
+            isOneToOne: true;
+            referencedRelation: "comments";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "comment_pins_pinned_by_fkey";
+            columns: ["pinned_by"];
+            isOneToOne: false;
+            referencedRelation: "profiles";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "comment_pins_post_id_fkey";
+            columns: ["post_id"];
+            isOneToOne: false;
+            referencedRelation: "posts";
+            referencedColumns: ["id"];
+          },
+        ];
+      };
+      comments: {
+        Row: {
+          author_avatar_url_snapshot: string | null;
+          author_id: string | null;
+          author_name_snapshot: string;
+          body: string;
+          campfire_id: string | null;
+          created_at: string;
+          deleted_at: string | null;
+          deleted_by: string | null;
+          depth: number | null;
+          hidden_at: string | null;
+          hidden_by: string | null;
+          id: number;
+          is_ai_suggestion: boolean;
+          moderation_reason: string | null;
+          parent_comment_id: number | null;
+          post_id: string;
+          removed_at: string | null;
+          removed_by: string | null;
+          status: string;
+          thread_path: unknown;
+          updated_at: string;
+        };
+        Insert: {
+          author_avatar_url_snapshot?: string | null;
+          author_id?: string | null;
+          author_name_snapshot: string;
+          body: string;
+          campfire_id?: string | null;
+          created_at?: string;
+          deleted_at?: string | null;
+          deleted_by?: string | null;
+          depth?: number | null;
+          hidden_at?: string | null;
+          hidden_by?: string | null;
+          id?: number;
+          is_ai_suggestion?: boolean;
+          moderation_reason?: string | null;
+          parent_comment_id?: number | null;
+          post_id: string;
+          removed_at?: string | null;
+          removed_by?: string | null;
+          status?: string;
+          thread_path: unknown;
+          updated_at?: string;
+        };
+        Update: {
+          author_avatar_url_snapshot?: string | null;
+          author_id?: string | null;
+          author_name_snapshot?: string;
+          body?: string;
+          campfire_id?: string | null;
+          created_at?: string;
+          deleted_at?: string | null;
+          deleted_by?: string | null;
+          depth?: number | null;
+          hidden_at?: string | null;
+          hidden_by?: string | null;
+          id?: number;
+          is_ai_suggestion?: boolean;
+          moderation_reason?: string | null;
+          parent_comment_id?: number | null;
+          post_id?: string;
+          removed_at?: string | null;
+          removed_by?: string | null;
+          status?: string;
+          thread_path?: unknown;
+          updated_at?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "comments_author_id_fkey";
+            columns: ["author_id"];
+            isOneToOne: false;
+            referencedRelation: "profiles";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "comments_campfire_id_fkey";
+            columns: ["campfire_id"];
+            isOneToOne: false;
+            referencedRelation: "campfires";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "comments_deleted_by_fkey";
+            columns: ["deleted_by"];
+            isOneToOne: false;
+            referencedRelation: "profiles";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "comments_hidden_by_fkey";
+            columns: ["hidden_by"];
+            isOneToOne: false;
+            referencedRelation: "profiles";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "comments_parent_comment_id_fkey";
+            columns: ["parent_comment_id"];
+            isOneToOne: false;
+            referencedRelation: "comments";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "comments_post_id_fkey";
+            columns: ["post_id"];
+            isOneToOne: false;
+            referencedRelation: "posts";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "comments_removed_by_fkey";
+            columns: ["removed_by"];
+            isOneToOne: false;
+            referencedRelation: "profiles";
+            referencedColumns: ["id"];
+          },
+        ];
+      };
+      health_tip_categories: {
+        Row: {
+          created_at: string;
+          display_name: string;
+          id: string;
+          is_active: boolean;
+          key: string;
+          sort_order: number;
+          updated_at: string;
+        };
+        Insert: {
+          created_at?: string;
+          display_name: string;
+          id?: string;
+          is_active?: boolean;
+          key: string;
+          sort_order?: number;
+          updated_at?: string;
+        };
+        Update: {
+          created_at?: string;
+          display_name?: string;
+          id?: string;
+          is_active?: boolean;
+          key?: string;
+          sort_order?: number;
+          updated_at?: string;
+        };
+        Relationships: [];
+      };
+      health_tip_sources: {
+        Row: {
+          created_at: string;
+          health_tip_id: string;
+          id: string;
+          notes: string | null;
+          published_year: number | null;
+          publisher: string | null;
+          source_type: Database["public"]["Enums"]["health_tip_source_type"];
+          title: string | null;
+          url: string | null;
+        };
+        Insert: {
+          created_at?: string;
+          health_tip_id: string;
+          id?: string;
+          notes?: string | null;
+          published_year?: number | null;
+          publisher?: string | null;
+          source_type: Database["public"]["Enums"]["health_tip_source_type"];
+          title?: string | null;
+          url?: string | null;
+        };
+        Update: {
+          created_at?: string;
+          health_tip_id?: string;
+          id?: string;
+          notes?: string | null;
+          published_year?: number | null;
+          publisher?: string | null;
+          source_type?: Database["public"]["Enums"]["health_tip_source_type"];
+          title?: string | null;
+          url?: string | null;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "health_tip_sources_health_tip_id_fkey";
+            columns: ["health_tip_id"];
+            isOneToOne: false;
+            referencedRelation: "health_tips";
+            referencedColumns: ["id"];
+          },
+        ];
+      };
+      health_tip_tags: {
+        Row: {
+          created_at: string;
+          health_tip_id: string;
+          tag_id: number;
+        };
+        Insert: {
+          created_at?: string;
+          health_tip_id: string;
+          tag_id: number;
+        };
+        Update: {
+          created_at?: string;
+          health_tip_id?: string;
+          tag_id?: number;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "health_tip_tags_health_tip_id_fkey";
+            columns: ["health_tip_id"];
+            isOneToOne: false;
+            referencedRelation: "health_tips";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "health_tip_tags_tag_id_fkey";
+            columns: ["tag_id"];
+            isOneToOne: false;
+            referencedRelation: "tags";
+            referencedColumns: ["id"];
+          },
+        ];
+      };
+      health_tips: {
+        Row: {
+          approved_by: string | null;
+          category_id: string | null;
+          content: string;
+          content_format: string;
+          created_at: string;
+          created_by: string | null;
+          excerpt: string | null;
+          id: string;
+          is_sponsored: boolean;
+          language_code: string;
+          published_at: string | null;
+          read_time_minutes: number;
+          rejected_reason: string | null;
+          reviewed_at: string | null;
+          sensitive_level: Database["public"]["Enums"]["health_tip_sensitivity"];
+          slug: string;
+          sponsor_label: string | null;
+          status: Database["public"]["Enums"]["health_tip_status"];
+          title: string;
+          updated_at: string;
+        };
+        Insert: {
+          approved_by?: string | null;
+          category_id?: string | null;
+          content: string;
+          content_format?: string;
+          created_at?: string;
+          created_by?: string | null;
+          excerpt?: string | null;
+          id?: string;
+          is_sponsored?: boolean;
+          language_code?: string;
+          published_at?: string | null;
+          read_time_minutes?: number;
+          rejected_reason?: string | null;
+          reviewed_at?: string | null;
+          sensitive_level?: Database["public"]["Enums"]["health_tip_sensitivity"];
+          slug: string;
+          sponsor_label?: string | null;
+          status?: Database["public"]["Enums"]["health_tip_status"];
+          title: string;
+          updated_at?: string;
+        };
+        Update: {
+          approved_by?: string | null;
+          category_id?: string | null;
+          content?: string;
+          content_format?: string;
+          created_at?: string;
+          created_by?: string | null;
+          excerpt?: string | null;
+          id?: string;
+          is_sponsored?: boolean;
+          language_code?: string;
+          published_at?: string | null;
+          read_time_minutes?: number;
+          rejected_reason?: string | null;
+          reviewed_at?: string | null;
+          sensitive_level?: Database["public"]["Enums"]["health_tip_sensitivity"];
+          slug?: string;
+          sponsor_label?: string | null;
+          status?: Database["public"]["Enums"]["health_tip_status"];
+          title?: string;
+          updated_at?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "health_tips_approved_by_fkey";
+            columns: ["approved_by"];
+            isOneToOne: false;
+            referencedRelation: "profiles";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "health_tips_category_id_fkey";
+            columns: ["category_id"];
+            isOneToOne: false;
+            referencedRelation: "health_tip_categories";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "health_tips_created_by_fkey";
+            columns: ["created_by"];
+            isOneToOne: false;
+            referencedRelation: "profiles";
+            referencedColumns: ["id"];
+          },
+        ];
+      };
+      post_media: {
+        Row: {
+          alt_text: string | null;
+          blurhash: string | null;
+          created_at: string;
+          created_by: string;
+          dominant_hex: string | null;
+          file_size: number | null;
+          height: number | null;
+          id: string;
+          mime_type: string;
+          post_id: string;
+          sort_order: number;
+          storage_path: string;
+          type: Database["public"]["Enums"]["post_media_type"];
+          width: number | null;
+        };
+        Insert: {
+          alt_text?: string | null;
+          blurhash?: string | null;
+          created_at?: string;
+          created_by: string;
+          dominant_hex?: string | null;
+          file_size?: number | null;
+          height?: number | null;
+          id?: string;
+          mime_type: string;
+          post_id: string;
+          sort_order?: number;
+          storage_path: string;
+          type?: Database["public"]["Enums"]["post_media_type"];
+          width?: number | null;
+        };
+        Update: {
+          alt_text?: string | null;
+          blurhash?: string | null;
+          created_at?: string;
+          created_by?: string;
+          dominant_hex?: string | null;
+          file_size?: number | null;
+          height?: number | null;
+          id?: string;
+          mime_type?: string;
+          post_id?: string;
+          sort_order?: number;
+          storage_path?: string;
+          type?: Database["public"]["Enums"]["post_media_type"];
+          width?: number | null;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "post_media_created_by_fkey";
+            columns: ["created_by"];
+            isOneToOne: false;
+            referencedRelation: "profiles";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "post_media_post_id_fkey";
+            columns: ["post_id"];
+            isOneToOne: false;
+            referencedRelation: "posts";
+            referencedColumns: ["id"];
+          },
+        ];
+      };
+      post_slides: {
+        Row: {
+          content: string;
+          created_at: string;
+          id: string;
+          post_id: string;
+          slide_index: number;
+        };
+        Insert: {
+          content: string;
+          created_at?: string;
+          id?: string;
+          post_id: string;
+          slide_index: number;
+        };
+        Update: {
+          content?: string;
+          created_at?: string;
+          id?: string;
+          post_id?: string;
+          slide_index?: number;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "post_slides_post_id_fkey";
+            columns: ["post_id"];
+            isOneToOne: false;
+            referencedRelation: "posts";
+            referencedColumns: ["id"];
+          },
+        ];
+      };
+      post_tags: {
+        Row: {
+          created_at: string;
+          post_id: string;
+          tag_id: number;
+        };
+        Insert: {
+          created_at?: string;
+          post_id: string;
+          tag_id: number;
+        };
+        Update: {
+          created_at?: string;
+          post_id?: string;
+          tag_id?: number;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "post_tags_post_id_fkey";
+            columns: ["post_id"];
+            isOneToOne: false;
+            referencedRelation: "posts";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "post_tags_tag_id_fkey";
+            columns: ["tag_id"];
+            isOneToOne: false;
+            referencedRelation: "tags";
+            referencedColumns: ["id"];
+          },
+        ];
+      };
+      post_views: {
+        Row: {
+          created_at: string;
+          post_id: string;
+          user_id: string;
+        };
+        Insert: {
+          created_at?: string;
+          post_id: string;
+          user_id: string;
+        };
+        Update: {
+          created_at?: string;
+          post_id?: string;
+          user_id?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "post_views_post_id_fkey";
+            columns: ["post_id"];
+            isOneToOne: false;
+            referencedRelation: "posts";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "post_views_user_id_fkey";
+            columns: ["user_id"];
+            isOneToOne: false;
+            referencedRelation: "profiles";
+            referencedColumns: ["id"];
+          },
+        ];
+      };
+      post_votes: {
+        Row: {
+          created_at: string;
+          post_id: string;
+          updated_at: string;
+          user_id: string;
+          vote_type: Database["public"]["Enums"]["vote_type"];
+        };
+        Insert: {
+          created_at?: string;
+          post_id: string;
+          updated_at?: string;
+          user_id: string;
+          vote_type: Database["public"]["Enums"]["vote_type"];
+        };
+        Update: {
+          created_at?: string;
+          post_id?: string;
+          updated_at?: string;
+          user_id?: string;
+          vote_type?: Database["public"]["Enums"]["vote_type"];
+        };
+        Relationships: [
+          {
+            foreignKeyName: "post_votes_post_id_fkey";
+            columns: ["post_id"];
+            isOneToOne: false;
+            referencedRelation: "posts";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "post_votes_user_id_fkey";
+            columns: ["user_id"];
+            isOneToOne: false;
+            referencedRelation: "profiles";
+            referencedColumns: ["id"];
+          },
+        ];
+      };
+      posts: {
+        Row: {
+          author_avatar_snapshot: string | null;
+          author_display_mode: Database["public"]["Enums"]["author_display_mode"];
+          author_id: string;
+          author_name_snapshot: string;
+          campfire_id: string | null;
+          content_text: string;
+          created_at: string;
+          delete_reason: string | null;
+          deleted_at: string | null;
+          deleted_by: string | null;
+          downvotes_count: number;
+          expires_at: string | null;
+          hero_media_id: string | null;
+          id: string;
+          is_sensitive: boolean;
+          media_count: number;
+          mood: Database["public"]["Enums"]["post_mood"];
+          post_kind: Database["public"]["Enums"]["post_kind"];
+          upvotes_count: number;
+        };
+        Insert: {
+          author_avatar_snapshot?: string | null;
+          author_display_mode?: Database["public"]["Enums"]["author_display_mode"];
+          author_id: string;
+          author_name_snapshot: string;
+          campfire_id?: string | null;
+          content_text: string;
+          created_at?: string;
+          delete_reason?: string | null;
+          deleted_at?: string | null;
+          deleted_by?: string | null;
+          downvotes_count?: number;
+          expires_at?: string | null;
+          hero_media_id?: string | null;
+          id?: string;
+          is_sensitive?: boolean;
+          media_count?: number;
+          mood?: Database["public"]["Enums"]["post_mood"];
+          post_kind?: Database["public"]["Enums"]["post_kind"];
+          upvotes_count?: number;
+        };
+        Update: {
+          author_avatar_snapshot?: string | null;
+          author_display_mode?: Database["public"]["Enums"]["author_display_mode"];
+          author_id?: string;
+          author_name_snapshot?: string;
+          campfire_id?: string | null;
+          content_text?: string;
+          created_at?: string;
+          delete_reason?: string | null;
+          deleted_at?: string | null;
+          deleted_by?: string | null;
+          downvotes_count?: number;
+          expires_at?: string | null;
+          hero_media_id?: string | null;
+          id?: string;
+          is_sensitive?: boolean;
+          media_count?: number;
+          mood?: Database["public"]["Enums"]["post_mood"];
+          post_kind?: Database["public"]["Enums"]["post_kind"];
+          upvotes_count?: number;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "posts_author_id_fkey";
+            columns: ["author_id"];
+            isOneToOne: false;
+            referencedRelation: "profiles";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "posts_campfire_id_fkey";
+            columns: ["campfire_id"];
+            isOneToOne: false;
+            referencedRelation: "campfires";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "posts_deleted_by_fkey";
+            columns: ["deleted_by"];
+            isOneToOne: false;
+            referencedRelation: "profiles";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "posts_hero_media_id_fkey";
+            columns: ["hero_media_id"];
+            isOneToOne: false;
+            referencedRelation: "post_media";
+            referencedColumns: ["id"];
+          },
+        ];
+      };
       profiles: {
         Row: {
           avatar_url: string | null;
@@ -313,6 +1108,27 @@ export type Database = {
           theme?: string | null;
           updated_at?: string;
           username?: string | null;
+        };
+        Relationships: [];
+      };
+      tags: {
+        Row: {
+          count: number;
+          created_at: string;
+          id: number;
+          name: string;
+        };
+        Insert: {
+          count?: number;
+          created_at?: string;
+          id?: number;
+          name: string;
+        };
+        Update: {
+          count?: number;
+          created_at?: string;
+          id?: number;
+          name?: string;
         };
         Relationships: [];
       };
@@ -384,15 +1200,52 @@ export type Database = {
         Args: { p_campfire_id: string };
         Returns: undefined;
       };
+      text2ltree: { Args: { "": string }; Returns: unknown };
     };
     Enums: {
+      author_display_mode: "attributed" | "anonymous";
       campfire_member_status: "pending" | "approved" | "rejected";
       campfire_role: "camper" | "firekeeper" | "firestarter";
       campfire_visibility: "public" | "private";
+      health_tip_sensitivity: "general" | "mild" | "sensitive";
+      health_tip_source_type: "url" | "paper" | "book" | "organization";
+      health_tip_status:
+        | "draft"
+        | "in_review"
+        | "published"
+        | "rejected"
+        | "archived";
       interaction_style_enum: "support" | "discussion" | "guided" | "creative";
       loading_experience_types: "none" | "breathing" | "affirmation";
+      post_kind: "text" | "text_with_media" | "carousel" | "voice";
+      post_media_type: "image";
+      post_mood:
+        | "neutral"
+        | "happy"
+        | "sad"
+        | "angry"
+        | "grateful"
+        | "melancholy"
+        | "peaceful"
+        | "excited"
+        | "confused"
+        | "thoughtful"
+        | "nostalgic"
+        | "reflecting"
+        | "processing"
+        | "chill"
+        | "energetic"
+        | "motivated"
+        | "venting"
+        | "ranting"
+        | "sharing"
+        | "seeking_advice"
+        | "creative"
+        | "inspired"
+        | "laughing";
       sensitive_content_mode: "show" | "blur" | "hide";
       theme_options: "system" | "light" | "dark";
+      vote_type: "upvote" | "downvote";
     };
     CompositeTypes: {
       [_ in never]: never;
@@ -523,13 +1376,51 @@ export type CompositeTypes<
 export const Constants = {
   public: {
     Enums: {
+      author_display_mode: ["attributed", "anonymous"],
       campfire_member_status: ["pending", "approved", "rejected"],
       campfire_role: ["camper", "firekeeper", "firestarter"],
       campfire_visibility: ["public", "private"],
+      health_tip_sensitivity: ["general", "mild", "sensitive"],
+      health_tip_source_type: ["url", "paper", "book", "organization"],
+      health_tip_status: [
+        "draft",
+        "in_review",
+        "published",
+        "rejected",
+        "archived",
+      ],
       interaction_style_enum: ["support", "discussion", "guided", "creative"],
       loading_experience_types: ["none", "breathing", "affirmation"],
+      post_kind: ["text", "text_with_media", "carousel", "voice"],
+      post_media_type: ["image"],
+      post_mood: [
+        "neutral",
+        "happy",
+        "sad",
+        "angry",
+        "grateful",
+        "melancholy",
+        "peaceful",
+        "excited",
+        "confused",
+        "thoughtful",
+        "nostalgic",
+        "reflecting",
+        "processing",
+        "chill",
+        "energetic",
+        "motivated",
+        "venting",
+        "ranting",
+        "sharing",
+        "seeking_advice",
+        "creative",
+        "inspired",
+        "laughing",
+      ],
       sensitive_content_mode: ["show", "blur", "hide"],
       theme_options: ["system", "light", "dark"],
+      vote_type: ["upvote", "downvote"],
     },
   },
 } as const;
