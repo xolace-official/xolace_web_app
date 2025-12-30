@@ -4,6 +4,7 @@ import { authMiddleware } from "@backend/middlewares/auth";
 
 // domain routers
 import campfire from "@backend/routes/campfire/campfire.index";
+import healthTip from "@backend/routes/health-tips/health-tip.index";
 import profile from "@backend/routes/profile/profile.index";
 
 // import imports from "@backend/routes/import/import.index";
@@ -16,6 +17,7 @@ router.use("/*", authMiddleware);
 // AUTHENTICATED ROUTES ONLY
 router.route("/profile", profile);
 router.route("/campfire", campfire);
+router.route("/health-tip", healthTip);
 // router.route("/import", imports);
 
 export default router;
