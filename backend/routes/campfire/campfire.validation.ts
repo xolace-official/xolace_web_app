@@ -212,6 +212,19 @@ export const batchCampfireMembershipResponse = z.object({
   memberships: z.record(z.string(), z.boolean()),
 });
 
+// -----------------------------------------------------------------------------
+// Realm item
+// -----------------------------------------------------------------------------
+
+export const campfireRealmSchema = z.object({
+  id: uuidSchema,
+  key: z.string(),
+  name: z.string(),
+  description: z.string().nullable(),
+  sort_order: z.number().int(),
+  is_high_safety: z.boolean().nullable(),
+});
+
 export type ManageCampfireListItem = z.infer<
   typeof manageCampfireListItemSchema
 >;
