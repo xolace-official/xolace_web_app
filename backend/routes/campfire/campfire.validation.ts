@@ -225,6 +225,36 @@ export const campfireRealmSchema = z.object({
   is_high_safety: z.boolean().nullable(),
 });
 
+// -----------------------------------------------------------------------------
+// Response
+// -----------------------------------------------------------------------------
+
+export const campfireRealmsResponse = z.object({
+  data: z.array(campfireRealmSchema),
+});
+
+// -----------------------------------------------------------------------------
+// Lane item
+// -----------------------------------------------------------------------------
+
+export const campfireLaneSchema = z.object({
+  id: uuidSchema,
+  realm_id: uuidSchema,
+  key: z.string(),
+  name: z.string(),
+  description: z.string().nullable(),
+  sort_order: z.number().int(),
+  is_high_safety: z.boolean().nullable(),
+});
+
+// -----------------------------------------------------------------------------
+// Response
+// -----------------------------------------------------------------------------
+
+export const campfireLanesResponse = z.object({
+  data: z.array(campfireLaneSchema),
+});
+
 export type ManageCampfireListItem = z.infer<
   typeof manageCampfireListItemSchema
 >;
