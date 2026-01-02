@@ -7,6 +7,7 @@ import { createMessageObjectSchema } from "stoker/openapi/schemas";
 import {
   batchCampfireMembershipResponse,
   batchMembershipBody,
+  campfireRealmsResponse,
   discoveryCampfiresQuery,
   discoveryCampfiresResponse,
   manageCampfiresPaginatedResponse,
@@ -126,6 +127,20 @@ export const getBatchMembership = createRoute({
     [HttpStatusCodes.INTERNAL_SERVER_ERROR]: jsonContent(
       internalServerErrorSchema,
       "Internal server error",
+    ),
+  },
+});
+
+export const getCampfireRealms = createRoute({
+  path: "/realms",
+  method: "get",
+  summary: "Get campfire realms",
+  description: "Returns all active campfire realms used for discovery tabs.",
+  tags,
+  responses: {
+    [HttpStatusCodes.OK]: jsonContent(
+      campfireRealmsResponse,
+      "List of campfire realms",
     ),
   },
 });
