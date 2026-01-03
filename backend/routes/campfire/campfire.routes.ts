@@ -7,9 +7,11 @@ import { createMessageObjectSchema } from "stoker/openapi/schemas";
 import {
   batchCampfireMembershipResponse,
   batchMembershipBody,
+  campfireLanesResponse,
   campfireRealmsResponse,
   discoveryCampfiresQuery,
   discoveryCampfiresResponse,
+  getCampfireLanesQuerySchema,
   manageCampfiresPaginatedResponse,
   manageCampfiresQuery,
   manageCampfiresResponse,
@@ -153,8 +155,33 @@ export const getCampfireRealms = createRoute({
   },
 });
 
+export const getCampfireLanes = createRoute({
+  method: "get",
+  path: "/campfires/lanes",
+  summary: "Get campfire lanes by realm",
+  tags: ["Campfires"],
+  request: {
+    query: getCampfireLanesQuerySchema,
+  },
+  responses: {
+    [HttpStatusCodes.OK]: jsonContent(
+      campfireLanesResponse,
+      "List of campfire lanes",
+    ),
+    [HttpStatusCodes.UNAUTHORIZED]: jsonContent(
+      createMessageObjectSchema("Unauthorized"),
+      "Authentication required",
+    ),
+    [HttpStatusCodes.INTERNAL_SERVER_ERROR]: jsonContent(
+      internalServerErrorSchema,
+      "Internal server error",
+    ),
+  },
+});
+
 export type GetManageCampfiresRoute = typeof getManageCampfires;
 export type GetManageCampfiresSimpleRoute = typeof getManageCampfiresSimple;
 export type GetDiscoveryCampfiresRoute = typeof getDiscoveryCampfires;
 export type GetBatchMembershipRoute = typeof getBatchMembership;
 export type GetCampfireRealmsRoute = typeof getCampfireRealms;
+export type GetCampfireLanesRoute = typeof getCampfireLanes;

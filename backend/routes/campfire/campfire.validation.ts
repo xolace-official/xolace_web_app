@@ -237,6 +237,14 @@ export const campfireRealmsResponse = z.object({
 // Lane item
 // -----------------------------------------------------------------------------
 
+export const getCampfireLanesQuerySchema = z.object({
+  realmId: z.uuid(),
+  activeOnly: z
+    .string()
+    .optional()
+    .transform((v) => v === "true"),
+});
+
 export const campfireLaneSchema = z.object({
   id: uuidSchema,
   realm_id: uuidSchema,

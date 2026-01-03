@@ -4,6 +4,8 @@ import * as HttpStatusPhrases from "stoker/http-status-phrases";
 import type { z } from "zod";
 import type {
   GetBatchMembershipRoute,
+  GetCampfireLanesRoute,
+  GetCampfireRealmsRoute,
   GetDiscoveryCampfiresRoute,
   GetManageCampfiresRoute,
 } from "./campfire.routes";
@@ -256,4 +258,85 @@ export const getBatchMembership: AppRouteHandler<
       HttpStatusCodes.INTERNAL_SERVER_ERROR,
     );
   }
+};
+
+export const getCampfireRealms: AppRouteHandler<
+  GetCampfireRealmsRoute
+> = async (c) => {
+  const supabase = c.get("supabase");
+
+  try {
+    const { data, error } = await supabase
+      .from("campfire_realms")
+      .select(
+        `
+        id,
+        key,
+        name,
+        description,
+        sort_order,
+        is_high_safety
+      `,
+      )
+      .eq("is_active", true)
+      .order("sort_order", { ascending: true });
+
+    if (error) {
+      console.error("getCampfireRealms error:", error);
+
+      return c.json(
+        { message: "Failed to fetch campfire realms" },
+        HttpStatusCodes.INTERNAL_SERVER_ERROR,
+      );
+    }
+
+    return c.json({ data: data ?? [] }, HttpStatusCodes.OK);
+  } catch (err) {
+    console.error("getCampfireRealms exception:", err);
+
+    return c.json(
+      { message: "Internal server error" },
+      HttpStatusCodes.INTERNAL_SERVER_ERROR,
+    );
+  }
+};
+
+export const getCampfireLanes: AppRouteHandler<GetCampfireLanesRoute> = async (
+  c,
+) => {
+  const supabase = c.get("supabase");
+  const { realmId, activeOnly } = c.req.valid("query");
+
+  let query = supabase.from("campfire_lanes").select(
+    `
+      id,
+      realm_id,
+      key,
+      name,
+      description,
+      sort_order,
+      is_high_safety
+    `,
+  );
+
+  if (realmId) {
+    query = query.eq("realm_id", realmId);
+  }
+
+  if (activeOnly !== false) {
+    query = query.eq("is_active", true);
+  }
+
+  const { data, error } = await query.order("sort_order", { ascending: true });
+
+  if (error) {
+    console.error("getCampfireLanes error:", error);
+
+    return c.json(
+      { message: "Failed to fetch campfire lanes" },
+      HttpStatusCodes.INTERNAL_SERVER_ERROR,
+    );
+  }
+
+  return c.json({ data: data ?? [] }, HttpStatusCodes.OK);
 };
