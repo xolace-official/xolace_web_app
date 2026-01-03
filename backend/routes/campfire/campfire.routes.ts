@@ -142,6 +142,14 @@ export const getCampfireRealms = createRoute({
       campfireRealmsResponse,
       "List of campfire realms",
     ),
+    [HttpStatusCodes.UNAUTHORIZED]: jsonContent(
+      createMessageObjectSchema("Unauthorized"),
+      "Authentication required",
+    ),
+    [HttpStatusCodes.INTERNAL_SERVER_ERROR]: jsonContent(
+      internalServerErrorSchema,
+      "Internal server error",
+    ),
   },
 });
 
@@ -149,3 +157,4 @@ export type GetManageCampfiresRoute = typeof getManageCampfires;
 export type GetManageCampfiresSimpleRoute = typeof getManageCampfiresSimple;
 export type GetDiscoveryCampfiresRoute = typeof getDiscoveryCampfires;
 export type GetBatchMembershipRoute = typeof getBatchMembership;
+export type GetCampfireRealmsRoute = typeof getCampfireRealms;
