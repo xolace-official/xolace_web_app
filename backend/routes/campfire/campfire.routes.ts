@@ -157,7 +157,7 @@ export const getCampfireRealms = createRoute({
 
 export const getCampfireLanes = createRoute({
   method: "get",
-  path: "/campfires/lanes",
+  path: "/lanes",
   summary: "Get campfire lanes by realm",
   tags: ["Campfires"],
   request: {
