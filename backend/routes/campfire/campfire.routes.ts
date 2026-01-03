@@ -5,6 +5,13 @@ import { jsonContent } from "stoker/openapi/helpers";
 import { createMessageObjectSchema } from "stoker/openapi/schemas";
 
 import {
+  batchCampfireMembershipResponse,
+  batchMembershipBody,
+  campfireLanesResponse,
+  campfireRealmsResponse,
+  discoveryCampfiresQuery,
+  discoveryCampfiresResponse,
+  getCampfireLanesQuerySchema,
   manageCampfiresPaginatedResponse,
   manageCampfiresQuery,
   manageCampfiresResponse,
@@ -74,5 +81,107 @@ export const getManageCampfiresSimple = createRoute({
   },
 });
 
+export const getDiscoveryCampfires = createRoute({
+  path: "/discovery",
+  summary: "Discover campfires",
+  description:
+    "Returns a paginated list of public campfires. Supports filtering by realm, lane, and search queries.",
+  method: "get",
+  request: {
+    query: discoveryCampfiresQuery,
+  },
+  tags,
+  responses: {
+    [HttpStatusCodes.OK]: jsonContent(
+      discoveryCampfiresResponse,
+      "List of campfires",
+    ),
+    [HttpStatusCodes.BAD_REQUEST]: jsonContent(
+      createMessageObjectSchema("Bad request"),
+      "Invalid query parameters",
+    ),
+    [HttpStatusCodes.INTERNAL_SERVER_ERROR]: jsonContent(
+      internalServerErrorSchema,
+      "Internal server error",
+    ),
+  },
+});
+
+export const getBatchMembership = createRoute({
+  path: "/memberships",
+  summary: "Get batch membership status",
+  description:
+    "Returns membership status for a list of campfire IDs. Used to overlay user-specific data on public lists.",
+  method: "post",
+  request: {
+    body: jsonContent(batchMembershipBody, "List of campfire IDs"),
+  },
+  tags,
+  responses: {
+    [HttpStatusCodes.OK]: jsonContent(
+      batchCampfireMembershipResponse,
+      "Map of campfire IDs to membership status",
+    ),
+    [HttpStatusCodes.UNAUTHORIZED]: jsonContent(
+      createMessageObjectSchema("Unauthorized"),
+      "Authentication required",
+    ),
+    [HttpStatusCodes.INTERNAL_SERVER_ERROR]: jsonContent(
+      internalServerErrorSchema,
+      "Internal server error",
+    ),
+  },
+});
+
+export const getCampfireRealms = createRoute({
+  path: "/realms",
+  method: "get",
+  summary: "Get campfire realms",
+  description: "Returns all active campfire realms used for discovery tabs.",
+  tags,
+  responses: {
+    [HttpStatusCodes.OK]: jsonContent(
+      campfireRealmsResponse,
+      "List of campfire realms",
+    ),
+    [HttpStatusCodes.UNAUTHORIZED]: jsonContent(
+      createMessageObjectSchema("Unauthorized"),
+      "Authentication required",
+    ),
+    [HttpStatusCodes.INTERNAL_SERVER_ERROR]: jsonContent(
+      internalServerErrorSchema,
+      "Internal server error",
+    ),
+  },
+});
+
+export const getCampfireLanes = createRoute({
+  method: "get",
+  path: "/lanes",
+  summary: "Get campfire lanes by realm",
+  tags: ["Campfires"],
+  request: {
+    query: getCampfireLanesQuerySchema,
+  },
+  responses: {
+    [HttpStatusCodes.OK]: jsonContent(
+      campfireLanesResponse,
+      "List of campfire lanes",
+    ),
+    [HttpStatusCodes.UNAUTHORIZED]: jsonContent(
+      createMessageObjectSchema("Unauthorized"),
+      "Authentication required",
+    ),
+    [HttpStatusCodes.INTERNAL_SERVER_ERROR]: jsonContent(
+      internalServerErrorSchema,
+      "Internal server error",
+    ),
+  },
+});
+
 export type GetManageCampfiresRoute = typeof getManageCampfires;
 export type GetManageCampfiresSimpleRoute = typeof getManageCampfiresSimple;
+export type GetDiscoveryCampfiresRoute = typeof getDiscoveryCampfires;
+export type GetBatchMembershipRoute = typeof getBatchMembership;
+export type GetCampfireRealmsRoute = typeof getCampfireRealms;
+export type GetCampfireLanesRoute = typeof getCampfireLanes;
