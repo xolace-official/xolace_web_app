@@ -110,12 +110,12 @@ export const TestimonialSection = () => {
 
   return (
     <section id="testimonials" className="section">
-      <div className="w-full max-w-6xl mx-auto px-4">
+      <div className="w-full max-w-6xl mx-auto">
         <h2 className="section-header text-center">
-          Hear What Our 200+ Campers Say
+          Hear What Our 150+ Campers Say
         </h2>
 
-        <div className="relative h-[550px] md:h-[500px] flex items-center justify-center px-4">
+        <div className="relative h-[550px] md:h-[500px] flex items-center justify-center  overflow-hidden">
           <button
             onClick={prev}
             type={"button"}
@@ -135,7 +135,7 @@ export const TestimonialSection = () => {
           </button>
 
           {/* Cards Stack */}
-          <div className=" relative w-full max-w-3xl h-full flex items-center justify-center ">
+          <div className="relative w-full max-w-3xl h-full flex items-center justify-center overflow-hidden md:overflow-visible">
             {testimonials.map((testimonial, index) => (
               <div
                 key={testimonial.id}
