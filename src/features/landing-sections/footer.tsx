@@ -71,8 +71,8 @@ export const FooterSection = () => {
   return (
     <footer id={"footer"} className="relative w-full">
       {/* CTA Card */}
-      <div className="relative z-80 px-4 md:px-8 lg:px-16 max-w-7xl mx-auto -mb-32">
-        <div className="bg-gradient-to-br from-accent/20 via-accent/50 to-accent/100 rounded-3xl shadow-2xl p-8 md:p-16 border">
+      <div className="relative z-40 px-4 md:px-8 lg:px-16 max-w-7xl mx-auto -mb-32">
+        <div className="bg-gradient-to-br from-accent/100 via-accent/90 to-accent/80 rounded-3xl shadow-2xl p-8 md:p-16 border">
           <div className="text-center max-w-3xl mx-auto">
             <p className="text-sm md:text-base text-foreground mb-4">
               Try xolace.app now

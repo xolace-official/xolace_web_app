@@ -52,7 +52,7 @@ const routeList: RouteProps[] = [
 export const Navbar = () => {
   const [isOpen, setIsOpen] = React.useState(false);
   return (
-    <header className="shadow-inner bg-opacity-15 w-full top-0 left-0 right-0 sticky border border-secondary z-99 flex justify-between items-center py-4 px-4 md:px-8 bg-muted dark:bg-card">
+    <header className="shadow-inner bg-opacity-15 w-full top-0 left-0 right-0 sticky border border-secondary z-80 flex justify-between items-center py-3 px-4 md:px-8 bg-muted dark:bg-card">
       <Link href="/" className="font-bold text-lg flex items-center">
         <ChevronsDown className="bg-gradient-to-tr border-secondary from-primary via-primary/70 to-primary rounded-lg w-9 h-9 mr-2 border text-white" />
         XOLACE
