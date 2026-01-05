@@ -9,6 +9,45 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
+      account_statuses: {
+        Row: {
+          reason: string | null;
+          status: string;
+          updated_at: string;
+          updated_by: string | null;
+          user_id: string;
+        };
+        Insert: {
+          reason?: string | null;
+          status?: string;
+          updated_at?: string;
+          updated_by?: string | null;
+          user_id: string;
+        };
+        Update: {
+          reason?: string | null;
+          status?: string;
+          updated_at?: string;
+          updated_by?: string | null;
+          user_id?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "account_statuses_updated_by_fkey";
+            columns: ["updated_by"];
+            isOneToOne: false;
+            referencedRelation: "profiles";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "account_statuses_user_id_fkey";
+            columns: ["user_id"];
+            isOneToOne: true;
+            referencedRelation: "profiles";
+            referencedColumns: ["id"];
+          },
+        ];
+      };
       campfire_guide_resources: {
         Row: {
           campfire_id: string;
@@ -1111,6 +1150,24 @@ export type Database = {
         };
         Relationships: [];
       };
+      roles: {
+        Row: {
+          created_at: string;
+          description: string;
+          role: string;
+        };
+        Insert: {
+          created_at?: string;
+          description: string;
+          role: string;
+        };
+        Update: {
+          created_at?: string;
+          description?: string;
+          role?: string;
+        };
+        Relationships: [];
+      };
       tags: {
         Row: {
           count: number;
@@ -1186,6 +1243,217 @@ export type Database = {
             foreignKeyName: "user_preferences_user_id_fkey";
             columns: ["user_id"];
             isOneToOne: true;
+            referencedRelation: "profiles";
+            referencedColumns: ["id"];
+          },
+        ];
+      };
+      user_role_assignments: {
+        Row: {
+          assigned_at: string;
+          assigned_by: string | null;
+          id: string;
+          reason: string | null;
+          revoked_at: string | null;
+          revoked_by: string | null;
+          role: string;
+          user_id: string;
+        };
+        Insert: {
+          assigned_at?: string;
+          assigned_by?: string | null;
+          id?: string;
+          reason?: string | null;
+          revoked_at?: string | null;
+          revoked_by?: string | null;
+          role: string;
+          user_id: string;
+        };
+        Update: {
+          assigned_at?: string;
+          assigned_by?: string | null;
+          id?: string;
+          reason?: string | null;
+          revoked_at?: string | null;
+          revoked_by?: string | null;
+          role?: string;
+          user_id?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "user_role_assignments_assigned_by_fkey";
+            columns: ["assigned_by"];
+            isOneToOne: false;
+            referencedRelation: "profiles";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "user_role_assignments_revoked_by_fkey";
+            columns: ["revoked_by"];
+            isOneToOne: false;
+            referencedRelation: "profiles";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "user_role_assignments_role_fkey";
+            columns: ["role"];
+            isOneToOne: false;
+            referencedRelation: "roles";
+            referencedColumns: ["role"];
+          },
+          {
+            foreignKeyName: "user_role_assignments_user_id_fkey";
+            columns: ["user_id"];
+            isOneToOne: false;
+            referencedRelation: "profiles";
+            referencedColumns: ["id"];
+          },
+        ];
+      };
+      video_likes: {
+        Row: {
+          created_at: string;
+          id: number;
+          user_profile_id: string;
+          video_id: string;
+        };
+        Insert: {
+          created_at?: string;
+          id?: never;
+          user_profile_id: string;
+          video_id: string;
+        };
+        Update: {
+          created_at?: string;
+          id?: never;
+          user_profile_id?: string;
+          video_id?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "video_likes_user_profile_id_fkey";
+            columns: ["user_profile_id"];
+            isOneToOne: false;
+            referencedRelation: "profiles";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "video_likes_video_id_fkey";
+            columns: ["video_id"];
+            isOneToOne: false;
+            referencedRelation: "videos";
+            referencedColumns: ["id"];
+          },
+        ];
+      };
+      video_tags: {
+        Row: {
+          created_at: string;
+          tag_id: number;
+          video_id: string;
+        };
+        Insert: {
+          created_at?: string;
+          tag_id: number;
+          video_id: string;
+        };
+        Update: {
+          created_at?: string;
+          tag_id?: number;
+          video_id?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "video_tags_tag_id_fkey";
+            columns: ["tag_id"];
+            isOneToOne: false;
+            referencedRelation: "tags";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "video_tags_video_id_fkey";
+            columns: ["video_id"];
+            isOneToOne: false;
+            referencedRelation: "videos";
+            referencedColumns: ["id"];
+          },
+        ];
+      };
+      videos: {
+        Row: {
+          author_avatar_url: string;
+          author_display_name: string;
+          author_profile_id: string;
+          bunny_video_id: string;
+          created_at: string;
+          deleted_at: string | null;
+          description: string | null;
+          duration_seconds: number;
+          id: string;
+          is_deleted: boolean;
+          is_featured: boolean;
+          is_recommended: boolean;
+          likes_count: number;
+          playback_url: string;
+          published_at: string | null;
+          saves_count: number;
+          thumbnail_url: string;
+          title: string | null;
+          updated_at: string;
+          views_count: number;
+          visibility: string;
+        };
+        Insert: {
+          author_avatar_url: string;
+          author_display_name: string;
+          author_profile_id: string;
+          bunny_video_id: string;
+          created_at?: string;
+          deleted_at?: string | null;
+          description?: string | null;
+          duration_seconds: number;
+          id?: string;
+          is_deleted?: boolean;
+          is_featured?: boolean;
+          is_recommended?: boolean;
+          likes_count?: number;
+          playback_url: string;
+          published_at?: string | null;
+          saves_count?: number;
+          thumbnail_url: string;
+          title?: string | null;
+          updated_at?: string;
+          views_count?: number;
+          visibility?: string;
+        };
+        Update: {
+          author_avatar_url?: string;
+          author_display_name?: string;
+          author_profile_id?: string;
+          bunny_video_id?: string;
+          created_at?: string;
+          deleted_at?: string | null;
+          description?: string | null;
+          duration_seconds?: number;
+          id?: string;
+          is_deleted?: boolean;
+          is_featured?: boolean;
+          is_recommended?: boolean;
+          likes_count?: number;
+          playback_url?: string;
+          published_at?: string | null;
+          saves_count?: number;
+          thumbnail_url?: string;
+          title?: string | null;
+          updated_at?: string;
+          views_count?: number;
+          visibility?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "videos_author_profile_id_fkey";
+            columns: ["author_profile_id"];
+            isOneToOne: false;
             referencedRelation: "profiles";
             referencedColumns: ["id"];
           },
