@@ -74,7 +74,7 @@ export function HowItWorksSection() {
                   alt={step.title}
                   width={400}
                   height={400}
-                  className="w-full h-[400px] object-cover"
+                  className="w-full h-[400px] object-cover rounded-xl"
                 />
               </div>
 
@@ -99,7 +99,7 @@ export function HowItWorksSection() {
                   alt={step.title}
                   width={400}
                   height={400}
-                  className="w-full h-[400px] object-cover"
+                  className="w-full h-[400px] object-cover rounded-xl"
                 />
               </div>
             </div>

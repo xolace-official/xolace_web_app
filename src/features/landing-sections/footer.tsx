@@ -121,7 +121,7 @@ export const FooterSection = () => {
           ))}
         </div>
 
-        <Separator className="my-8 bg-foreground" />
+        <Separator className="my-8 bg-muted-foreground" />
 
         {/* Bottom Bar */}
         <div className="flex flex-row justify-between items-center gap-4">
