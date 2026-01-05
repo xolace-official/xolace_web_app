@@ -1,11 +1,6 @@
 "use client";
 
-import {
-  IconMail,
-  IconMessage,
-  IconPencil,
-  IconUser,
-} from "@tabler/icons-react";
+import { IconMail, IconMessage, IconUser } from "@tabler/icons-react";
 import { motion } from "motion/react";
 import Form from "next/form";
 import { useActionState } from "react";
@@ -35,7 +30,6 @@ export default function ContactUsForm() {
       values: {
         fullName: "",
         email: "",
-        subject: "",
         description: "",
       },
       errors: null,
@@ -91,21 +85,6 @@ export default function ContactUsForm() {
                   <IconMail className="size-4 text-muted-foreground" />
                 }
                 error={formState.errors?.email}
-              />
-
-              {/* Subject */}
-              <FormInput
-                id="subject"
-                name="subject"
-                type="text"
-                label="Subject"
-                placeholder="e.g. I need help with my account"
-                required
-                defaultValue={formState.values?.subject}
-                leftAddon={
-                  <IconPencil className="size-4 text-muted-foreground" />
-                }
-                error={formState.errors?.subject}
               />
 
               {/* Description */}
