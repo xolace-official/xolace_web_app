@@ -263,6 +263,36 @@ export const campfireLanesResponse = z.object({
   data: z.array(campfireLaneSchema),
 });
 
+// -----------------------------------------------------------------------------
+// Membership item
+// -----------------------------------------------------------------------------
+
+export const getCampfireMembershipParamsSchema = z.object({
+  campfireId: z.uuid().openapi({
+    param: {
+      name: "campfireId",
+      in: "path",
+    },
+    description: "Campfire ID",
+  }),
+});
+
+export const campfireMembershipDetailSchema = z.object({
+  is_member: z.boolean(),
+  role: campfireRoleEnum.nullable(),
+  status: campfireMemberStatusEnum.nullable(),
+  is_favorite: z.boolean(),
+  joined_at: timestampSchema.nullable(),
+});
+
+// -----------------------------------------------------------------------------
+// Response
+// -----------------------------------------------------------------------------
+
+export const campfireMembershipDetailResponse = z.object({
+  data: campfireMembershipDetailSchema,
+});
+
 export type ManageCampfireListItem = z.infer<
   typeof manageCampfireListItemSchema
 >;
