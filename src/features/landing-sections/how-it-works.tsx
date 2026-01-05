@@ -82,7 +82,7 @@ export function HowItWorksSection() {
                 <h3 className="text-3xl md:text-4xl font-bold">{step.title}</h3>
                 <p className="text-muted-foreground flex flex-col gap-4 md:gap-8">
                   {step.description.map((desc) => (
-                    <p key={desc}>{desc}</p>
+                    <span key={desc}>{desc}</span>
                   ))}
                 </p>
                 <CtaButton
