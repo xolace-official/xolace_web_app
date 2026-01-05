@@ -5,6 +5,7 @@ import type { z } from "zod";
 import type {
   GetBatchMembershipRoute,
   GetCampfireLanesRoute,
+  GetCampfireMembershipRoute,
   GetCampfireRealmsRoute,
   GetDiscoveryCampfiresRoute,
   GetManageCampfiresRoute,
@@ -258,6 +259,57 @@ export const getBatchMembership: AppRouteHandler<
       HttpStatusCodes.INTERNAL_SERVER_ERROR,
     );
   }
+};
+
+export const getCampfireMembership: AppRouteHandler<
+  GetCampfireMembershipRoute
+> = async (c) => {
+  const userId = c.get("userId");
+  const supabase = c.get("supabase");
+  const { campfireId } = c.req.param();
+
+  const { data, error } = await supabase
+    .from("campfire_members")
+    .select("role, status, is_favorite, joined_at")
+    .eq("campfire_id", campfireId)
+    .eq("user_id", userId)
+    .maybeSingle();
+
+  if (error && error.code !== "PGRST116") {
+    console.error("getCampfireMembership error:", error);
+    return c.json(
+      { message: "Failed to fetch membership" },
+      HttpStatusCodes.INTERNAL_SERVER_ERROR,
+    );
+  }
+
+  if (!data) {
+    return c.json(
+      {
+        data: {
+          is_member: false,
+          role: null,
+          status: null,
+          is_favorite: false,
+          joined_at: null,
+        },
+      },
+      HttpStatusCodes.OK,
+    );
+  }
+
+  return c.json(
+    {
+      data: {
+        is_member: true,
+        role: data.role,
+        status: data.status,
+        is_favorite: data.is_favorite,
+        joined_at: data.joined_at,
+      },
+    },
+    HttpStatusCodes.OK,
+  );
 };
 
 export const getCampfireRealms: AppRouteHandler<
