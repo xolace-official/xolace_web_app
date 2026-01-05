@@ -87,14 +87,16 @@ export const glimpseFeedItemSchema = z.object({
 
   published_at: z.string().nullable(),
 
+  tags: z.array(z.string()),
+
   // video_tags
-  video_tags: z.array(
-    z.object({
-      tag: z.object({
-        name: z.string(),
-      }),
-    }),
-  ),
+  //   video_tags: z.array(
+  //     z.object({
+  //       tag: z.object({
+  //         name: z.string(),
+  //       }),
+  //     }),
+  //   ),
 });
 
 /**

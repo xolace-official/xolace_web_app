@@ -120,9 +120,19 @@ export const getGlimpseFeed: AppRouteHandler<GetGlimpseFeedRoute> = async (
     const totalCount = count || 0;
     const totalPages = Math.ceil(totalCount / pageSize);
 
+    // transform data
+    const transformedData =
+      data?.map((video) => ({
+        ...video,
+        tags:
+          video.video_tags
+            ?.map((vt: { tag: { name: string } | null }) => vt.tag?.name)
+            .filter((name): name is string => Boolean(name)) ?? [],
+      })) || [];
+
     return c.json(
       {
-        data: data || [],
+        data: transformedData,
         meta: {
           totalCount,
           currentPage: pageNumber,
