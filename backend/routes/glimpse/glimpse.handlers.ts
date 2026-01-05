@@ -46,7 +46,12 @@ export const getGlimpseFeed: AppRouteHandler<GetGlimpseFeedRoute> = async (
         saves_count,
         is_featured,
         is_recommended,
-        published_at
+        published_at,
+        video_tags (
+          tag:tags (
+            name
+          )
+        )
       `,
         { count: "exact" },
       )

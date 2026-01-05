@@ -86,6 +86,15 @@ export const glimpseFeedItemSchema = z.object({
   is_recommended: z.boolean(),
 
   published_at: z.string().nullable(),
+
+  // video_tags
+  video_tags: z.array(
+    z.object({
+      tag: z.object({
+        name: z.string(),
+      }),
+    }),
+  ),
 });
 
 /**
