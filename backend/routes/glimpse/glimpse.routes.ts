@@ -20,6 +20,10 @@ export const getGlimpseFeed = createRoute({
   },
   responses: {
     [HttpStatusCodes.OK]: jsonContent(glimpseFeedResponse, "List of videos"),
+    [HttpStatusCodes.UNAUTHORIZED]: jsonContent(
+      createMessageObjectSchema("Unauthorized"),
+      "Authentication required",
+    ),
     [HttpStatusCodes.BAD_REQUEST]: jsonContent(
       createMessageObjectSchema("Bad request"),
       "Invalid query parameters",
