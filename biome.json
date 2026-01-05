@@ -14,8 +14,8 @@
       "!.next",
       "!dist",
       "!build",
-      "!components/ui",
-      "!components/ui/shadcn-io"
+      "!src/components/ui",
+      "!src/components/ui/shadcn-io"
     ]
   },
   "formatter": {
