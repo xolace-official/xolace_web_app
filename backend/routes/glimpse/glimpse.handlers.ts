@@ -33,7 +33,7 @@ export const getGlimpseFeed: AppRouteHandler<GetGlimpseFeedRoute> = async (
       .select(
         `
         id,
-        playback_url,
+        bunny_video_id,
         thumbnail_url,
         duration_seconds,
         title,
@@ -122,13 +122,21 @@ export const getGlimpseFeed: AppRouteHandler<GetGlimpseFeedRoute> = async (
 
     // transform data
     const transformedData =
-      data?.map((video) => ({
-        ...video,
-        tags:
+      data?.map((video) => {
+        const tags =
           video.video_tags
             ?.map((vt: { tag: { name: string } | null }) => vt.tag?.name)
-            .filter((name): name is string => Boolean(name)) ?? [],
-      })) || [];
+            .filter((name): name is string => Boolean(name)) ?? [];
+
+        // ❗ destructure to REMOVE video_tags
+        // biome-ignore lint/correctness/noUnusedVariables: we just want to remove video_tags
+        const { video_tags, ...cleanVideo } = video;
+
+        return {
+          ...cleanVideo,
+          tags,
+        };
+      }) || [];
 
     return c.json(
       {

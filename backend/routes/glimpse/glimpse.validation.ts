@@ -67,8 +67,8 @@ export const glimpseFeedQuery = z.object({
 // schema
 export const glimpseFeedItemSchema = z.object({
   id: z.uuid(),
-  playback_url: z.string().url(),
-  thumbnail_url: z.string().url(),
+  bunny_video_id: z.string(),
+  thumbnail_url: z.url(),
   duration_seconds: z.number().int(),
 
   title: z.string().nullable(),
