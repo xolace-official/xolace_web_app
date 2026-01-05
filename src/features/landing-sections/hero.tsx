@@ -4,8 +4,8 @@ import { useRouter } from "next/navigation";
 import { CtaButton } from "@/components/shared/layout/cta-button";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import Iphone15Pro from "@/components/ui/shadcn-io/iphone-15-pro";
-import { Safari } from "@/components/ui/shadcn-io/safari";
+import { Safari } from "@/components/ui/safari";
+import { Iphone } from "@/components/ui/iphone";
 
 export const HeroSection = () => {
   const router = useRouter();
@@ -63,17 +63,13 @@ export const HeroSection = () => {
             <div className="hidden md:block bg-card rounded-3xl p-8">
               <Safari
                 url="xolace.app"
-                className="size-full"
-                height={600}
+                className={"flex w-full "}
                 mode={"default"}
                 videoSrc="https://videos.pexels.com/video-files/27180348/12091515_2560_1440_50fps.mp4"
               />
             </div>
             <div className={"flex md:hidden items-center justify-center "}>
-              <Iphone15Pro
-                className="w-[60vw] max-w-[250px] max-h-[400px] sm:w-full sm:max-w-[300px] sm:max-h-[500px] md:max-h-[600px]"
-                videoSrc="https://videos.pexels.com/video-files/27180348/12091515_2560_1440_50fps.mp4"
-              />
+              <Iphone videoSrc="https://videos.pexels.com/video-files/27180348/12091515_2560_1440_50fps.mp4" />
             </div>
             <div className="absolute bottom-0 left-0 w-full h-20 md:h-28 bg-gradient-to-b from-background/0 via-background/50 to-background rounded-b-xl pointer-events-none"></div>
           </div>

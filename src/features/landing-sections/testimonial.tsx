@@ -2,6 +2,8 @@
 import { ChevronLeft, ChevronRight, Star } from "lucide-react";
 import Image from "next/image";
 import { useState } from "react";
+import { CtaButton } from "@/components/shared/layout/cta-button";
+import { useRouter } from "next/navigation";
 
 interface Props {
   id: string;
@@ -62,6 +64,7 @@ const testimonials: Props[] = [
 
 export const TestimonialSection = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
+  const router = useRouter();
 
   const next = () => {
     setCurrentIndex((prev) => (prev + 1) % testimonials.length);
@@ -195,6 +198,12 @@ export const TestimonialSection = () => {
               aria-label={`Go to testimonial ${index + 1}`}
             />
           ))}
+        </div>
+        <div className={"pt-4 md:pt-8 flex items-end justify-end mx-auto"}>
+          <CtaButton
+            label={"Read More Here"}
+            onClick={() => router.push("/feed")}
+          />
         </div>
       </div>
     </section>
