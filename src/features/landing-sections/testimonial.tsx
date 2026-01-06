@@ -157,7 +157,7 @@ export const TestimonialSection = () => {
                   </div>
 
                   {/* Quote */}
-                  <p className="text-xl font-medium leading-relaxed mb-4 flex-grow">
+                  <p className="text-xl font-medium leading-relaxed mb-4 grow">
                     "{testimonial.quote}"
                   </p>
 

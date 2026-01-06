@@ -16,7 +16,7 @@ export const HeroSection = () => {
           <div className="absolute -top-20 -left-20 w-[400px] h-[400px] bg-primary/20 rounded-full blur-3xl"></div>
           <div className="absolute top-10 right-10 w-[500px] h-[500px] bg-secondary/20 rounded-full blur-2xl"></div>
         </div>
-        <div className="text-center space-y-8 max-w-screen-md mx-auto py-6 md:py-12 px-4 z-10 relative">
+        <div className="text-center space-y-8 max-w-3xl mx-auto py-6 md:py-12 px-4 z-10 relative">
           <Badge variant="outline" className="text-sm py-2">
             <span className="mr-2 text-primary">
               <Badge>New</Badge>
@@ -57,7 +57,7 @@ export const HeroSection = () => {
       </div>
 
       <div className="relative z-20 bg-background">
-        <div className="lg:max-w-screen-xl mx-auto px-4 -mt-18">
+        <div className="lg:max-w-7xl mx-auto px-4 -mt-18">
           <div className="relative group">
             <div className="absolute top-2 lg:-top-8 left-1/2 transform -translate-x-1/2 w-[80%] mx-auto h-24 lg:h-80 bg-primary/20 rounded-full blur-3xl pointer-events-none"></div>
             <div className="hidden md:block bg-card rounded-3xl p-8">
@@ -71,7 +71,7 @@ export const HeroSection = () => {
             <div className={"flex md:hidden items-center justify-center "}>
               <Iphone videoSrc="https://videos.pexels.com/video-files/27180348/12091515_2560_1440_50fps.mp4" />
             </div>
-            <div className="absolute bottom-0 left-0 w-full h-20 md:h-28 bg-gradient-to-b from-background/0 via-background/50 to-background rounded-b-xl pointer-events-none"></div>
+            <div className="absolute bottom-0 left-0 w-full h-20 md:h-28 bg-linear-to-b from-background/0 via-background/50 to-background rounded-b-xl pointer-events-none"></div>
           </div>
         </div>
       </div>
