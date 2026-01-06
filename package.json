@@ -103,11 +103,9 @@
     "typescript": "^5.9.3"
   },
   "lint-staged": {
-    "*.{js,ts,cjs,mjs,d.cts,d.mts,jsx,tsx,json,jsonc}": [
+    "{src,backend}/**/!(*components/ui)/*.{js,ts,jsx,tsx,json,jsonc}": [
       "biome format --write --no-errors-on-unmatched",
-      "biome lint --write --no-errors-on-unmatched",
-      "biome check --write --no-errors-on-unmatched",
-      "biome check --files-ignore-unknown=true"
+      "biome check --write --no-errors-on-unmatched --stdin-file-path"
     ]
   }
 }

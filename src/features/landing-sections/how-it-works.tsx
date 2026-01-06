@@ -1,77 +1,51 @@
 "use client";
 
+import Image from "next/image";
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
 import { CtaButton } from "@/components/shared/layout/cta-button";
-import Iphone15Pro from "@/components/ui/shadcn-io/iphone-15-pro";
 
-type HowItWorksProps = {
-  step: number;
+interface HowItWorksItem {
+  id: string;
   title: string;
-  description: string;
-};
+  description: string[];
+  image: string;
+  cta: string;
+  imagePosition: "left" | "right";
+}
 
-export const howItWorksList: HowItWorksProps[] = [
+const howItWorksList: HowItWorksItem[] = [
   {
-    step: 1,
-    title: "Ignite a Spark",
-    description:
-      "A thought. A confession. A moment too heavy to hold alone. You release it into the circle, and the fire catches it with quiet understanding.",
-  },
-  {
-    step: 2,
-    title: "The Circle Responds",
-    description:
-      "Kindlers and Guides turn your Spark into an Ember—reflecting back lived wisdom, warmth, and perspective that helps you breathe easier.",
-  },
-  {
-    step: 3,
-    title: "Follow the Glow",
-    description:
-      "Mini-campfires form around shared experiences. You’re not posting for attention—you’re gathering with people who genuinely resonate.",
-  },
-  {
-    step: 4,
-    title: "Grow at Your Pace",
-    description:
+    id: "spark",
+    title: "From Spark to Strength",
+    description: [
+      "A thought. A confession. A moment too heavy to hold alone. You release it into the circle, and the fire catches it with quiet understanding. Kindlers and Guides turn your Spark into an Ember reflecting back lived wisdom, warmth, and perspective that helps you breathe easier.",
+      "Mini-campfires form around shared experiences. You’re not posting for attention you’re gathering with people who genuinely resonate.",
       "Daily prompts, gentle emotional wins, and a space built for resilience help you strengthen your inner world one ember at a time.",
+    ],
+    image:
+      "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80",
+    cta: "Make A Spark",
+    imagePosition: "left",
   },
   {
-    step: 5,
+    id: "deeper",
     title: "Go Deeper When Ready",
-    description:
-      "Private, optional 1-on-1 sessions with Guides—human, grounded, and free from the cold clinical distance—wait whenever you choose to step closer.",
+    description: [
+      "When you’re ready to go further, private 1-on-1 sessions open a deeper layer of support. Connect with licensed professionals and experienced guides including therapists, counselors, mentors, and wellness practitioners who help reduce stress and support mental and emotional wellbeing.",
+      "These conversations are human, grounded, and pressure-free, meeting you exactly where you are. There’s no timeline and no expectation just a confidential space to explore, heal, and grow with guidance you can trust.",
+    ],
+    image:
+      "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80",
+    cta: "Explore Guided Support",
+    imagePosition: "right",
   },
 ];
 
-const videoList = [
-  "https://videos.pexels.com/video-files/27180348/12091515_2560_1440_50fps.mp4",
-  "https://videos.pexels.com/video-files/27180348/12091515_2560_1440_50fps.mp4",
-  "https://videos.pexels.com/video-files/27180348/12091515_2560_1440_50fps.mp4",
-];
-
-export const HowItWorksSection = () => {
-  const [currentVideoIndex, setCurrentVideoIndex] = useState(0);
-  const [isRotating, setIsRotating] = useState(false);
+export function HowItWorksSection() {
   const router = useRouter();
 
-  useEffect(() => {
-    // Change video every 5 seconds
-    const interval = setInterval(() => {
-      setIsRotating(true);
-
-      // After rotation animation (1 second), change video
-      setTimeout(() => {
-        setCurrentVideoIndex((prev) => (prev + 1) % videoList.length);
-        setIsRotating(false);
-      }, 1000);
-    }, 5000);
-
-    return () => clearInterval(interval);
-  }, []);
-
   return (
-    <section id="howItWorks" className={"section"}>
+    <section id="howItWorks" className="section">
       <div className="section-parent-header">
         <h2 className="section-header text-center">
           Built With the Architecture of Empathy.
@@ -83,45 +57,55 @@ export const HowItWorksSection = () => {
         </h3>
       </div>
 
-      <div className="flex flex-col md:flex-row items-center justify-between gap-8 md:gap-16 w-full">
-        <div className="w-full md:w-1/2 flex items-center justify-center">
-          <div
-            className="transition-transform duration-1000 ease-in-out"
-            style={{
-              transform: isRotating ? "rotateY(360deg)" : "rotateY(0deg)",
-              transformStyle: "preserve-3d",
-            }}
-          >
-            <Iphone15Pro
-              key={currentVideoIndex}
-              className="w-[60vw] max-w-[250px] max-h-[400px] sm:w-full sm:max-w-[300px] sm:max-h-[500px] md:max-h-[600px]"
-              videoSrc={videoList[currentVideoIndex]}
-            />
-          </div>
-        </div>
+      <div className="flex flex-col gap-8 md:gap-12">
+        {howItWorksList.map((step) => {
+          const isImageLeft = step.imagePosition === "left";
 
-        <div className="w-full md:w-1/2 flex flex-col gap-5">
-          {howItWorksList.map((item) => (
-            <div key={item.step} className="flex gap-4 items-start">
-              <span className="text-muted-foreground font-semibold text-sm pt-1">
-                {item.step}.
-              </span>
-              <div className="flex flex-col gap-1">
-                <h2 className="text-xl font-semibold">{item.title}</h2>
-                <p className="text-muted-foreground leading-relaxed">
-                  {item.description}
+          return (
+            <div
+              key={step.id}
+              className="flex flex-col items-center justify-center md:flex-row gap-2 md:gap-8"
+            >
+              <div
+                className={`w-full md:w-1/2 ${isImageLeft ? "flex " : "flex md:hidden"}`}
+              >
+                <Image
+                  src={step.image}
+                  alt={step.title}
+                  width={400}
+                  height={400}
+                  className="w-full h-[400px] object-cover rounded-xl"
+                />
+              </div>
+
+              <div className="w-full md:w-1/2 space-y-4 md:space-y-8">
+                <h3 className="text-3xl md:text-4xl font-bold">{step.title}</h3>
+                <p className="text-muted-foreground flex flex-col gap-4 md:gap-8">
+                  {step.description.map((desc) => (
+                    <span key={desc}>{desc}</span>
+                  ))}
                 </p>
+                <CtaButton
+                  label={step.cta}
+                  onClick={() => router.push("/feed")}
+                />
+              </div>
+
+              <div
+                className={`w-full md:w-1/2 ${!isImageLeft ? "hidden md:flex" : "hidden"}`}
+              >
+                <Image
+                  src={step.image}
+                  alt={step.title}
+                  width={400}
+                  height={400}
+                  className="w-full h-[400px] object-cover rounded-xl"
+                />
               </div>
             </div>
-          ))}
-          <div className={"ml-8"}>
-            <CtaButton
-              label={"Step Into the Circle"}
-              onClick={() => router.push("sign-up")}
-            />
-          </div>
-        </div>
+          );
+        })}
       </div>
     </section>
   );
-};
+}

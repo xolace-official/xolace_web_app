@@ -12,7 +12,7 @@ export default function Home() {
   return (
     <main className={"main"}>
       <Navbar />
-      <div className="flex flex-col items-center ">
+      <div className="flex flex-col items-center overflow-x-hidden">
         <HeroSection />
         <EmotionalSlapSection />
         <BenefitsSection />

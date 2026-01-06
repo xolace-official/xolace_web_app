@@ -71,8 +71,8 @@ export const FooterSection = () => {
   return (
     <footer id={"footer"} className="relative w-full">
       {/* CTA Card */}
-      <div className="relative z-80 px-4 md:px-8 lg:px-16 max-w-7xl mx-auto -mb-32">
-        <div className="bg-gradient-to-br from-accent/20 via-accent/50 to-accent/100 rounded-3xl shadow-2xl p-8 md:p-16 border">
+      <div className="relative z-40 px-4 md:px-8 lg:px-16 max-w-7xl mx-auto -mb-32">
+        <div className="bg-linear-to-br from-accent via-accent/90 to-accent/80 rounded-3xl shadow-2xl p-8 md:p-16 border">
           <div className="text-center max-w-3xl mx-auto">
             <p className="text-sm md:text-base text-foreground mb-4">
               Try xolace.app now
@@ -93,7 +93,7 @@ export const FooterSection = () => {
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-8 md:gap-12 mb-12">
           <div className="col-span-2 md:col-span-3 lg:col-span-1">
             <Link href="/" className="font-bold text-lg flex items-center">
-              <ChevronsDown className="bg-gradient-to-tr border-secondary from-primary via-primary/70 to-primary rounded-lg w-9 h-9 mr-2 border" />
+              <ChevronsDown className="bg-linear-to-tr border-secondary from-primary via-primary/70 to-primary rounded-lg w-9 h-9 mr-2 border" />
               XOLACE
             </Link>
             <p className="text-sm text-foreground/70 mt-2 flex gap-1">
@@ -121,7 +121,7 @@ export const FooterSection = () => {
           ))}
         </div>
 
-        <Separator className="my-8 bg-foreground" />
+        <Separator className="my-8 bg-muted-foreground" />
 
         {/* Bottom Bar */}
         <div className="flex flex-row justify-between items-center gap-4">

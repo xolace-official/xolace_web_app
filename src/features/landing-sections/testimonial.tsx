@@ -2,6 +2,8 @@
 import { ChevronLeft, ChevronRight, Star } from "lucide-react";
 import Image from "next/image";
 import { useState } from "react";
+import { CtaButton } from "@/components/shared/layout/cta-button";
+import { useRouter } from "next/navigation";
 
 interface Props {
   id: string;
@@ -62,6 +64,7 @@ const testimonials: Props[] = [
 
 export const TestimonialSection = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
+  const router = useRouter();
 
   const next = () => {
     setCurrentIndex((prev) => (prev + 1) % testimonials.length);
@@ -110,12 +113,12 @@ export const TestimonialSection = () => {
 
   return (
     <section id="testimonials" className="section">
-      <div className="w-full max-w-6xl mx-auto px-4">
+      <div className="w-full max-w-6xl mx-auto">
         <h2 className="section-header text-center">
-          Hear What Our 200+ Campers Say
+          Hear What Our 150+ Campers Say
         </h2>
 
-        <div className="relative h-[550px] md:h-[500px] flex items-center justify-center px-4">
+        <div className="relative h-[550px] md:h-[500px] flex items-center justify-center  overflow-hidden">
           <button
             onClick={prev}
             type={"button"}
@@ -135,7 +138,7 @@ export const TestimonialSection = () => {
           </button>
 
           {/* Cards Stack */}
-          <div className=" relative w-full max-w-3xl h-full flex items-center justify-center ">
+          <div className="relative w-full max-w-3xl h-full flex items-center justify-center overflow-hidden md:overflow-visible">
             {testimonials.map((testimonial, index) => (
               <div
                 key={testimonial.id}
@@ -154,7 +157,7 @@ export const TestimonialSection = () => {
                   </div>
 
                   {/* Quote */}
-                  <p className="text-xl font-medium leading-relaxed mb-4 flex-grow">
+                  <p className="text-xl font-medium leading-relaxed mb-4 grow">
                     "{testimonial.quote}"
                   </p>
 
@@ -195,6 +198,12 @@ export const TestimonialSection = () => {
               aria-label={`Go to testimonial ${index + 1}`}
             />
           ))}
+        </div>
+        <div className={"pt-4 md:pt-8 flex items-end justify-end mx-auto"}>
+          <CtaButton
+            label={"Read More Here"}
+            onClick={() => router.push("/feed")}
+          />
         </div>
       </div>
     </section>

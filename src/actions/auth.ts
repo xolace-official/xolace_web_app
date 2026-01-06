@@ -113,7 +113,6 @@ export async function contactFormAction(
   const values = {
     fullName: formData.get("fullName") as string,
     email: formData.get("email") as string,
-    subject: formData.get("subject") as string,
     description: formData.get("description") as string,
   };
 
