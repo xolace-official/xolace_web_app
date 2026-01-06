@@ -104,8 +104,8 @@
   },
   "lint-staged": {
     "src/**/!(*components/ui)/*.{js,ts,jsx,tsx,json,jsonc}": [
-      "biome format --write",
-      "biome check --write --stdin-file-path"
+      "biome format --write --no-errors-on-unmatched",
+      "biome check --write --no-errors-on-unmatched --stdin-file-path"
     ]
   }
 }
