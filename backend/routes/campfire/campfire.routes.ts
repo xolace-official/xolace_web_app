@@ -8,10 +8,12 @@ import {
   batchCampfireMembershipResponse,
   batchMembershipBody,
   campfireLanesResponse,
+  campfireMembershipDetailResponse,
   campfireRealmsResponse,
   discoveryCampfiresQuery,
   discoveryCampfiresResponse,
   getCampfireLanesQuerySchema,
+  getCampfireMembershipParamsSchema,
   manageCampfiresPaginatedResponse,
   manageCampfiresQuery,
   manageCampfiresResponse,
@@ -133,6 +135,44 @@ export const getBatchMembership = createRoute({
   },
 });
 
+// -----------------------------------------------------------------------------
+// Get single campfire membership
+// -----------------------------------------------------------------------------
+
+export const getCampfireMembership = createRoute({
+  method: "get",
+  path: "/:campfireId/membership",
+  summary: "Get user's membership for a campfire",
+  description:
+    "Returns the authenticated user's membership status for a specific campfire. " +
+    "Used by the campfire details page to fetch role, favorite state, and membership status independently.",
+  tags,
+  request: {
+    params: getCampfireMembershipParamsSchema,
+  },
+  responses: {
+    [HttpStatusCodes.OK]: jsonContent(
+      campfireMembershipDetailResponse,
+      "Membership information for the campfire",
+    ),
+
+    [HttpStatusCodes.UNAUTHORIZED]: jsonContent(
+      createMessageObjectSchema("Unauthorized"),
+      "Authentication required",
+    ),
+
+    [HttpStatusCodes.BAD_REQUEST]: jsonContent(
+      createMessageObjectSchema("Invalid campfire ID"),
+      "Invalid path parameter",
+    ),
+
+    [HttpStatusCodes.INTERNAL_SERVER_ERROR]: jsonContent(
+      internalServerErrorSchema,
+      "Internal server error",
+    ),
+  },
+});
+
 export const getCampfireRealms = createRoute({
   path: "/realms",
   method: "get",
@@ -185,3 +225,4 @@ export type GetDiscoveryCampfiresRoute = typeof getDiscoveryCampfires;
 export type GetBatchMembershipRoute = typeof getBatchMembership;
 export type GetCampfireRealmsRoute = typeof getCampfireRealms;
 export type GetCampfireLanesRoute = typeof getCampfireLanes;
+export type GetCampfireMembershipRoute = typeof getCampfireMembership;
