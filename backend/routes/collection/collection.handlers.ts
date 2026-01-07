@@ -580,7 +580,10 @@ export const saveItem: AppRouteHandler<SaveItemRoute> = async (c) => {
       );
 
       if ("error" in result) {
-        console.error("saveItem create collection error:", result.error);
+        console.error("saveItem create collection error:", result.error, {
+          details: result.details,
+          code: result.code,
+        });
         return c.json(
           { message: "Failed to create collection" },
           HttpStatusCodes.INTERNAL_SERVER_ERROR,
@@ -599,7 +602,10 @@ export const saveItem: AppRouteHandler<SaveItemRoute> = async (c) => {
       );
 
       if ("error" in result) {
-        console.error("saveItem create favorites error:", result.error);
+        console.error("saveItem create favorites error:", result.error, {
+          details: result.details,
+          code: result.code,
+        });
         return c.json(
           { message: "Failed to create default collection" },
           HttpStatusCodes.INTERNAL_SERVER_ERROR,

@@ -5,7 +5,10 @@ export async function findOrCreateCollection(
   userId: string,
   name: string,
   isPinned: boolean,
-): Promise<{ id: string; isNew: boolean } | { error: string }> {
+): Promise<
+  | { id: string; isNew: boolean }
+  | { error: string; details?: string; code?: string }
+> {
   const { data: existing } = await supabase
     .from("collections")
     .select("id")
@@ -30,7 +33,11 @@ export async function findOrCreateCollection(
     .single();
 
   if (createError) {
-    return { error: "Failed to create collection" };
+    return {
+      error: "Failed to create collection",
+      details: createError.message,
+      code: createError.code,
+    };
   }
 
   return { id: newCollection.id, isNew: true };
