@@ -607,6 +607,7 @@ export const saveItem: AppRouteHandler<SaveItemRoute> = async (c) => {
       }
       collectionId = result.id;
       isNewCollection = result.isNew;
+      collectionName = "Favorites";
     }
 
     if (!collectionId || !collectionName) {

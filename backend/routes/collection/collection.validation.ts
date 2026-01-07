@@ -305,13 +305,13 @@ export const createCollectionBody = z.object({
  * Response for created collection
  */
 export const createCollectionResponse = z.object({
-  id: z.uuid(),
+  id: uuidSchema,
   name: z.string(),
   name_normalized: z.string(),
   is_pinned: z.boolean(),
   position: z.number().int(),
-  created_at: z.iso.datetime(),
-  updated_at: z.iso.datetime(),
+  created_at: timestampSchema,
+  updated_at: timestampSchema,
 });
 
 // ============================================================================
@@ -325,24 +325,41 @@ export const createCollectionResponse = z.object({
  * 2. collection_name provided - find or create collection by name
  * 3. Neither provided - save to "Favorites" (auto-created if needed)
  */
-export const saveItemBody = z.object({
-  entity_type: collectionEntityTypeEnum.openapi({
-    description: "Type of entity to save",
-    example: "post",
-  }),
-  entity_id: z.uuid().openapi({
-    description: "ID of the entity to save",
-  }),
-  collection_id: z.uuid().optional().openapi({
-    description:
-      "ID of target collection (mutually exclusive with collection_name)",
-  }),
-  collection_name: z.string().min(1).max(50).optional().openapi({
-    description:
-      "Name of target collection - will create if not exists (mutually exclusive with collection_id)",
-    example: "Reading List",
-  }),
-});
+export const saveItemBody = z
+  .object({
+    entity_type: collectionEntityTypeEnum.openapi({
+      description: "Type of entity to save",
+      example: "post",
+    }),
+    entity_id: z.uuid().openapi({
+      description: "ID of the entity to save",
+    }),
+    collection_id: z.uuid().optional().openapi({
+      description:
+        "ID of target collection (mutually exclusive with collection_name)",
+    }),
+    collection_name: z.string().min(1).max(50).optional().openapi({
+      description:
+        "Name of target collection - will create if not exists (mutually exclusive with collection_id)",
+      example: "Reading List",
+    }),
+  })
+  .superRefine((data, ctx) => {
+    if (data.collection_id && data.collection_name) {
+      ctx.addIssue({
+        code: "custom",
+        message:
+          "Cannot provide both collection_id and collection_name. Please provide only one.",
+        path: ["collection_id"],
+      });
+      ctx.addIssue({
+        code: "custom",
+        message:
+          "Cannot provide both collection_id and collection_name. Please provide only one.",
+        path: ["collection_name"],
+      });
+    }
+  });
 
 /**
  * Response for save item operation
