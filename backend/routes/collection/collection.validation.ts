@@ -236,10 +236,7 @@ export const collectionItemHydratedSchema = z.object({
   position: z.number().int(),
   created_at: timestampSchema,
   entity: z
-    .discriminatedUnion("entity_type", [
-      hydratedPostSchema,
-      hydratedVideoSchema,
-    ])
+    .union([hydratedPostSchema, hydratedVideoSchema, hydratedVoiceSchema])
     .nullable(),
 });
 
