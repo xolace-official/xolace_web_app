@@ -248,6 +248,11 @@ export const unsaveItem = createRoute({
       "Item removed successfully",
     ),
 
+    [HttpStatusCodes.NOT_FOUND]: jsonContent(
+      createMessageObjectSchema("Collection not found"),
+      "Collection does not exist or user does not own it",
+    ),
+
     [HttpStatusCodes.UNAUTHORIZED]: jsonContent(
       createMessageObjectSchema("Unauthorized"),
       "Authentication required",

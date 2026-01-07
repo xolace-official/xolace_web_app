@@ -690,30 +690,33 @@ export const unsaveItem: AppRouteHandler<UnsaveItemRoute> = async (c) => {
   const body = c.req.valid("json");
 
   try {
-    // We should strictly verify the collection belongs to the user first
-    // Although RLS policies often handle this, explicit check is safer for delete operations
-    const { data: collection } = await supabase
+    // ─────────────────────────────────────────────
+    // Step 1: Verify Collection Ownership
+    // ─────────────────────────────────────────────
+    const { data: collection, error: findError } = await supabase
       .from("collections")
       .select("id")
       .eq("id", body.collection_id)
       .eq("user_id", userId)
       .single();
 
-    if (!collection) {
-      // Silent success (idempotent) or error? RLS would prevent delete anyway.
-      // Let's just proceed to delete with RLS assumption or let the query run.
-      // If collection doesn't exist/belong to user, delete will affect 0 rows.
+    if (findError || !collection) {
+      // Return 404 to avoid leaking collection existence or if it genuinely doesn't exist
+      return c.json(
+        { message: "Collection not found" },
+        HttpStatusCodes.NOT_FOUND,
+      );
     }
 
-    // Since we need to delete based on composite key, we do:
+    // ─────────────────────────────────────────────
+    // Step 2: Delete Item
+    // ─────────────────────────────────────────────
     const { error } = await supabase
       .from("collection_items")
       .delete()
       .eq("collection_id", body.collection_id)
       .eq("entity_type", body.entity_type)
       .eq("entity_id", body.entity_id);
-    // Note: We might need to ensure the collection belongs to user if RLS on items doesn't check parent collection user_id
-    // Usually RLS on items checks `collection_id` -> `collections` -> `user_id`
 
     if (error) {
       console.error("unsaveItem error:", error);
