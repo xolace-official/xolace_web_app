@@ -21,6 +21,8 @@ import type {
   saveItemResponse,
 } from "./collection.validation";
 
+import { findOrCreateCollection } from "./helpers/findOrCreateCollection";
+
 // =============================================================================
 // Constants
 // =============================================================================
@@ -468,7 +470,7 @@ export const getCollectionItems: AppRouteHandler<
 
     return c.json(response, HttpStatusCodes.OK);
   } catch (err) {
-    console.error("deleteCollection exception:", err);
+    console.error("getCollectionItems exception:", err);
     return c.json(
       { message: HttpStatusPhrases.INTERNAL_SERVER_ERROR },
       HttpStatusCodes.INTERNAL_SERVER_ERROR,
@@ -570,75 +572,41 @@ export const saveItem: AppRouteHandler<SaveItemRoute> = async (c) => {
       collectionName = existing.name;
     } else if (collectionName) {
       // Case 2: Saving to specific collection Name (find or create)
-      const { data: existing } = await supabase
-        .from("collections")
-        .select("id")
-        .eq("user_id", userId)
-        .ilike("name", collectionName)
-        .maybeSingle();
+      const result = await findOrCreateCollection(
+        supabase,
+        userId,
+        collectionName,
+        false,
+      );
 
-      if (existing) {
-        collectionId = existing.id;
-      } else {
-        // Create new collection
-        const name_normalized = collectionName.toLowerCase();
-        const { data: newCollection, error: createError } = await supabase
-          .from("collections")
-          .insert({
-            user_id: userId,
-            name: collectionName,
-            name_normalized,
-            is_pinned: false,
-          })
-          .select("id")
-          .single();
-
-        if (createError) {
-          console.error("saveItem create collection error:", createError);
-          return c.json(
-            { message: "Failed to create collection" },
-            HttpStatusCodes.INTERNAL_SERVER_ERROR,
-          );
-        }
-        collectionId = newCollection.id;
-        isNewCollection = true;
+      if ("error" in result) {
+        console.error("saveItem create collection error:", result.error);
+        return c.json(
+          { message: "Failed to create collection" },
+          HttpStatusCodes.INTERNAL_SERVER_ERROR,
+        );
       }
+
+      collectionId = result.id;
+      isNewCollection = result.isNew;
     } else {
       // Case 3: Default "Favorites" collection
-      collectionName = "Favorites";
-      const { data: existing } = await supabase
-        .from("collections")
-        .select("id")
-        .eq("user_id", userId)
-        .ilike("name", collectionName)
-        .maybeSingle();
+      const result = await findOrCreateCollection(
+        supabase,
+        userId,
+        "Favorites",
+        true,
+      );
 
-      if (existing) {
-        collectionId = existing.id;
-      } else {
-        // Create Favorites collection
-        const name_normalized = collectionName.toLowerCase();
-        const { data: newCollection, error: createError } = await supabase
-          .from("collections")
-          .insert({
-            user_id: userId,
-            name: collectionName,
-            name_normalized,
-            is_pinned: true, // Auto-pin favorites
-          })
-          .select("id")
-          .single();
-
-        if (createError) {
-          console.error("saveItem create favorites error:", createError);
-          return c.json(
-            { message: "Failed to create default collection" },
-            HttpStatusCodes.INTERNAL_SERVER_ERROR,
-          );
-        }
-        collectionId = newCollection.id;
-        isNewCollection = true;
+      if ("error" in result) {
+        console.error("saveItem create favorites error:", result.error);
+        return c.json(
+          { message: "Failed to create default collection" },
+          HttpStatusCodes.INTERNAL_SERVER_ERROR,
+        );
       }
+      collectionId = result.id;
+      isNewCollection = result.isNew;
     }
 
     if (!collectionId || !collectionName) {

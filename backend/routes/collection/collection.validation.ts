@@ -20,8 +20,10 @@ export const collectionEntityTypeEnum = z.enum([
 // Base Field Schemas
 // ============================================================================
 
-const uuidSchema = z.uuid();
-const timestampSchema = z.iso.datetime();
+const uuidSchema = z.uuid().openapi({ description: "UUID identifier" });
+const timestampSchema = z.iso
+  .datetime()
+  .openapi({ description: "ISO 8601 timestamp" });
 
 // ============================================================================
 // Collection Schemas
@@ -171,6 +173,7 @@ export const collectionItemReferenceSchema = z.object({
  * Based on actual posts table schema
  */
 export const hydratedPostSchema = z.object({
+  entity_type: z.literal("post"),
   id: uuidSchema,
   content_text: z.string(),
   author_id: uuidSchema,
@@ -188,6 +191,7 @@ export const hydratedPostSchema = z.object({
  * Based on actual videos table schema
  */
 export const hydratedVideoSchema = z.object({
+  entity_type: z.literal("video"),
   id: uuidSchema,
   bunny_video_id: z.string(),
   thumbnail_url: z.string(),
@@ -206,6 +210,7 @@ export const hydratedVideoSchema = z.object({
  * Voice posts are stored as posts with post_kind = 'voice'
  */
 export const hydratedVoiceSchema = z.object({
+  entity_type: z.literal("voice"),
   id: uuidSchema,
   content_text: z.string(),
   author_id: uuidSchema,
@@ -219,6 +224,7 @@ export const hydratedVoiceSchema = z.object({
  * Using campfire_guide_resources table
  */
 export const hydratedCampfireResourceSchema = z.object({
+  entity_type: z.literal("campfire_resource"),
   id: z.number().int(),
   label: z.string(),
   url: z.string().nullable(),
@@ -238,7 +244,7 @@ export const collectionItemHydratedSchema = z.object({
   position: z.number().int(),
   created_at: timestampSchema,
   entity: z
-    .union([
+    .discriminatedUnion("entity_type", [
       hydratedPostSchema,
       hydratedVideoSchema,
       hydratedVoiceSchema,
