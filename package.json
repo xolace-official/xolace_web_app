@@ -13,6 +13,7 @@
     "lint:safe-fix": "biome lint --write ./src",
     "format": "biome format --write ./src",
     "check-no-assist": "biome check --enforce-assist=true",
+    "type-check": "bun tsc --noEmit --skipLibCheck",
     "add-component": "bunx --bun shadcn@latest add",
     "prepare": "husky",
     "test": "jest",
