@@ -9,12 +9,7 @@ import { z } from "@hono/zod-openapi";
  * Note: voice and campfire_resource are included for future support
  * but may not have tables yet in the database
  */
-export const collectionEntityTypeEnum = z.enum([
-  "post",
-  "video",
-  "voice",
-  "campfire_resource",
-]);
+export const collectionEntityTypeEnum = z.enum(["post", "video", "voice"]);
 
 // ============================================================================
 // Base Field Schemas
@@ -173,7 +168,6 @@ export const collectionItemReferenceSchema = z.object({
  * Based on actual posts table schema
  */
 export const hydratedPostSchema = z.object({
-  entity_type: z.literal("post"),
   id: uuidSchema,
   content_text: z.string(),
   author_id: uuidSchema,
@@ -191,7 +185,6 @@ export const hydratedPostSchema = z.object({
  * Based on actual videos table schema
  */
 export const hydratedVideoSchema = z.object({
-  entity_type: z.literal("video"),
   id: uuidSchema,
   bunny_video_id: z.string(),
   thumbnail_url: z.string(),
@@ -210,7 +203,6 @@ export const hydratedVideoSchema = z.object({
  * Voice posts are stored as posts with post_kind = 'voice'
  */
 export const hydratedVoiceSchema = z.object({
-  entity_type: z.literal("voice"),
   id: uuidSchema,
   content_text: z.string(),
   author_id: uuidSchema,
@@ -247,8 +239,6 @@ export const collectionItemHydratedSchema = z.object({
     .discriminatedUnion("entity_type", [
       hydratedPostSchema,
       hydratedVideoSchema,
-      hydratedVoiceSchema,
-      hydratedCampfireResourceSchema,
     ])
     .nullable(),
 });
@@ -380,7 +370,7 @@ export const saveItemResponse = z.object({
  * Request body for removing an item from a collection
  */
 export const unsaveItemBody = z.object({
-  collection_id: z.uuid().openapi({
+  collection_id: uuidSchema.openapi({
     description: "ID of the collection",
   }),
   entity_type: collectionEntityTypeEnum.openapi({
