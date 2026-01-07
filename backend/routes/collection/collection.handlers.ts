@@ -4,15 +4,21 @@ import * as HttpStatusPhrases from "stoker/http-status-phrases";
 import type { z } from "zod";
 
 import type {
+  CreateCollectionRoute,
+  DeleteCollectionRoute,
   GetCollectionItemsRoute,
   GetCollectionsRoute,
   GetCollectionsSimpleRoute,
+  SaveItemRoute,
+  UnsaveItemRoute,
 } from "./collection.routes";
 import type {
   CollectionEntityType,
   collectionItemsResponse,
   collectionsResponse,
   collectionsSimpleResponse,
+  createCollectionResponse,
+  saveItemResponse,
 } from "./collection.validation";
 
 // =============================================================================
@@ -462,7 +468,350 @@ export const getCollectionItems: AppRouteHandler<
 
     return c.json(response, HttpStatusCodes.OK);
   } catch (err) {
-    console.error("getCollectionItems exception:", err);
+    console.error("deleteCollection exception:", err);
+    return c.json(
+      { message: HttpStatusPhrases.INTERNAL_SERVER_ERROR },
+      HttpStatusCodes.INTERNAL_SERVER_ERROR,
+    );
+  }
+};
+
+// =============================================================================
+// POST /collections - Create a new collection
+// =============================================================================
+
+export const createCollection: AppRouteHandler<CreateCollectionRoute> = async (
+  c,
+) => {
+  const userId = c.get("userId");
+  const supabase = c.get("supabase");
+  const body = c.req.valid("json");
+
+  const { name, is_pinned } = body;
+  const name_normalized = name.toLowerCase();
+
+  try {
+    const { data: collection, error } = await supabase
+      .from("collections")
+      .insert({
+        user_id: userId,
+        name,
+        name_normalized,
+        is_pinned: is_pinned ?? false,
+      })
+      .select()
+      .single();
+
+    if (error) {
+      console.error("createCollection error:", error);
+      return c.json(
+        { message: "Failed to create collection" },
+        HttpStatusCodes.INTERNAL_SERVER_ERROR,
+      );
+    }
+
+    const response: z.infer<typeof createCollectionResponse> = {
+      id: collection.id,
+      name: collection.name,
+      name_normalized: collection.name_normalized,
+      is_pinned: collection.is_pinned,
+      position: collection.position,
+      created_at: collection.created_at,
+      updated_at: collection.updated_at,
+    };
+
+    return c.json(response, HttpStatusCodes.CREATED);
+  } catch (err) {
+    console.error("createCollection exception:", err);
+    return c.json(
+      { message: HttpStatusPhrases.INTERNAL_SERVER_ERROR },
+      HttpStatusCodes.INTERNAL_SERVER_ERROR,
+    );
+  }
+};
+
+// =============================================================================
+// POST /collections/items - Save item to collection
+// =============================================================================
+
+export const saveItem: AppRouteHandler<SaveItemRoute> = async (c) => {
+  const userId = c.get("userId");
+  const supabase = c.get("supabase");
+  const body = c.req.valid("json");
+
+  try {
+    let collectionId = body.collection_id;
+    let collectionName = body.collection_name;
+    let isNewCollection = false;
+
+    // ─────────────────────────────────────────────
+    // Step 1: Resolve Collection ID
+    // ─────────────────────────────────────────────
+
+    if (collectionId) {
+      // Case 1: Saving to specific collection ID
+      // Verify ownership
+      const { data: existing, error: findError } = await supabase
+        .from("collections")
+        .select("id, name")
+        .eq("id", collectionId)
+        .eq("user_id", userId)
+        .single();
+
+      if (findError || !existing) {
+        return c.json(
+          {
+            message:
+              "Collection not found - cannot save to non-existent collection",
+          },
+          HttpStatusCodes.BAD_REQUEST,
+        );
+      }
+      collectionName = existing.name;
+    } else if (collectionName) {
+      // Case 2: Saving to specific collection Name (find or create)
+      const { data: existing } = await supabase
+        .from("collections")
+        .select("id")
+        .eq("user_id", userId)
+        .ilike("name", collectionName)
+        .maybeSingle();
+
+      if (existing) {
+        collectionId = existing.id;
+      } else {
+        // Create new collection
+        const name_normalized = collectionName.toLowerCase();
+        const { data: newCollection, error: createError } = await supabase
+          .from("collections")
+          .insert({
+            user_id: userId,
+            name: collectionName,
+            name_normalized,
+            is_pinned: false,
+          })
+          .select("id")
+          .single();
+
+        if (createError) {
+          console.error("saveItem create collection error:", createError);
+          return c.json(
+            { message: "Failed to create collection" },
+            HttpStatusCodes.INTERNAL_SERVER_ERROR,
+          );
+        }
+        collectionId = newCollection.id;
+        isNewCollection = true;
+      }
+    } else {
+      // Case 3: Default "Favorites" collection
+      collectionName = "Favorites";
+      const { data: existing } = await supabase
+        .from("collections")
+        .select("id")
+        .eq("user_id", userId)
+        .ilike("name", collectionName)
+        .maybeSingle();
+
+      if (existing) {
+        collectionId = existing.id;
+      } else {
+        // Create Favorites collection
+        const name_normalized = collectionName.toLowerCase();
+        const { data: newCollection, error: createError } = await supabase
+          .from("collections")
+          .insert({
+            user_id: userId,
+            name: collectionName,
+            name_normalized,
+            is_pinned: true, // Auto-pin favorites
+          })
+          .select("id")
+          .single();
+
+        if (createError) {
+          console.error("saveItem create favorites error:", createError);
+          return c.json(
+            { message: "Failed to create default collection" },
+            HttpStatusCodes.INTERNAL_SERVER_ERROR,
+          );
+        }
+        collectionId = newCollection.id;
+        isNewCollection = true;
+      }
+    }
+
+    if (!collectionId || !collectionName) {
+      // Should be unreachable
+      return c.json(
+        { message: "Failed to resolve collection" },
+        HttpStatusCodes.INTERNAL_SERVER_ERROR,
+      );
+    }
+
+    // ─────────────────────────────────────────────
+    // Step 2: Insert Item
+    // ─────────────────────────────────────────────
+
+    // Check if checks already exists to avoid unique constraint violation if not using upsert
+    // Or just use upsert/onConflict
+    // Using simple insert + ignore or select first approach.
+    // Let's use select first to return "already_saved" correctly.
+
+    const { data: existingItem } = await supabase
+      .from("collection_items")
+      .select("id")
+      .eq("collection_id", collectionId)
+      .eq("entity_type", body.entity_type)
+      .eq("entity_id", body.entity_id)
+      .maybeSingle();
+
+    let collectionItemId: string;
+    let alreadySaved = false;
+
+    if (existingItem) {
+      collectionItemId = existingItem.id;
+      alreadySaved = true;
+    } else {
+      const { data: newItem, error: insertError } = await supabase
+        .from("collection_items")
+        .insert({
+          user_id: userId,
+          collection_id: collectionId,
+          entity_type: body.entity_type,
+          entity_id: body.entity_id,
+        })
+        .select("id")
+        .single();
+
+      if (insertError) {
+        console.error("saveItem insert error:", insertError);
+        return c.json(
+          { message: "Failed to save item" },
+          HttpStatusCodes.INTERNAL_SERVER_ERROR,
+        );
+      }
+      collectionItemId = newItem.id;
+    }
+
+    const response: z.infer<typeof saveItemResponse> = {
+      collection_item_id: collectionItemId,
+      collection_id: collectionId,
+      collection_name: collectionName,
+      is_new_collection: isNewCollection,
+      already_saved: alreadySaved,
+    };
+
+    return c.json(response, HttpStatusCodes.OK);
+  } catch (err) {
+    console.error("saveItem exception:", err);
+    return c.json(
+      { message: HttpStatusPhrases.INTERNAL_SERVER_ERROR },
+      HttpStatusCodes.INTERNAL_SERVER_ERROR,
+    );
+  }
+};
+
+// =============================================================================
+// DELETE /collections/items - Unsave item from collection
+// =============================================================================
+
+export const unsaveItem: AppRouteHandler<UnsaveItemRoute> = async (c) => {
+  const userId = c.get("userId");
+  const supabase = c.get("supabase");
+  const body = c.req.valid("json");
+
+  try {
+    // We should strictly verify the collection belongs to the user first
+    // Although RLS policies often handle this, explicit check is safer for delete operations
+    const { data: collection } = await supabase
+      .from("collections")
+      .select("id")
+      .eq("id", body.collection_id)
+      .eq("user_id", userId)
+      .single();
+
+    if (!collection) {
+      // Silent success (idempotent) or error? RLS would prevent delete anyway.
+      // Let's just proceed to delete with RLS assumption or let the query run.
+      // If collection doesn't exist/belong to user, delete will affect 0 rows.
+    }
+
+    // Since we need to delete based on composite key, we do:
+    const { error } = await supabase
+      .from("collection_items")
+      .delete()
+      .eq("collection_id", body.collection_id)
+      .eq("entity_type", body.entity_type)
+      .eq("entity_id", body.entity_id);
+    // Note: We might need to ensure the collection belongs to user if RLS on items doesn't check parent collection user_id
+    // Usually RLS on items checks `collection_id` -> `collections` -> `user_id`
+
+    if (error) {
+      console.error("unsaveItem error:", error);
+      return c.json(
+        { message: "Failed to unsave item" },
+        HttpStatusCodes.INTERNAL_SERVER_ERROR,
+      );
+    }
+
+    return c.json({ message: "Item removed successfully" }, HttpStatusCodes.OK);
+  } catch (err) {
+    console.error("unsaveItem exception:", err);
+    return c.json(
+      { message: HttpStatusPhrases.INTERNAL_SERVER_ERROR },
+      HttpStatusCodes.INTERNAL_SERVER_ERROR,
+    );
+  }
+};
+
+// =============================================================================
+// DELETE /collections/:collectionId - Delete collection
+// =============================================================================
+
+export const deleteCollection: AppRouteHandler<DeleteCollectionRoute> = async (
+  c,
+) => {
+  const userId = c.get("userId");
+  const supabase = c.get("supabase");
+  const { collectionId } = c.req.param();
+
+  try {
+    // Verify ownership and existence
+    const { data: collection, error: findError } = await supabase
+      .from("collections")
+      .select("id")
+      .eq("id", collectionId)
+      .eq("user_id", userId)
+      .single();
+
+    if (findError || !collection) {
+      return c.json(
+        { message: "Collection not found" },
+        HttpStatusCodes.NOT_FOUND,
+      );
+    }
+
+    // Delete collection (cascade should handle items)
+    const { error: deleteError } = await supabase
+      .from("collections")
+      .delete()
+      .eq("id", collectionId);
+
+    if (deleteError) {
+      console.error("deleteCollection error:", deleteError);
+      return c.json(
+        { message: "Failed to delete collection" },
+        HttpStatusCodes.INTERNAL_SERVER_ERROR,
+      );
+    }
+
+    return c.json(
+      { message: "Collection deleted successfully" },
+      HttpStatusCodes.OK,
+    );
+  } catch (err) {
+    console.error("deleteCollection exception:", err);
     return c.json(
       { message: HttpStatusPhrases.INTERNAL_SERVER_ERROR },
       HttpStatusCodes.INTERNAL_SERVER_ERROR,

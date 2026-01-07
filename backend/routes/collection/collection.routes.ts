@@ -8,9 +8,16 @@ import {
   collectionItemsResponse,
   collectionsResponse,
   collectionsSimpleResponse,
+  createCollectionBody,
+  createCollectionResponse,
+  deleteCollectionParams,
   getCollectionItemsParams,
   getCollectionItemsQuery,
   getCollectionsQuery,
+  saveItemBody,
+  saveItemResponse,
+  successResponse,
+  unsaveItemBody,
 } from "./collection.validation";
 
 const tags = ["Collections"];
@@ -144,3 +151,156 @@ export const getCollectionItems = createRoute({
 export type GetCollectionsRoute = typeof getCollections;
 export type GetCollectionsSimpleRoute = typeof getCollectionsSimple;
 export type GetCollectionItemsRoute = typeof getCollectionItems;
+
+// =============================================================================
+// POST /collections - Create a new collection
+// =============================================================================
+
+export const createCollection = createRoute({
+  method: "post",
+  path: "/",
+  summary: "Create a collection",
+  description: "Creates a new collection for the user.",
+  tags,
+  request: {
+    body: jsonContent(createCollectionBody, "Collection creation data"),
+  },
+  responses: {
+    [HttpStatusCodes.CREATED]: jsonContent(
+      createCollectionResponse,
+      "Collection created successfully",
+    ),
+
+    [HttpStatusCodes.BAD_REQUEST]: jsonContent(
+      createMessageObjectSchema("Invalid request body"),
+      "Bad request",
+    ),
+
+    [HttpStatusCodes.UNAUTHORIZED]: jsonContent(
+      createMessageObjectSchema("Unauthorized"),
+      "Authentication required",
+    ),
+
+    [HttpStatusCodes.INTERNAL_SERVER_ERROR]: jsonContent(
+      internalServerErrorSchema,
+      "Internal server error",
+    ),
+  },
+});
+
+// =============================================================================
+// POST /collections/items - Save item to collection
+// =============================================================================
+
+export const saveItem = createRoute({
+  method: "post",
+  path: "/items",
+  summary: "Save item to collection",
+  description:
+    "Saves an entity to a collection. Can save to an existing collection ID, " +
+    "create a new collection by name, or save to 'Favorites' if neither is provided. " +
+    "Handles duplicates gracefully.",
+  tags,
+  request: {
+    body: jsonContent(saveItemBody, "Save item data"),
+  },
+  responses: {
+    [HttpStatusCodes.OK]: jsonContent(
+      saveItemResponse,
+      "Item saved successfully",
+    ),
+
+    [HttpStatusCodes.BAD_REQUEST]: jsonContent(
+      createMessageObjectSchema(
+        "Invalid request - cannot provide both ID and Name",
+      ),
+      "Bad request",
+    ),
+
+    [HttpStatusCodes.UNAUTHORIZED]: jsonContent(
+      createMessageObjectSchema("Unauthorized"),
+      "Authentication required",
+    ),
+
+    [HttpStatusCodes.INTERNAL_SERVER_ERROR]: jsonContent(
+      internalServerErrorSchema,
+      "Internal server error",
+    ),
+  },
+});
+
+// =============================================================================
+// DELETE /collections/items - Unsave item from collection
+// =============================================================================
+
+export const unsaveItem = createRoute({
+  method: "delete",
+  path: "/items",
+  summary: "Unsave item from collection",
+  description: "Removes an item from a collection. Idempotent.",
+  tags,
+  request: {
+    body: jsonContent(unsaveItemBody, "Unsave item data"),
+  },
+  responses: {
+    [HttpStatusCodes.OK]: jsonContent(
+      successResponse,
+      "Item removed successfully",
+    ),
+
+    [HttpStatusCodes.UNAUTHORIZED]: jsonContent(
+      createMessageObjectSchema("Unauthorized"),
+      "Authentication required",
+    ),
+
+    [HttpStatusCodes.INTERNAL_SERVER_ERROR]: jsonContent(
+      internalServerErrorSchema,
+      "Internal server error",
+    ),
+  },
+});
+
+// =============================================================================
+// DELETE /collections/:collectionId - Delete collection
+// =============================================================================
+
+export const deleteCollection = createRoute({
+  method: "delete",
+  path: "/:collectionId",
+  summary: "Delete collection",
+  description: "Permanently deletes a collection and all its items.",
+  tags,
+  request: {
+    params: deleteCollectionParams,
+  },
+  responses: {
+    [HttpStatusCodes.OK]: jsonContent(
+      successResponse,
+      "Collection deleted successfully",
+    ),
+
+    [HttpStatusCodes.NOT_FOUND]: jsonContent(
+      createMessageObjectSchema("Collection not found"),
+      "Collection does not exist or user does not own it",
+    ),
+
+    [HttpStatusCodes.UNAUTHORIZED]: jsonContent(
+      createMessageObjectSchema("Unauthorized"),
+      "Authentication required",
+    ),
+
+    [HttpStatusCodes.INTERNAL_SERVER_ERROR]: jsonContent(
+      internalServerErrorSchema,
+      "Internal server error",
+    ),
+  },
+});
+
+// =============================================================================
+// Route Type Exports
+// =============================================================================
+
+export type CreateCollectionRoute = typeof createCollection;
+export type DeleteCollectionRoute = typeof deleteCollection;
+export type SaveItemRoute = typeof saveItem;
+export type UnsaveItemRoute = typeof unsaveItem;

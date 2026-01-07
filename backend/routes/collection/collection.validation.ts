@@ -274,6 +274,126 @@ export const collectionItemsResponse = z.object({
 });
 
 // ============================================================================
+// Create Collection Schemas
+// ============================================================================
+
+/**
+ * Request body for creating a collection
+ */
+export const createCollectionBody = z.object({
+  name: z
+    .string()
+    .min(1, "Collection name is required")
+    .max(50, "Collection name must not exceed 50 characters")
+    .openapi({
+      description: "Name of the collection",
+      example: "My Favorites",
+    }),
+  is_pinned: z.boolean().optional().default(false).openapi({
+    description: "Whether to pin the collection",
+    example: false,
+  }),
+});
+
+/**
+ * Response for created collection
+ */
+export const createCollectionResponse = z.object({
+  id: z.uuid(),
+  name: z.string(),
+  name_normalized: z.string(),
+  is_pinned: z.boolean(),
+  position: z.number().int(),
+  created_at: z.iso.datetime(),
+  updated_at: z.iso.datetime(),
+});
+
+// ============================================================================
+// Save Item to Collection Schemas
+// ============================================================================
+
+/**
+ * Request body for saving an item to a collection
+ * Supports three modes:
+ * 1. collection_id provided - save to specific collection
+ * 2. collection_name provided - find or create collection by name
+ * 3. Neither provided - save to "Favorites" (auto-created if needed)
+ */
+export const saveItemBody = z.object({
+  entity_type: collectionEntityTypeEnum.openapi({
+    description: "Type of entity to save",
+    example: "post",
+  }),
+  entity_id: z.uuid().openapi({
+    description: "ID of the entity to save",
+  }),
+  collection_id: z.uuid().optional().openapi({
+    description:
+      "ID of target collection (mutually exclusive with collection_name)",
+  }),
+  collection_name: z.string().min(1).max(50).optional().openapi({
+    description:
+      "Name of target collection - will create if not exists (mutually exclusive with collection_id)",
+    example: "Reading List",
+  }),
+});
+
+/**
+ * Response for save item operation
+ */
+export const saveItemResponse = z.object({
+  collection_item_id: z.uuid(),
+  collection_id: z.uuid(),
+  collection_name: z.string(),
+  is_new_collection: z.boolean(),
+  already_saved: z.boolean(),
+});
+
+// ============================================================================
+// Unsave Item from Collection Schemas
+// ============================================================================
+
+/**
+ * Request body for removing an item from a collection
+ */
+export const unsaveItemBody = z.object({
+  collection_id: z.uuid().openapi({
+    description: "ID of the collection",
+  }),
+  entity_type: collectionEntityTypeEnum.openapi({
+    description: "Type of entity to remove",
+    example: "post",
+  }),
+  entity_id: z.uuid().openapi({
+    description: "ID of the entity to remove",
+  }),
+});
+
+/**
+ * Generic success response
+ */
+export const successResponse = z.object({
+  message: z.string(),
+});
+
+// ============================================================================
+// Delete Collection Schemas
+// ============================================================================
+
+/**
+ * Path params for delete collection
+ */
+export const deleteCollectionParams = z.object({
+  collectionId: z.uuid().openapi({
+    param: {
+      name: "collectionId",
+      in: "path",
+    },
+    description: "Collection ID to delete",
+  }),
+});
+
+// ============================================================================
 // Type Exports
 // ============================================================================
 
@@ -287,3 +407,6 @@ export type CollectionItemHydrated = z.infer<
   typeof collectionItemHydratedSchema
 >;
 export type CollectionEntityType = z.infer<typeof collectionEntityTypeEnum>;
+export type CreateCollectionBody = z.infer<typeof createCollectionBody>;
+export type SaveItemBody = z.infer<typeof saveItemBody>;
+export type UnsaveItemBody = z.infer<typeof unsaveItemBody>;
