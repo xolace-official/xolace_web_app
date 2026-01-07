@@ -331,10 +331,10 @@ export const saveItemBody = z
       description: "Type of entity to save",
       example: "post",
     }),
-    entity_id: z.uuid().openapi({
+    entity_id: uuidSchema.openapi({
       description: "ID of the entity to save",
     }),
-    collection_id: z.uuid().optional().openapi({
+    collection_id: uuidSchema.optional().openapi({
       description:
         "ID of target collection (mutually exclusive with collection_name)",
     }),
@@ -365,8 +365,8 @@ export const saveItemBody = z
  * Response for save item operation
  */
 export const saveItemResponse = z.object({
-  collection_item_id: z.uuid(),
-  collection_id: z.uuid(),
+  collection_item_id: uuidSchema,
+  collection_id: uuidSchema,
   collection_name: z.string(),
   is_new_collection: z.boolean(),
   already_saved: z.boolean(),
@@ -387,7 +387,7 @@ export const unsaveItemBody = z.object({
     description: "Type of entity to remove",
     example: "post",
   }),
-  entity_id: z.uuid().openapi({
+  entity_id: uuidSchema.openapi({
     description: "ID of the entity to remove",
   }),
 });
@@ -407,7 +407,7 @@ export const successResponse = z.object({
  * Path params for delete collection
  */
 export const deleteCollectionParams = z.object({
-  collectionId: z.uuid().openapi({
+  collectionId: uuidSchema.openapi({
     param: {
       name: "collectionId",
       in: "path",
