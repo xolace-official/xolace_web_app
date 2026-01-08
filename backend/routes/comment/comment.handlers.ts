@@ -32,7 +32,8 @@ export const getComments: AppRouteHandler<GetCommentsRoute> = async (c) => {
     const countQuery = supabase
       .from("comments")
       .select("*", { count: "exact", head: true })
-      .eq("post_id", post_id);
+      .eq("post_id", post_id)
+      .eq("depth", 0);
 
     const [
       { data: rootComments, error: rootError },
@@ -84,7 +85,10 @@ export const getComments: AppRouteHandler<GetCommentsRoute> = async (c) => {
     const repliesByRoot = new Map<string, typeof allReplies>();
     allReplies?.forEach((reply) => {
       // Require root_id for correctness
-      if (!reply.root_id) return;
+      if (!reply.root_id) {
+        console.warn(`Reply ${reply.id} missing root_id, skipping`);
+        return;
+      }
       const list = repliesByRoot.get(reply.root_id) || [];
       list.push(reply);
       repliesByRoot.set(reply.root_id, list);
