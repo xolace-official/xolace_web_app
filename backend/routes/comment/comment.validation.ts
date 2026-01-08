@@ -20,6 +20,7 @@ export const getCommentsQuery = z.object({
     .string()
     .default("10")
     .transform(Number)
+    .pipe(z.number().int().min(1).max(100))
     .openapi({
       param: { name: "limit", in: "query" },
       description: "Number of root comments to fetch (default 10)",

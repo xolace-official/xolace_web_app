@@ -85,8 +85,8 @@ export const getComments: AppRouteHandler<GetCommentsRoute> = async (c) => {
         body: root.status === "active" ? root.body : null,
         status: root.status as "active" | "deleted" | "hidden" | "removed",
         author: {
-          id: root.author_id as string,
-          name: root.author_name_snapshot as string,
+          id: root.author_id ?? "",
+          name: root.author_name_snapshot ?? "",
           avatar_url: root.author_avatar_url_snapshot,
           is_professional: false, // TODO: enrich if needed
         },
@@ -107,8 +107,8 @@ export const getComments: AppRouteHandler<GetCommentsRoute> = async (c) => {
           body: r.status === "active" ? r.body : null,
           status: r.status as "active" | "deleted" | "hidden" | "removed",
           author: {
-            id: r.author_id as string,
-            name: r.author_name_snapshot as string,
+            id: r.author_id ?? "",
+            name: r.author_name_snapshot ?? "",
             avatar_url: r.author_avatar_url_snapshot,
             is_professional: false,
           },

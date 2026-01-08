@@ -15,7 +15,7 @@ export const getCommentsRoute = createRoute({
   path: "/",
   summary: "Fetch comments for a post",
   description:
-    "Returns root comments and all their replies for a given post. Replies are returned as a flat list with depth for UI rendering.",
+    "Returns root comments with their nested replies for a given post. Each root comment includes a replies array ordered by thread_path.",
   tags,
   request: {
     query: getCommentsQuery,
