@@ -407,21 +407,21 @@ export type Database = {
       };
       comment_edits: {
         Row: {
-          comment_id: number;
+          comment_id: string;
           edited_at: string;
           edited_by: string;
           id: number;
           previous_body: string;
         };
         Insert: {
-          comment_id: number;
+          comment_id: string;
           edited_at?: string;
           edited_by: string;
           id?: number;
           previous_body: string;
         };
         Update: {
-          comment_id?: number;
+          comment_id?: string;
           edited_at?: string;
           edited_by?: string;
           id?: number;
@@ -446,7 +446,7 @@ export type Database = {
       };
       comment_pins: {
         Row: {
-          comment_id: number;
+          comment_id: string;
           id: number;
           pin_type: string;
           pinned_at: string;
@@ -454,7 +454,7 @@ export type Database = {
           post_id: string;
         };
         Insert: {
-          comment_id: number;
+          comment_id: string;
           id?: number;
           pin_type: string;
           pinned_at?: string;
@@ -462,7 +462,7 @@ export type Database = {
           post_id: string;
         };
         Update: {
-          comment_id?: number;
+          comment_id?: string;
           id?: number;
           pin_type?: string;
           pinned_at?: string;
@@ -506,13 +506,15 @@ export type Database = {
           depth: number | null;
           hidden_at: string | null;
           hidden_by: string | null;
-          id: number;
+          id: string;
           is_ai_suggestion: boolean;
+          is_edited: boolean;
           moderation_reason: string | null;
-          parent_comment_id: number | null;
+          parent_comment_id: string | null;
           post_id: string;
           removed_at: string | null;
           removed_by: string | null;
+          root_id: string | null;
           status: string;
           thread_path: unknown;
           updated_at: string;
@@ -529,13 +531,15 @@ export type Database = {
           depth?: number | null;
           hidden_at?: string | null;
           hidden_by?: string | null;
-          id?: number;
+          id?: string;
           is_ai_suggestion?: boolean;
+          is_edited?: boolean;
           moderation_reason?: string | null;
-          parent_comment_id?: number | null;
+          parent_comment_id?: string | null;
           post_id: string;
           removed_at?: string | null;
           removed_by?: string | null;
+          root_id?: string | null;
           status?: string;
           thread_path: unknown;
           updated_at?: string;
@@ -552,13 +556,15 @@ export type Database = {
           depth?: number | null;
           hidden_at?: string | null;
           hidden_by?: string | null;
-          id?: number;
+          id?: string;
           is_ai_suggestion?: boolean;
+          is_edited?: boolean;
           moderation_reason?: string | null;
-          parent_comment_id?: number | null;
+          parent_comment_id?: string | null;
           post_id?: string;
           removed_at?: string | null;
           removed_by?: string | null;
+          root_id?: string | null;
           status?: string;
           thread_path?: unknown;
           updated_at?: string;
@@ -611,6 +617,13 @@ export type Database = {
             columns: ["removed_by"];
             isOneToOne: false;
             referencedRelation: "profiles";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "comments_root_id_fkey";
+            columns: ["root_id"];
+            isOneToOne: false;
+            referencedRelation: "comments";
             referencedColumns: ["id"];
           },
         ];

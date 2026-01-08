@@ -8,7 +8,7 @@ import collection from "@backend/routes/collection/collection.index";
 import glimpse from "@backend/routes/glimpse/glimpse.index";
 import healthTip from "@backend/routes/health-tips/health-tip.index";
 import profile from "@backend/routes/profile/profile.index";
-
+import comment from "@backend/routes/comment/comment.index";
 // import imports from "@backend/routes/import/import.index";
 
 const router = createRouter();
@@ -22,6 +22,7 @@ router.route("/campfire", campfire);
 router.route("/collection", collection);
 router.route("/health-tip", healthTip);
 router.route("/glimpse", glimpse);
+router.route("/comment", comment);
 // router.route("/import", imports);
 
 export default router;
