@@ -40,25 +40,31 @@ export const DiscoveryFiltering = () => {
         "w-full flex flex-col items-start gap-2 sticky top-0 z-50 bg-background"
       }
     >
-      <div className={"w-full flex flex-row gap-2 md:gap-4 border-b "}>
-        <p
-          className={`${selectedRealm === "all" ? "border-b border-destructive text-destructive" : "hover:text-primary"} text-xs md:text-sm font-semibold px-1 md:px-2 cursor-pointer`}
-          onClick={() => handleRealmClick("all")}
+      <div className={"w-full border-b overflow-hidden"}>
+        <div
+          className={
+            "flex flex-row gap-2 md:gap-4 overflow-x-auto scrollbar-hide scroll-smooth"
+          }
         >
-          All
-        </p>
-        {CAMPFIRE_REALMS?.map((realm) => {
-          const active = realm.key === selectedRealm;
-          return (
-            <p
-              key={realm.key}
-              className={`${active ? "border-b border-destructive text-destructive" : "hover:text-primary"} text-xs md:text-sm font-semibold px-1 md:px-2 cursor-pointer`}
-              onClick={() => handleRealmClick(realm.key)}
-            >
-              {realm.name}
-            </p>
-          );
-        })}
+          <p
+            className={`${selectedRealm === "all" ? "border-b border-destructive text-destructive" : "hover:text-primary"} text-sm font-semibold px-1 md:px-2 cursor-pointer whitespace-nowrap flex-shrink-0`}
+            onClick={() => handleRealmClick("all")}
+          >
+            All
+          </p>
+          {CAMPFIRE_REALMS?.map((realm) => {
+            const active = realm.key === selectedRealm;
+            return (
+              <p
+                key={realm.key}
+                className={`${active ? "border-b border-destructive text-destructive" : "hover:text-primary"} text-xs md:text-sm font-semibold px-1 md:px-2 cursor-pointer whitespace-nowrap flex-shrink-0`}
+                onClick={() => handleRealmClick(realm.key)}
+              >
+                {realm.name}
+              </p>
+            );
+          })}
+        </div>
       </div>
 
       {showSearch ? (
@@ -73,22 +79,26 @@ export const DiscoveryFiltering = () => {
           </Button>
         </div>
       ) : (
-        <div className={"flex flex-row gap-2 md:gap-4"}>
+        <div className={"flex items-center gap-2 w-full overflow-hidden"}>
           <Button
             size="sm"
             onClick={() => setShowSearch(true)}
-            className={"h-6 "}
+            className={"h-6 flex-shrink-0"}
           >
             <Search />
           </Button>
           {lanes.length > 0 && (
-            <div className={"flex flex-wrap items-start gap-4 "}>
+            <div
+              className={
+                "flex items-center gap-4 overflow-x-auto scrollbar-hide scroll-smooth min-w-0 flex-1"
+              }
+            >
               {lanes.map((lane) => {
                 const active = selectedLane === lane[0];
                 return (
                   <p
                     key={lane[0]}
-                    className={`py-1 px-4 text-xs items-center border rounded-sm cursor-pointer ${active ? "border-destructive/20 bg-destructive text-destructive-foreground" : "border-border hover:bg-accent/20 hover:shadow-lg"}`}
+                    className={`py-1 px-4 text-xs whitespace-nowrap flex-shrink-0 border rounded-sm cursor-pointer ${active ? "border-destructive/20 bg-destructive text-destructive-foreground" : "border-border hover:bg-accent/20 hover:shadow-lg"}`}
                     onClick={() => handleLaneClick(lane[0])}
                   >
                     {lane[1]}
