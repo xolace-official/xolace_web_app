@@ -12,6 +12,7 @@ export const getComments: AppRouteHandler<GetCommentsRoute> = async (c) => {
   try {
     // ------------------------------------------------------------------
     // 1. Fetch ROOT comments (depth = 0) with pagination
+    //    AND fetch total count of root comments
     // ------------------------------------------------------------------
     let rootQuery = supabase
       .from("comments")
@@ -27,14 +28,30 @@ export const getComments: AppRouteHandler<GetCommentsRoute> = async (c) => {
 
     if (cursor) rootQuery = rootQuery.lt("created_at", cursor);
 
-    const { data: rootComments, error: rootError } = await rootQuery;
+    // Count query (ignore cursor/pagination)
+    const countQuery = supabase
+      .from("comments")
+      .select("*", { count: "exact", head: true })
+      .eq("post_id", post_id);
+
+    const [
+      { data: rootComments, error: rootError },
+      { count: totalCount, error: countError },
+    ] = await Promise.all([rootQuery, countQuery]);
+
     if (rootError) throw rootError;
+    if (countError) throw countError;
 
     if (!rootComments?.length) {
       return c.json(
         {
           data: [],
-          meta: { post_id, total_count: 0, has_more: false, next_cursor: null },
+          meta: {
+            post_id,
+            total_count: totalCount ?? 0,
+            has_more: false,
+            next_cursor: null,
+          },
         },
         HttpStatusCodes.OK,
       );
@@ -132,7 +149,7 @@ export const getComments: AppRouteHandler<GetCommentsRoute> = async (c) => {
         data: responseData,
         meta: {
           post_id,
-          total_count: -1, // optional; can calculate if needed
+          total_count: totalCount ?? 0,
           has_more: hasMore,
           next_cursor: nextCursor,
         },
