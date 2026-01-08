@@ -27,6 +27,16 @@ export function formatRelativeTime(input: Date | string | number) {
   return rtf.format(years, "year");
 }
 
+export const formatNumber = (count: number): string => {
+  if (count >= 1000000) {
+    return `${(count / 1000000).toFixed(1)}M`;
+  }
+  if (count >= 1000) {
+    return `${(count / 1000).toFixed(1)}K`;
+  }
+  return count.toString();
+};
+
 // Default URL
 export const defaultUrl = process.env.VERCEL_URL
   ? `https://${process.env.VERCEL_URL}`
