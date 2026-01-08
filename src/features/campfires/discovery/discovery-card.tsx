@@ -65,7 +65,7 @@ export const DiscoveryCard = ({
         <div className="relative p-4">
           <div className="flex items-start justify-between gap-2 mb-2">
             <div className="flex-1 min-w-0">
-              <h3 className="font-semibold text-sm mb-1 truncate group-hover:text-primary transition-colors hover:underline hover:text-primary/20">
+              <h3 className="font-semibold text-sm mb-1 truncate group-hover:text-primary transition-colors hover:underline hover:text-primary">
                 {discovery.name}
               </h3>
               <div className="flex items-center gap-1 text-xs text-muted-foreground">
