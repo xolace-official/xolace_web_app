@@ -1,32 +1,62 @@
 "use client";
 import { Button } from "@/components/ui/button";
-import { useState } from "react";
+import { useState, useTransition } from "react";
 import { Search, SearchX } from "lucide-react";
-import { SearchBar } from "@/components/shared/search-bar";
 import {
   CAMPFIRE_REALMS,
-  InteractionStyle,
+  RealmKey,
 } from "@/features/campfires/discovery/index";
-import { useDiscovery } from "./discovery-context";
-
-type RealmKey = InteractionStyle | "all";
+import { ParamsSearchBar } from "@/components/shared/params-search-bar";
+import { useFiltersServer } from "@/components/shared/search-params";
+import { debounce } from "nuqs/server";
 
 export const DiscoveryFiltering = () => {
-  const { selectedRealm, setSelectedRealm, selectedLane, setSelectedLane } =
-    useDiscovery();
-  const [showSearch, setShowSearch] = useState<boolean>(false);
+  const [isPending, startTransition] = useTransition();
+  const [{ query, realm, lane }, setSearchParams] = useFiltersServer({
+    limitUrlUpdates: debounce(250),
+    shallow: false,
+  });
 
-  //Handle real click
+  const [selectedRealm, setSelectedRealm] = useState<RealmKey>(
+    realm as RealmKey,
+  );
+  const [selectedLane, setSelectedLane] = useState<string | null>(lane || null);
+  const [showSearchBar, setShowSearchBar] = useState<boolean>(false);
+
+  // Handle realm click - update both local state and URL
   const handleRealmClick = (key: RealmKey) => {
-    if (key) {
-      setSelectedRealm(key);
-      setSelectedLane(null);
-    }
+    setSelectedRealm(key);
+    setSelectedLane(null);
+
+    startTransition(async () => {
+      await setSearchParams({
+        realm: key,
+        lane: "",
+      });
+    });
   };
 
-  // Handle lane click for filtering
+  // Handle lane click - update both local state and URL
   const handleLaneClick = (laneKey: string) => {
-    setSelectedLane(laneKey);
+    const newLane = selectedLane === laneKey ? null : laneKey;
+    setSelectedLane(newLane);
+
+    startTransition(async () => {
+      await setSearchParams({
+        lane: newLane || "",
+      });
+    });
+  };
+
+  // Handle hiding search bar and clearing query
+  const handleHideSearch = () => {
+    setShowSearchBar(false);
+
+    startTransition(async () => {
+      await setSearchParams({
+        query: "",
+      });
+    });
   };
 
   const selectedRealmData = CAMPFIRE_REALMS.find(
@@ -67,14 +97,23 @@ export const DiscoveryFiltering = () => {
         </div>
       </div>
 
-      {showSearch ? (
+      {showSearchBar || query ? (
         <div className={"w-full flex gap-4 items-center"}>
-          <SearchBar />
-          <Button
-            size="sm"
-            variant="destructive"
-            onClick={() => setShowSearch(false)}
-          >
+          <ParamsSearchBar
+            value={query}
+            onChange={(value) => {
+              startTransition(async () => {
+                await setSearchParams(
+                  { query: value },
+                  {
+                    limitUrlUpdates: value ? debounce(250) : undefined,
+                  },
+                );
+              });
+            }}
+            isLoading={isPending}
+          />
+          <Button size="sm" variant="destructive" onClick={handleHideSearch}>
             <SearchX />
           </Button>
         </div>
@@ -82,7 +121,7 @@ export const DiscoveryFiltering = () => {
         <div className={"flex items-center gap-2 w-full overflow-hidden"}>
           <Button
             size="sm"
-            onClick={() => setShowSearch(true)}
+            onClick={() => setShowSearchBar(true)}
             className={"h-6 flex-shrink-0"}
           >
             <Search />
