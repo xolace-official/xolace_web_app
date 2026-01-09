@@ -19,8 +19,9 @@ import {
 import {
   CAMPFIRE_REALMS,
   InteractionStyle,
+  RealmKey,
 } from "@/features/campfires/discovery/index";
-import { useDiscovery } from "@/features/campfires/discovery/discovery-context";
+import { useFiltersServer } from "@/components/shared/search-params";
 
 interface RealmCardData {
   key: InteractionStyle;
@@ -67,7 +68,8 @@ const getRealmBorderColor = (style: InteractionStyle): string => {
 };
 
 export const RealmOverview = () => {
-  const { selectedRealm } = useDiscovery();
+  const [{ realm: realmKey }] = useFiltersServer();
+  const selectedRealm: RealmKey = realmKey as InteractionStyle | "all";
 
   // Don't show card if "all" is selected
   if (selectedRealm === "all") {
