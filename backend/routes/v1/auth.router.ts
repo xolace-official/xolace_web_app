@@ -14,9 +14,8 @@ import profile from "@backend/routes/profile/profile.index";
 
 const router = createRouter();
 
-// 🔐 apply auth ONCE
-router.use("/*", authMiddleware);
-router.use("/*", accountStatusMiddleware);
+// 🔐 apply auth, account status, ONCE
+router.use("/*", authMiddleware, accountStatusMiddleware);
 
 // AUTHENTICATED ROUTES ONLY
 router.route("/profile", profile);

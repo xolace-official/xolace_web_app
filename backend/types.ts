@@ -5,12 +5,14 @@ import type { SupabaseClient, User } from "@supabase/supabase-js";
 import type { Schema } from "hono";
 import type { Database } from "@/lib/supabase/types_db";
 
+export type AccountStatus = "active" | "suspended" | "deactivated";
+
 export interface AppBindings {
   Variables: {
     supabase: SupabaseClient<Database>;
     user: User;
     userId: string;
-    accountStatus: string;
+    accountStatus: AccountStatus;
   };
 }
 

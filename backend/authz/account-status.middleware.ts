@@ -1,6 +1,6 @@
 import { createMiddleware } from "hono/factory";
 import { HTTPException } from "hono/http-exception";
-import type { AppBindings } from "../types";
+import type { AccountStatus, AppBindings } from "../types";
 
 /**
  * Account Status Gate
@@ -13,8 +13,7 @@ import type { AppBindings } from "../types";
 // WhiteListing approach
 // Routes that suspended users ARE allowed to write to
 const SUSPENSION_WHITELIST = [
-  "/api/v1/support/appeals",
-  "/api/v1/users/me/export", // Maybe allow data export?
+  "/api/v1/auth/profile", // Maybe allow profile update?
 ];
 
 export const accountStatusMiddleware = createMiddleware<AppBindings>(
@@ -50,6 +49,7 @@ export const accountStatusMiddleware = createMiddleware<AppBindings>(
     if (status === "suspended") {
       const method = c.req.method;
       const path = c.req.path;
+      console.log("Account Suspended", { method, path });
 
       // Rule: Allow GET requests (Read Only)
       if (method === "GET") {
@@ -74,7 +74,7 @@ export const accountStatusMiddleware = createMiddleware<AppBindings>(
     }
 
     // Attach for downstream logic
-    c.set("accountStatus", status);
+    c.set("accountStatus", status as AccountStatus);
 
     await next();
   },
