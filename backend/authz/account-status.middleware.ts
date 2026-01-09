@@ -48,7 +48,10 @@ export const accountStatusMiddleware = createMiddleware<AppBindings>(
     // ------------------------------------------------------
     if (status === "suspended") {
       const method = c.req.method;
-      const path = c.req.path;
+      // Normalize path to ensure leading slash for safe matching
+      const rawPath = c.req.path;
+      const path = rawPath.startsWith("/") ? rawPath : `/${rawPath}`;
+
       console.log("Account Suspended", { method, path });
 
       // Rule: Allow GET requests (Read Only)
@@ -60,7 +63,12 @@ export const accountStatusMiddleware = createMiddleware<AppBindings>(
       }
 
       // Rule: Allow Whitelisted Routes
-      if (SUSPENSION_WHITELIST.some((p) => path.includes(p))) {
+      // Exact match OR directory prefix match (e.g. "/foo" matches "/foo" and "/foo/bar" but NOT "/foobar")
+      if (
+        SUSPENSION_WHITELIST.some(
+          (p) => path === p || path.startsWith(p.endsWith("/") ? p : `${p}/`),
+        )
+      ) {
         c.set("accountStatus", status);
 
         await next();
