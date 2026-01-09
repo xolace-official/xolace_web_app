@@ -5,11 +5,11 @@ import {
 import Link from "next/link";
 import {
   Users,
-  Sparkles,
   MessageCircle,
   Heart,
-  Zap,
-  TrendingUp,
+  Lightbulb,
+  Palette,
+  Sprout,
 } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { formatNumber } from "@/utils";
@@ -29,17 +29,17 @@ const getInteractionConfig = (style: InteractionStyle) => {
       };
     case "motivational":
       return {
-        icon: Zap,
+        icon: Lightbulb,
         iconColor: "text-chart-5",
       };
     case "expressive":
       return {
-        icon: TrendingUp,
+        icon: Palette,
         iconColor: "text-chart-2",
       };
     case "educational":
       return {
-        icon: Sparkles,
+        icon: Sprout,
         iconColor: "text-chart-4",
       };
     default:
