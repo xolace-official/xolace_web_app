@@ -3,21 +3,18 @@ import { ThemeSwitcher } from "@/components/shared/theme-switcher";
 import { PageHeading } from "@/components/shared/layout/page-heading";
 import { CampfireDiscoveryList } from "@/features/campfires/discovery/discovery-list";
 import { RealmOverview } from "@/features/campfires/discovery/realm-overview";
-import { DiscoveryProvider } from "@/features/campfires/discovery/discovery-context";
 
 export const DiscoveryPage = () => {
   return (
-    <DiscoveryProvider>
-      <PageContainer
-        title="Campfire Discovery"
-        externalContent={<RealmOverview />}
-        actions={<ThemeSwitcher key={"theme-switcher"} />}
-      >
-        <PageHeading title="Find your circle. Join discussions that matter." />
-        <div className="flex flex-col gap-4 px-2 md:px-0">
-          <CampfireDiscoveryList />
-        </div>
-      </PageContainer>
-    </DiscoveryProvider>
+    <PageContainer
+      title="Campfire Discovery"
+      externalContent={<RealmOverview />}
+      actions={<ThemeSwitcher key={"theme-switcher"} />}
+    >
+      <PageHeading title="Find your circle. Join discussions that matter to you." />
+      <div className="flex flex-col gap-4 px-2 md:px-0">
+        <CampfireDiscoveryList />
+      </div>
+    </PageContainer>
   );
 };
