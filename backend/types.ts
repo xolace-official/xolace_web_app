@@ -10,6 +10,7 @@ export interface AppBindings {
     supabase: SupabaseClient<Database>;
     user: User;
     userId: string;
+    accountStatus: string;
   };
 }
 
