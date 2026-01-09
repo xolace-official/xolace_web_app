@@ -25,7 +25,7 @@ export const accountStatusMiddleware = createMiddleware<AppBindings>(
       .from("account_statuses")
       .select("status, reason")
       .eq("user_id", userId)
-      .single();
+      .maybeSingle();
 
     if (error) {
       // Fail closed — no silent bypass
@@ -77,7 +77,8 @@ export const accountStatusMiddleware = createMiddleware<AppBindings>(
 
       // Rule: Block everything else (Mutations)
       throw new HTTPException(403, {
-        message: data.reason ?? "Account suspended. You are in read-only mode.",
+        message:
+          data?.reason ?? "Account suspended. You are in read-only mode.",
       });
     }
 
