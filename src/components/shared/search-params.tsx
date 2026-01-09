@@ -5,11 +5,15 @@ import { createTypedLink } from "@/lib/typed-links";
 
 const searchParams = {
   query: parseAsString.withDefault(""),
+  realm: parseAsString.withDefault("all"),
+  lane: parseAsString.withDefault(""),
 };
 
 // short hand
 const urlKeys: UrlKeys<typeof searchParams> = {
   query: "q",
+  realm: "r",
+  lane: "l",
 };
 
 export const loadFilters = createLoader(searchParams, { urlKeys });
