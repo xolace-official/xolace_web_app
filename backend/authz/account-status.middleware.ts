@@ -12,8 +12,8 @@ import type { AccountStatus, AppBindings } from "../types";
 
 // WhiteListing approach
 // Routes that suspended users ARE allowed to write to
-const SUSPENSION_WHITELIST = [
-  "/api/v1/auth/profile", // Maybe allow profile update?
+const SUSPENSION_WHITELIST: Array<{ path: string; methods: string[] }> = [
+  { path: "/api/v1/auth/profile", methods: ["PATCH", "PUT"] },
 ];
 
 export const accountStatusMiddleware = createMiddleware<AppBindings>(
@@ -52,10 +52,8 @@ export const accountStatusMiddleware = createMiddleware<AppBindings>(
       const rawPath = c.req.path;
       const path = rawPath.startsWith("/") ? rawPath : `/${rawPath}`;
 
-      console.log("Account Suspended", { method, path });
-
-      // Rule: Allow GET requests (Read Only)
-      if (method === "GET") {
+      // Rule: Allow GET, OPTIONS, HEAD requests (Read Only)
+      if (method === "GET" || method === "OPTIONS" || method === "HEAD") {
         c.set("accountStatus", status);
 
         await next();
@@ -65,9 +63,11 @@ export const accountStatusMiddleware = createMiddleware<AppBindings>(
       // Rule: Allow Whitelisted Routes
       // Exact match OR directory prefix match (e.g. "/foo" matches "/foo" and "/foo/bar" but NOT "/foobar")
       if (
-        SUSPENSION_WHITELIST.some(
-          (p) => path === p || path.startsWith(p.endsWith("/") ? p : `${p}/`),
-        )
+        SUSPENSION_WHITELIST.some(({ path: p, methods }) => {
+          const pathMatch =
+            path === p || path.startsWith(p.endsWith("/") ? p : `${p}/`);
+          return pathMatch && methods.includes(method);
+        })
       ) {
         c.set("accountStatus", status);
 
