@@ -53,12 +53,16 @@ export const accountStatusMiddleware = createMiddleware<AppBindings>(
 
       // Rule: Allow GET requests (Read Only)
       if (method === "GET") {
+        c.set("accountStatus", status);
+
         await next();
         return;
       }
 
       // Rule: Allow Whitelisted Routes
       if (SUSPENSION_WHITELIST.some((p) => path.includes(p))) {
+        c.set("accountStatus", status);
+
         await next();
         return;
       }
