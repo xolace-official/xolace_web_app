@@ -5,6 +5,8 @@ export type InteractionStyle =
   | "educational"
   | "expressive";
 
+export type RealmKey = InteractionStyle | "all";
+
 export interface CampfireRealmInterface {
   id: string;
   key: InteractionStyle;
