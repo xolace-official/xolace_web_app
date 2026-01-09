@@ -58,6 +58,13 @@ export const DiscoveryCard = ({
   const config = getInteractionConfig(discovery.interaction_style);
   const IconComponent = config.icon;
 
+  const handleJoinClick = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    // Add your join logic here
+    console.log("Joining campfire:", discovery.name);
+  };
+
   return (
     <Link href={`/x/${discovery.slug}`}>
       {/* Desktop Card View - Hidden on Mobile */}
@@ -97,9 +104,11 @@ export const DiscoveryCard = ({
               <span className="capitalize">{discovery.interaction_style}</span>
             </div>
 
-            <Button variant={"link"} size={"sm"}>
-              Join
-            </Button>
+            <div onClick={handleJoinClick}>
+              <Button variant={"link"} size={"sm"}>
+                Join
+              </Button>
+            </div>
           </div>
         </div>
       </div>
@@ -144,7 +153,7 @@ export const DiscoveryCard = ({
                 </div>
               </div>
             </div>
-            <div>
+            <div onClick={handleJoinClick}>
               <Button variant={"link"} size={"sm"}>
                 Join
               </Button>
