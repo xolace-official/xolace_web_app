@@ -1,6 +1,6 @@
 import { PageContainer } from "@/components/app/page-container";
-import { ThemeSwitcher } from "@/components/shared/theme-switcher";
 import { PageHeading } from "@/components/shared/layout/page-heading";
+import { ThemeSwitcher } from "@/components/shared/theme-switcher";
 import { CampfireDiscoveryList } from "@/features/campfires/discovery/discovery-list";
 import { RealmOverview } from "@/features/campfires/discovery/realm-overview";
 
