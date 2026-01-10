@@ -1,6 +1,14 @@
 "use client";
 
-import React from "react";
+import {
+  Heart,
+  Lightbulb,
+  type LucideIcon,
+  Palette,
+  Sprout,
+  Users,
+} from "lucide-react";
+import { useFiltersServer } from "@/components/shared/search-params";
 import {
   Card,
   CardContent,
@@ -9,19 +17,10 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import {
-  Heart,
-  Sprout,
-  Palette,
-  LucideIcon,
-  Lightbulb,
-  Users,
-} from "lucide-react";
-import {
   CAMPFIRE_REALMS,
-  InteractionStyle,
-  RealmKey,
+  type InteractionStyle,
+  type RealmKey,
 } from "@/features/campfires/discovery/index";
-import { useFiltersServer } from "@/components/shared/search-params";
 
 interface RealmCardData {
   key: InteractionStyle;

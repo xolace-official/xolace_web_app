@@ -1,14 +1,14 @@
 "use client";
 
-import { DISCOVERY_DUMMY } from "@/features/campfires/discovery/index";
-import { DiscoveryCard } from "@/features/campfires/discovery/discovery-card";
-import { DiscoveryFiltering } from "@/features/campfires/discovery/discovery-filtering";
-import { useFiltersServer } from "@/components/shared/search-params";
-import { EmptyContent } from "@/components/app/empty-content";
-import { Button } from "@/components/ui/button";
+import { SearchX } from "lucide-react";
 import { debounce } from "nuqs/server";
 import { useTransition } from "react";
-import { SearchX } from "lucide-react";
+import { EmptyContent } from "@/components/app/empty-content";
+import { useFiltersServer } from "@/components/shared/search-params";
+import { Button } from "@/components/ui/button";
+import { DiscoveryCard } from "@/features/campfires/discovery/discovery-card";
+import { DiscoveryFiltering } from "@/features/campfires/discovery/discovery-filtering";
+import { DISCOVERY_DUMMY } from "@/features/campfires/discovery/index";
 
 export const CampfireDiscoveryList = () => {
   const [isPending, startTransition] = useTransition();

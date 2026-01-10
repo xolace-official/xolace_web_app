@@ -2,10 +2,9 @@
 import { Button } from "@/components/ui/button";
 import { useState, useTransition } from "react";
 import { Search, SearchX } from "lucide-react";
-import {
-  CAMPFIRE_REALMS,
-  RealmKey,
-} from "@/features/campfires/discovery/index";
+// biome-ignore lint/style/useImportType: it crashes when I add type
+import { RealmKey } from "@/features/campfires/discovery/index";
+import { CAMPFIRE_REALMS } from "@/features/campfires/discovery/index";
 import { ParamsSearchBar } from "@/components/shared/params-search-bar";
 import { useFiltersServer } from "@/components/shared/search-params";
 import { debounce } from "nuqs/server";
@@ -76,22 +75,24 @@ export const DiscoveryFiltering = () => {
             "flex flex-row gap-2 md:gap-4 overflow-x-auto scrollbar-hide scroll-smooth"
           }
         >
-          <p
-            className={`${selectedRealm === "all" ? "border-b border-destructive text-destructive" : "hover:text-primary"} text-sm font-semibold px-1 md:px-2 cursor-pointer whitespace-nowrap flex-shrink-0`}
+          <button
+            type="button"
+            className={`${selectedRealm === "all" ? "border-b border-destructive text-destructive" : "hover:text-primary"} text-sm font-semibold px-1 md:px-2 cursor-pointer whitespace-nowrap shrink-0`}
             onClick={() => handleRealmClick("all")}
           >
             All
-          </p>
+          </button>
           {CAMPFIRE_REALMS?.map((realm) => {
             const active = realm.key === selectedRealm;
             return (
-              <p
+              <button
                 key={realm.key}
-                className={`${active ? "border-b border-destructive text-destructive" : "hover:text-primary"} text-xs md:text-sm font-semibold px-1 md:px-2 cursor-pointer whitespace-nowrap flex-shrink-0`}
+                type="button"
+                className={`${active ? "border-b border-destructive text-destructive" : "hover:text-primary"} text-xs md:text-sm font-semibold px-1 md:px-2 cursor-pointer whitespace-nowrap shrink-0`}
                 onClick={() => handleRealmClick(realm.key)}
               >
                 {realm.name}
-              </p>
+              </button>
             );
           })}
         </div>
@@ -122,7 +123,7 @@ export const DiscoveryFiltering = () => {
           <Button
             size="sm"
             onClick={() => setShowSearchBar(true)}
-            className={"h-6 flex-shrink-0"}
+            className={"h-6 shrink-0"}
           >
             <Search />
           </Button>
@@ -135,13 +136,14 @@ export const DiscoveryFiltering = () => {
               {lanes.map((lane) => {
                 const active = selectedLane === lane[0];
                 return (
-                  <p
+                  <button
                     key={lane[0]}
-                    className={`py-1 px-4 text-xs whitespace-nowrap flex-shrink-0 border rounded-sm cursor-pointer ${active ? "border-destructive/20 bg-destructive text-destructive-foreground" : "border-border hover:bg-accent/20 hover:shadow-lg"}`}
+                    type="button"
+                    className={`py-1 px-4 text-xs whitespace-nowrap shrink-0 border rounded-sm cursor-pointer ${active ? "border-destructive/20 bg-destructive text-destructive-foreground" : "border-border hover:bg-accent/20 hover:shadow-lg"}`}
                     onClick={() => handleLaneClick(lane[0])}
                   >
                     {lane[1]}
-                  </p>
+                  </button>
                 );
               })}
             </div>
