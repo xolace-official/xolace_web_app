@@ -12,7 +12,7 @@ import { DISCOVERY_DUMMY } from "@/features/campfires/discovery/index";
 
 export const CampfireDiscoveryList = () => {
   const [isPending, startTransition] = useTransition();
-  const [{ query, realm, lane }, setSearchParams] = useFiltersServer({
+  const [{ query, realm }, setSearchParams] = useFiltersServer({
     limitUrlUpdates: debounce(250),
     shallow: false,
   });
@@ -29,7 +29,7 @@ export const CampfireDiscoveryList = () => {
       item.interaction_style?.toLowerCase().includes(query.toLowerCase()) ||
       item.member_count?.toString().includes(query.toLowerCase());
 
-    const matchesLane = lane; //lane implementation will be done later
+    //const matchesLane = lane; //lane implementation will be done later
 
     return matchesRealm && matchesQuery;
   });

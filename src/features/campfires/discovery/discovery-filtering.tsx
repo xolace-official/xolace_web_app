@@ -18,33 +18,34 @@ export const DiscoveryFiltering = () => {
     shallow: false,
   });
 
-  const [selectedRealm, setSelectedRealm] = useState<RealmKey>(
-    realm as RealmKey,
-  );
-  const [selectedLane, setSelectedLane] = useState<string | null>(lane || null);
   const [showSearchBar, setShowSearchBar] = useState<boolean>(false);
 
-  // Handle realm click - update both local state and URL
+  // Derive and validate realm from URL
+  const validRealm = (
+    CAMPFIRE_REALMS.some((r) => r.key === realm) ? realm : "all"
+  ) as RealmKey;
+
+  // Handle realm click - update URL directly
   const handleRealmClick = (key: RealmKey) => {
-    setSelectedRealm(key);
-    setSelectedLane(null);
+    // If clicking the same realm, no need to update (optional optimization)
+    if (key === validRealm) return;
 
     startTransition(async () => {
       await setSearchParams({
         realm: key,
-        lane: "",
+        lane: "", // Reset lane when realm changes
       });
     });
   };
 
-  // Handle lane click - update both local state and URL
+  // Handle lane click - update URL directly
   const handleLaneClick = (laneKey: string) => {
-    const newLane = selectedLane === laneKey ? null : laneKey;
-    setSelectedLane(newLane);
+    // Toggle: if clicking currently selected lane, deselect it (set to null/empty)
+    const newLane = lane === laneKey ? "" : laneKey;
 
     startTransition(async () => {
       await setSearchParams({
-        lane: newLane || "",
+        lane: newLane,
       });
     });
   };
@@ -52,7 +53,6 @@ export const DiscoveryFiltering = () => {
   // Handle hiding search bar and clearing query
   const handleHideSearch = () => {
     setShowSearchBar(false);
-
     startTransition(async () => {
       await setSearchParams({
         query: "",
@@ -60,9 +60,7 @@ export const DiscoveryFiltering = () => {
     });
   };
 
-  const selectedRealmData = CAMPFIRE_REALMS.find(
-    (realm) => realm.key === selectedRealm,
-  );
+  const selectedRealmData = CAMPFIRE_REALMS.find((r) => r.key === validRealm);
   const lanes = selectedRealmData?.lanes || [];
 
   return (
@@ -79,21 +77,21 @@ export const DiscoveryFiltering = () => {
         >
           <button
             type="button"
-            className={`${selectedRealm === "all" ? "border-b border-destructive text-destructive" : "hover:text-primary"} text-sm font-semibold px-1 md:px-2 cursor-pointer whitespace-nowrap shrink-0`}
+            className={`${validRealm === "all" ? "border-b border-destructive text-destructive" : "hover:text-primary"} text-sm font-semibold px-1 md:px-2 cursor-pointer whitespace-nowrap shrink-0`}
             onClick={() => handleRealmClick("all")}
           >
             All
           </button>
-          {CAMPFIRE_REALMS?.map((realm) => {
-            const active = realm.key === selectedRealm;
+          {CAMPFIRE_REALMS?.map((r) => {
+            const active = r.key === validRealm;
             return (
               <button
-                key={realm.key}
+                key={r.key}
                 type="button"
                 className={`${active ? "border-b border-destructive text-destructive" : "hover:text-primary"} text-xs md:text-sm font-semibold px-1 md:px-2 cursor-pointer whitespace-nowrap shrink-0`}
-                onClick={() => handleRealmClick(realm.key)}
+                onClick={() => handleRealmClick(r.key)}
               >
-                {realm.name}
+                {r.name}
               </button>
             );
           })}
@@ -112,6 +110,11 @@ export const DiscoveryFiltering = () => {
                     limitUrlUpdates: value ? debounce(250) : undefined,
                   },
                 );
+              });
+            }}
+            onClear={() => {
+              startTransition(async () => {
+                await setSearchParams({ query: "" });
               });
             }}
             isLoading={isPending}
@@ -135,16 +138,16 @@ export const DiscoveryFiltering = () => {
                 "flex items-center gap-4 overflow-x-auto scrollbar-hide scroll-smooth min-w-0 flex-1"
               }
             >
-              {lanes.map((lane) => {
-                const active = selectedLane === lane[0];
+              {lanes.map((l) => {
+                const active = lane === l[0];
                 return (
                   <button
-                    key={lane[0]}
+                    key={l[0]}
                     type="button"
                     className={`py-1 px-4 text-xs whitespace-nowrap shrink-0 border rounded-sm cursor-pointer ${active ? "border-destructive/20 bg-destructive text-destructive-foreground" : "border-border hover:bg-accent/20 hover:shadow-lg"}`}
-                    onClick={() => handleLaneClick(lane[0])}
+                    onClick={() => handleLaneClick(l[0])}
                   >
-                    {lane[1]}
+                    {l[1]}
                   </button>
                 );
               })}

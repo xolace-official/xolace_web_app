@@ -1,19 +1,19 @@
 import {
+  Heart,
+  Lightbulb,
+  MessageCircle,
+  Palette,
+  Sprout,
+  Users,
+} from "lucide-react";
+import Link from "next/link";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Button } from "@/components/ui/button";
+import type {
   CampfireDiscoveryInterface,
   InteractionStyle,
 } from "@/features/campfires/discovery/index";
-import Link from "next/link";
-import {
-  Users,
-  MessageCircle,
-  Heart,
-  Lightbulb,
-  Palette,
-  Sprout,
-} from "lucide-react";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { formatNumber } from "@/utils";
-import { Button } from "@/components/ui/button";
 
 const getInteractionConfig = (style: InteractionStyle) => {
   switch (style) {
@@ -61,8 +61,8 @@ export const DiscoveryCard = ({
   const handleJoinClick = (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
-    // Add your join logic here
-    console.log("Joining campfire:", discovery.name);
+    // TODO: Implement join logic
+    console.log("Joining campfire: ", discovery.name);
   };
 
   return (
@@ -87,7 +87,7 @@ export const DiscoveryCard = ({
                 src={discovery.icon_path || undefined}
                 alt={discovery.name}
               />
-              <AvatarFallback className="bg-gradient-to-br from-primary to-primary/80 font-bold text-sm">
+              <AvatarFallback className="bg-linear-to-br from-primary to-primary/80 font-bold text-sm">
                 {discovery.name.slice(0, 2).toUpperCase()}
               </AvatarFallback>
             </Avatar>
@@ -104,11 +104,9 @@ export const DiscoveryCard = ({
               <span className="capitalize">{discovery.interaction_style}</span>
             </div>
 
-            <div onClick={handleJoinClick}>
-              <Button variant={"link"} size={"sm"}>
-                Join
-              </Button>
-            </div>
+            <Button onClick={handleJoinClick} variant={"link"} size={"sm"}>
+              Join
+            </Button>
           </div>
         </div>
       </div>
@@ -124,7 +122,7 @@ export const DiscoveryCard = ({
                 src={discovery.icon_path || undefined}
                 alt={discovery.name}
               />
-              <AvatarFallback className="bg-gradient-to-br from-primary to-primary/80 text-white font-bold text-sm">
+              <AvatarFallback className="bg-linear-to-br from-primary to-primary/80 text-white font-bold text-sm">
                 {discovery.name.slice(0, 2).toUpperCase()}
               </AvatarFallback>
             </Avatar>
@@ -153,11 +151,9 @@ export const DiscoveryCard = ({
                 </div>
               </div>
             </div>
-            <div onClick={handleJoinClick}>
-              <Button variant={"link"} size={"sm"}>
-                Join
-              </Button>
-            </div>
+            <Button onClick={handleJoinClick} variant={"link"} size={"sm"}>
+              Join
+            </Button>
           </div>
         </div>
       </div>
