@@ -38,9 +38,7 @@ export function PageContainer(props: {
   disableSidebarToggle?: boolean;
 }) {
   return (
-    <div
-      className={cn("flex flex-col size-full px-4 md:px-0", props.className)}
-    >
+    <div className={cn("flex flex-col size-full", props.className)}>
       <SiteHeader
         disableSidebarToggle={props.disableSidebarToggle}
         title={props.title}
