@@ -1,8 +1,7 @@
 "use client";
-import React, { createContext, useContext, useState, ReactNode } from "react";
-import { InteractionStyle } from "@/features/campfires/discovery/index";
-
-type RealmKey = InteractionStyle | "all";
+import type React from "react";
+import { createContext, type ReactNode, useContext, useState } from "react";
+import type { RealmKey } from "@/features/campfires/discovery/index";
 
 interface DiscoveryContextType {
   selectedRealm: RealmKey;

@@ -1,7 +1,7 @@
 "use client";
 
 import { SearchX } from "lucide-react";
-import { debounce } from "nuqs/server";
+import { debounce } from "nuqs";
 import { useTransition } from "react";
 import { EmptyContent } from "@/components/app/empty-content";
 import { useFiltersServer } from "@/components/shared/search-params";

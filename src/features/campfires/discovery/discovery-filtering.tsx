@@ -1,13 +1,15 @@
 "use client";
-import { Button } from "@/components/ui/button";
-import { useState, useTransition } from "react";
 import { Search, SearchX } from "lucide-react";
-// biome-ignore lint/style/useImportType: it crashes when I add type
-import { RealmKey } from "@/features/campfires/discovery/index";
-import { CAMPFIRE_REALMS } from "@/features/campfires/discovery/index";
+import { debounce } from "nuqs";
+import { useState, useTransition } from "react";
 import { ParamsSearchBar } from "@/components/shared/params-search-bar";
 import { useFiltersServer } from "@/components/shared/search-params";
-import { debounce } from "nuqs/server";
+import { Button } from "@/components/ui/button";
+// biome-ignore lint/style/useImportType: it crashes when I add type
+import {
+  CAMPFIRE_REALMS,
+  RealmKey,
+} from "@/features/campfires/discovery/index";
 
 export const DiscoveryFiltering = () => {
   const [isPending, startTransition] = useTransition();

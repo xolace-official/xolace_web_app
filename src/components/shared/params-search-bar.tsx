@@ -105,6 +105,8 @@ const ParamsSearchBar = React.forwardRef<HTMLInputElement, SearchBarProps>(
     // Input ref for internal use
     const inputRef = React.useRef<HTMLInputElement>(null);
 
+    React.useImperativeHandle(ref, () => inputRef.current as HTMLInputElement);
+
     // Handle keyboard events
     const handleKeyDown = React.useCallback(
       (e: React.KeyboardEvent<HTMLInputElement>) => {
@@ -172,7 +174,7 @@ const ParamsSearchBar = React.forwardRef<HTMLInputElement, SearchBarProps>(
             <InputGroupButton
               size="icon-xs"
               variant="ghost"
-              onClick={() => onClear}
+              onClick={() => onClear?.()}
               aria-label="Clear search"
               className="text-muted-foreground hover:text-foreground"
             >
