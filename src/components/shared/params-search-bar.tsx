@@ -105,7 +105,10 @@ const ParamsSearchBar = React.forwardRef<HTMLInputElement, SearchBarProps>(
     // Input ref for internal use
     const inputRef = React.useRef<HTMLInputElement>(null);
 
-    React.useImperativeHandle(ref, () => inputRef.current as HTMLInputElement);
+    React.useImperativeHandle(
+      ref,
+      () => inputRef.current ?? ({} as HTMLInputElement),
+    );
 
     // Handle keyboard events
     const handleKeyDown = React.useCallback(
