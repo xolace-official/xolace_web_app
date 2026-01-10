@@ -41,8 +41,8 @@ export const HealthTipsList = () => {
 
     startTransition(async () => {
       await setSearchParams({
-        category: "all",
-        sensitivity: "all",
+        category: category,
+        sensitivity: sensitivity,
         query: "",
       });
     });
@@ -96,7 +96,7 @@ export const HealthTipsList = () => {
     <div className="flex flex-col gap-4">
       <div className="flex flex-col gap-2 md:gap-4 sticky z-10 top-0 bg-background">
         <div>
-          {!showFilters ? (
+          {!showFilters || !(category || sensitivity) ? (
             // Search View
             <div className="relative flex items-center gap-2">
               <ParamsSearchBar
