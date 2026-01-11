@@ -4,6 +4,7 @@ import * as HttpStatusPhrases from "stoker/http-status-phrases";
 import type { z } from "zod";
 import type {
   GetBatchMembershipRoute,
+  GetCampfireDetailsRoute,
   GetCampfireLanesRoute,
   GetCampfireMembershipRoute,
   GetCampfireRealmsRoute,
@@ -391,4 +392,78 @@ export const getCampfireLanes: AppRouteHandler<GetCampfireLanesRoute> = async (
   }
 
   return c.json({ data: data ?? [] }, HttpStatusCodes.OK);
+};
+
+export const getCampfireDetails: AppRouteHandler<
+  GetCampfireDetailsRoute
+> = async (c) => {
+  const supabase = c.get("supabase");
+  const { slug } = c.req.param();
+
+  try {
+    const { data, error } = await supabase
+      .from("campfires")
+      .select(`
+    id,
+    name,
+    slug,
+    description,
+    icon_path,
+    banner_path,
+    interaction_style,
+    visibility,
+    member_count,
+    created_at,
+    created_by,
+
+    realm:campfire_realms (
+      id,
+      key,
+      name,
+      is_high_safety
+    ),
+
+    lane:campfire_lanes (
+      id,
+      key,
+      name,
+      is_high_safety
+    ),
+
+    settings:campfire_settings (
+      guide_enabled,
+      guide_header_image,
+      guide_header_layout,
+      guide_show_on_join,
+      guide_welcome_message
+    )
+  `)
+      .eq("slug", slug)
+      .eq("visibility", "public")
+      .maybeSingle();
+
+    if (error) {
+      console.error("getCampfireDetails error:", error);
+      return c.json(
+        { message: HttpStatusPhrases.INTERNAL_SERVER_ERROR },
+        HttpStatusCodes.INTERNAL_SERVER_ERROR,
+      );
+    }
+
+    if (!data) {
+      return c.json(
+        { message: "Campfire not found" },
+        HttpStatusCodes.NOT_FOUND,
+      );
+    }
+
+    return c.json({ data }, HttpStatusCodes.OK);
+  } catch (error) {
+    console.error("getCampfireDetails exception:", error);
+
+    return c.json(
+      { message: HttpStatusPhrases.INTERNAL_SERVER_ERROR },
+      HttpStatusCodes.INTERNAL_SERVER_ERROR,
+    );
+  }
 };

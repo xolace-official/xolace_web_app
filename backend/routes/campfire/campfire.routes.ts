@@ -7,6 +7,8 @@ import { createMessageObjectSchema } from "stoker/openapi/schemas";
 import {
   batchCampfireMembershipResponse,
   batchMembershipBody,
+  campfireDetailsParamsSchema,
+  campfireDetailsResponse,
   campfireLanesResponse,
   campfireMembershipDetailResponse,
   campfireRealmsResponse,
@@ -219,6 +221,41 @@ export const getCampfireLanes = createRoute({
   },
 });
 
+export const getCampfireDetails = createRoute({
+  path: "/:slug",
+  method: "get",
+  summary: "Get campfire details",
+  description:
+    "Returns public, stable campfire metadata. This endpoint is cacheable, usable by anonymous users, and does not include membership or user-specific data.",
+  tags,
+
+  request: {
+    params: campfireDetailsParamsSchema,
+  },
+
+  responses: {
+    [HttpStatusCodes.OK]: jsonContent(
+      campfireDetailsResponse,
+      "Campfire details",
+    ),
+
+    [HttpStatusCodes.NOT_FOUND]: jsonContent(
+      createMessageObjectSchema("Campfire not found"),
+      "Campfire does not exist or is not accessible",
+    ),
+
+    [HttpStatusCodes.UNAUTHORIZED]: jsonContent(
+      createMessageObjectSchema("Authentication required"),
+      "Authentication required for private campfires",
+    ),
+
+    [HttpStatusCodes.INTERNAL_SERVER_ERROR]: jsonContent(
+      internalServerErrorSchema,
+      "Internal server error",
+    ),
+  },
+});
+
 export type GetManageCampfiresRoute = typeof getManageCampfires;
 export type GetManageCampfiresSimpleRoute = typeof getManageCampfiresSimple;
 export type GetDiscoveryCampfiresRoute = typeof getDiscoveryCampfires;
@@ -226,3 +263,4 @@ export type GetBatchMembershipRoute = typeof getBatchMembership;
 export type GetCampfireRealmsRoute = typeof getCampfireRealms;
 export type GetCampfireLanesRoute = typeof getCampfireLanes;
 export type GetCampfireMembershipRoute = typeof getCampfireMembership;
+export type GetCampfireDetailsRoute = typeof getCampfireDetails;
