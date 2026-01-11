@@ -94,7 +94,7 @@ export const HealthTipsList = () => {
 
   return (
     <div className="flex flex-col gap-4">
-      <div className="flex flex-col gap-2 md:gap-4 sticky z-10 top-0 bg-background">
+      <div className="flex flex-col gap-2 md:gap-4 sticky z-50 top-0 bg-background">
         <div>
           {!showFilters || !(category || sensitivity) ? (
             // Search View
