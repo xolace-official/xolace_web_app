@@ -10,6 +10,7 @@ export type AccountStatus = "active" | "suspended" | "deactivated";
 export interface AppBindings {
   Variables: {
     supabase: SupabaseClient<Database>;
+    adminSupabase: SupabaseClient;
     user: User;
     userId: string;
     accountStatus: AccountStatus;
