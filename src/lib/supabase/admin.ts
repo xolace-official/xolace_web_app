@@ -1,6 +1,5 @@
 import { createClient } from "@supabase/supabase-js";
 import { env } from "@/env/server";
-import type { FullDatabase } from "./types_private";
 
 /**
  * Service-role Supabase client

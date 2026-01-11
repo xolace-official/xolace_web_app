@@ -1,6 +1,5 @@
 import * as HttpStatusCodes from "stoker/http-status-codes";
 import * as HttpStatusPhrases from "stoker/http-status-phrases";
-import { createServiceSupabase } from "@/lib/supabase/admin";
 import type { AppRouteHandler } from "../../types";
 import type {
   GetOwnPrivateProfileRoute,
@@ -11,7 +10,7 @@ import type {
 } from "./profile.routes";
 
 export const getOwnProfile: AppRouteHandler<GetOwnProfileRoute> = async (c) => {
-  const adminSupabase = createServiceSupabase();
+  const adminSupabase = c.get("adminSupabase");
   const supabase = c.get("supabase");
   const userId = c.get("userId");
 
@@ -93,11 +92,11 @@ export const getOwnPublicProfile: AppRouteHandler<
 export const getOwnPrivateProfile: AppRouteHandler<
   GetOwnPrivateProfileRoute
 > = async (c) => {
-  const supabase = createServiceSupabase();
+  const adminSupabase = c.get("adminSupabase");
   const userId = c.get("userId");
 
   const fetchPrivateProfile = async () => {
-    const { data, error } = await supabase
+    const { data, error } = await adminSupabase
       .schema("private")
       .from("profile_private")
       .select(
@@ -176,13 +175,13 @@ export const updateUserPublicProfile: AppRouteHandler<
 export const updateUserPrivateProfile: AppRouteHandler<
   UpdateUserPrivateRoute
 > = async (c) => {
-  const supabase = createServiceSupabase();
+  const adminSupabase = c.get("adminSupabase");
   const userId = c.get("userId");
   const updateData = c.req.valid("json");
 
   try {
     // Update the profile
-    const { error } = await supabase
+    const { error } = await adminSupabase
       .schema("private")
       .from("profile_private")
       .update({

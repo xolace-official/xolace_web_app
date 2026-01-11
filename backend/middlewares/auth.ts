@@ -3,6 +3,7 @@ import { createMiddleware } from "hono/factory";
 import { HTTPException } from "hono/http-exception";
 import { env } from "@/env/server";
 import { createAuthedSupabase } from "@/lib/supabase/server-api";
+import { createServiceSupabase } from "@/lib/supabase/admin";
 import type { AppBindings } from "../types";
 
 /**
@@ -64,11 +65,17 @@ export const authMiddleware = createMiddleware<AppBindings>(async (c, next) => {
   const supabase = createAuthedSupabase(jwt);
 
   /**
-   * STEP 3: Attach to request context
+   * STEP 3: Create service role Supabase client (no RLS)
+   */
+  const adminSupabase = createServiceSupabase();
+
+  /**
+   * STEP 4: Attach to request context
    */
   c.set("user", user);
   c.set("userId", user.id);
   c.set("supabase", supabase);
+  c.set("adminSupabase", adminSupabase);
 
   console.log("Auth middleware passed");
 
