@@ -92,11 +92,11 @@ export const getOwnPublicProfile: AppRouteHandler<
 export const getOwnPrivateProfile: AppRouteHandler<
   GetOwnPrivateProfileRoute
 > = async (c) => {
-  const supabase = c.get("adminSupabase");
+  const adminSupabase = c.get("adminSupabase");
   const userId = c.get("userId");
 
   const fetchPrivateProfile = async () => {
-    const { data, error } = await supabase
+    const { data, error } = await adminSupabase
       .schema("private")
       .from("profile_private")
       .select(
@@ -175,13 +175,13 @@ export const updateUserPublicProfile: AppRouteHandler<
 export const updateUserPrivateProfile: AppRouteHandler<
   UpdateUserPrivateRoute
 > = async (c) => {
-  const supabase = c.get("adminSupabase");
+  const adminSupabase = c.get("adminSupabase");
   const userId = c.get("userId");
   const updateData = c.req.valid("json");
 
   try {
     // Update the profile
-    const { error } = await supabase
+    const { error } = await adminSupabase
       .schema("private")
       .from("profile_private")
       .update({
