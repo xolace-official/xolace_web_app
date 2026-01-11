@@ -34,7 +34,7 @@ export const HealthTipCard = ({
   };
 
   return (
-    <Card className="group hover:shadow-xl transition-all duration-300 hover:-translate-y-1 flex flex-col gap-2">
+    <Card className="group hover:shadow-xl transition-all duration-300 hover:-translate-y-1 flex flex-col gap-2 ">
       <CardHeader className="space-y-2">
         <div className="flex items-center justify-between gap-2">
           <Badge
@@ -62,7 +62,7 @@ export const HealthTipCard = ({
         </div>
       </CardHeader>
 
-      <Separator />
+      {/*<Separator />*/}
 
       <CardContent className="flex-1 space-y-2">
         {tip.tags.length > 0 && (
@@ -88,7 +88,7 @@ export const HealthTipCard = ({
         )}
       </CardContent>
 
-      <Separator />
+      {/*<Separator />*/}
 
       <CardFooter className="flex-col gap-2 ">
         <div className="w-full flex items-center justify-between">
