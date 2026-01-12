@@ -398,7 +398,7 @@ export const getCampfireDetails: AppRouteHandler<
   GetCampfireDetailsRoute
 > = async (c) => {
   const supabase = c.get("supabase");
-  const { slug } = c.req.param();
+  const { slug } = c.req.valid("param");
 
   try {
     const { data, error } = await supabase

@@ -299,7 +299,7 @@ export const campfireMembershipDetailResponse = z.object({
 
 // Params
 export const campfireDetailsParamsSchema = z.object({
-  slug: z.string().openapi({
+  slug: slugSchema.openapi({
     param: {
       name: "slug",
       in: "path",
@@ -311,7 +311,7 @@ export const campfireDetailsParamsSchema = z.object({
 export const campfireDetailsSchema = z.object({
   id: uuidSchema,
   name: z.string(),
-  slug: z.string(),
+  slug: slugSchema,
   description: z.string().nullable(),
 
   icon_path: z.string().nullable(),
@@ -367,3 +367,5 @@ export type BatchMembershipResponse = z.infer<typeof batchMembershipResponse>;
 export type BatchCampfireMembershipResponse = z.infer<
   typeof batchCampfireMembershipResponse
 >;
+export type CampfireDetails = z.infer<typeof campfireDetailsSchema>;
+export type CampfireDetailsResponse = z.infer<typeof campfireDetailsResponse>;

@@ -246,7 +246,7 @@ export const getCampfireDetails = createRoute({
 
     [HttpStatusCodes.UNAUTHORIZED]: jsonContent(
       createMessageObjectSchema("Authentication required"),
-      "Authentication required for private campfires",
+      "Authentication required",
     ),
 
     [HttpStatusCodes.INTERNAL_SERVER_ERROR]: jsonContent(
