@@ -11,5 +11,6 @@ router.openapi(routes.getBatchMembership, handlers.getBatchMembership);
 router.openapi(routes.getCampfireMembership, handlers.getCampfireMembership);
 router.openapi(routes.getCampfireRealms, handlers.getCampfireRealms);
 router.openapi(routes.getCampfireLanes, handlers.getCampfireLanes);
+router.openapi(routes.getCampfireDetails, handlers.getCampfireDetails);
 
 export default router;

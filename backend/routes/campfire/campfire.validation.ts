@@ -293,6 +293,69 @@ export const campfireMembershipDetailResponse = z.object({
   data: campfireMembershipDetailSchema,
 });
 
+// ============================================================================
+// Campfire Details
+// ============================================================================
+
+// Params
+export const campfireDetailsParamsSchema = z.object({
+  slug: slugSchema.openapi({
+    param: {
+      name: "slug",
+      in: "path",
+    },
+    description: "Campfire slug",
+  }),
+});
+
+export const campfireDetailsSchema = z.object({
+  id: uuidSchema,
+  name: z.string(),
+  slug: slugSchema,
+  description: z.string().nullable(),
+
+  icon_path: z.string().nullable(),
+  banner_path: z.string().nullable(),
+
+  interaction_style: z.enum(["support", "discussion", "guided", "creative"]),
+
+  visibility: campfireVisibilityEnum,
+  member_count: z.number().int().min(0),
+
+  created_at: timestampSchema,
+  created_by: uuidSchema,
+
+  realm: z.object({
+    id: uuidSchema,
+    key: z.string(),
+    name: z.string(),
+    is_high_safety: z.boolean().nullable(),
+  }),
+
+  lane: z
+    .object({
+      id: uuidSchema,
+      key: z.string(),
+      name: z.string(),
+      is_high_safety: z.boolean().nullable(),
+    })
+    .nullable(),
+
+  settings: z
+    .object({
+      guide_enabled: z.boolean(),
+      guide_header_image: z.string().nullable(),
+      guide_header_layout: z.string().nullable(),
+      guide_show_on_join: z.boolean(),
+      guide_welcome_message: z.string(),
+    })
+    .nullable(),
+});
+
+export const campfireDetailsResponse = z.object({
+  data: campfireDetailsSchema,
+});
+
 export type ManageCampfireListItem = z.infer<
   typeof manageCampfireListItemSchema
 >;
@@ -304,3 +367,5 @@ export type BatchMembershipResponse = z.infer<typeof batchMembershipResponse>;
 export type BatchCampfireMembershipResponse = z.infer<
   typeof batchCampfireMembershipResponse
 >;
+export type CampfireDetails = z.infer<typeof campfireDetailsSchema>;
+export type CampfireDetailsResponse = z.infer<typeof campfireDetailsResponse>;
