@@ -3,6 +3,19 @@
 import { motion } from "motion/react";
 import { cn } from "@/lib/utils";
 
+/**
+ * Render a centered, animated empty-state UI with an icon, title, description, and optional actions.
+ *
+ * @param title - Heading text shown prominently at the top
+ * @param description - Content displayed below the title (can be any React node)
+ * @param icon - Visual node rendered inside a scale animation above the title
+ * @param actions - Optional action controls rendered below the description with spacing
+ * @param className - Additional CSS classes appended to the container
+ * @param options - Visual toggles for the container
+ * @param options.disablePadding - When true, removes the container padding
+ * @param options.disableBorder - When true, removes the container border
+ * @returns The JSX element for the empty-state layout
+ */
 export function EmptyContent({
   title,
   description,
