@@ -1,12 +1,11 @@
 "use client";
 
-import {
-  HEALTH_TIPS_BASE_URL,
-  healthArticles,
-} from "@/features/health-space/health-tips/index";
-import { Search, Filter, SearchX } from "lucide-react";
+import { Filter, Search, SearchX } from "lucide-react";
+import { useRouter } from "next/navigation";
+import { debounce } from "nuqs";
 import { useState, useTransition } from "react";
-import { HealthTipCard } from "@/features/health-space/health-tips/health-tip-card";
+import { EmptyContent } from "@/components/app/empty-content";
+import { ParamsSearchBar } from "@/components/shared/params-search-bar";
 import { Button } from "@/components/ui/button";
 import {
   Select,
@@ -15,11 +14,12 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { ParamsSearchBar } from "@/components/shared/params-search-bar";
-import { debounce } from "nuqs";
+import { HealthTipCard } from "@/features/health-space/health-tips/health-tip-card";
 import { useHealthTipsFiltersServer } from "@/features/health-space/health-tips/health-tips-filter";
-import { EmptyContent } from "@/components/app/empty-content";
-import { useRouter } from "next/navigation";
+import {
+  HEALTH_TIPS_BASE_URL,
+  healthArticles,
+} from "@/features/health-space/health-tips/index";
 
 export const HealthTipsList = () => {
   const [isPending, startTransition] = useTransition();
