@@ -49,7 +49,7 @@ export const HealthTipCard = ({
         </div>
 
         <div className="flex flex-col gap-1">
-          <h3 className="text-base md:text-xl font-semibold leading-tight line-clamp-1 group-hover:text-primary transition-colors cursor-pointer">
+          <h3 className="text-base md:text-xl font-semibold leading-tight line-clamp-1 group-hover:text-primary transition-colors">
             {tip.title}
           </h3>
 
@@ -85,8 +85,6 @@ export const HealthTipCard = ({
         )}
       </CardContent>
 
-      {/*<Separator />*/}
-
       <CardFooter className="flex-col gap-2 ">
         <div className="w-full flex items-center justify-between">
           <div className="flex items-center gap-2">
@@ -106,9 +104,15 @@ export const HealthTipCard = ({
             </div>
           </div>
 
-          <Button variant={"link"} onClick={onFullArticle} className={"group"}>
+          <Button
+            variant={"link"}
+            onClick={onFullArticle}
+            className={"group/btn cursor-pointer"}
+          >
             Full article
-            <span className={"transition-transform group-hover:translate-x-1"}>
+            <span
+              className={"transition-transform group-hover/btn:translate-x-1"}
+            >
               <CircleArrowRight size={12} />
             </span>
           </Button>

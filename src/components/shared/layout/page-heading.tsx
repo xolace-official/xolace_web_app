@@ -19,7 +19,9 @@ export function PageHeading(props: {
         {props.showBackButton && <BackButton />}
         <div className="space-y-2">
           <h2 className="text-3xl font-semibold">{props.title}</h2>
-          <p className="text-sm text-muted-foreground">{props.description}</p>
+          {props.description && (
+            <p className="text-sm text-muted-foreground">{props.description}</p>
+          )}
         </div>
       </div>
 

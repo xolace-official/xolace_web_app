@@ -14,8 +14,7 @@ export const HealthTipsDetailsPage = ({ slug }: { slug: string }) => {
 
   return (
     <PageContainer
-      title={slug}
-      externalContent={<div />}
+      title={article.title}
       actions={<ThemeSwitcher key={"theme-switcher"} />}
     >
       <PageHeading

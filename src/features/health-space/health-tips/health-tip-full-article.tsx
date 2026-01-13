@@ -60,18 +60,19 @@ export function HealthTipFullArticle({
         </div>
       </div>
 
-      <Separator />
-
       {article.tags.length > 0 && (
-        <div className="space-y-2">
-          <div className="flex flex-wrap gap-2">
-            {article.tags.map((tag) => (
-              <Badge key={tag.name} variant="secondary">
-                {tag.name}
-              </Badge>
-            ))}
+        <>
+          <Separator />
+          <div className="space-y-2">
+            <div className="flex flex-wrap gap-2">
+              {article.tags.map((tag) => (
+                <Badge key={tag.name} variant="secondary">
+                  {tag.name}
+                </Badge>
+              ))}
+            </div>
           </div>
-        </div>
+        </>
       )}
     </article>
   );
