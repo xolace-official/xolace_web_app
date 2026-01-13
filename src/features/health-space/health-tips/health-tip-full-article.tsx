@@ -1,8 +1,8 @@
-import { Badge } from "@/components/ui/badge";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Separator } from "@/components/ui/separator";
 import { Clock, User } from "lucide-react";
-import { HealthArticleInterface } from "@/features/health-space/health-tips/index";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Badge } from "@/components/ui/badge";
+import { Separator } from "@/components/ui/separator";
+import type { HealthArticleInterface } from "@/features/health-space/health-tips/index";
 
 export function HealthTipFullArticle({
   article,

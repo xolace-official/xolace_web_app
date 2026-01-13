@@ -1,15 +1,14 @@
-import { Clock, Tag, User, Sparkles, CircleArrowRight } from "lucide-react";
+import { CircleArrowRight, Clock, Sparkles, Tag, User } from "lucide-react";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
   CardFooter,
   CardHeader,
 } from "@/components/ui/card";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Separator } from "@/components/ui/separator";
-import { HealthArticleInterface } from "@/features/health-space/health-tips/index";
-import { Button } from "@/components/ui/button";
+import type { HealthArticleInterface } from "@/features/health-space/health-tips/index";
 
 export const HealthTipCard = ({
   tip,
@@ -66,25 +65,23 @@ export const HealthTipCard = ({
 
       <CardContent className="flex-1 space-y-2">
         {tip.tags.length > 0 && (
-          <>
-            <div className="flex flex-wrap gap-2">
-              {tip.tags.slice(0, 3).map((tag, index) => (
-                <Badge
-                  key={index}
-                  variant="outline"
-                  className="text-xs font-normal hover:bg-accent transition-colors cursor-pointer"
-                >
-                  <Tag className="w-3 h-3 mr-1" />
-                  {tag.name}
-                </Badge>
-              ))}
-              {tip.tags.length > 3 && (
-                <Badge variant="outline" className="text-xs font-normal">
-                  +{tip.tags.length - 3}
-                </Badge>
-              )}
-            </div>
-          </>
+          <div className="flex flex-wrap gap-2">
+            {tip.tags.slice(0, 3).map((tag) => (
+              <Badge
+                key={tag.name}
+                variant="outline"
+                className="text-xs font-normal hover:bg-accent transition-colors cursor-pointer"
+              >
+                <Tag className="w-3 h-3 mr-1" />
+                {tag.name}
+              </Badge>
+            ))}
+            {tip.tags.length > 3 && (
+              <Badge variant="outline" className="text-xs font-normal">
+                +{tip.tags.length - 3}
+              </Badge>
+            )}
+          </div>
         )}
       </CardContent>
 
