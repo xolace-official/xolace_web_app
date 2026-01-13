@@ -28,7 +28,7 @@ export function EmptyContent({
       className={cn(
         "flex justify-center items-center flex-col rounded-xl gap-y-3 @container",
         options?.disableBorder ? "" : "border",
-        options?.disablePadding ? "" : "px-5 py-12",
+        options?.disablePadding ? "" : "px-4 py-8",
         className,
       )}
     >
