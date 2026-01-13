@@ -4,6 +4,21 @@ import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
 import type { HealthArticleInterface } from "@/features/health-space/health-tips/index";
 
+/**
+ * Render a full health-tip article layout including metadata, author, content, and tags.
+ *
+ * Renders the article's category, estimated read time, optional published date, author avatar and name (defaults to "Anonymous" when missing), optional excerpt, main content, and optional tag badges.
+ *
+ * @param article - Health article data containing fields used for rendering:
+ *   - category.display_name: displayed above the content
+ *   - read_time_minutes: shown as "{n} min"
+ *   - published_at (optional): when present, shown as a localized short date
+ *   - author.avatar_url and author.username: avatar image (falls back to a user icon) and author name
+ *   - excerpt (optional): short summary rendered before the main content
+ *   - content: main article body (preserves whitespace)
+ *   - tags: array of tag objects with `name` rendered as badges when non-empty
+ * @returns The component's rendered UI for the provided health article.
+ */
 export function HealthTipFullArticle({
   article,
 }: {
