@@ -1,0 +1,125 @@
+"use client";
+import Image from "next/image";
+import { GlimpseInterface } from "@/features/health-space/glimpse/index";
+import { Button } from "@/components/ui/button";
+import Link from "next/link";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { formatDuration, formatNumber, formatRelativeTime } from "@/utils";
+
+import {
+  EllipsisVertical,
+  Eye,
+  Heart,
+  LucideIcon,
+  Bookmark,
+  Share2,
+  Flag,
+  Copy,
+} from "lucide-react";
+
+const actions: { key: string; label: string; icon: LucideIcon }[] = [
+  { key: "save", label: "Save", icon: Bookmark },
+  { key: "share", label: "Share", icon: Share2 },
+  { key: "report", label: "Report", icon: Flag },
+  { key: "copy", label: "Copy", icon: Copy },
+];
+
+interface StoriesCardProps {
+  glimpse: GlimpseInterface;
+}
+
+export const GlimpseCard = ({ glimpse }: StoriesCardProps) => {
+  return (
+    <div className="group cursor-pointer p-2 rounded-lg hover:bg-muted hover:shadow-sm">
+      <div className="relative w-full aspect-video overflow-hidden rounded-lg  border border-border">
+        <Link href={`/glimpse/${glimpse.id}`}>
+          <Image
+            src={glimpse.thumbnail_url}
+            alt={glimpse.title || "Glimpse video"}
+            fill
+            sizes="(max-width: 768px) 100vw, 33vw"
+            className="object-cover"
+          />
+        </Link>
+
+        <div className="text-destructive absolute bottom-2 right-2 px-1.5 py-0.5 rounded text-xs font-semibold">
+          {formatDuration(glimpse.duration_seconds)}
+        </div>
+      </div>
+
+      <div className={"flex items-center justify-between"}>
+        <div className="flex gap-2 mt-2">
+          <div className="relative w-9 h-9 rounded-full overflow-hidden bg-muted flex-shrink-0 border-2 border-border">
+            <Image
+              src={glimpse.author_avatar_url}
+              alt={glimpse.author_display_name}
+              fill
+              className="object-cover"
+            />
+          </div>
+
+          <div className="flex-1 min-w-0">
+            <h3 className="text-sm font-bold text-foreground line-clamp-2 mb-1 group-hover:text-primary transition-colors">
+              {glimpse.title || "Untitled Glimpse"}
+            </h3>
+
+            {/* Author Name */}
+            <p className="text-xs text-muted-foreground font-semibold mb-0.5">
+              {glimpse.author_display_name}
+            </p>
+
+            <div className="flex items-center gap-1 text-xs text-muted-foreground">
+              <div className="flex items-center gap-1">
+                <Eye className="w-3 h-3" />
+                <span className="font-semibold">
+                  {formatNumber(glimpse.views_count)}
+                </span>
+              </div>
+              <span>•</span>
+              <div className="flex items-center gap-1">
+                <Heart className="w-3 h-3" />
+                <span className="font-semibold">
+                  {formatNumber(glimpse.likes_count)}
+                </span>
+              </div>
+              {glimpse.published_at && (
+                <>
+                  <span>•</span>
+                  <span className="font-semibold">
+                    {formatRelativeTime(glimpse.published_at)}
+                  </span>
+                </>
+              )}
+            </div>
+          </div>
+        </div>
+        <DropdownMenu modal={false}>
+          <DropdownMenuTrigger asChild>
+            <Button variant="ghost" aria-label="Open menu">
+              <EllipsisVertical />
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent className="w-40" align="end">
+            {actions.map((action) => {
+              const IconComponent = action.icon;
+              return (
+                <DropdownMenuItem
+                  key={action.key}
+                  onSelect={() => ""}
+                  className={"flex flex-row items-center gap-2"}
+                >
+                  <IconComponent className={"w-4 h-4"} /> {action.label}
+                </DropdownMenuItem>
+              );
+            })}
+          </DropdownMenuContent>
+        </DropdownMenu>
+      </div>
+    </div>
+  );
+};
