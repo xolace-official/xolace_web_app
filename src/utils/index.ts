@@ -37,6 +37,12 @@ export const formatNumber = (count: number): string => {
   return count.toString();
 };
 
+export const formatDuration = (seconds: number) => {
+  const mins = Math.floor(seconds / 60);
+  const secs = seconds % 60;
+  return `${mins}:${secs.toString().padStart(2, "0")}`;
+};
+
 // Default URL
 export const defaultUrl = process.env.VERCEL_URL
   ? `https://${process.env.VERCEL_URL}`
