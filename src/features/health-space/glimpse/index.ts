@@ -15,7 +15,7 @@ export interface GlimpseInterface {
   saves_count: number;
   is_featured: boolean;
   is_recommended: boolean;
-  published_at: string | null;
+  published_at: Date | string | number;
   tags: string[];
 }
 
