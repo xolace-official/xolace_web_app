@@ -17,10 +17,10 @@ export const GlimpseVideo = ({ videoId }: { videoId: string }) => {
     <PageContainer
       title={video.title}
       actions={<ThemeSwitcher key={"theme-switcher"} />}
-      externalContent={<GlimpseTranscript />}
+      externalContent={<GlimpseTranscript glimpse={video} />}
     >
       <PageHeading className="px-2 md:px-0" />
-      <div className="flex flex-col gap-4 px-2 md:px-0">
+      <div className="w-full flex px-2 md:px-0">
         <GlimpseDetails glimpse={video} />
       </div>
     </PageContainer>
