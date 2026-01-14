@@ -9,7 +9,7 @@ const SiteHeader = async (props: {
   "use cache";
   return (
     <div className="sticky top-0 w-full flex items-center justify-between px-3 py-3 bg-background lg:relative z-50 header-height">
-      <div className="flex items-center gap-2">
+      <div className="flex items-center gap-2 w-full">
         {!props.disableSidebarToggle && (
           <>
             <SidebarToggle />
@@ -21,7 +21,7 @@ const SiteHeader = async (props: {
           </>
         )}
 
-        <h1 className="text-sm font-medium pl-1 max-w-sm line-clamp-1">
+        <h1 className="text-sm font-medium pl-1 w-full line-clamp-1">
           {props.title}
         </h1>
       </div>
