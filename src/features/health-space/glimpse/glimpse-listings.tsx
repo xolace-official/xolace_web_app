@@ -1,6 +1,4 @@
 "use client";
-import { GlimpseFiltering } from "@/features/health-space/glimpse/glimpse-filtering";
-
 import { GlimpseCard } from "@/features/health-space/glimpse/glimpse-card";
 import { dummyGlimpses } from ".";
 import { useGlimpseFiltersServer } from "@/features/health-space/glimpse/glimpse-filter";
@@ -9,28 +7,28 @@ import { debounce } from "nuqs";
 import { EmptyContent } from "@/components/app/empty-content";
 import { SearchX } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { toast } from "sonner";
 
 export const GlimpseListings = () => {
-  const [{ query, tab }, setSearchParams] = useGlimpseFiltersServer({
+  const [{ query }, setSearchParams] = useGlimpseFiltersServer({
     limitUrlUpdates: debounce(250),
     shallow: false,
   });
   const [isPending, startTransition] = useTransition();
 
-  // Filter the data based on the search params
   let filteredData = dummyGlimpses.data;
 
   filteredData = filteredData.filter((item) => {
-    const matchesQuery =
+    return (
       !query ||
       item.title?.toLowerCase().includes(query.toLowerCase()) ||
       item.description?.toLowerCase().includes(query.toLowerCase()) ||
       item.author_display_name?.toString().includes(query.toLowerCase()) ||
-      item.tags?.toString().includes(query.toLowerCase());
-
-    return matchesQuery;
+      item.tags?.toString().includes(query.toLowerCase())
+    );
   });
 
+  // Handler for resetting input filtering to default
   const handleResetFiltering = () => {
     startTransition(async () => {
       await setSearchParams({
@@ -40,26 +38,55 @@ export const GlimpseListings = () => {
     });
   };
 
-  return (
-    <div className="w-full flex flex-col gap-4 md:gap-8">
-      <GlimpseFiltering />
+  //Handle save video to
+  const handleSaveVideo = (videoId: string) => {
+    toast.success("Video saved!");
+    console.log("Save video:", videoId);
+  };
 
-      {/* Stories Display */}
+  // Handler for sharing video
+  const handleShareVideo = (videoId: string) => {
+    toast.success("Share options opened!");
+    console.log("Share video:", videoId);
+  };
+
+  // Helper for reporting a video
+  const handleReportVideo = (videoId: string) => {
+    toast.success("Report submitted!");
+    console.log("Report video:", videoId);
+  };
+
+  // Handler for copy to clipboard
+  const handleCopyLink = (videoId: string) => {
+    navigator.clipboard
+      .writeText(`${window.location.origin}/glimpse/${videoId}`)
+      .then(() => {
+        toast.success("Link copied to clipboard");
+      })
+      .catch(() => {
+        toast.error("Failed to copy link");
+      });
+  };
+
+  return (
+    <div className={"w-full grid grid-cols-1 items-start gap-4"}>
       {filteredData.length > 0 ? (
-        <>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 md:gap-6">
-            {filteredData.map((glimpse) => (
-              <GlimpseCard key={glimpse.id} glimpse={glimpse} />
-            ))}
-          </div>
-          {/* Pagination Info (Optional) */}
-          {dummyGlimpses.meta.hasNextPage && (
-            <div className="text-center text-sm text-muted-foreground">
-              Showing {dummyGlimpses.data.length} of{" "}
-              {dummyGlimpses.meta.totalCount} stories
-            </div>
-          )}
-        </>
+        <div
+          className={
+            "grid grid-cols-1 items-center md:grid md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-4 gap-4"
+          }
+        >
+          {filteredData.map((glimpse) => (
+            <GlimpseCard
+              key={glimpse.id}
+              glimpse={glimpse}
+              onSave={handleSaveVideo}
+              onShare={handleShareVideo}
+              onReport={handleReportVideo}
+              onCopy={(videoId) => handleCopyLink(videoId)}
+            />
+          ))}
+        </div>
       ) : (
         <div className="col-span-1 md:col-span-3 lg:col-span-3 xl:col-span-4">
           <EmptyContent
