@@ -1,19 +1,18 @@
 import { PageContainer } from "@/components/app/page-container";
 import { ThemeSwitcher } from "@/components/shared/theme-switcher";
-import { PageHeading } from "@/components/shared/layout/page-heading";
 import { GlimpseListings } from "@/features/health-space/glimpse/glimpse-listings";
+import { GlimpseFiltering } from "@/features/health-space/glimpse/glimpse-filtering";
 
 export const GlimpsePage = () => {
   return (
     <PageContainer
-      title="Glimpse: Real stories. Real voices."
+      title={<GlimpseFiltering />}
       actions={<ThemeSwitcher key={"theme-switcher"} />}
-      className={"w-full flex justify-start"}
-      containerClassName={"flex flex-row items-start justify-start"}
-      contentClassName={"w-full flex flex-row"}
+      className={"w-full "}
+      containerClassName={"w-full flex-1"}
+      contentClassName={"w-full max-w-none flex flex-col"}
     >
-      <PageHeading className="px-2 md:px-0" />
-      <div className="flex px-2 md:px-0">
+      <div className={"px-0"}>
         <GlimpseListings />
       </div>
     </PageContainer>
