@@ -24,3 +24,13 @@ export async function setCookie(name: string, value: string, maxAge: number) {
   // biome-ignore lint/suspicious/noDocumentCookie: Fallback for browsers without cookieStore
   document.cookie = `${name}=${value}; path=/; max-age=${maxAge}`;
 }
+
+export function createIframeLink(videoId: string, startTime?: number) {
+  let base = `https://iframe.mediadelivery.net/embed/468693/${videoId}?autoplay=true&preload=true`;
+
+  if (startTime && startTime > 0) {
+    base += `&start=${startTime}`;
+  }
+
+  return base;
+}
