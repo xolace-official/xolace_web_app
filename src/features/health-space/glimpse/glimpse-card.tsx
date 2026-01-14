@@ -22,21 +22,36 @@ import {
   Copy,
 } from "lucide-react";
 
-const actions: { key: string; label: string; icon: LucideIcon }[] = [
-  { key: "save", label: "Save", icon: Bookmark },
-  { key: "share", label: "Share", icon: Share2 },
-  { key: "report", label: "Report", icon: Flag },
-  { key: "copy", label: "Copy", icon: Copy },
-];
-
 interface StoriesCardProps {
   glimpse: GlimpseInterface;
+  onSave: (value: string) => void;
+  onShare: (value: string) => void;
+  onReport: (value: string) => void;
+  onCopy: (value: string) => void;
 }
 
-export const GlimpseCard = ({ glimpse }: StoriesCardProps) => {
+export const GlimpseCard = ({
+  glimpse,
+  onCopy,
+  onShare,
+  onReport,
+  onSave,
+}: StoriesCardProps) => {
+  const actions: {
+    key: string;
+    label: string;
+    icon: LucideIcon;
+    onClick: (value: string) => void;
+  }[] = [
+    { key: "save", label: "Save", icon: Bookmark, onClick: onSave },
+    { key: "share", label: "Share", icon: Share2, onClick: onShare },
+    { key: "report", label: "Report", icon: Flag, onClick: onReport },
+    { key: "copy", label: "Copy Link", icon: Copy, onClick: onCopy },
+  ];
+
   return (
     <div className="group cursor-pointer p-2 rounded-lg hover:bg-muted hover:shadow-sm">
-      <div className="relative w-full aspect-video overflow-hidden rounded-lg  border border-border">
+      <div className="relative w-full aspect-video overflow-hidden rounded-lg border border-border">
         <Link href={`/glimpse/${glimpse.id}`}>
           <Image
             src={glimpse.thumbnail_url}
@@ -52,7 +67,7 @@ export const GlimpseCard = ({ glimpse }: StoriesCardProps) => {
         </div>
       </div>
 
-      <div className={"flex items-center justify-between"}>
+      <div className={"flex items-start justify-between"}>
         <div className="flex gap-2 mt-2">
           <div className="relative w-9 h-9 rounded-full overflow-hidden bg-muted flex-shrink-0 border-2 border-border">
             <Image
@@ -68,7 +83,6 @@ export const GlimpseCard = ({ glimpse }: StoriesCardProps) => {
               {glimpse.title || "Untitled Glimpse"}
             </h3>
 
-            {/* Author Name */}
             <p className="text-xs text-muted-foreground font-semibold mb-0.5">
               {glimpse.author_display_name}
             </p>
@@ -110,7 +124,7 @@ export const GlimpseCard = ({ glimpse }: StoriesCardProps) => {
               return (
                 <DropdownMenuItem
                   key={action.key}
-                  onSelect={() => ""}
+                  onSelect={() => action.onClick(glimpse.id)}
                   className={"flex flex-row items-center gap-2"}
                 >
                   <IconComponent className={"w-4 h-4"} /> {action.label}
