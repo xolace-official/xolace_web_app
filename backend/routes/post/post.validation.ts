@@ -52,8 +52,7 @@ export const getCampfirePostsParamsSchema = z.object({
 });
 
 export const getCampfirePostsQuerySchema = z.object({
-  cursor: z
-    .string()
+  cursor: z.iso
     .datetime()
     .optional()
     .openapi({
