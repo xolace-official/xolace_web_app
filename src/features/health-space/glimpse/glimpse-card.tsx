@@ -79,9 +79,33 @@ export const GlimpseCard = ({
           </div>
 
           <div className="flex-1 min-w-0">
-            <h3 className="text-sm font-bold text-foreground line-clamp-2 mb-1 group-hover:text-primary transition-colors">
-              {glimpse.title || "Untitled Glimpse"}
-            </h3>
+            <div className={"flex items-center justify-between"}>
+              <h3 className="text-sm font-bold text-foreground line-clamp-2 mb-1 group-hover:text-primary transition-colors">
+                {glimpse.title || "Untitled Glimpse"}
+              </h3>
+
+              <DropdownMenu modal={false}>
+                <DropdownMenuTrigger asChild>
+                  <Button variant="ghost" aria-label="Open menu">
+                    <EllipsisVertical />
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent className="w-40" align="end">
+                  {actions.map((action) => {
+                    const IconComponent = action.icon;
+                    return (
+                      <DropdownMenuItem
+                        key={action.key}
+                        onSelect={() => action.onClick(glimpse.id)}
+                        className={"flex flex-row items-center gap-2"}
+                      >
+                        <IconComponent className={"w-4 h-4"} /> {action.label}
+                      </DropdownMenuItem>
+                    );
+                  })}
+                </DropdownMenuContent>
+              </DropdownMenu>
+            </div>
 
             <p className="text-xs text-muted-foreground font-semibold mb-0.5">
               {glimpse.author_display_name}
@@ -112,27 +136,6 @@ export const GlimpseCard = ({
             </div>
           </div>
         </div>
-        <DropdownMenu modal={false}>
-          <DropdownMenuTrigger asChild>
-            <Button variant="ghost" aria-label="Open menu">
-              <EllipsisVertical />
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent className="w-40" align="end">
-            {actions.map((action) => {
-              const IconComponent = action.icon;
-              return (
-                <DropdownMenuItem
-                  key={action.key}
-                  onSelect={() => action.onClick(glimpse.id)}
-                  className={"flex flex-row items-center gap-2"}
-                >
-                  <IconComponent className={"w-4 h-4"} /> {action.label}
-                </DropdownMenuItem>
-              );
-            })}
-          </DropdownMenuContent>
-        </DropdownMenu>
       </div>
     </div>
   );
