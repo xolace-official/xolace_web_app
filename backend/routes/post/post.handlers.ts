@@ -18,6 +18,7 @@ export const getCampfirePosts: AppRouteHandler<GetCampfirePostsRoute> = async (
 ) => {
   const supabase = c.get("supabase");
   const { campfireId } = c.req.valid("param");
+  console.log("campfireId ", campfireId);
   const { cursor, limit: rawLimit } = c.req.valid("query");
 
   const limit = Math.min(Number(rawLimit) || DEFAULT_LIMIT, MAX_LIMIT);
@@ -73,7 +74,7 @@ export const getCampfirePosts: AppRouteHandler<GetCampfirePostsRoute> = async (
           slug,
           icon_path
         ),
-        media:post_media (
+        media:post_media!post_media_post_id_fkey (
           id,
           type,
           storage_path,

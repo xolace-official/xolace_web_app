@@ -21,7 +21,7 @@ const internalServerErrorSchema = createMessageObjectSchema(
 // =============================================================================
 
 export const getCampfirePosts = createRoute({
-  path: "/:campfireId/posts",
+  path: "/{campfireId}/posts",
   method: "get",
   summary: "Get posts for a campfire",
   description:
