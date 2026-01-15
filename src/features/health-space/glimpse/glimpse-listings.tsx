@@ -73,7 +73,7 @@ export const GlimpseListings = () => {
       {filteredData.length > 0 ? (
         <div
           className={
-            "grid grid-cols-1 items-center md:grid md:grid-cols-3 gap-4"
+            "grid grid-cols-1 items-center md:grid md:grid-cols-3 3xl:grid-cols-4 gap-4"
           }
         >
           {filteredData.map((glimpse) => (
