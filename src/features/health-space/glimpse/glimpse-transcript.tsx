@@ -15,7 +15,7 @@ export const GlimpseTranscript = ({ glimpse }: GlimpseTranscriptProps) => {
   );
 
   return (
-    <div className="min-h-screen rounded-lg">
+    <div className=" rounded-lg">
       <div className="pt-4 pb-10 lg:p-6">
         <Tabs
           value={activeTab}
