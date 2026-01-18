@@ -143,7 +143,7 @@ export const getBatchMembership = createRoute({
 
 export const getCampfireMembership = createRoute({
   method: "get",
-  path: "/:campfireId/membership",
+  path: "/{campfireId}/membership",
   summary: "Get user's membership for a campfire",
   description:
     "Returns the authenticated user's membership status for a specific campfire. " +
@@ -222,7 +222,7 @@ export const getCampfireLanes = createRoute({
 });
 
 export const getCampfireDetails = createRoute({
-  path: "/:slug",
+  path: "/{slug}",
   method: "get",
   summary: "Get campfire details",
   description:
