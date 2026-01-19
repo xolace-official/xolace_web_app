@@ -1,10 +1,10 @@
 "use client";
-import { ParamsSearchBar } from "@/components/shared/params-search-bar";
-import { useTransition } from "react";
-import { debounce } from "nuqs";
-import { useGlimpseFiltersServer } from "@/features/health-space/glimpse/glimpse-filter";
-import { Button } from "@/components/ui/button";
 import { Upload } from "lucide-react";
+import { debounce } from "nuqs";
+import { useTransition } from "react";
+import { ParamsSearchBar } from "@/components/shared/params-search-bar";
+import { Button } from "@/components/ui/button";
+import { useGlimpseFiltersServer } from "@/features/health-space/glimpse/glimpse-filter";
 
 export const GlimpseFiltering = () => {
   const [isPending, startTransition] = useTransition();
@@ -33,8 +33,9 @@ export const GlimpseFiltering = () => {
           }}
           isLoading={isPending}
         />
-        <Button variant={"destructive"} size={"sm"}>
-          <Upload /> <span className={"sr hidden md:flex"}>Upload</span>
+        <Button variant={"destructive"} size={"sm"} aria-label="Upload">
+          <Upload aria-hidden="true" />{" "}
+          <span className={"sr hidden md:flex"}>Upload</span>
         </Button>
       </div>
     </div>
