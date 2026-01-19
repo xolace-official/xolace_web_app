@@ -35,7 +35,7 @@ export const GlimpseFiltering = () => {
         />
         <Button variant={"destructive"} size={"sm"} aria-label="Upload">
           <Upload aria-hidden="true" />{" "}
-          <span className={"sr hidden md:flex"}>Upload</span>
+          <span className={"hidden md:flex"}>Upload</span>
         </Button>
       </div>
     </div>

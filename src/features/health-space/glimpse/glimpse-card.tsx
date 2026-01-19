@@ -74,6 +74,7 @@ export const GlimpseCard = ({
               src={glimpse.author_avatar_url}
               alt={glimpse.author_display_name}
               fill
+              sizes="36px"
               className="object-cover"
             />
           </div>
