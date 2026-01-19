@@ -130,7 +130,7 @@ export const postItemSchema = z.object({
 export const getCampfirePostsMetaSchema = z.object({
   campfire_id: uuidSchema,
   has_more: z.boolean(),
-  next_cursor: z.string().datetime().nullable(),
+  next_cursor: timestampSchema.nullable(),
 });
 
 export const getCampfirePostsResponse = z.object({
