@@ -1,26 +1,26 @@
 "use client";
+
+import {
+  Bookmark,
+  Copy,
+  EllipsisVertical,
+  Eye,
+  Flag,
+  Heart,
+  type LucideIcon,
+  Share2,
+} from "lucide-react";
 import Image from "next/image";
-import { GlimpseInterface } from "@/features/health-space/glimpse/index";
-import { Button } from "@/components/ui/button";
 import Link from "next/link";
+import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import type { GlimpseInterface } from "@/features/health-space/glimpse/index";
 import { formatDuration, formatNumber, formatRelativeTime } from "@/utils";
-
-import {
-  EllipsisVertical,
-  Eye,
-  Heart,
-  LucideIcon,
-  Bookmark,
-  Share2,
-  Flag,
-  Copy,
-} from "lucide-react";
 
 interface StoriesCardProps {
   glimpse: GlimpseInterface;
@@ -50,7 +50,7 @@ export const GlimpseCard = ({
   ];
 
   return (
-    <div className="group cursor-pointer p-2 rounded-lg hover:bg-muted hover:shadow-sm">
+    <div className="group p-2 rounded-lg hover:bg-muted hover:shadow-sm">
       <div className="relative w-full aspect-video overflow-hidden rounded-lg border border-border">
         <Link href={`/glimpse/${glimpse.id}`}>
           <Image
@@ -69,7 +69,7 @@ export const GlimpseCard = ({
 
       <div className={"flex items-start justify-between"}>
         <div className="flex gap-2 mt-2">
-          <div className="relative w-9 h-9 rounded-full overflow-hidden bg-muted flex-shrink-0 border-2 border-border">
+          <div className="relative w-9 h-9 rounded-full overflow-hidden bg-muted shrink-0 border-2 border-border">
             <Image
               src={glimpse.author_avatar_url}
               alt={glimpse.author_display_name}

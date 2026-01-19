@@ -1,16 +1,15 @@
 "use client";
 
-import { GlimpseInterface } from "@/features/health-space/glimpse/index";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { formatNumber, formatRelativeTime } from "@/utils";
-import VideoPlayer from "@/features/health-space/glimpse/video-player";
+import { IconBookmark } from "@tabler/icons-react";
 import {
   PostMetrics,
   PostMetricsAction,
   PostMetricsVote,
 } from "@/components/shared/post-metrics";
-import { IconBookmark } from "@tabler/icons-react";
-import type * as React from "react";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import type { GlimpseInterface } from "@/features/health-space/glimpse/index";
+import VideoPlayer from "@/features/health-space/glimpse/video-player";
+import { formatNumber, formatRelativeTime } from "@/utils";
 
 export const GlimpseDetails = ({ glimpse }: { glimpse: GlimpseInterface }) => {
   return (
@@ -23,7 +22,7 @@ export const GlimpseDetails = ({ glimpse }: { glimpse: GlimpseInterface }) => {
           <div className="flex items-center gap-2">
             <Avatar className="h-10 w-10">
               <AvatarImage
-                src={glimpse.author_display_name || "/placeholder.svg"}
+                src={glimpse.author_avatar_url || "/placeholder.svg"}
                 alt={glimpse.author_display_name}
               />
               <AvatarFallback className="bg-muted">

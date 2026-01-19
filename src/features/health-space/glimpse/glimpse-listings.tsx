@@ -1,13 +1,13 @@
 "use client";
-import { GlimpseCard } from "@/features/health-space/glimpse/glimpse-card";
-import { dummyGlimpses } from ".";
-import { useGlimpseFiltersServer } from "@/features/health-space/glimpse/glimpse-filter";
-import { useTransition } from "react";
-import { debounce } from "nuqs";
-import { EmptyContent } from "@/components/app/empty-content";
 import { SearchX } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { debounce } from "nuqs";
+import { useTransition } from "react";
 import { toast } from "sonner";
+import { EmptyContent } from "@/components/app/empty-content";
+import { Button } from "@/components/ui/button";
+import { GlimpseCard } from "@/features/health-space/glimpse/glimpse-card";
+import { useGlimpseFiltersServer } from "@/features/health-space/glimpse/glimpse-filter";
+import { dummyGlimpses } from ".";
 
 export const GlimpseListings = () => {
   const [{ query }, setSearchParams] = useGlimpseFiltersServer({
@@ -58,14 +58,22 @@ export const GlimpseListings = () => {
 
   // Handler for copy to clipboard
   const handleCopyLink = (videoId: string) => {
-    navigator.clipboard
-      .writeText(`${window.location.origin}/glimpse/${videoId}`)
-      .then(() => {
-        toast.success("Link copied to clipboard");
-      })
-      .catch(() => {
-        toast.error("Failed to copy link");
-      });
+    if (
+      window.isSecureContext &&
+      navigator.clipboard &&
+      typeof navigator.clipboard.writeText === "function"
+    ) {
+      navigator.clipboard
+        .writeText(`${window.location.origin}/glimpse/${videoId}`)
+        .then(() => {
+          toast.success("Link copied to clipboard");
+        })
+        .catch(() => {
+          toast.error("Failed to copy link");
+        });
+    } else {
+      toast.error("Clipboard not available in this context");
+    }
   };
 
   return (
