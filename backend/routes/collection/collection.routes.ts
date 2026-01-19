@@ -104,7 +104,7 @@ export const getCollectionsSimple = createRoute({
 
 export const getCollectionItems = createRoute({
   method: "get",
-  path: "/:collectionId/items",
+  path: "/{collectionId}/items",
   summary: "Get items in a collection",
   description:
     "Returns a paginated list of items in a collection with hydrated entity data. " +
@@ -271,7 +271,7 @@ export const unsaveItem = createRoute({
 
 export const deleteCollection = createRoute({
   method: "delete",
-  path: "/:collectionId",
+  path: "/{collectionId}",
   summary: "Delete collection",
   description: "Permanently deletes a collection and all its items.",
   tags,
