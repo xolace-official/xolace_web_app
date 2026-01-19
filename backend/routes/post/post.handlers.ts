@@ -39,7 +39,7 @@ export const getCampfirePosts: AppRouteHandler<GetCampfirePostsRoute> = async (
       );
     }
 
-    if (campfireCount === 0) {
+    if (!campfireCount) {
       return c.json(
         { message: "Campfire not found" },
         HttpStatusCodes.NOT_FOUND,
