@@ -55,14 +55,6 @@ export const notificationSchema = z.object({
 // ---------------------------------------------
 
 export const notificationsInboxQuery = z.object({
-  limit: z
-    .string()
-    .transform(Number)
-    .optional()
-    .openapi({
-      param: { name: "limit", in: "query" },
-      example: "20",
-    }),
   status: notificationStatusFilterEnum.default("all").openapi({
     param: { name: "status", in: "query" },
     example: "unread",
