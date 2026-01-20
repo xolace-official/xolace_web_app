@@ -10,6 +10,7 @@ import glimpse from "@backend/routes/glimpse/glimpse.index";
 import healthTip from "@backend/routes/health-tips/health-tip.index";
 import post from "@backend/routes/post/post.index";
 import profile from "@backend/routes/profile/profile.index";
+import notification from "@backend/routes/notification/notification.index";
 
 // import imports from "@backend/routes/import/import.index";
 
@@ -26,6 +27,7 @@ router.route("/health-tip", healthTip);
 router.route("/glimpse", glimpse);
 router.route("/comment", comment);
 router.route("/post", post);
+router.route("/notification", notification);
 // router.route("/import", imports);
 
 export default router;

@@ -826,6 +826,63 @@ export type Database = {
           },
         ];
       };
+      notifications: {
+        Row: {
+          actor_avatar_url: string | null;
+          actor_id: string | null;
+          actor_name: string | null;
+          created_at: string;
+          entity_id: string | null;
+          entity_type: string | null;
+          id: string;
+          is_read: boolean;
+          metadata: Json;
+          recipient_user_id: string;
+          type: string;
+        };
+        Insert: {
+          actor_avatar_url?: string | null;
+          actor_id?: string | null;
+          actor_name?: string | null;
+          created_at?: string;
+          entity_id?: string | null;
+          entity_type?: string | null;
+          id?: string;
+          is_read?: boolean;
+          metadata?: Json;
+          recipient_user_id: string;
+          type: string;
+        };
+        Update: {
+          actor_avatar_url?: string | null;
+          actor_id?: string | null;
+          actor_name?: string | null;
+          created_at?: string;
+          entity_id?: string | null;
+          entity_type?: string | null;
+          id?: string;
+          is_read?: boolean;
+          metadata?: Json;
+          recipient_user_id?: string;
+          type?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "notifications_actor_id_fkey";
+            columns: ["actor_id"];
+            isOneToOne: false;
+            referencedRelation: "profiles";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "notifications_recipient_user_id_fkey";
+            columns: ["recipient_user_id"];
+            isOneToOne: false;
+            referencedRelation: "profiles";
+            referencedColumns: ["id"];
+          },
+        ];
+      };
       post_media: {
         Row: {
           alt_text: string | null;
