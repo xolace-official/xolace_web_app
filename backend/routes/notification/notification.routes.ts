@@ -7,8 +7,8 @@ import {
   getNotificationParamsSchema,
   notificationsInboxQuery,
   notificationsInboxResponse,
-  unreadCountResponse,
   successResponse,
+  unreadCountResponse,
 } from "./notification.validation";
 
 const tags = ["Notifications"];
@@ -84,6 +84,10 @@ export const markNotificationAsRead = createRoute({
     [HttpStatusCodes.NO_CONTENT]: {
       description: "Notification marked as read",
     },
+    [HttpStatusCodes.BAD_REQUEST]: jsonContent(
+      createMessageObjectSchema("Bad request"),
+      "Invalid path parameters",
+    ),
     [HttpStatusCodes.UNAUTHORIZED]: jsonContent(
       unauthorizedErrorSchema,
       "Authentication required",
