@@ -65,22 +65,22 @@ export const notificationsInboxQuery = z.object({
     example: "thisWeek",
   }),
 
-  page: z
-    .string()
-    .default("0")
-    .transform(Number)
+  page: z.coerce
+    .number()
+    .int()
+    .min(0)
+    .default(0)
     .openapi({
       param: { name: "page", in: "query" },
       example: "0",
     }),
 
-  page_size: z
-    .string()
-    .default("20")
-    .transform(Number)
-    .refine((v) => v >= 1 && v <= 50, {
-      message: "page_size must be between 1 and 50",
-    })
+  page_size: z.coerce
+    .number()
+    .int()
+    .min(1)
+    .max(50)
+    .default(20)
     .openapi({
       param: { name: "page_size", in: "query" },
       example: "20",
