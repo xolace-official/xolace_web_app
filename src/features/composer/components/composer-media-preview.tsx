@@ -22,7 +22,7 @@ export function ComposerMediaPreview() {
         <button
           type="button"
           onClick={() => setMedia(null)}
-          className="absolute right-2 top-2 flex h-6 w-6 items-center justify-center rounded-full bg-black/60 text-white opacity-0 transition-opacity hover:bg-black/80 group-hover/media:opacity-100"
+          className="absolute right-2 top-2 flex h-6 w-6 items-center justify-center rounded-full bg-black/60 text-white lg:opacity-0 transition-opacity hover:bg-black/80 group-hover/media:opacity-100"
           aria-label="Remove image"
         >
           <X size={14} />
