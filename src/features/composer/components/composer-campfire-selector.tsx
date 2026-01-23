@@ -36,12 +36,12 @@ export function ComposerCampfireSelector() {
           "group flex max-sm:w-full items-center gap-3 rounded-2xl px-4 py-3 text-left transition-all duration-200",
           "bg-popover hover:bg-popover/90",
           "ring-1 ring-inset ring-primary",
-          "hover:ring-zinc-300 dark:hover:ring-zinc-700",
-          "focus:outline-none focus:ring-2 focus:ring-orange-500/20",
-          isOpen && "ring-zinc-300 dark:ring-zinc-700 bg-popover",
+          "hover:ring-border",
+          "focus:outline-none focus:ring-2 focus:ring-border",
+          isOpen && "ring-border bg-popover",
         )}
       >
-        <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-white shadow-sm ring-1 ring-zinc-200 dark:bg-zinc-800 dark:ring-zinc-700 overflow-hidden">
+        <div className="flex h-10 w-10 items-center justify-center rounded-xl shadow-sm ring-1 ring-border bg-muted overflow-hidden">
           {campfire?.iconUrl ? (
             <Image
               width={40}
@@ -57,7 +57,7 @@ export function ComposerCampfireSelector() {
 
         <div className="min-w-0 flex-1">
           <div className="flex items-center gap-2">
-            <span className="truncate text-sm font-semibold text-zinc-900 dark:text-zinc-100">
+            <span className="truncate text-sm font-semibold text-foreground">
               {campfire ? campfire.name : "Select a Campfire"}
             </span>
           </div>
@@ -68,7 +68,7 @@ export function ComposerCampfireSelector() {
                 campfire ? "bg-green-500" : "bg-zinc-400",
               )}
             />
-            <span className="text-xs font-medium text-zinc-500 dark:text-zinc-400">
+            <span className="text-xs font-medium text-muted-foreground">
               {campfire ? `/${campfire.slug}` : "Optional"}
             </span>
           </div>
@@ -77,7 +77,7 @@ export function ComposerCampfireSelector() {
         <ChevronDown
           size={18}
           className={cn(
-            "text-zinc-400 transition-transform duration-200 group-hover:text-zinc-600 dark:group-hover:text-zinc-300",
+            "text-muted-foreground transition-transform duration-200 group-hover:text-foreground",
             isOpen && "rotate-180",
           )}
         />
@@ -99,7 +99,7 @@ export function ComposerCampfireSelector() {
           <div
             className={cn(
               "absolute left-0 max-sm:right-0 md:min-w-58 top-[calc(100%+8px)] z-50 overflow-hidden rounded-2xl shadow-xl shadow-zinc-900/5 ring-1 ring-zinc-200 dark:ring-zinc-800",
-              "animate-in fade-in zoom-in-95 bg-white p-1.5 duration-100 dark:bg-zinc-900",
+              "animate-in fade-in zoom-in-95 bg-popover p-1.5 duration-100",
             )}
           >
             <div className="max-h-[320px] overflow-y-auto pr-1 scrollbar-thin scrollbar-thumb-zinc-200 dark:scrollbar-thumb-zinc-800">
@@ -108,7 +108,7 @@ export function ComposerCampfireSelector() {
                 <button
                   type="button"
                   onClick={handleClear}
-                  className="flex w-full items-center gap-3 rounded-xl px-3 py-3 text-left text-sm text-zinc-500 transition-all duration-200 hover:bg-zinc-50 dark:text-zinc-400 dark:hover:bg-zinc-800/50"
+                  className="flex w-full items-center gap-3 rounded-xl px-3 py-3 text-left text-sm text-muted-foreground transition-all duration-200 hover:bg-zinc-50 dark:text-zinc-400 dark:hover:bg-zinc-800/50"
                 >
                   <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-zinc-50 ring-1 ring-inset ring-zinc-100 dark:bg-zinc-800/50 dark:ring-zinc-800">
                     <Flame size={16} className="text-zinc-400" />
@@ -119,11 +119,8 @@ export function ComposerCampfireSelector() {
 
               {PLACEHOLDER_CAMPFIRES.length === 0 && !campfire ? (
                 <div className="flex flex-col items-center gap-2 py-6 text-center">
-                  <Flame
-                    size={20}
-                    className="text-zinc-400 dark:text-zinc-500"
-                  />
-                  <p className="text-xs text-zinc-500 dark:text-zinc-400">
+                  <Flame size={20} className="text-muted-foreground" />
+                  <p className="text-xs text-muted-foreground">
                     No campfires available
                   </p>
                 </div>
