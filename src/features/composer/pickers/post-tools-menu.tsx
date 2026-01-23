@@ -14,8 +14,8 @@ export function PostToolsMenu() {
         type="button"
         onClick={() => setIsSensitive(!isSensitive)}
         className={cn(
-          "flex items-center gap-2.5 rounded-md px-2.5 py-2 text-left text-sm transition-colors hover:bg-accent",
-          isSensitive && "bg-accent",
+          "flex items-center gap-2.5 rounded-md px-2.5 py-2 text-left text-sm transition-colors hover:bg-accent/20",
+          isSensitive && "bg-accent/20",
         )}
       >
         <AlertTriangle size={15} className="shrink-0 text-amber-500" />
@@ -28,7 +28,7 @@ export function PostToolsMenu() {
         <div
           className={cn(
             "h-4 w-7 rounded-full transition-colors",
-            isSensitive ? "bg-primary" : "bg-muted",
+            isSensitive ? "bg-primary/20" : "bg-muted",
           )}
         >
           <div
@@ -46,8 +46,8 @@ export function PostToolsMenu() {
         type="button"
         onClick={() => setAutoExpiry(!autoExpiry)}
         className={cn(
-          "flex items-center gap-2.5 rounded-md px-2.5 py-2 text-left text-sm transition-colors hover:bg-accent",
-          autoExpiry && "bg-accent",
+          "flex items-center gap-2.5 rounded-md px-2.5 py-2 text-left text-sm transition-colors hover:bg-accent/20",
+          autoExpiry && "bg-accent/20",
         )}
       >
         <Clock size={15} className="shrink-0 text-blue-500" />
@@ -60,7 +60,7 @@ export function PostToolsMenu() {
         <div
           className={cn(
             "h-4 w-7 rounded-full transition-colors",
-            autoExpiry ? "bg-primary" : "bg-muted",
+            autoExpiry ? "bg-primary/20" : "bg-muted",
           )}
         >
           <div
