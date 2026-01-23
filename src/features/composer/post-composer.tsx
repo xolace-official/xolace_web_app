@@ -1,0 +1,48 @@
+"use client";
+
+import { ComposerProvider, useComposer } from "./composer-context";
+import { ComposerTextarea } from "./components/composer-textarea";
+import { ComposerMediaPreview } from "./components/composer-media-preview";
+import { ComposerMoodIndicator } from "./components/composer-mood-indicator";
+import { ComposerTagsBar } from "./components/composer-tags-bar";
+import { ComposerToolbar } from "./components/toolbar/composer-toolbar";
+import { ComposerFooter } from "./components/composer-footer";
+import { ComposerPromptBanner } from "./components/composer-prompt-banner";
+import type { ComposerFormValues } from "./composer-types";
+
+export function PostComposer() {
+  return (
+    <ComposerProvider>
+      <ComposerForm />
+    </ComposerProvider>
+  );
+}
+
+function ComposerForm() {
+  const { form } = useComposer();
+
+  const onSubmit = (data: ComposerFormValues) => {
+    // No mutation at the page level — this is a UI-only shell.
+    // The parent page or a submission hook will handle the actual POST.
+    console.log("Composer submit:", data);
+  };
+
+  return (
+    <form
+      onSubmit={form.handleSubmit(onSubmit)}
+      className="flex flex-col gap-3"
+    >
+      <ComposerPromptBanner />
+
+      <div className="overflow-hidden rounded-2xl border bg-card">
+        <ComposerTextarea />
+        <ComposerMediaPreview />
+        <ComposerMoodIndicator />
+        <ComposerTagsBar />
+        <ComposerToolbar />
+      </div>
+
+      <ComposerFooter />
+    </form>
+  );
+}
