@@ -33,7 +33,7 @@ export function ComposerCampfireSelector() {
         type="button"
         onClick={() => setIsOpen(!isOpen)}
         className={cn(
-          "group flex w-full items-center gap-3 rounded-2xl px-4 py-3 text-left transition-all duration-200",
+          "group flex max-sm:w-full items-center gap-3 rounded-2xl px-4 py-3 text-left transition-all duration-200",
           "bg-zinc-50 hover:bg-zinc-100 dark:bg-zinc-900 dark:hover:bg-zinc-800",
           "ring-1 ring-inset ring-zinc-200 dark:ring-zinc-800",
           "hover:ring-zinc-300 dark:hover:ring-zinc-700",
@@ -99,7 +99,7 @@ export function ComposerCampfireSelector() {
           {/* Dropdown menu */}
           <div
             className={cn(
-              "absolute left-0 right-0 top-[calc(100%+8px)] z-50 overflow-hidden rounded-2xl shadow-xl shadow-zinc-900/5 ring-1 ring-zinc-200 dark:ring-zinc-800",
+              "absolute left-0 max-sm:right-0 md:min-w-58 top-[calc(100%+8px)] z-50 overflow-hidden rounded-2xl shadow-xl shadow-zinc-900/5 ring-1 ring-zinc-200 dark:ring-zinc-800",
               "animate-in fade-in zoom-in-95 bg-white p-1.5 duration-100 dark:bg-zinc-900",
             )}
           >
