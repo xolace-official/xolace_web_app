@@ -4,7 +4,6 @@ import { ToolbarImageButton } from "./toolbar-image-button";
 import { ToolbarMoodButton } from "./toolbar-mood-button";
 import { ToolbarEmojiButton } from "./toolbar-emoji-button";
 import { ToolbarVoiceButton } from "./toolbar-voice-button";
-import { ToolbarCampfireButton } from "./toolbar-campfire-button";
 import { ToolbarMoreButton } from "./toolbar-more-button";
 
 export function ComposerToolbar() {
@@ -14,7 +13,6 @@ export function ComposerToolbar() {
       <ToolbarMoodButton />
       <ToolbarEmojiButton />
       <ToolbarVoiceButton />
-      <ToolbarCampfireButton />
       <div className="ml-auto">
         <ToolbarMoreButton />
       </div>

@@ -1,14 +1,15 @@
 "use client";
 
 import { ComposerProvider, useComposer } from "./composer-context";
-import { ComposerTextarea } from "./components/composer-textarea";
+import type { ComposerFormValues } from "./composer-types";
+import { ComposerCampfireSelector } from "./components/composer-campfire-selector";
+import { ComposerFooter } from "./components/composer-footer";
 import { ComposerMediaPreview } from "./components/composer-media-preview";
 import { ComposerMoodIndicator } from "./components/composer-mood-indicator";
-import { ComposerTagsBar } from "./components/composer-tags-bar";
-import { ComposerToolbar } from "./components/toolbar/composer-toolbar";
-import { ComposerFooter } from "./components/composer-footer";
 import { ComposerPromptBanner } from "./components/composer-prompt-banner";
-import type { ComposerFormValues } from "./composer-types";
+import { ComposerTagsBar } from "./components/composer-tags-bar";
+import { ComposerTextarea } from "./components/composer-textarea";
+import { ComposerToolbar } from "./components/toolbar/composer-toolbar";
 
 export function PostComposer() {
   return (
@@ -32,6 +33,7 @@ function ComposerForm() {
       onSubmit={form.handleSubmit(onSubmit)}
       className="flex flex-col gap-3"
     >
+      <ComposerCampfireSelector />
       <ComposerPromptBanner />
 
       <div className="overflow-hidden rounded-2xl border bg-card">
