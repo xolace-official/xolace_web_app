@@ -1,7 +1,7 @@
-import { PostComposer } from "@/features/composer";
 import { PageContainer } from "@/components/app/page-container";
-import { ThemeSwitcher } from "@/components/shared/theme-switcher";
 import { LegalFooter } from "@/components/shared/legal-footer";
+import { ThemeSwitcher } from "@/components/shared/theme-switcher";
+import { PostComposer } from "@/features/composer";
 
 export const CreatePostPage = () => {
   return (
