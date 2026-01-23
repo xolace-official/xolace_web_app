@@ -1,7 +1,5 @@
 "use client";
 
-import { ComposerProvider, useComposer } from "./composer-context";
-import type { ComposerFormValues } from "./composer-types";
 import { ComposerCampfireSelector } from "./components/composer-campfire-selector";
 import { ComposerFooter } from "./components/composer-footer";
 import { ComposerMediaPreview } from "./components/composer-media-preview";
@@ -10,6 +8,8 @@ import { ComposerPromptBanner } from "./components/composer-prompt-banner";
 import { ComposerTagsBar } from "./components/composer-tags-bar";
 import { ComposerTextarea } from "./components/composer-textarea";
 import { ComposerToolbar } from "./components/toolbar/composer-toolbar";
+import { ComposerProvider, useComposer } from "./composer-context";
+import type { ComposerFormValues } from "./composer-types";
 
 export function PostComposer() {
   return (
