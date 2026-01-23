@@ -34,12 +34,11 @@ export function ComposerCampfireSelector() {
         onClick={() => setIsOpen(!isOpen)}
         className={cn(
           "group flex max-sm:w-full items-center gap-3 rounded-2xl px-4 py-3 text-left transition-all duration-200",
-          "bg-zinc-50 hover:bg-zinc-100 dark:bg-zinc-900 dark:hover:bg-zinc-800",
-          "ring-1 ring-inset ring-zinc-200 dark:ring-zinc-800",
+          "bg-popover hover:bg-popover/90",
+          "ring-1 ring-inset ring-primary",
           "hover:ring-zinc-300 dark:hover:ring-zinc-700",
           "focus:outline-none focus:ring-2 focus:ring-orange-500/20",
-          isOpen &&
-            "ring-zinc-300 dark:ring-zinc-700 bg-zinc-100 dark:bg-zinc-800",
+          isOpen && "ring-zinc-300 dark:ring-zinc-700 bg-popover",
         )}
       >
         <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-white shadow-sm ring-1 ring-zinc-200 dark:bg-zinc-800 dark:ring-zinc-700 overflow-hidden">
