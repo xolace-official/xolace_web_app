@@ -32,6 +32,9 @@ export function ComposerCampfireSelector() {
       <button
         type="button"
         onClick={() => setIsOpen(!isOpen)}
+        onKeyDown={(e) => e.key === "Escape" && setIsOpen(false)}
+        aria-expanded={isOpen}
+        aria-haspopup="listbox"
         className={cn(
           "group flex max-sm:w-full items-center gap-3 rounded-2xl px-4 py-3 text-left transition-all duration-200",
           "bg-popover hover:bg-popover/90",
@@ -98,6 +101,9 @@ export function ComposerCampfireSelector() {
 
       {/* Dropdown menu — preserved in DOM, toggled via visibility/opacity */}
       <div
+        role="listbox"
+        aria-label="Campfire selection"
+        onKeyDown={(e) => e.key === "Escape" && setIsOpen(false)}
         className={cn(
           "absolute left-0 max-sm:right-0 md:min-w-58 top-[calc(100%+8px)] z-50 overflow-hidden rounded-2xl shadow-xl shadow-zinc-900/5 ring-1 ring-zinc-200 dark:ring-zinc-800",
           "bg-popover p-1.5 transition-all duration-100 origin-top",
@@ -111,6 +117,7 @@ export function ComposerCampfireSelector() {
           {campfire && (
             <button
               type="button"
+              role="option"
               onClick={handleClear}
               className="flex w-full items-center gap-3 rounded-xl px-3 py-3 text-left text-sm text-muted-foreground transition-all duration-200 hover:bg-zinc-50 dark:text-zinc-400 dark:hover:bg-zinc-800/50"
             >
@@ -135,6 +142,8 @@ export function ComposerCampfireSelector() {
                 <button
                   key={c.id}
                   type="button"
+                  role="option"
+                  aria-selected={isSelected}
                   onClick={() => handleSelect(c)}
                   className={cn(
                     "flex w-full items-start gap-3 rounded-xl px-3 py-3 text-left transition-all duration-200",
