@@ -9,7 +9,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import { useComposer } from "../../composer-context";
+import { useComposerForm } from "../../composer-context";
 
 const EmojiPicker = dynamic(() => import("emoji-picker-react"), {
   ssr: false,
@@ -25,7 +25,7 @@ interface EmojiData {
 }
 
 export function ToolbarEmojiButton() {
-  const { insertAtCursor } = useComposer();
+  const { insertAtCursor } = useComposerForm();
   const [open, setOpen] = useState(false);
 
   const handleEmojiClick = (emojiData: EmojiData) => {

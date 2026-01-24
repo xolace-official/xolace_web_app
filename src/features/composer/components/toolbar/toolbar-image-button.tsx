@@ -2,10 +2,10 @@
 
 import { ImageIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { useComposer } from "../../composer-context";
+import { useComposerUI } from "../../composer-context";
 
 export function ToolbarImageButton() {
-  const { openFilePicker, mediaFile } = useComposer();
+  const { openFilePicker, mediaFile } = useComposerUI();
 
   return (
     <Button

@@ -1,11 +1,12 @@
 "use client";
 
-import { useComposer } from "../composer-context";
+import { useComposerForm } from "../composer-context";
 import { MOOD_OPTIONS } from "../composer-constants";
 import { Badge } from "@/components/ui/badge";
 
 export function ComposerMoodIndicator() {
-  const { mood } = useComposer();
+  const { form } = useComposerForm();
+  const mood = form.watch("mood");
 
   if (mood === "neutral") return null;
 

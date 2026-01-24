@@ -1,18 +1,19 @@
 "use client";
 
 import { AlertTriangle, Clock } from "lucide-react";
-import { useComposer } from "../composer-context";
+import { useComposerForm } from "../composer-context";
 import { cn } from "@/lib/utils";
 
 export function PostToolsMenu() {
-  const { isSensitive, setIsSensitive, autoExpiry, setAutoExpiry } =
-    useComposer();
+  const { form } = useComposerForm();
+  const isSensitive = form.watch("is_sensitive");
+  const autoExpiry = form.watch("auto_expiry");
 
   return (
     <div className="flex flex-col gap-0.5">
       <button
         type="button"
-        onClick={() => setIsSensitive(!isSensitive)}
+        onClick={() => form.setValue("is_sensitive", !isSensitive)}
         className={cn(
           "flex items-center gap-2.5 rounded-md px-2.5 py-2 text-left text-sm transition-colors hover:bg-accent/20",
           isSensitive && "bg-accent/20",
@@ -44,7 +45,7 @@ export function PostToolsMenu() {
 
       <button
         type="button"
-        onClick={() => setAutoExpiry(!autoExpiry)}
+        onClick={() => form.setValue("auto_expiry", !autoExpiry)}
         className={cn(
           "flex items-center gap-2.5 rounded-md px-2.5 py-2 text-left text-sm transition-colors hover:bg-accent/20",
           autoExpiry && "bg-accent/20",

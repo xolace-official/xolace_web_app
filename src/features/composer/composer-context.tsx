@@ -4,7 +4,6 @@ import {
   createContext,
   useCallback,
   useContext,
-  useEffect,
   useMemo,
   useRef,
   useState,
@@ -12,68 +11,46 @@ import {
 import { useForm, type UseFormReturn } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { composerSchema } from "./composer-schema";
-import { useTagExtraction } from "./hooks/use-tag-extraction";
 import { useCursorInsert } from "./hooks/use-cursor-insert";
 import { useImageUpload } from "./hooks/use-image-upload";
 import { STARTER_PROMPTS } from "./composer-constants";
 import type {
-  AuthorDisplayMode,
   CampfireSelection,
   ComposerFormValues,
   PostKind,
-  PostMood,
 } from "./composer-types";
 
-interface ComposerContextValue {
-  // Refs
-  textareaRef: React.RefObject<HTMLTextAreaElement | null>;
+// --- Form Context (stable: form instance, ref, insert action) ---
 
-  // Media
+interface ComposerFormContextValue {
+  form: UseFormReturn<ComposerFormValues>;
+  textareaRef: React.RefObject<HTMLTextAreaElement | null>;
+  insertAtCursor: (text: string) => void;
+}
+
+const ComposerFormContext = createContext<ComposerFormContextValue | null>(
+  null,
+);
+
+// --- UI Context (updates on discrete user actions, NOT keystrokes) ---
+
+interface ComposerUIContextValue {
   mediaFile: File | null;
   mediaPreviewUrl: string | null;
   setMedia: (file: File | null) => void;
   openFilePicker: () => void;
-
-  // Mood
-  mood: PostMood;
-  setMood: (mood: PostMood) => void;
-
-  // Tags (extracted from text)
-  tags: string[];
-
-  // Campfire
   campfire: CampfireSelection | null;
   setCampfire: (c: CampfireSelection | null) => void;
-
-  // Post tools
-  isSensitive: boolean;
-  setIsSensitive: (v: boolean) => void;
-  autoExpiry: boolean;
-  setAutoExpiry: (v: boolean) => void;
-
-  // Display mode
-  displayMode: AuthorDisplayMode;
-  setDisplayMode: (m: AuthorDisplayMode) => void;
-
-  // Prompt
   activePrompt: string | null;
   dismissPrompt: () => void;
   applyPrompt: (text: string) => void;
-
-  // Derived
-  isValid: boolean;
   postKind: PostKind;
-  charCount: number;
-
-  // Actions
-  insertAtCursor: (text: string) => void;
   reset: () => void;
-
-  // Form
-  form: UseFormReturn<ComposerFormValues>;
 }
 
-const ComposerContext = createContext<ComposerContextValue | null>(null);
+const ComposerUIContext = createContext<ComposerUIContextValue | null>(null);
+
+// --- Provider ---
 
 export function ComposerProvider({ children }: { children: React.ReactNode }) {
   const textareaRef = useRef<HTMLTextAreaElement | null>(null);
@@ -90,23 +67,14 @@ export function ComposerProvider({ children }: { children: React.ReactNode }) {
     },
   });
 
-  const contentText = form.watch("content_text");
-  const mood = form.watch("mood");
-  const isSensitive = form.watch("is_sensitive");
-  const autoExpiry = form.watch("auto_expiry");
-  const authorDisplayMode = form.watch("author_display_mode");
-  // Tag extraction — reactively extracts from content
-  const { tags, extractTags, clearTags } = useTagExtraction();
-
-  useEffect(() => {
-    extractTags(contentText);
-  }, [contentText, extractTags]);
+  // Cursor insert
+  const { insertAtCursor } = useCursorInsert({ textareaRef, form });
 
   // Image upload
   const { mediaFile, mediaPreviewUrl, setMedia, openFilePicker } =
     useImageUpload();
 
-  // Campfire state (holds object data beyond just the id)
+  // Campfire state
   const [campfire, setCampfireState] = useState<CampfireSelection | null>(null);
 
   const setCampfire = useCallback(
@@ -136,124 +104,78 @@ export function ComposerProvider({ children }: { children: React.ReactNode }) {
     [form],
   );
 
-  // Cursor insert
-  const { insertAtCursor } = useCursorInsert({
-    textareaRef,
-    form,
-  });
-
-  // Setters
-  const setMood = useCallback(
-    (m: PostMood) => {
-      form.setValue("mood", m);
-    },
-    [form],
-  );
-
-  const setIsSensitive = useCallback(
-    (v: boolean) => {
-      form.setValue("is_sensitive", v);
-    },
-    [form],
-  );
-
-  const setAutoExpiry = useCallback(
-    (v: boolean) => {
-      form.setValue("auto_expiry", v);
-    },
-    [form],
-  );
-
-  const setDisplayMode = useCallback(
-    (m: AuthorDisplayMode) => {
-      form.setValue("author_display_mode", m);
-    },
-    [form],
-  );
-
-  // Derived values
-  const charCount = contentText.length;
-  const isValid = charCount >= 10 && !form.formState.isSubmitting;
+  // Derived
   const postKind: PostKind = mediaFile ? "text_with_media" : "text";
 
   // Reset
   const reset = useCallback(() => {
     form.reset();
     setMedia(null);
-    clearTags();
     setCampfire(null);
     setActivePrompt(
       STARTER_PROMPTS[Math.floor(Math.random() * STARTER_PROMPTS.length)].text,
     );
-  }, [form, setMedia, clearTags, setCampfire]);
+  }, [form, setMedia, setCampfire]);
 
-  const value = useMemo<ComposerContextValue>(
+  // Form context value (stable — form/ref/insertAtCursor don't change on keystrokes)
+  const formValue = useMemo<ComposerFormContextValue>(
+    () => ({ form, textareaRef, insertAtCursor }),
+    [form, insertAtCursor],
+  );
+
+  // UI context value (updates only on discrete user actions)
+  const uiValue = useMemo<ComposerUIContextValue>(
     () => ({
-      textareaRef,
       mediaFile,
       mediaPreviewUrl,
       setMedia,
       openFilePicker,
-      mood,
-      setMood,
-      tags,
       campfire,
       setCampfire,
-      isSensitive,
-      setIsSensitive,
-      autoExpiry,
-      setAutoExpiry,
-      displayMode: authorDisplayMode,
-      setDisplayMode,
       activePrompt,
       dismissPrompt,
       applyPrompt,
-      isValid,
       postKind,
-      charCount,
-      insertAtCursor,
       reset,
-      form,
     }),
     [
       mediaFile,
       mediaPreviewUrl,
       setMedia,
       openFilePicker,
-      mood,
-      setMood,
-      tags,
       campfire,
       setCampfire,
-      isSensitive,
-      setIsSensitive,
-      autoExpiry,
-      setAutoExpiry,
-      authorDisplayMode,
-      setDisplayMode,
       activePrompt,
       dismissPrompt,
       applyPrompt,
-      isValid,
       postKind,
-      charCount,
-      insertAtCursor,
       reset,
-      form,
     ],
   );
 
   return (
-    <ComposerContext.Provider value={value}>
-      {children}
-    </ComposerContext.Provider>
+    <ComposerFormContext.Provider value={formValue}>
+      <ComposerUIContext.Provider value={uiValue}>
+        {children}
+      </ComposerUIContext.Provider>
+    </ComposerFormContext.Provider>
   );
 }
 
-export function useComposer() {
-  const context = useContext(ComposerContext);
+// --- Hooks ---
+
+export function useComposerForm() {
+  const context = useContext(ComposerFormContext);
   if (!context) {
-    throw new Error("useComposer must be used within a ComposerProvider");
+    throw new Error("useComposerForm must be used within a ComposerProvider");
+  }
+  return context;
+}
+
+export function useComposerUI() {
+  const context = useContext(ComposerUIContext);
+  if (!context) {
+    throw new Error("useComposerUI must be used within a ComposerProvider");
   }
   return context;
 }

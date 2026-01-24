@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { SmilePlus } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { useComposer } from "../../composer-context";
+import { useComposerForm } from "../../composer-context";
 import { MoodPicker } from "../../pickers/mood-picker";
 import {
   Popover,
@@ -12,7 +12,8 @@ import {
 } from "@/components/ui/popover";
 
 export function ToolbarMoodButton() {
-  const { mood } = useComposer();
+  const { form } = useComposerForm();
+  const mood = form.watch("mood");
   const [open, setOpen] = useState(false);
 
   return (

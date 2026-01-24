@@ -3,10 +3,10 @@
 import { Controller } from "react-hook-form";
 
 import { CONTENT_MAX_LENGTH, PLACEHOLDERS } from "../composer-constants";
-import { useComposer } from "../composer-context";
+import { useComposerForm } from "../composer-context";
 
 export function ComposerTextarea() {
-  const { textareaRef, form } = useComposer();
+  const { textareaRef, form } = useComposerForm();
 
   return (
     <div className="px-4 pt-4">

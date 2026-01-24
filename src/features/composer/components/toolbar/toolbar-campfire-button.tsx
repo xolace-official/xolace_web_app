@@ -8,11 +8,11 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import { useComposer } from "../../composer-context";
+import { useComposerUI } from "../../composer-context";
 import { CampfirePicker } from "../../pickers/campfire-picker";
 
 export function ToolbarCampfireButton() {
-  const { campfire } = useComposer();
+  const { campfire } = useComposerUI();
   const [open, setOpen] = useState(false);
 
   return (

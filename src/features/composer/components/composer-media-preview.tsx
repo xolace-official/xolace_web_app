@@ -2,10 +2,10 @@
 
 import Image from "next/image";
 import { X } from "lucide-react";
-import { useComposer } from "../composer-context";
+import { useComposerUI } from "../composer-context";
 
 export function ComposerMediaPreview() {
-  const { mediaPreviewUrl, mediaFile, setMedia } = useComposer();
+  const { mediaPreviewUrl, mediaFile, setMedia } = useComposerUI();
 
   if (!mediaPreviewUrl || !mediaFile) return null;
 

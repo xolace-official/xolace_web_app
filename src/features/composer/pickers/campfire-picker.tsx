@@ -1,7 +1,7 @@
 "use client";
 
 import { Flame, X } from "lucide-react";
-import { useComposer } from "../composer-context";
+import { useComposerUI } from "../composer-context";
 import type { CampfireSelection } from "../composer-types";
 import { cn } from "@/lib/utils";
 
@@ -13,7 +13,7 @@ interface CampfirePickerProps {
 const PLACEHOLDER_CAMPFIRES: CampfireSelection[] = [];
 
 export function CampfirePicker({ onSelect }: CampfirePickerProps) {
-  const { campfire, setCampfire } = useComposer();
+  const { campfire, setCampfire } = useComposerUI();
 
   const handleSelect = (c: CampfireSelection) => {
     setCampfire(c);

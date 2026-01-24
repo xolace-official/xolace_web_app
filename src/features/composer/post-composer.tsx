@@ -8,7 +8,7 @@ import { ComposerPromptBanner } from "./components/composer-prompt-banner";
 import { ComposerTagsBar } from "./components/composer-tags-bar";
 import { ComposerTextarea } from "./components/composer-textarea";
 import { ComposerToolbar } from "./components/toolbar/composer-toolbar";
-import { ComposerProvider, useComposer } from "./composer-context";
+import { ComposerProvider, useComposerForm } from "./composer-context";
 import type { ComposerFormValues } from "./composer-types";
 
 export function PostComposer() {
@@ -20,11 +20,9 @@ export function PostComposer() {
 }
 
 function ComposerForm() {
-  const { form } = useComposer();
+  const { form } = useComposerForm();
 
   const onSubmit = (data: ComposerFormValues) => {
-    // No mutation at the page level — this is a UI-only shell.
-    // The parent page or a submission hook will handle the actual POST.
     console.log("Composer submit:", data);
   };
 

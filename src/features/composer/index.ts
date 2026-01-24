@@ -1,5 +1,9 @@
 export { PostComposer } from "./post-composer";
-export { ComposerProvider, useComposer } from "./composer-context";
+export {
+  ComposerProvider,
+  useComposerForm,
+  useComposerUI,
+} from "./composer-context";
 export type {
   ComposerFormValues,
   PostMood,

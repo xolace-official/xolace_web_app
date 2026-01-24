@@ -1,10 +1,10 @@
 "use client";
 
 import { Lightbulb, X } from "lucide-react";
-import { useComposer } from "../composer-context";
+import { useComposerUI } from "../composer-context";
 
 export function ComposerPromptBanner() {
-  const { activePrompt, dismissPrompt, applyPrompt } = useComposer();
+  const { activePrompt, dismissPrompt, applyPrompt } = useComposerUI();
 
   if (!activePrompt) return null;
 

@@ -1,10 +1,10 @@
 "use client";
 
 import { VoiceInput } from "@/components/ui/voice-input";
-import { useComposer } from "../../composer-context";
+import { useComposerForm } from "../../composer-context";
 
 export function ToolbarVoiceButton() {
-  const { insertAtCursor } = useComposer();
+  const { insertAtCursor } = useComposerForm();
 
   return (
     <VoiceInput
