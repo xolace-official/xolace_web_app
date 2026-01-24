@@ -4,6 +4,7 @@ import {
   createContext,
   useCallback,
   useContext,
+  useEffect,
   useMemo,
   useRef,
   useState,
@@ -85,11 +86,14 @@ export function ComposerProvider({ children }: { children: React.ReactNode }) {
     [form],
   );
 
-  // Prompt state
-  const [activePrompt, setActivePrompt] = useState<string | null>(
-    () =>
+  // Prompt state — initialized client-side to avoid hydration mismatch from Math.random()
+  const [activePrompt, setActivePrompt] = useState<string | null>(null);
+
+  useEffect(() => {
+    setActivePrompt(
       STARTER_PROMPTS[Math.floor(Math.random() * STARTER_PROMPTS.length)].text,
-  );
+    );
+  }, []);
 
   const dismissPrompt = useCallback(() => {
     setActivePrompt(null);
