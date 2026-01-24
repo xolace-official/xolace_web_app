@@ -10,7 +10,7 @@ import { useComposerForm } from "../composer-context";
 function CharCounter() {
   const { form } = useComposerForm();
   const contentText = useWatch({ control: form.control, name: "content_text" });
-  const charCount = contentText.length;
+  const charCount = (contentText || "").length;
 
   return (
     <span
@@ -33,8 +33,9 @@ function CharCounter() {
 function SubmitButton() {
   const { form } = useComposerForm();
   const contentText = useWatch({ control: form.control, name: "content_text" });
+  const text = contentText ?? "";
   const isSubmitting = form.formState.isSubmitting;
-  const isValid = contentText.length >= CONTENT_MIN_LENGTH && !isSubmitting;
+  const isValid = text.length >= CONTENT_MIN_LENGTH;
 
   return (
     <Button
