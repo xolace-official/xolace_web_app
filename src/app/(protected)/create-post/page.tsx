@@ -7,8 +7,6 @@ export const metadata: Metadata = {
     "Create and share your story with a caring community offering support, advice, and encouragement for mental wellness and personal growth.",
 };
 
-const CreatePost = () => {
+export default function CreatePost() {
   return <CreatePostPage />;
-};
-
-export default CreatePost;
+}
