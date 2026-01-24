@@ -1,6 +1,7 @@
 "use client";
 
 import { useMemo } from "react";
+import { useWatch } from "react-hook-form";
 import { useComposerForm } from "../composer-context";
 import { MAX_TAGS } from "../composer-constants";
 import { Pill } from "@/components/kibo-ui/pill";
@@ -9,7 +10,7 @@ const TAG_REGEX = /#(\w+)/g;
 
 export function ComposerTagsBar() {
   const { form } = useComposerForm();
-  const contentText = form.watch("content_text");
+  const contentText = useWatch({ control: form.control, name: "content_text" });
 
   const tags = useMemo(() => {
     const matches = contentText.match(TAG_REGEX) || [];

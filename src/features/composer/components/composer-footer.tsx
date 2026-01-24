@@ -1,5 +1,6 @@
 "use client";
 
+import { useWatch } from "react-hook-form";
 import { Button } from "@/components/ui/button";
 import { useComposerForm } from "../composer-context";
 import { CONTENT_MAX_LENGTH, CONTENT_MIN_LENGTH } from "../composer-constants";
@@ -9,8 +10,11 @@ import type { AuthorDisplayMode } from "../composer-types";
 export function ComposerFooter() {
   const { form } = useComposerForm();
 
-  const contentText = form.watch("content_text");
-  const displayMode = form.watch("author_display_mode");
+  const contentText = useWatch({ control: form.control, name: "content_text" });
+  const displayMode = useWatch({
+    control: form.control,
+    name: "author_display_mode",
+  });
   const isSubmitting = form.formState.isSubmitting;
 
   const charCount = contentText.length;

@@ -1,5 +1,6 @@
 "use client";
 
+import { useWatch } from "react-hook-form";
 import { useComposerForm } from "../composer-context";
 import { MOOD_OPTIONS } from "../composer-constants";
 import { cn } from "@/lib/utils";
@@ -11,7 +12,7 @@ interface MoodPickerProps {
 
 export function MoodPicker({ onSelect }: MoodPickerProps) {
   const { form } = useComposerForm();
-  const mood = form.watch("mood");
+  const mood = useWatch({ control: form.control, name: "mood" });
 
   const handleSelect = (value: PostMood) => {
     form.setValue("mood", value);

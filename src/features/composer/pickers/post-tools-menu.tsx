@@ -1,13 +1,14 @@
 "use client";
 
 import { AlertTriangle, Clock } from "lucide-react";
-import { useComposerForm } from "../composer-context";
+import { useWatch } from "react-hook-form";
 import { cn } from "@/lib/utils";
+import { useComposerForm } from "../composer-context";
 
 export function PostToolsMenu() {
   const { form } = useComposerForm();
-  const isSensitive = form.watch("is_sensitive");
-  const autoExpiry = form.watch("auto_expiry");
+  const isSensitive = useWatch({ control: form.control, name: "is_sensitive" });
+  const autoExpiry = useWatch({ control: form.control, name: "auto_expiry" });
 
   return (
     <div className="flex flex-col gap-0.5">

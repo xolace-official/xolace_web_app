@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useWatch } from "react-hook-form";
 import { SmilePlus } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useComposerForm } from "../../composer-context";
@@ -13,7 +14,7 @@ import {
 
 export function ToolbarMoodButton() {
   const { form } = useComposerForm();
-  const mood = form.watch("mood");
+  const mood = useWatch({ control: form.control, name: "mood" });
   const [open, setOpen] = useState(false);
 
   return (
