@@ -3,8 +3,13 @@ import { PageContainer } from "@/components/app/page-container";
 import { LegalFooter } from "@/components/shared/legal-footer";
 import { ThemeSwitcher } from "@/components/shared/theme-switcher";
 
-const PostComposer = dynamic(() =>
-  import("@/features/composer/post-composer").then((m) => m.PostComposer),
+const PostComposer = dynamic(
+  () => import("@/features/composer/post-composer").then((m) => m.PostComposer),
+  {
+    loading: () => (
+      <div className="h-[300px] animate-pulse rounded-2xl bg-muted" />
+    ),
+  },
 );
 
 export const CreatePostPage = () => {
