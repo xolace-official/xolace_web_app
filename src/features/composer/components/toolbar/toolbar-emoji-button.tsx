@@ -1,8 +1,9 @@
 "use client";
 
-import { useState } from "react";
-import dynamic from "next/dynamic";
+import type { EmojiClickData } from "emoji-picker-react";
 import { Smile } from "lucide-react";
+import dynamic from "next/dynamic";
+import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import {
   Popover,
@@ -20,15 +21,11 @@ const EmojiPicker = dynamic(() => import("emoji-picker-react"), {
   ),
 });
 
-interface EmojiData {
-  emoji: string;
-}
-
 export function ToolbarEmojiButton() {
   const { insertAtCursor } = useComposerForm();
   const [open, setOpen] = useState(false);
 
-  const handleEmojiClick = (emojiData: EmojiData) => {
+  const handleEmojiClick = (emojiData: EmojiClickData) => {
     insertAtCursor(emojiData.emoji);
     setOpen(false);
   };
