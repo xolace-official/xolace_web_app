@@ -30,7 +30,7 @@ const Page = async ({ params }: Props) => {
 
   return (
     <main className="w-full flex items-center justify-center">
-      <DetailsPage campfire={campfire} />
+      <DetailsPage campfireId={campfire} />
     </main>
   );
 };

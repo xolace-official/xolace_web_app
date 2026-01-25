@@ -2,8 +2,16 @@ import React from "react";
 import { ThemeSwitcher } from "@/components/shared/theme-switcher";
 import { PageContainer } from "@/components/app/page-container";
 import { CampfireDetails } from "@/features/campfires/campfire-details/campfire-details";
+import { dummy_campfires } from "@/features/campfires";
+import { notFound } from "next/navigation";
 
-const DetailsPage = ({ campfire }: { campfire: string }) => {
+const DetailsPage = ({ campfireId }: { campfireId: string }) => {
+  const campfire = dummy_campfires.find((c) => c.slug === campfireId);
+
+  if (!campfire) {
+    notFound();
+  }
+
   return (
     <PageContainer
       title={"Find your circle"}
@@ -13,7 +21,7 @@ const DetailsPage = ({ campfire }: { campfire: string }) => {
       contentClassName={"w-full max-w-none flex flex-col"}
     >
       <div className={"px-0"}>
-        <CampfireDetails campfireId={campfire} />
+        <CampfireDetails campfire={campfire} />
       </div>
     </PageContainer>
   );
