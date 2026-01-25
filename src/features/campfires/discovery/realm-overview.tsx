@@ -17,10 +17,10 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import {
-  CAMPFIRE_REALMS,
-  type InteractionStyle,
-  type RealmKey,
-} from "@/features/campfires/discovery/index";
+  campfire_realms,
+  InteractionStyle,
+  RealmKey,
+} from "@/features/campfires";
 
 interface RealmCardData {
   key: InteractionStyle;
@@ -76,7 +76,7 @@ export const RealmOverview = () => {
   }
 
   // Find the specific realm by key
-  const realm = CAMPFIRE_REALMS.find((r) => r.key === selectedRealm);
+  const realm = campfire_realms.find((r) => r.key === selectedRealm);
 
   if (!realm) {
     return null;
