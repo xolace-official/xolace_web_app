@@ -32,6 +32,7 @@ export {
   DEFAULT_SIDEBAR_LIMIT,
   MAX_COLLECTION_NAME_LENGTH,
   DRAWER_STEPS,
+  DUMMY_COLLECTIONS,
 } from "./collections.constants";
 export type { DrawerStep } from "./collections.constants";
 
@@ -63,6 +64,8 @@ export { CollectionHeader } from "./components/collection-header";
 export { CollectionItemsList } from "./components/collection-items-list";
 export { CollectionTypeFilter } from "./components/collection-type-filter";
 export type { FilterOption } from "./components/collection-type-filter";
+export { CollectionsGrid } from "./components/collections-grid";
+export { CollectionDetailContent } from "./components/collection-detail-content";
 
 // Schema
 export { createCollectionSchema } from "./collections.schema";

@@ -1,12 +1,11 @@
 import { Separator } from "../ui/separator";
 import { SidebarToggle } from "./app-sidebar";
 
-const SiteHeader = async (props: {
+const SiteHeader = (props: {
   disableSidebarToggle?: boolean;
   title: React.ReactNode;
   actions?: React.ReactNode;
 }) => {
-  "use cache";
   return (
     <div className="sticky top-0 w-full flex items-center justify-between px-3 py-3 bg-background lg:relative z-50 header-height">
       <div className="flex items-center gap-2 w-full">

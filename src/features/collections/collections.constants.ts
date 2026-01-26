@@ -39,3 +39,57 @@ export const DRAWER_STEPS = {
 } as const;
 
 export type DrawerStep = (typeof DRAWER_STEPS)[keyof typeof DRAWER_STEPS];
+
+// ============================================================================
+// Dummy Data (for development/demo)
+// ============================================================================
+
+import type { CollectionListItem } from "./collections.types";
+
+export const DUMMY_COLLECTIONS: CollectionListItem[] = [
+  {
+    id: "1",
+    name: "Favorites",
+    is_pinned: true,
+    position: 0,
+    created_at: "2024-01-01T00:00:00Z",
+    updated_at: "2024-01-01T00:00:00Z",
+    item_count: 12,
+  },
+  {
+    id: "2",
+    name: "Read Later",
+    is_pinned: true,
+    position: 1,
+    created_at: "2024-01-02T00:00:00Z",
+    updated_at: "2024-01-02T00:00:00Z",
+    item_count: 5,
+  },
+  {
+    id: "3",
+    name: "Inspiration",
+    is_pinned: false,
+    position: 2,
+    created_at: "2024-01-03T00:00:00Z",
+    updated_at: "2024-01-03T00:00:00Z",
+    item_count: 23,
+  },
+  {
+    id: "4",
+    name: "Work Ideas",
+    is_pinned: false,
+    position: 3,
+    created_at: "2024-01-04T00:00:00Z",
+    updated_at: "2024-01-04T00:00:00Z",
+    item_count: 8,
+  },
+  {
+    id: "5",
+    name: "Music",
+    is_pinned: false,
+    position: 4,
+    created_at: "2024-01-05T00:00:00Z",
+    updated_at: "2024-01-05T00:00:00Z",
+    item_count: 0,
+  },
+];
