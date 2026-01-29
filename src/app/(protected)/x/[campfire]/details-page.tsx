@@ -14,7 +14,7 @@ const DetailsPage = ({ campfireId }: { campfireId: string }) => {
 
   return (
     <PageContainer
-      title={"Find your circle"}
+      title={`${campfire.name}`}
       actions={<ThemeSwitcher key={"theme-switcher"} />}
       className={"w-full"}
       containerClassName={"w-full flex-1"}
