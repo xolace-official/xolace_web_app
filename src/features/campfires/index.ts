@@ -57,6 +57,8 @@ export interface CampfireInterface {
   icon_path: string | null;
   banner_path?: string | null;
   interaction_style: InteractionStyle;
+  memberRole: "camper" | "firestarter" | "firekeeper";
+  isFavorite?: boolean;
   visibility?: string;
   member_count: number;
   created_at?: string;
@@ -75,10 +77,12 @@ export const dummy_campfires: CampfireInterface[] = [
     description:
       "A community for technology enthusiasts and innovators to share ideas and collaborate on cutting-edge projects.",
     icon_path: "/assets/icons/tech-hub.png",
-    banner_path: "/assets/banners/tech-banner.jpg",
+    banner_path:
+      "https://images.unsplash.com/photo-1768797767719-dad3da9a6e09?q=80&w=687&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
     interaction_style: "supportive",
     visibility: "public",
     member_count: 1247,
+    memberRole: "camper",
     created_at: "2025-11-15T08:30:00.000Z",
     created_by: "u1s2e3r4-5678-90ab-cdef-123456789012",
     realm: {
@@ -107,10 +111,12 @@ export const dummy_campfires: CampfireInterface[] = [
     name: "x/creativeWriters",
     slug: "creative-writers-circle",
     isMember: true,
+    memberRole: "camper",
     description:
       "A safe space for writers to share their work, get feedback, and improve their craft together.",
     icon_path: "/assets/icons/writers-circle.png",
-    banner_path: "/assets/banners/writers-banner.jpg",
+    banner_path:
+      "https://images.unsplash.com/photo-1768797767719-dad3da9a6e09?q=80&w=687&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
     interaction_style: "collaborative",
     visibility: "private",
     member_count: 342,
@@ -142,10 +148,12 @@ export const dummy_campfires: CampfireInterface[] = [
     name: "x/fitnessAwareness",
     isMember: false,
     slug: "fitness-wellness-warriors",
+    memberRole: "firekeeper",
     description:
       "Motivate each other, share workout routines, nutrition tips, and celebrate health milestones together.",
     icon_path: "/assets/icons/fitness-warriors.png",
-    banner_path: "/assets/banners/fitness-banner.jpg",
+    banner_path:
+      "https://images.unsplash.com/photo-1768797767719-dad3da9a6e09?q=80&w=687&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
     interaction_style: "educational",
     visibility: "public",
     member_count: 2891,
@@ -176,10 +184,12 @@ export const dummy_campfires: CampfireInterface[] = [
     id: "d4e5f6a7-b8c9-0123-def4-234567890123",
     name: "x/gameDevelopers",
     slug: "game-developers-network",
+    memberRole: "firekeeper",
     isMember: false,
     description: "Game developers network association",
     icon_path: "/assets/images/landing-page/x-logo-full.webp",
-    banner_path: null,
+    banner_path:
+      "https://images.unsplash.com/photo-1768797767719-dad3da9a6e09?q=80&w=687&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
     interaction_style: "collaborative",
     visibility: "public",
     member_count: 567,
@@ -210,10 +220,10 @@ export const dummy_campfires: CampfireInterface[] = [
     name: "x/sustainableLiving",
     isMember: true,
     slug: "sustainable-living-collective",
+    memberRole: "camper",
     description:
       "Join us in making eco-friendly choices, reducing waste, and building a sustainable future for our planet.",
-    icon_path:
-      "https://images.unsplash.com/photo-1768797767719-dad3da9a6e09?q=80&w=687&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+    icon_path: null,
     banner_path:
       "https://images.unsplash.com/photo-1768797767719-dad3da9a6e09?q=80&w=687&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
     interaction_style: "expressive",
@@ -373,9 +383,9 @@ export const getPurposeDescription = (purpose: string) => {
 
 // Helper for Get campfire rank
 export const getRankInfo = (memberCount: number) => {
-  if (memberCount >= 10000) return { rank: "Top 1%", color: "text-yellow-600" };
-  if (memberCount >= 5000) return { rank: "Top 2%", color: "text-orange-600" };
-  if (memberCount >= 1000) return { rank: "Top 5%", color: "text-blue-600" };
-  if (memberCount >= 500) return { rank: "Top 10%", color: "text-green-600" };
+  if (memberCount >= 10000) return { rank: "Top 1%", color: "text-chart-2" };
+  if (memberCount >= 5000) return { rank: "Top 2%", color: "text-chart-4" };
+  if (memberCount >= 1000) return { rank: "Top 5%", color: "text-chart-5" };
+  if (memberCount >= 500) return { rank: "Top 10%", color: "text-chart-1" };
   return { rank: "Growing", color: "text-gray-600" };
 };
