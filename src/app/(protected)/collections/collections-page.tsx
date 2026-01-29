@@ -1,6 +1,6 @@
 import { PageContainer } from "@/components/app/page-container";
-import { CollectionsGrid } from "@/features/collections/components/collections-grid";
 import { PageHeading } from "@/components/shared/layout/page-heading";
+import { CollectionsGrid } from "@/features/collections/components/collections-grid";
 
 export const CollectionsPage = () => {
   return (
