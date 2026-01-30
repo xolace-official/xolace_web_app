@@ -118,7 +118,7 @@
   --sidebar-ring: oklch(0.6726 0.2904 341.4084);
   --destructive-foreground: oklch(1 0 0);
   --font-sans: Reddit Sans, ui-sans-serif, sans-serif, system-ui;
-  --font-serif: Reddit Mono, ui-monospace, monospace;
+  --font-serif: PT Serif, serif;
   --font-mono: Reddit Mono, ui-monospace, monospace;
   --shadow-color: hsl(325.78 58.18% 56.86% / 0.5);
   --shadow-opacity: 1;
@@ -185,7 +185,7 @@
   --destructive-foreground: oklch(1 0 0);
   --radius: 0.5rem;
   --font-sans: Reddit Sans, ui-sans-serif, sans-serif, system-ui;
-  --font-serif: Reddit Mono, ui-monospace, monospace;
+  --font-serif: PT Serif, serif;
   --font-mono: Reddit Mono, ui-monospace, monospace;
   --shadow-color: #324859;
   --shadow-opacity: 1;
