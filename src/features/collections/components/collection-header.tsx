@@ -1,5 +1,6 @@
 "use client";
 
+import { MoreHorizontal, Pin, PinOff, Star, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -9,7 +10,6 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { cn } from "@/lib/utils";
-import { MoreHorizontal, Pin, PinOff, Star, Trash2 } from "lucide-react";
 import type { CollectionDetail } from "../collections.types";
 
 interface CollectionHeaderProps {
@@ -92,7 +92,7 @@ export function CollectionHeader({
 
           {onDelete && (
             <>
-              <DropdownMenuSeparator />
+              {onTogglePin && <DropdownMenuSeparator />}
               <DropdownMenuItem
                 onClick={onDelete}
                 disabled={isDeleting}
