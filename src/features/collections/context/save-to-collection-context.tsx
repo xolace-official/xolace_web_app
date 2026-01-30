@@ -1,6 +1,15 @@
 "use client";
 
-import * as React from "react";
+import {
+  createContext,
+  type ReactNode,
+  useCallback,
+  useContext,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 import type { CollectionEntityType } from "../collections.types";
 
 // ============================================================================
@@ -28,14 +37,14 @@ interface SaveToCollectionContextValue {
 // ============================================================================
 
 const SaveToCollectionContext =
-  React.createContext<SaveToCollectionContextValue | null>(null);
+  createContext<SaveToCollectionContextValue | null>(null);
 
 // ============================================================================
 // Hook
 // ============================================================================
 
 export function useSaveToCollection() {
-  const context = React.useContext(SaveToCollectionContext);
+  const context = useContext(SaveToCollectionContext);
 
   if (!context) {
     throw new Error(
@@ -51,32 +60,48 @@ export function useSaveToCollection() {
 // ============================================================================
 
 interface SaveToCollectionProviderProps {
-  children: React.ReactNode;
+  children: ReactNode;
 }
 
 export function SaveToCollectionProvider({
   children,
 }: SaveToCollectionProviderProps) {
-  const [target, setTarget] = React.useState<SaveTarget | null>(null);
-  const [isOpen, setIsOpen] = React.useState(false);
+  const [target, setTarget] = useState<SaveTarget | null>(null);
+  const [isOpen, setIsOpen] = useState(false);
+  const clearTargetTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(
+    null,
+  );
 
-  const openSaveDrawer = React.useCallback(
+  const openSaveDrawer = useCallback(
     (entityType: CollectionEntityType, entityId: string) => {
+      if (clearTargetTimeoutRef.current) {
+        clearTimeout(clearTargetTimeoutRef.current);
+        clearTargetTimeoutRef.current = null;
+      }
       setTarget({ entityType, entityId });
       setIsOpen(true);
     },
     [],
   );
 
-  const closeSaveDrawer = React.useCallback(() => {
+  const closeSaveDrawer = useCallback(() => {
     setIsOpen(false);
     // Delay clearing target to allow close animation
-    setTimeout(() => {
+    clearTargetTimeoutRef.current = setTimeout(() => {
       setTarget(null);
+      clearTargetTimeoutRef.current = null;
     }, 300);
   }, []);
 
-  const value = React.useMemo<SaveToCollectionContextValue>(
+  useEffect(() => {
+    return () => {
+      if (clearTargetTimeoutRef.current) {
+        clearTimeout(clearTargetTimeoutRef.current);
+      }
+    };
+  }, []);
+
+  const value = useMemo<SaveToCollectionContextValue>(
     () => ({
       target,
       isOpen,
