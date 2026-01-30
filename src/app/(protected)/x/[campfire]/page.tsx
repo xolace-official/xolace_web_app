@@ -28,10 +28,6 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 const Page = async ({ params }: Props) => {
   const { campfire } = await params;
 
-  return (
-    <main className="w-full flex items-center justify-center">
-      <DetailsPage campfireId={campfire} />
-    </main>
-  );
+  return <DetailsPage campfireId={campfire} />;
 };
 export default Page;

@@ -20,7 +20,7 @@ const DetailsPage = ({ campfireId }: { campfireId: string }) => {
       containerClassName={"w-full flex-1"}
       contentClassName={"w-full max-w-none flex flex-col"}
     >
-      <div className={"px-0"}>
+      <div className={"px-0 lg:px-8"}>
         <CampfireDetails campfire={campfire} />
       </div>
     </PageContainer>

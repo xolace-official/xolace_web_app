@@ -59,7 +59,7 @@ export const CampfireDetails = ({
 
   return (
     <>
-      <div className="flex w-full max-w-4xl flex-col items-center justify-center mx-auto">
+      <div className="flex w-full max-w-5xl flex-col items-center justify-center mx-auto">
         <div
           className="relative flex h-32 w-full rounded-none border lg:rounded-lg"
           style={{
@@ -159,13 +159,11 @@ export const CampfireDetails = ({
             <CampfireHighlight campfire={campfire} />
           </div>
           <div className="col-span-4">
-            <div className="sticky top-[calc(var(--header-height)+1rem)]">
-              <div className="max-h-[calc(100vh-var(--header-height)-2rem)] overflow-y-auto pr-2">
-                <CampfireAbout
-                  campfire={campfire}
-                  setDrawerOpen={setOpenGuideModal}
-                />
-              </div>
+            <div className="sticky top-0 max-h-[calc(100vh-2rem)] overflow-y-auto overflow-x-hidden [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
+              <CampfireAbout
+                campfire={campfire}
+                setDrawerOpen={setOpenGuideModal}
+              />
             </div>
           </div>
         </div>
