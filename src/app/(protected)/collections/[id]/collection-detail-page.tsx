@@ -1,16 +1,18 @@
 "use client";
 
-import { PageContainer } from "@/components/app/page-container";
-import { CollectionDetailContent } from "@/features/collections/components/collection-detail-content";
 import { ArrowLeft } from "lucide-react";
 import Link from "next/link";
+import { PageContainer } from "@/components/app/page-container";
+import { CollectionDetailContent } from "@/features/collections/components/collection-detail-content";
 
 interface CollectionDetailPageProps {
-  collectionId: string;
+  collectionId?: string;
+  params: Promise<{ id: string }>;
 }
 
 export function CollectionDetailPage({
   collectionId,
+  params,
 }: CollectionDetailPageProps) {
   return (
     <PageContainer
@@ -23,8 +25,9 @@ export function CollectionDetailPage({
           <span>Collections</span>
         </Link>
       }
+      contentClassName="px-2 md:px-0"
     >
-      <CollectionDetailContent collectionId={collectionId} />
+      <CollectionDetailContent collectionId={collectionId} params={params} />
     </PageContainer>
   );
 }

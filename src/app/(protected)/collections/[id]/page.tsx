@@ -11,6 +11,6 @@ interface PageProps {
 }
 
 export default async function Page({ params }: PageProps) {
-  const { id } = await params;
-  return <CollectionDetailPage collectionId={id} />;
+  // const { id } = await params;
+  return <CollectionDetailPage params={params} />;
 }

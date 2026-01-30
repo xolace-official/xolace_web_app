@@ -1,8 +1,7 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
-import { cn } from "@/lib/utils";
 import { FileText, Loader2, Trash2, Video, VolumeIcon } from "lucide-react";
+import { Button } from "@/components/ui/button";
 import type {
   CollectionEntityType,
   CollectionItemHydrated,
