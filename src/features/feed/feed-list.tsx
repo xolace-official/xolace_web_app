@@ -3,11 +3,15 @@
 import { useState } from "react";
 import PostCard from "@/components/cards/post-card/post-card";
 import type { PostMetricsVoteState } from "@/components/shared/post-metrics";
+import { useSaveToCollection } from "@/features/collections";
 
 export const FeedList = () => {
   const [vote, setVote] = useState<PostMetricsVoteState | null>(null);
+  const { openSaveDrawer } = useSaveToCollection();
+
   const posts = [
     {
+      id: "demo-post-1",
       title: "they can't keep getting away with this",
       createdAtLabel: "2 days ago",
       community: {
@@ -22,6 +26,7 @@ export const FeedList = () => {
       metrics: { score: 2800, comments: 223 },
     },
     {
+      id: "demo-post-2",
       title: "Minimal cards are underrated for high-signal feeds",
       createdAtLabel: "5 hours ago",
       community: {
@@ -33,6 +38,7 @@ export const FeedList = () => {
       metrics: { score: 630, comments: 46 },
     },
     {
+      id: "demo-post-3",
       title: "high-signal feeds",
       createdAtLabel: "5 hours ago",
       community: {
@@ -49,6 +55,7 @@ export const FeedList = () => {
       metrics: { score: 630, comments: 46 },
     },
     {
+      id: "demo-post-4",
       title: "The best Quote",
       createdAtLabel: "5 hours ago",
       community: {
@@ -65,6 +72,7 @@ export const FeedList = () => {
       metrics: { score: 630, comments: 46 },
     },
     {
+      id: "demo-post-5",
       title: "Screen Shot 1",
       createdAtLabel: "5 hours ago",
       community: {
@@ -76,6 +84,7 @@ export const FeedList = () => {
       metrics: { score: 630, comments: 46 },
     },
     {
+      id: "demo-post-6",
       title: "Screen Shot 2",
       createdAtLabel: "5 hours ago",
       community: {
@@ -96,7 +105,7 @@ export const FeedList = () => {
     <div className="grid grid-cols-1 gap-3">
       {posts.map((post) => (
         <PostCard
-          key={`${post.community.name}:${post.title}`}
+          key={post.id}
           title={post.title}
           createdAtLabel={post.createdAtLabel}
           community={post.community}
@@ -104,6 +113,7 @@ export const FeedList = () => {
           metrics={post.metrics}
           vote={vote}
           onVoteChange={onVoteChange}
+          onSaveClick={() => openSaveDrawer("post", post.id)}
         />
       ))}
     </div>

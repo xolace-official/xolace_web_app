@@ -2,7 +2,7 @@
 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useState } from "react";
-import { GlimpseInterface } from "@/features/health-space/glimpse/index";
+import type { GlimpseInterface } from "@/features/health-space/glimpse/index";
 import { formatDuration } from "@/utils";
 
 interface GlimpseTranscriptProps {

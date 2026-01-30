@@ -4,6 +4,10 @@ import { AppSidebar } from "@/components/app/app-sidebar";
 import { MainContainer } from "@/components/app/main-container";
 import { SidebarProvider } from "@/components/ui/sidebar";
 import { QueryProvider } from "@/providers/query-provider";
+import {
+  SaveToCollectionProvider,
+  SaveToCollectionDrawer,
+} from "@/features/collections";
 
 export default async function ProtectedLayout({
   children,
@@ -27,18 +31,21 @@ export default async function ProtectedLayout({
         />
       </Head>
       <QueryProvider>
-        <div className="bg-background tracking-normal">
-          <SidebarProvider
-            style={
-              {
-                "--sidebar-width": "calc(var(--spacing) * 72)",
-              } as React.CSSProperties
-            }
-          >
-            <AppSidebar />
-            <MainContainer>{children}</MainContainer>
-          </SidebarProvider>
-        </div>
+        <SaveToCollectionProvider>
+          <div className="bg-background tracking-normal">
+            <SidebarProvider
+              style={
+                {
+                  "--sidebar-width": "calc(var(--spacing) * 72)",
+                } as React.CSSProperties
+              }
+            >
+              <AppSidebar />
+              <MainContainer>{children}</MainContainer>
+            </SidebarProvider>
+          </div>
+          <SaveToCollectionDrawer />
+        </SaveToCollectionProvider>
       </QueryProvider>
     </Suspense>
   );
