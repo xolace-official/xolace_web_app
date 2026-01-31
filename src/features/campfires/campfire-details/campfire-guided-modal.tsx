@@ -1,6 +1,12 @@
 "use client";
 
 import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import {
   Drawer,
   DrawerContent,
   DrawerDescription,
@@ -8,13 +14,6 @@ import {
   DrawerTitle,
   DrawerTrigger,
 } from "@/components/ui/drawer";
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog";
-import React from "react";
 import { useMediaQuery } from "@/hooks/use-media-query";
 import GuidePreview from "./guide-preview";
 

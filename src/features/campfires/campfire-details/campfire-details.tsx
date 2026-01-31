@@ -1,17 +1,17 @@
 "use client";
 
-import React, { useState } from "react";
-import { Button } from "@/components/ui/button";
-import { Plus, Globe, Info } from "lucide-react";
+import { Globe, Info, Plus } from "lucide-react";
 import { useRouter } from "next/navigation";
+import { useState } from "react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { CampfireHighlight } from "@/features/campfires/campfire-details/campfire-highlight";
-import { CampfireInterface } from "@/features/campfires";
-import CampfireAbout from "@/features/campfires/campfire-details/campfire-about";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import type { CampfireInterface } from "@/features/campfires";
 import { getInteractionConfig } from "@/features/campfires";
+import CampfireAbout from "@/features/campfires/campfire-details/campfire-about";
 import CampfireActionsPopover from "@/features/campfires/campfire-details/campfire-actions-popover";
 import CampfireGuideModal from "@/features/campfires/campfire-details/campfire-guided-modal";
+import { CampfireHighlight } from "@/features/campfires/campfire-details/campfire-highlight";
 
 export const CampfireDetails = ({
   campfire,
@@ -76,7 +76,7 @@ export const CampfireDetails = ({
                   src={campfire.icon_path || undefined}
                   alt={campfire.name}
                 />
-                <AvatarFallback className="border flex items-center justify-center rounded-full border font-semibold">
+                <AvatarFallback className="flex items-center justify-center rounded-full border font-semibold">
                   <span
                     className={`bg-muted flex h-20 w-20 items-center justify-center rounded-full text-3xl font-semibold`}
                   >

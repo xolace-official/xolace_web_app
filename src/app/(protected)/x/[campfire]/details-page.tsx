@@ -1,9 +1,8 @@
-import React from "react";
-import { ThemeSwitcher } from "@/components/shared/theme-switcher";
-import { PageContainer } from "@/components/app/page-container";
-import { CampfireDetails } from "@/features/campfires/campfire-details/campfire-details";
-import { dummy_campfires } from "@/features/campfires";
 import { notFound } from "next/navigation";
+import { PageContainer } from "@/components/app/page-container";
+import { ThemeSwitcher } from "@/components/shared/theme-switcher";
+import { dummy_campfires } from "@/features/campfires";
+import { CampfireDetails } from "@/features/campfires/campfire-details/campfire-details";
 
 const DetailsPage = ({ campfireId }: { campfireId: string }) => {
   const campfire = dummy_campfires.find((c) => c.slug === campfireId);

@@ -1,25 +1,25 @@
 "use client";
 
-import React, { useState } from "react";
+import {
+  Copy,
+  Ellipsis,
+  ExternalLink,
+  Flag,
+  Heart,
+  Share2,
+  Volume2,
+  VolumeX,
+} from "lucide-react";
+import { useState } from "react";
+import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import {
-  Ellipsis,
-  Share2,
-  Copy,
-  Heart,
-  Volume2,
-  VolumeX,
-  Flag,
-  ExternalLink,
-} from "lucide-react";
-import { toast } from "sonner";
 import { Separator } from "@/components/ui/separator";
-import { CampfireInterface } from "@/features/campfires";
+import type { CampfireInterface } from "@/features/campfires";
 
 interface CampfireActionsPopoverProps {
   campfire: CampfireInterface;

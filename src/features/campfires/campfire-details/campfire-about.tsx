@@ -1,20 +1,23 @@
 "use client";
 import { Crown, Globe, TicketCheck } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { Separator } from "@/components/ui/separator";
 import Link from "next/link";
-import { formatDate, formatNumber } from "@/utils";
-import { CampfireInterface } from "@/features/campfires";
-import { getPurposeDescription, getRankInfo } from "@/features/campfires";
-import CampfireAvatar from "@/features/campfires/campfire-details/campfire-avatar";
+import { useState } from "react";
 import {
   Accordion,
   AccordionContent,
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
+import { Button } from "@/components/ui/button";
+import { Separator } from "@/components/ui/separator";
 import { Skeleton } from "@/components/ui/skeleton";
-import { useState } from "react";
+import {
+  type CampfireInterface,
+  getPurposeDescription,
+  getRankInfo,
+} from "@/features/campfires";
+import CampfireAvatar from "@/features/campfires/campfire-details/campfire-avatar";
+import { formatDate, formatNumber } from "@/utils";
 
 interface CampfireAboutProps {
   campfire: CampfireInterface;

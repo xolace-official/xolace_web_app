@@ -1,5 +1,4 @@
-import React from "react";
-import { Metadata } from "next";
+import type { Metadata } from "next";
 import DetailsPage from "@/app/(protected)/x/[campfire]/details-page";
 
 interface Props {
