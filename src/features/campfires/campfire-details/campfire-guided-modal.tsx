@@ -56,7 +56,6 @@ const CampfireGuideModal = ({
         </Dialog>
       ) : (
         <Drawer open={drawerOpen} onOpenChange={setDrawerOpen}>
-          <DrawerTrigger asChild></DrawerTrigger>
           <DrawerHeader className="pb-4">
             <DrawerTitle className="text-center" />
             <DrawerDescription className="text-center text-sm" />

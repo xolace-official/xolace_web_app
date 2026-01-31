@@ -37,9 +37,9 @@ export function createIframeLink(videoId: string, startTime?: number) {
 
 export const isValidUrl = (url: string) => {
   try {
-    new URL(url);
-    return true;
-  } catch (e) {
+    const urlObj = new URL(url);
+    return urlObj.protocol === "http:" || urlObj.protocol === "https:";
+  } catch (_) {
     return false;
   }
 };

@@ -26,7 +26,7 @@ export const CampfireDetails = ({
   const configColor = getInteractionConfig(campfire.interaction_style);
 
   const handleCreatePost = () => {
-    router.push(`/create-post?submit=${campfire.name}`);
+    router.push(`/create-post?submit=${encodeURIComponent(campfire.name)}`);
   };
 
   //Dummy ui resource

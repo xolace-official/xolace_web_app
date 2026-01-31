@@ -20,6 +20,7 @@ import {
 } from "@/components/ui/popover";
 import { Separator } from "@/components/ui/separator";
 import type { CampfireInterface } from "@/features/campfires";
+import { cn } from "@/lib/utils";
 
 interface CampfireActionsPopoverProps {
   campfire: CampfireInterface;
@@ -31,14 +32,14 @@ interface CampfireActionsPopoverProps {
   isProcessingFavorite?: boolean;
 }
 
-const CampfireActionsPopover: React.FC<CampfireActionsPopoverProps> = ({
+const CampfireActionsPopover = ({
   campfire,
   onAddToFavorites,
   onMuteToggle,
   onReport,
   className = "",
   isProcessingFavorite = false,
-}) => {
+}: CampfireActionsPopoverProps) => {
   const [isOpen, setIsOpen] = useState(false);
   const [isMuted, setIsMuted] = useState(false);
 
@@ -140,7 +141,7 @@ const CampfireActionsPopover: React.FC<CampfireActionsPopoverProps> = ({
         <Button
           size="sm"
           variant="outline"
-          className={`rounded-full border transition-colors ${className}`}
+          className={cn("rounded-full border transition-colors", className)}
           aria-label="More options"
         >
           {isProcessingFavorite ? (
@@ -207,11 +208,12 @@ const CampfireActionsPopover: React.FC<CampfireActionsPopoverProps> = ({
             >
               {/* fill heart if favorite */}
               <Heart
-                className={`mr-2 h-4 w-4 transition-all duration-200 ${
+                className={cn(
+                  "mr-2 h-4 w-4 transition-all duration-200",
                   campfire.isFavorite
                     ? "fill-yellow-400 text-yellow-400 drop-shadow-sm"
-                    : "text-gray-400 hover:text-yellow-400"
-                }`}
+                    : "text-muted-foreground hover:text-yellow-400",
+                )}
               />
               {campfire.isFavorite
                 ? "Remove from favorites"
@@ -251,7 +253,7 @@ const CampfireActionsPopover: React.FC<CampfireActionsPopoverProps> = ({
             <Button
               variant="ghost"
               size="sm"
-              className="w-full justify-start h-8 px-2 text-red-600 hover:text-red-700 hover:bg-red-50 dark:text-red-400 dark:hover:text-red-300 dark:hover:bg-red-950/20"
+              className="w-full justify-start h-8 px-2 text-destructive hover:text-destructive hover:bg-destructive/10"
               onClick={handleReport}
             >
               <Flag className="mr-2 h-4 w-4" />
