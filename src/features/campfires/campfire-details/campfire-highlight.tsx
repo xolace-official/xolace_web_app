@@ -1,9 +1,9 @@
 "use client";
-import React from "react";
+import { ChevronDown, ChevronUp, Pin } from "lucide-react";
+import { useState } from "react";
 import { Button } from "@/components/ui/button";
-import { Pin, ChevronUp, ChevronDown } from "lucide-react";
 import { Separator } from "@/components/ui/separator";
-import { CampfireInterface } from "@/features/campfires";
+import type { CampfireInterface } from "@/features/campfires";
 import { FeedList } from "@/features/feed/feed-list";
 
 export const CampfireHighlight = ({
@@ -11,7 +11,7 @@ export const CampfireHighlight = ({
 }: {
   campfire: CampfireInterface;
 }) => {
-  const [showHighlight, setShowHighlight] = React.useState(false);
+  const [showHighlight, setShowHighlight] = useState(false);
 
   return (
     <div className="flex flex-col gap-4">

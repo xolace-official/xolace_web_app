@@ -1,11 +1,10 @@
 "use client";
 
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Book, ChevronRight } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import React from "react";
 import Link from "next/link";
+import { Alert, AlertDescription } from "@/components/ui/alert";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Button } from "@/components/ui/button";
 import { isValidUrl, substituteUsername } from "@/lib/utils";
 
 interface GuidePreview {
@@ -67,39 +66,34 @@ const GuidePreview = ({
 
       <div className="flex w-full flex-col gap-2">
         <p className="font-medium">Resources</p>
-        {resource &&
-          resource.map((item, i) =>
-            isValidUrl(item.value) ? (
-              <Link
-                key={`${item.label}-${i}`}
-                href={item.value}
-                target="_blank"
-              >
-                <div className="text-muted-foreground flex w-full items-center justify-between text-sm group">
-                  <p className={"flex flex-row gap-1"}>
-                    <Book className={"h-4 w-4"} />
-                    <span>{item.label}</span>
-                  </p>
-                  <span className="rounded-full p-1 transition-colors duration-200 group-hover:bg-muted/20">
-                    <ChevronRight className="h-5 w-5 text-foreground/40" />
-                  </span>
-                </div>
-              </Link>
-            ) : (
-              <div
-                className="text-muted-foreground flex w-full items-center justify-between text-sm group"
-                key={`${item.label}-${i}`}
-              >
+        {resource?.map((item, i) =>
+          isValidUrl(item.value) ? (
+            <Link key={`${item.label}-${i}`} href={item.value} target="_blank">
+              <div className="text-muted-foreground flex w-full items-center justify-between text-sm group">
                 <p className={"flex flex-row gap-1"}>
                   <Book className={"h-4 w-4"} />
                   <span>{item.label}</span>
                 </p>
-                <span className="rounded-full p-1 group-hover:cursor-not-allowed">
-                  <ChevronRight className="h-5 w-5" />
+                <span className="rounded-full p-1 transition-colors duration-200 group-hover:bg-muted/20">
+                  <ChevronRight className="h-5 w-5 text-foreground/40" />
                 </span>
               </div>
-            ),
-          )}
+            </Link>
+          ) : (
+            <div
+              className="text-muted-foreground flex w-full items-center justify-between text-sm group"
+              key={`${item.label}-${i}`}
+            >
+              <p className={"flex flex-row gap-1"}>
+                <Book className={"h-4 w-4"} />
+                <span>{item.label}</span>
+              </p>
+              <span className="rounded-full p-1 group-hover:cursor-not-allowed">
+                <ChevronRight className="h-5 w-5" />
+              </span>
+            </div>
+          ),
+        )}
       </div>
 
       <Button onClick={handleGotIt} className="rounded-full">
