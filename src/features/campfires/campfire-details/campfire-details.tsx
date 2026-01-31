@@ -12,6 +12,7 @@ import CampfireAbout from "@/features/campfires/campfire-details/campfire-about"
 import CampfireActionsPopover from "@/features/campfires/campfire-details/campfire-actions-popover";
 import CampfireGuideModal from "@/features/campfires/campfire-details/campfire-guided-modal";
 import { CampfireHighlight } from "@/features/campfires/campfire-details/campfire-highlight";
+import { cn } from "@/lib/utils";
 
 export const CampfireDetails = ({
   campfire,
@@ -61,11 +62,11 @@ export const CampfireDetails = ({
     <>
       <div className="flex w-full max-w-5xl flex-col items-center justify-center mx-auto">
         <div
-          className="relative flex h-32 w-full rounded-none border lg:rounded-lg"
+          className={cn(
+            "relative flex h-32 w-full rounded-none border bg-cover bg-center lg:rounded-lg",
+          )}
           style={{
             backgroundImage: `url(${campfire.banner_path})`,
-            backgroundSize: "cover",
-            backgroundPosition: "center",
           }}
         >
           <div className="absolute -bottom-12 md:-bottom-8 left-2 z-20 h-20 w-20">
@@ -137,7 +138,7 @@ export const CampfireDetails = ({
               {(campfire.memberRole === "firekeeper" ||
                 campfire.memberRole === "firestarter") && (
                 <Button
-                  className={"flex items-center gap-1 rounded-full"}
+                  className={cn("flex items-center gap-1 rounded-full")}
                   size="sm"
                   variant="outline"
                   onClick={() =>
@@ -179,7 +180,10 @@ export const CampfireDetails = ({
                   onClick={() => setSelectedTab(tab.key)}
                   size={"sm"}
                   variant="outline"
-                  className={`rounded-full px-6 ${activeTab && "bg-accent text-black"}`}
+                  className={cn(
+                    "rounded-full px-6",
+                    activeTab && "bg-accent text-accent-foreground",
+                  )}
                 >
                   {tab.label}
                 </Button>
