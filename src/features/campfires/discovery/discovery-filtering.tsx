@@ -6,10 +6,7 @@ import { ParamsSearchBar } from "@/components/shared/params-search-bar";
 import { useFiltersServer } from "@/components/shared/search-params";
 import { Button } from "@/components/ui/button";
 // biome-ignore lint/style/useImportType: it crashes when I add type
-import {
-  CAMPFIRE_REALMS,
-  RealmKey,
-} from "@/features/campfires/discovery/index";
+import { campfire_realms, RealmKey } from "@/features/campfires";
 
 export const DiscoveryFiltering = () => {
   const [isPending, startTransition] = useTransition();
@@ -22,7 +19,7 @@ export const DiscoveryFiltering = () => {
 
   // Derive and validate realm from URL
   const validRealm = (
-    CAMPFIRE_REALMS.some((r) => r.key === realm) ? realm : "all"
+    campfire_realms.some((r) => r.key === realm) ? realm : "all"
   ) as RealmKey;
 
   // Handle realm click - update URL directly
@@ -60,7 +57,7 @@ export const DiscoveryFiltering = () => {
     });
   };
 
-  const selectedRealmData = CAMPFIRE_REALMS.find((r) => r.key === validRealm);
+  const selectedRealmData = campfire_realms.find((r) => r.key === validRealm);
   const lanes = selectedRealmData?.lanes || [];
 
   return (
@@ -82,7 +79,7 @@ export const DiscoveryFiltering = () => {
           >
             All
           </button>
-          {CAMPFIRE_REALMS?.map((r) => {
+          {campfire_realms?.map((r) => {
             const active = r.key === validRealm;
             return (
               <button

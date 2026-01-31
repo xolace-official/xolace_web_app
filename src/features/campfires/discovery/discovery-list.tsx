@@ -8,7 +8,7 @@ import { useFiltersServer } from "@/components/shared/search-params";
 import { Button } from "@/components/ui/button";
 import { DiscoveryCard } from "@/features/campfires/discovery/discovery-card";
 import { DiscoveryFiltering } from "@/features/campfires/discovery/discovery-filtering";
-import { DISCOVERY_DUMMY } from "@/features/campfires/discovery/index";
+import { dummy_campfires } from "@/features/campfires";
 
 export const CampfireDiscoveryList = () => {
   const [isPending, startTransition] = useTransition();
@@ -18,7 +18,7 @@ export const CampfireDiscoveryList = () => {
   });
 
   // Filter the data based on the search params
-  let filteredData = DISCOVERY_DUMMY;
+  let filteredData = dummy_campfires;
 
   filteredData = filteredData.filter((item) => {
     const matchesRealm =

@@ -34,3 +34,20 @@ export function createIframeLink(videoId: string, startTime?: number) {
 
   return base;
 }
+
+export const isValidUrl = (url: string) => {
+  try {
+    const urlObj = new URL(url);
+    return urlObj.protocol === "http:" || urlObj.protocol === "https:";
+  } catch (_) {
+    return false;
+  }
+};
+
+// utils function to substitute {username} with actual username if it is present
+export const substituteUsername = (str: string, username: string) => {
+  if (str.includes("{username}")) {
+    return str.replace("{username}", username);
+  }
+  return str;
+};

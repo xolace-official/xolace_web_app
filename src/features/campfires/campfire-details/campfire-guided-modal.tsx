@@ -1,0 +1,79 @@
+"use client";
+
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import {
+  Drawer,
+  DrawerContent,
+  DrawerDescription,
+  DrawerHeader,
+  DrawerTitle,
+  DrawerTrigger,
+} from "@/components/ui/drawer";
+import { useMediaQuery } from "@/hooks/use-media-query";
+import GuidePreview from "./guide-preview";
+
+interface GuidePreviewProps {
+  campfireName: string;
+  welcomeMsg: string;
+  resource?: { label: string; value: string }[];
+  icon: string | null;
+  drawerOpen: boolean;
+  setDrawerOpen: (open: boolean) => void;
+}
+
+const CampfireGuideModal = ({
+  welcomeMsg,
+  campfireName,
+  resource,
+  drawerOpen,
+  setDrawerOpen,
+  icon,
+}: GuidePreviewProps) => {
+  const isDesktop = useMediaQuery("(min-width: 768px)");
+
+  return (
+    <div className="items-center">
+      {isDesktop ? (
+        <Dialog open={drawerOpen} onOpenChange={setDrawerOpen}>
+          <DialogContent className="w-full max-w-[400px] border-0 rounded-2xl!">
+            <DialogHeader>
+              <DialogTitle className="flex items-center gap-1" />
+            </DialogHeader>
+            <GuidePreview
+              welcomeMsg={welcomeMsg}
+              campfireName={campfireName}
+              resource={resource}
+              icon={icon}
+              modTitle={campfireName}
+              setDrawerOpen={setDrawerOpen}
+            />
+          </DialogContent>
+        </Dialog>
+      ) : (
+        <Drawer open={drawerOpen} onOpenChange={setDrawerOpen}>
+          <DrawerHeader className="pb-4">
+            <DrawerTitle className="text-center" />
+            <DrawerDescription className="text-center text-sm" />
+          </DrawerHeader>
+          <DrawerContent className="max-h-[85vh] bg-muted px-8 pb-8">
+            <GuidePreview
+              welcomeMsg={welcomeMsg}
+              campfireName={campfireName}
+              resource={resource}
+              icon={icon}
+              modTitle={campfireName}
+              setDrawerOpen={setDrawerOpen}
+            />
+          </DrawerContent>
+        </Drawer>
+      )}
+    </div>
+  );
+};
+
+export default CampfireGuideModal;

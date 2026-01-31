@@ -1,7 +1,7 @@
 "use client";
 import type React from "react";
 import { createContext, type ReactNode, useContext, useState } from "react";
-import type { RealmKey } from "@/features/campfires/discovery/index";
+import type { RealmKey } from "@/features/campfires";
 
 interface DiscoveryContextType {
   selectedRealm: RealmKey;

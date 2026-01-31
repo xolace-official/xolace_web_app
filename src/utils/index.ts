@@ -60,3 +60,13 @@ export function formatDate(dateString: string): string {
 export const defaultUrl = process.env.VERCEL_URL
   ? `https://${process.env.VERCEL_URL}`
   : "http://localhost:3000";
+
+export const formatDate = (dateString: string) => {
+  const date = toDate(dateString);
+  if (!date) return "";
+  return date.toLocaleDateString("en-US", {
+    year: "numeric",
+    month: "short",
+    day: "numeric",
+  });
+};

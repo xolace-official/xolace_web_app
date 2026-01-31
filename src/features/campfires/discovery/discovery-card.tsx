@@ -9,11 +9,8 @@ import {
 import Link from "next/link";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
-import type {
-  CampfireDiscoveryInterface,
-  InteractionStyle,
-} from "@/features/campfires/discovery/index";
 import { formatNumber } from "@/utils";
+import { CampfireInterface, InteractionStyle } from "@/features/campfires";
 
 const getInteractionConfig = (style: InteractionStyle) => {
   switch (style) {
@@ -53,7 +50,7 @@ const getInteractionConfig = (style: InteractionStyle) => {
 export const DiscoveryCard = ({
   discovery,
 }: {
-  discovery: CampfireDiscoveryInterface;
+  discovery: CampfireInterface;
 }) => {
   const config = getInteractionConfig(discovery.interaction_style);
   const IconComponent = config.icon;
