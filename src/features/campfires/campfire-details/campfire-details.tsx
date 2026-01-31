@@ -99,9 +99,9 @@ export const CampfireDetails = ({
 
         {/* Name and CTA buttons */}
         <div className="flex w-full px-2 lg:px-4">
-          <div className="w-full pl-16 md:pl-18 pt-2 flex flex-row items-center justify-between gap-4">
-            <div className="flex items-center gap-2">
-              <h1 className="text-xl md:text-2xl font-bold">
+          <div className="w-full pl-18 pt-2 flex flex-col md:flex-row items-start md:items-center justify-between gap-2 md:gap-4">
+            <div className="flex items-center gap-1 md:gap-2">
+              <h1 className="text-lg md:text-2xl font-bold">
                 {`${campfire.name}`}
               </h1>
               <Globe size={18} className="text-green-500" />
@@ -115,7 +115,7 @@ export const CampfireDetails = ({
                 onClick={handleCreatePost}
               >
                 <Plus size={16} />
-                <span className="hidden sm:inline">Create Post</span>
+                <span className="">Create Post</span>
               </Button>
 
               <Button
