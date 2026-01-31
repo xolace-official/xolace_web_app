@@ -131,7 +131,7 @@ const CampfireActionsPopover: React.FC<CampfireActionsPopoverProps> = ({
 
   const handleOpenInNewTab = () => {
     setIsOpen(false);
-    window.open(window.location.href, "_blank");
+    window.open(window.location.href, "_blank", "noopener,noreferrer");
   };
 
   return (

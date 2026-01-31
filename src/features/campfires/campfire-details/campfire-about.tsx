@@ -63,7 +63,7 @@ const rules: { id: string; title: string; description: string }[] = [
     id: "rule-5",
     title: "Listen to moderators",
     description:
-      "Moderators have the final say in enforcing rules. If a moderator asks you to stop or adjust behavi",
+      "Moderators have the final say in enforcing rules. If a moderator asks you to stop or adjust behavior, comply promptly.",
   },
 ];
 
@@ -112,7 +112,7 @@ const CampfireAbout = ({ campfire, setDrawerOpen }: CampfireAboutProps) => {
 
           <div className="flex flex-col items-start">
             <span className="font-semibold flex items-center gap-1">
-              <div className="w-2 h-2 rounded-full bg-green-500 animate-pulse" />
+              <span className="w-2 h-2 rounded-full bg-accent animate-pulse" />
               {/* {Math.floor(campfire.members * 0.05)} Approximate online users */}
               Online
             </span>
