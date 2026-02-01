@@ -71,7 +71,7 @@ src/
 - Query provider configured with 5-min stale time, 20-min refetch interval
 
 **Data Fetching:**
-- Client components: Use `useQuery` from `@tanstack/react-query`
+- Client components: Use the api-client.ts file to fetch data 
 - Mutations: Use Next.js server actions in `src/actions/`
 - API routes: Hono handlers in `backend/routes/`
 - Fetch or mutation pattern should not be done at page level( page-container)

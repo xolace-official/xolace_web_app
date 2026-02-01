@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import ManageCampfireCard, {
   type UserCampfireFavoriteJoin,
 } from "@/components/cards/campfires/manage-card";
@@ -144,27 +144,27 @@ export function ManageCampfireList() {
   const [togglingId, setTogglingId] = useState<string | null>(null);
   const [joiningId, setJoiningId] = useState<string | null>(null);
 
-  const handleToggleFavorite = async (
-    campfireId: string,
-    currentState: boolean,
-  ) => {
-    setTogglingId(campfireId);
+  const handleToggleFavorite = useCallback(
+    async (campfireId: string, currentState: boolean) => {
+      setTogglingId(campfireId);
 
-    // Simulate API call
-    await new Promise((resolve) => setTimeout(resolve, 500));
+      // Simulate API call
+      await new Promise((resolve) => setTimeout(resolve, 500));
 
-    setCampfires((prev) =>
-      prev.map((campfire) =>
-        campfire.campfireId === campfireId
-          ? { ...campfire, isFavorite: !currentState }
-          : campfire,
-      ),
-    );
+      setCampfires((prev) =>
+        prev.map((campfire) =>
+          campfire.campfireId === campfireId
+            ? { ...campfire, isFavorite: !currentState }
+            : campfire,
+        ),
+      );
 
-    setTogglingId(null);
-  };
+      setTogglingId(null);
+    },
+    [],
+  );
 
-  const handleJoinCampfire = async (campfireId: string) => {
+  const handleJoinCampfire = useCallback(async (campfireId: string) => {
     setJoiningId(campfireId);
 
     // Simulate API call
@@ -179,10 +179,10 @@ export function ManageCampfireList() {
     );
 
     setJoiningId(null);
-  };
+  }, []);
 
   return (
-    <div className="flex flex-col gap-4">
+    <div className="flex flex-col gap-4 [&>*]:content-visibility-auto">
       {campfires.map((campfire) => (
         <ManageCampfireCard
           key={campfire.campfireId}
