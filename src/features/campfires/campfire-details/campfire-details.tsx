@@ -2,7 +2,7 @@
 
 import { Globe, Info, Plus } from "lucide-react";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -14,49 +14,35 @@ import CampfireGuideModal from "@/features/campfires/campfire-details/campfire-g
 import { CampfireHighlight } from "@/features/campfires/campfire-details/campfire-highlight";
 import { cn } from "@/lib/utils";
 
+type TabKey = "feed" | "about";
+
+const TAB_OPTIONS = [
+  { key: "feed", label: "Feed" },
+  { key: "about", label: "About" },
+] as const;
+
+const UI_RESOURCES: { label: string; value: string }[] = [
+  { label: "New Post", value: "new-post" },
+  { label: "New Post", value: "new-post" },
+];
+
 export const CampfireDetails = ({
   campfire,
 }: {
   campfire: CampfireInterface;
 }) => {
   const router = useRouter();
-  const [selectedTab, setSelectedTab] = useState("feed");
+  const [selectedTab, setSelectedTab] = useState<TabKey>("feed");
   const [isProcessingMembership, setIsProcessingMembership] = useState(false);
   const [openGuideModal, setOpenGuideModal] = useState(false);
 
   const configColor = getInteractionConfig(campfire.interaction_style);
 
-  const handleCreatePost = () => {
+  const handleCreatePost = useCallback(() => {
     router.push(`/create-post?submit=${encodeURIComponent(campfire.name)}`);
-  };
+  }, [router, campfire.name]);
 
-  //Dummy ui resource
-  const uiResources: { label: string; value: string }[] = [
-    { label: "New Post", value: "new-post" },
-    { label: "New Post", value: "new-post" },
-  ];
-
-  //Helper for join action
-  const handleJoinToggle = async () => {};
-
-  const tabOptions: {
-    key: string;
-    label: string;
-    children: React.ReactNode;
-  }[] = [
-    {
-      key: "feed",
-      label: "Feed",
-      children: <CampfireHighlight campfire={campfire} />,
-    },
-    {
-      key: "about",
-      label: "About",
-      children: (
-        <CampfireAbout campfire={campfire} setDrawerOpen={setOpenGuideModal} />
-      ),
-    },
-  ];
+  const handleJoinToggle = useCallback(async () => {}, []);
 
   return (
     <>
@@ -172,45 +158,44 @@ export const CampfireDetails = ({
         {/*mobile layout*/}
         <div className="mt-4 flex w-full flex-col gap-4 lg:hidden">
           <div className="flex flex-row items-start gap-4 px-4">
-            {tabOptions.map((tab) => {
-              const activeTab = selectedTab === tab.key;
-              return (
-                <Button
-                  key={tab.key}
-                  onClick={() => setSelectedTab(tab.key)}
-                  size={"sm"}
-                  variant="outline"
-                  className={cn(
-                    "rounded-full px-6",
-                    activeTab && "bg-accent text-accent-foreground",
-                  )}
-                >
-                  {tab.label}
-                </Button>
-              );
-            })}
+            {TAB_OPTIONS.map((tab) => (
+              <Button
+                key={tab.key}
+                onClick={() => setSelectedTab(tab.key)}
+                size={"sm"}
+                variant="outline"
+                className={cn(
+                  "rounded-full px-6",
+                  selectedTab === tab.key && "bg-accent text-accent-foreground",
+                )}
+              >
+                {tab.label}
+              </Button>
+            ))}
           </div>
           <div className="px-4">
-            {tabOptions.map(
-              (tab) =>
-                tab.key === selectedTab && (
-                  <div key={tab.key}>{tab.children}</div>
-                ),
+            {selectedTab === "feed" ? (
+              <CampfireHighlight campfire={campfire} />
+            ) : (
+              <CampfireAbout
+                campfire={campfire}
+                setDrawerOpen={setOpenGuideModal}
+              />
             )}
           </div>
         </div>
       </div>
 
-      {openGuideModal && (
+      {openGuideModal ? (
         <CampfireGuideModal
           welcomeMsg={"You are welcome !"}
           campfireName={campfire.name}
-          resource={uiResources}
+          resource={UI_RESOURCES}
           icon={campfire.icon_path || null}
           drawerOpen={openGuideModal}
           setDrawerOpen={setOpenGuideModal}
         />
-      )}
+      ) : null}
     </>
   );
 };
