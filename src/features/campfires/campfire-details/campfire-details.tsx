@@ -121,7 +121,7 @@ export const CampfireDetails = ({
 
               <Button
                 size="sm"
-                variant={campfire.isMember ? "secondary" : "outline"}
+                variant={"secondary"}
                 onClick={handleJoinToggle}
                 disabled={isProcessingMembership}
                 className="rounded-full min-w-[80px]"
@@ -140,7 +140,7 @@ export const CampfireDetails = ({
                 <Button
                   className={cn("flex items-center gap-1 rounded-full")}
                   size="sm"
-                  variant="outline"
+                  variant="destructive"
                   onClick={() =>
                     router.replace(`/c/${campfire.slug}/mod/moderators`)
                   }
