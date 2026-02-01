@@ -182,7 +182,7 @@ export function ManageCampfireList() {
   }, []);
 
   return (
-    <div className="flex flex-col gap-4 [&>*]:content-visibility-auto">
+    <div className="flex flex-col gap-4 *:content-visibility-auto">
       {campfires.map((campfire) => (
         <ManageCampfireCard
           key={campfire.campfireId}
