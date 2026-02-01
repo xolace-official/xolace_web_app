@@ -17,7 +17,7 @@ import {
   getRankInfo,
 } from "@/features/campfires";
 import CampfireAvatar from "@/features/campfires/campfire-details/campfire-avatar";
-import { formatDate, formatNumber } from "@/utils";
+import { formatDateTime, formatNumber } from "@/utils";
 
 interface CampfireAboutProps {
   campfire: CampfireInterface;
@@ -87,7 +87,7 @@ const CampfireAbout = ({ campfire, setDrawerOpen }: CampfireAboutProps) => {
           <span className="flex items-center gap-2">
             <TicketCheck size={16} />
             Created{" "}
-            {formatDate(campfire.created_at || new Date().toISOString())}
+            {formatDateTime(campfire.created_at || new Date().toISOString())}
           </span>
           <span className="flex items-center gap-2 uppercase">
             <Globe size={16} />
