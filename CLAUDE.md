@@ -17,6 +17,7 @@ bun run type-check             # TypeScript type checking
 
 # Testing
 bun test                       # Run all tests
+bun test <path>                # Run single test file
 bun test:watch                 # Run tests in watch mode
 
 # Supabase
@@ -24,6 +25,9 @@ bun run supabase:start         # Start local Supabase
 bun run supabase:restart       # Restart local Supabase
 bun run supabase:generate-types    # Regenerate DB types from schema
 bun run supabase:generate-migration # Create new migration from diff
+
+# API Client Generation
+bun run sync-api               # Regenerate src/api-client.ts from OpenAPI spec (requires dev server running)
 
 # UI Components
 bun run add-component          # Add shadcn components (bunx shadcn@latest add)
@@ -38,6 +42,7 @@ bun run add-component          # Add shadcn components (bunx shadcn@latest add)
 ```
 backend/                    # Hono API layer
 ├── routes/                 # API route handlers (/api/v1/*)
+│   └── v1/                 # Versioned routes (public.router.ts, auth.router.ts)
 ├── authz/                  # Authorization logic
 ├── middlewares/            # API middlewares
 └── types.ts                # AppBindings for Hono context
@@ -46,7 +51,7 @@ src/
 ├── app/                    # Next.js App Router
 │   ├── (auth-pages)/       # Public auth routes
 │   ├── (protected)/        # Authenticated routes
-│   └── api/                # API routes (Hono mounted here)
+│   └── api/[[...router]]/  # Hono catch-all route handler
 ├── features/               # Feature modules (auth, composer, feed, campfires, etc.)
 ├── components/
 │   ├── ui/                 # Base shadcn components
@@ -56,6 +61,7 @@ src/
 │   └── [molecule-ui, spectrumui, kibo-ui]  # Additional registries
 ├── actions/                # Next.js server actions
 ├── hooks/                  # Custom React hooks
+├── api-client.ts           # Generated API client (do not edit manually)
 ├── lib/
 │   ├── supabase/           # Supabase clients (server.ts, admin.ts, middleware.ts)
 │   └── utils.ts            # cn() helper, utilities
@@ -71,10 +77,15 @@ src/
 - Query provider configured with 5-min stale time, 20-min refetch interval
 
 **Data Fetching:**
-- Client components: Use the api-client.ts file to fetch data 
+- Client components: Use generated hooks from `src/api-client.ts` (Orval-generated React Query hooks)
 - Mutations: Use Next.js server actions in `src/actions/`
 - API routes: Hono handlers in `backend/routes/`
-- Fetch or mutation pattern should not be done at page level( page-container)
+- Never fetch data at page level (page-container); fetch in feature components
+
+**API Layer:**
+- Hono mounted at `/api/` with versioned routes (`/api/v1/public/*`, `/api/v1/auth/*`)
+- OpenAPI spec available at `/api/doc`
+- Run `bun run sync-api` after adding/modifying API routes to regenerate client
 
 **Authentication:** Supabase Auth (email/password + anonymous)
 - Server-side sessions via middleware
