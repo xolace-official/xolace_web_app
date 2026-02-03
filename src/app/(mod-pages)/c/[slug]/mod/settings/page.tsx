@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import SettingsTab from "@/features/mods/features/settings/settings-tab";
+import { SettingsPage } from "@/app/(mod-pages)/c/[slug]/mod/settings/settings-page";
 
 export const metadata: Metadata = {
   title: "General Settings",
@@ -14,12 +14,7 @@ interface Props {
 const GeneralSettingsPage = async ({ params }: Props) => {
   const { slug } = await params;
 
-  return (
-    <main>
-      {/*<SettingsTab slug={slug}/>*/}
-      <div>Settings page</div>
-    </main>
-  );
+  return <SettingsPage settings={slug} />;
 };
 
 export default GeneralSettingsPage;
