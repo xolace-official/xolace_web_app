@@ -1,4 +1,4 @@
-import React from "react";
+import React, { Suspense } from "react";
 import { SidebarProvider } from "@/components/ui/sidebar";
 import type { Metadata } from "next";
 import { ModsSidebarLeft } from "@/features/mods/layout/mod-siderbar-left";
@@ -18,7 +18,7 @@ interface ModLayoutProps {
 }
 
 export default async function ModLayout({ children, params }: ModLayoutProps) {
-  // const { slug } = await params;
+  const { slug } = await params;
   // const supabase = await createClient();
   //
   // // Check authentication
@@ -74,7 +74,11 @@ export default async function ModLayout({ children, params }: ModLayoutProps) {
           } as React.CSSProperties
         }
       >
-        <ModsSidebarLeft />
+        <Suspense
+          fallback={<div className="text-sm animate-pulse">Loading ...</div>}
+        >
+          <ModsSidebarLeft />
+        </Suspense>
         <MainContainer>{children}</MainContainer>
       </SidebarProvider>
     </div>
