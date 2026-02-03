@@ -9,8 +9,6 @@ import {
   ExperienceSection,
   NotificationsSection,
 } from "./_components";
-import { Switch } from "@/components/ui/switch";
-import { Label } from "@/components/ui/label";
 
 export function PreferencesPage() {
   return (
@@ -19,10 +17,6 @@ export function PreferencesPage() {
         title="Preferences"
         description="Customize your experience on the platform."
       />
-      <div className="flex items-center space-x-2">
-        <Switch id="airplane-mode" />
-        <Label htmlFor="airplane-mode">Airplane Mode</Label>
-      </div>
 
       <PageSection title="Display">
         <DisplaySection />

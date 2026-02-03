@@ -1,7 +1,7 @@
 "use client";
 
 import { SettingsPanel, SettingsPanelSection } from "@/components/settings";
-import { Switch } from "@/components/ui/switch";
+import { Checkbox } from "@/components/ui/checkbox";
 import type { PreferenceToggleOption } from "./preference-types";
 
 const experienceOptions: PreferenceToggleOption[] = [
@@ -48,9 +48,9 @@ export function ExperienceSection() {
           title={option.label}
           description={option.description}
         >
-          <Switch
+          <Checkbox
             checked={preferences[option.key as keyof typeof preferences]}
-            onCheckedChange={(checked) => handleToggle(option.key, checked)}
+            onCheckedChange={(checked) => handleToggle(option.key, !!checked)}
             disabled={isLoading}
           />
         </SettingsPanelSection>

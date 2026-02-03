@@ -1,6 +1,6 @@
 "use client";
 
-import { Switch } from "@/components/ui/switch";
+import { Checkbox } from "@/components/ui/checkbox";
 import { SettingsPanel, SettingsPanelSection } from "@/components/settings";
 import { SensitiveContentSelect } from "./sensitive-content-select";
 import type {
@@ -64,11 +64,11 @@ export function ContentSection() {
           title={option.label}
           description={option.description}
         >
-          <Switch
+          <Checkbox
             checked={
               preferences[option.key as keyof typeof preferences] as boolean
             }
-            onCheckedChange={(checked) => handleToggle(option.key, checked)}
+            onCheckedChange={(checked) => handleToggle(option.key, !!checked)}
             disabled={isLoading}
           />
         </SettingsPanelSection>
