@@ -1,9 +1,9 @@
 "use client";
 
 import { SettingsPanel, SettingsPanelSection } from "@/components/settings";
-import { ThemeSelect } from "./theme-select";
 import { LanguageSelect } from "./language-select";
 import type { ThemeOption } from "./preference-types";
+import { ThemeSelect } from "./theme-select";
 
 export function DisplaySection() {
   // TODO: Get preferences from your preferences store
