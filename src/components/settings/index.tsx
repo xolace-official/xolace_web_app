@@ -31,7 +31,7 @@ export function SettingsPanelSection({
   return (
     // biome-ignore lint/a11y/noLabelWithoutControl: the input is in the children prop
     <label className="flex gap-x-5 md:gap-x-10 py-4 justify-between items-center">
-      <div>
+      <div className="flex-1 min-w-0">
         <div className="text-sm font-semibold flex items-center gap-1 line-clamp-1">
           {title}
         </div>
@@ -40,7 +40,7 @@ export function SettingsPanelSection({
         )}
       </div>
 
-      {children}
+      <div className="shrink-0">{children}</div>
     </label>
   );
 }
@@ -57,7 +57,7 @@ export function SettingsPanelSectionMini({
   return (
     // biome-ignore lint/a11y/noLabelWithoutControl: the input is in the children prop
     <label className="flex gap-x-5 md:gap-x-10 py-2 justify-between items-center group">
-      <div>
+      <div className="flex-1 min-w-0">
         <div className="text-sm font-semibold flex items-center gap-1">
           {title}
         </div>
@@ -66,7 +66,7 @@ export function SettingsPanelSectionMini({
         )}
       </div>
 
-      {children}
+      <div className="shrink-0">{children}</div>
     </label>
   );
 }
