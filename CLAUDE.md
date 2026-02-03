@@ -2,6 +2,60 @@
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
+## XOLACE APP Overview
+The below description about Xolace is to help you suggest improvement or ideas when we building ui/features in the context of what Xolace is about.
+
+What Xolace Is (at its core)
+
+Xolace is a hybrid social + mental-wellness platform built around the idea of a digital campfire — a place where people can show up honestly without performing.
+It is not therapy, and it does not replace professionals.
+Instead, Xolace exists before, between, and outside of therapy — especially for people who don’t know what they need yet.
+
+Xolace targets:
+Emotional expression without pressure
+Anonymous or low-identity sharing
+Gentle reflection and grounding
+Peer resonance, not viral performance
+The platform is intentionally anti-performative.
+
+Audience Reality (design for this person)
+The dominant user mindset:
+“I don’t know what I need, but something feels off.”
+Users are often:
+Emotionally tired
+Burned out
+Over-stimulated by traditional social media
+Not ready for therapy
+Afraid of being judged
+
+Design should feel:
+Calm
+Spacious
+Human
+Unrushed
+
+
+Business Reality (important constraints)
+Early-stage startup
+Engagement is currently fragile
+The system must deliver value even when communities are quiet
+AI costs must be controlled
+Trust is more important than growth speed
+Monetization is still evolving (subscription / credits), so avoid hard assumptions.
+
+Summary for an AI Designer
+If you are designing for Xolace:
+You are not designing a social network.
+You are not designing a productivity tool.
+You are not designing a therapy app.
+
+You are designing a place to sit with yourself — together.
+When in doubt, choose:
+Softer over louder
+Slower over faster
+Safer over stickier
+Honest over impressive
+
 ## Commands
 
 ```bash
