@@ -18,9 +18,9 @@ const quickLinks = [
     external: false,
   },
   {
-    href: "mailto:xolace25@gmail.com",
+    href: "mailto:support@xolaceinc.com",
     label: "Email Us",
-    description: "xolace25@gmail.com",
+    description: "support@xolaceinc.com",
     icon: MailIcon,
     external: true,
   },

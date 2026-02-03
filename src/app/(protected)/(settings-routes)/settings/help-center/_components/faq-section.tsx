@@ -8,7 +8,11 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
-import { Input } from "@/components/ui/input";
+import {
+  InputGroup,
+  InputGroupAddon,
+  InputGroupInput,
+} from "@/components/ui/input-group";
 import { helpFaqs } from "./help-center-data";
 
 export function FaqSection() {
@@ -28,18 +32,17 @@ export function FaqSection() {
   return (
     <div className="space-y-6">
       {/* Search */}
-      <div className="relative">
-        <span className="absolute inset-y-0 start-0 flex items-center ps-3">
-          <Search className="size-4 text-muted-foreground" />
-        </span>
-        <Input
+      <InputGroup>
+        <InputGroupAddon>
+          <Search />
+        </InputGroupAddon>
+        <InputGroupInput
           type="text"
           placeholder="Search for help..."
-          className="ps-9"
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
         />
-      </div>
+      </InputGroup>
 
       {/* FAQ List */}
       <div className="rounded-lg border bg-card">
