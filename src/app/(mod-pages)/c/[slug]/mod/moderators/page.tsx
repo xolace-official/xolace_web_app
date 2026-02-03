@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import ModsAndMembersTab from "@/features/mods/features/moderators/mods-and-members-tab";
+import { ModeratorsPage } from "@/app/(mod-pages)/c/[slug]/mod/moderators/moderators-page";
 
 export const metadata: Metadata = {
   title: "Moderator",
@@ -13,12 +13,7 @@ interface Props {
 const ModsPage = async ({ params }: Props) => {
   const { slug } = await params;
 
-  return (
-    <main>
-      {/*<ModsAndMembersTab slug={slug}/>*/}
-      <p>Mods page</p>
-    </main>
-  );
+  return <ModeratorsPage moderators={slug} />;
 };
 
 export default ModsPage;
