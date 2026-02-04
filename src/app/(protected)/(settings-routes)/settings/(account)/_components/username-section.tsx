@@ -1,6 +1,6 @@
 "use client";
 
-import * as React from "react";
+import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -24,8 +24,8 @@ export function UsernameSection() {
   const currentUsername = "";
   const isPending = false;
 
-  const [open, setOpen] = React.useState(false);
-  const [username, setUsername] = React.useState(currentUsername);
+  const [open, setOpen] = useState(false);
+  const [username, setUsername] = useState(currentUsername);
 
   const handleSubmit = () => {
     if (!username.trim()) return;

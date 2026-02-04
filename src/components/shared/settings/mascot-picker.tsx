@@ -1,13 +1,13 @@
 "use client";
 
-import * as React from "react";
+import { memo, useState } from "react";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { cn } from "@/lib/utils";
 
 // TODO: Replace with actual mascot images from your assets
@@ -33,9 +33,9 @@ export function MascotPicker({
   onValueChange,
   children,
 }: MascotPickerProps) {
-  const [open, setOpen] = React.useState(false);
+  const [open, setOpen] = useState(false);
 
-  const selectedMascot = MASCOT_OPTIONS.find((m) => m.id === value);
+  //const selectedMascot = MASCOT_OPTIONS.find((m) => m.id === value);
 
   return (
     <Popover open={open} onOpenChange={setOpen}>
@@ -90,7 +90,7 @@ interface MascotItemProps {
   onSelect: () => void;
 }
 
-const MascotItem = React.memo(function MascotItem({
+const MascotItem = memo(function MascotItem({
   mascot,
   isSelected,
   onSelect,

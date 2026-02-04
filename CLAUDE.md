@@ -155,6 +155,7 @@ src/
 - Use type inference over explicit types
 - Avoid `any`, `unknown` unless justified
 - Path aliases: `@/*` → `./src/*`, `@backend/*` → `./backend/*`
+- Please dont import stuff like this `import * as React from "react";` , instead import what you need. eg: `import { useState } from "react";` 
 
 **Naming:**
 - Components/files: kebab-case (`post-composer.tsx`)

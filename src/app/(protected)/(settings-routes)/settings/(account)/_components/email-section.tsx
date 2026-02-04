@@ -1,6 +1,6 @@
 "use client";
 
-import * as React from "react";
+import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -30,8 +30,8 @@ export function EmailSection() {
   const currentEmail = "";
   const isPending = false;
 
-  const [open, setOpen] = React.useState(false);
-  const [email, setEmail] = React.useState(currentEmail);
+  const [open, setOpen] = useState(false);
+  const [email, setEmail] = useState(currentEmail);
 
   const handleSubmit = () => {
     if (!email.trim()) return;

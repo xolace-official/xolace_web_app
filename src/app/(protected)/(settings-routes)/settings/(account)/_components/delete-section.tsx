@@ -1,8 +1,8 @@
 "use client";
 
-import * as React from "react";
-import { Button } from "@/components/ui/button";
 import { ConfirmDialog } from "@/components/shared/settings/confirm-dialog";
+import { Button } from "@/components/ui/button";
+import { useState } from "react";
 
 export function DeleteSection() {
   // TODO: Add mutation hook for deleting account
@@ -11,7 +11,7 @@ export function DeleteSection() {
   // Placeholder values - replace with actual state
   const isPending = false;
 
-  const [open, setOpen] = React.useState(false);
+  const [open, setOpen] = useState(false);
 
   const handleDelete = () => {
     // TODO: Call mutation to delete account

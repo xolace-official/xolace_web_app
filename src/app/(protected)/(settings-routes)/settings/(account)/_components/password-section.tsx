@@ -1,7 +1,7 @@
 "use client";
 
-import * as React from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { Button } from "@/components/ui/button";
@@ -59,7 +59,7 @@ export function PasswordSection() {
   // Placeholder values - replace with actual state
   const isPending = false;
 
-  const [open, setOpen] = React.useState(false);
+  const [open, setOpen] = useState(false);
 
   const form = useForm<PasswordFormValues>({
     resolver: zodResolver(passwordSchema),
