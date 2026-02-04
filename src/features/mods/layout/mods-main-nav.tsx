@@ -57,7 +57,7 @@ export function ModsNavMain() {
   };
 
   return (
-    <SidebarMenu className="gap-6 pt-0 ">
+    <SidebarMenu className="gap-6 pt-0 px-2 md:px-4 ">
       <Button
         variant={"ghostDestructive"}
         size={"sm"}
@@ -142,7 +142,7 @@ export function ModsNavMain() {
                 <SidebarMenuItem key={item.label} className="w-full flex">
                   <SidebarMenuButton
                     asChild
-                    className={`${isActive && "border-s-4 rounded-none"}  py-4`}
+                    className={`${isActive && "border-s-4"}  py-4`}
                     onClick={() => setOpenMobile(false)}
                     tooltip={item.label}
                   >
