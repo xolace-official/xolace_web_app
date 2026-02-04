@@ -65,8 +65,13 @@ export function QuickLinksSection() {
                 target={link.external ? "_blank" : undefined}
                 rel={link.external ? "noopener noreferrer" : undefined}
                 className="text-muted-foreground hover:text-foreground transition-colors"
+                aria-label={`Open ${link.label}`}
               >
-                {link.external && <ExternalLinkIcon className="size-4" />}
+                {link.external ? (
+                  <ExternalLinkIcon className="size-4" aria-hidden="true" />
+                ) : (
+                  <span className="text-xs">Open</span>
+                )}
               </Link>
             </SettingsPanelSection>
           );
