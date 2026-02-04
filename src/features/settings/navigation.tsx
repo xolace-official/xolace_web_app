@@ -1,6 +1,7 @@
 import {
   BrainIcon,
   Cuboid,
+  HelpCircleIcon,
   ImageIcon,
   PaletteIcon,
   TagIcon,
@@ -14,28 +15,33 @@ export const settingsNavigation = [
     icon: <UserIcon size={8} />,
   },
   {
-    pathname: "/settings/config",
-    label: "Config",
+    pathname: "/settings/preferences",
+    label: "Preferences",
     icon: <BrainIcon size={8} />,
   },
+  // {
+  //   pathname: "/settings/theme",
+  //   label: "Theme",
+  //   icon: <PaletteIcon size={8} />,
+  // },
+  // {
+  //   pathname: "/settings/tags",
+  //   label: "Tags",
+  //   icon: <TagIcon size={8} />,
+  // },
+  // {
+  //   pathname: "/settings/assets",
+  //   label: "Assets",
+  //   icon: <ImageIcon size={8} />,
+  // },
+  // {
+  //   pathname: "/settings/data",
+  //   label: "Data",
+  //   icon: <Cuboid size={8} />,
+  // },
   {
-    pathname: "/settings/theme",
-    label: "Theme",
-    icon: <PaletteIcon size={8} />,
-  },
-  {
-    pathname: "/settings/tags",
-    label: "Tags",
-    icon: <TagIcon size={8} />,
-  },
-  {
-    pathname: "/settings/assets",
-    label: "Assets",
-    icon: <ImageIcon size={8} />,
-  },
-  {
-    pathname: "/settings/data",
-    label: "Data",
-    icon: <Cuboid size={8} />,
+    pathname: "/settings/help-center",
+    label: "Help Center",
+    icon: <HelpCircleIcon size={8} />,
   },
 ];
