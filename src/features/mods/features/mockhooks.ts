@@ -703,8 +703,11 @@ export function getCampfireModerators(campfireId: string) {
   return { data, isLoading, isError, error };
 }
 
-// 8. getCampfireIdWithSlug
-export function getCampfireIdWithSlug(slug: string) {
+// ============================================
+// HOOK: getCampfireWithSlug
+// ============================================
+
+export function useCampfireWithSlug(slug: string, userId?: string) {
   const [data, setData] = useState<CampfireInterface | null>(null);
   const [isPending, setIsPending] = useState(true);
   const [isError, setIsError] = useState(false);
@@ -717,36 +720,174 @@ export function getCampfireIdWithSlug(slug: string) {
 
     await new Promise((resolve) => setTimeout(resolve, 700));
 
-    if (Math.random() < 0.05) {
-      const errorMessage = "Failed to fetch campfire data";
-      setIsError(true);
-      setError(new Error(errorMessage));
-      setIsPending(false);
-      return;
-    }
-
     const campfire = dummy_campfires.find((c) => c.slug === slug);
 
     if (!campfire) {
-      const errorMessage = `Campfire with slug "${slug}" not found`;
       setIsError(true);
-      setError(new Error(errorMessage));
+      setError(new Error(`Campfire with slug "${slug}" not found`));
       setIsPending(false);
       return;
     }
 
-    console.log(`Fetching campfire with slug: ${slug}`, campfire);
     setData(campfire);
     setIsPending(false);
   };
 
   useEffect(() => {
     fetchCampfire();
-  }, [slug]);
+  }, [slug, userId]);
 
-  const refetch = () => {
-    fetchCampfire();
+  return {
+    data,
+    isPending,
+    isError,
+    error,
+    refetch: fetchCampfire,
+  };
+}
+
+export interface UpdateCampfireParams {
+  campfireId: string;
+  slug: string;
+  updates: {
+    name?: string;
+    slug?: string;
+    description?: string;
+    welcomeMessage?: string;
+    visibility?: string;
+    interaction_style?: string;
+    [key: string]: any; // Allow other fields
+  };
+}
+
+export interface MutationCallbacks {
+  onSuccess?: (data: any) => void;
+  onError?: (error: Error) => void;
+}
+
+export function useUpdateCampfireMutation() {
+  const [isPending, setIsPending] = useState(false);
+  const [error, setError] = useState<Error | null>(null);
+
+  const mutate = (
+    params: UpdateCampfireParams,
+    callbacks?: MutationCallbacks,
+  ) => {
+    const executeUpdate = async () => {
+      setIsPending(true);
+      setError(null);
+
+      try {
+        // Simulate API call delay
+        await new Promise((resolve) => setTimeout(resolve, 1500));
+
+        // Randomly simulate error (10% chance)
+        if (Math.random() < 0.1) {
+          throw new Error("Failed to update campfire settings");
+        }
+
+        // Simulate successful update
+        console.log("Campfire updated:", {
+          campfireId: params.campfireId,
+          slug: params.slug,
+          updates: params.updates,
+        });
+
+        // Update the dummy_campfires array (for local testing)
+        const campfireIndex = dummy_campfires.findIndex(
+          (c) => c.id === params.campfireId,
+        );
+
+        if (campfireIndex !== -1) {
+          dummy_campfires[campfireIndex] = <CampfireInterface>{
+            ...dummy_campfires[campfireIndex],
+            ...params.updates,
+          };
+        }
+
+        const result = {
+          success: true,
+          campfireId: params.campfireId,
+          updates: params.updates,
+        };
+
+        setIsPending(false);
+
+        // Call success callback
+        if (callbacks?.onSuccess) {
+          callbacks.onSuccess(result);
+        }
+
+        return result;
+      } catch (err) {
+        const error = err instanceof Error ? err : new Error("Unknown error");
+        setError(error);
+        setIsPending(false);
+
+        // Call error callback
+        if (callbacks?.onError) {
+          callbacks.onError(error);
+        }
+
+        throw error;
+      }
+    };
+
+    executeUpdate();
   };
 
-  return { data, isPending, isError, error, refetch };
+  const mutateAsync = async (params: UpdateCampfireParams) => {
+    setIsPending(true);
+    setError(null);
+
+    try {
+      // Simulate API call delay
+      await new Promise((resolve) => setTimeout(resolve, 1500));
+
+      // Randomly simulate error (10% chance)
+      if (Math.random() < 0.1) {
+        throw new Error("Failed to update campfire settings");
+      }
+
+      // Simulate successful update
+      console.log("Campfire updated:", {
+        campfireId: params.campfireId,
+        slug: params.slug,
+        updates: params.updates,
+      });
+
+      // Update the dummy_campfires array (for local testing)
+      const campfireIndex = dummy_campfires.findIndex(
+        (c) => c.id === params.campfireId,
+      );
+
+      if (campfireIndex !== -1) {
+        dummy_campfires[campfireIndex] = <CampfireInterface>{
+          ...dummy_campfires[campfireIndex],
+          ...params.updates,
+        };
+      }
+
+      const result = {
+        success: true,
+        campfireId: params.campfireId,
+        updates: params.updates,
+      };
+
+      setIsPending(false);
+      return result;
+    } catch (err) {
+      const error = err instanceof Error ? err : new Error("Unknown error");
+      setError(error);
+      setIsPending(false);
+      throw error;
+    }
+  };
+
+  return {
+    mutate,
+    mutateAsync,
+    isPending,
+    error,
+  };
 }
