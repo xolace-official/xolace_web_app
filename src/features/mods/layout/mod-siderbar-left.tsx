@@ -32,7 +32,7 @@ export function ModsSidebarLeft({
           <Tooltip>
             <TooltipTrigger asChild>
               <div
-                className="bg-bg  absolute top-0 -right-5 hidden h-10 w-10 cursor-pointer items-center justify-center rounded-full border-r-[1px] border-b-[0px] md:flex"
+                className="bg-muted border absolute top-0 -right-5 hidden h-10 w-10 cursor-pointer items-center justify-center rounded-full border-r-[1px] border-b-[0px] md:flex"
                 onClick={toggleSidebar}
               >
                 {open ? (

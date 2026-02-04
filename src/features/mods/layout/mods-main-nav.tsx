@@ -34,6 +34,12 @@ const moderatedCampfires: {
     name: "lwkkde",
     icon_url: "whltlwl",
   },
+  {
+    id: "kdke",
+    slug: "kskekslw",
+    name: "lwkkde",
+    icon_url: "whltlwl",
+  },
 ];
 export function ModsNavMain() {
   // get the slug params
@@ -76,7 +82,7 @@ export function ModsNavMain() {
             onValueChange={handleCampfireChange}
             disabled={moderatedCampfiresPending || isError}
           >
-            <SelectTrigger className="w-[160px] rounded-full h-8 border-none text-sm flex items-center">
+            <SelectTrigger className="w-full rounded-full h-8 border-none text-sm flex items-center">
               <SelectValue
                 placeholder={
                   moderatedCampfiresPending ? (
@@ -92,7 +98,7 @@ export function ModsNavMain() {
                 }
               />
             </SelectTrigger>
-            <SelectContent>
+            <SelectContent className={"flex w-full"}>
               {moderatedCampfiresPending ? (
                 <SelectItem value="loading" disabled>
                   <div className="flex items-center gap-2">
