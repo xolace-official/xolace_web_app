@@ -9,7 +9,7 @@ export async function submitHelpCenterQuestion(question: string) {
   }
 
   if (question.length > 500) {
-    return { error: "Question must be less than 500 characters." };
+    return { error: "Question must be 500 characters or fewer." };
   }
 
   // TODO: Uncomment when help_center table is created

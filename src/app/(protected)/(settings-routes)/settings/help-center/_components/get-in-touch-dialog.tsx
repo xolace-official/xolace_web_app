@@ -78,7 +78,7 @@ export function GetInTouchDialog() {
         <DialogHeader>
           <DialogTitle>Send us your question</DialogTitle>
           <DialogDescription>
-            Didn't find what you were looking for? We're happy to help — just
+            Didn't find what you were looking for? We're happy to help - just
             drop your question below.
           </DialogDescription>
         </DialogHeader>

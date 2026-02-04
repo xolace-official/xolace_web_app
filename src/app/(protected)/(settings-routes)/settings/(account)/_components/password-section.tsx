@@ -62,6 +62,7 @@ export function PasswordSection() {
   const [open, setOpen] = useState(false);
 
   const form = useForm<PasswordFormValues>({
+    mode: "onChange",
     resolver: zodResolver(passwordSchema),
     defaultValues: {
       newPassword: "",
