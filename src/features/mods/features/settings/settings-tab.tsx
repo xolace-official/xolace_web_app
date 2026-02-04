@@ -3,9 +3,9 @@
 import React, { useState } from "react";
 import GeneralSettings from "./general";
 import PrivacyAndDiscovery from "@/features/mods/features/settings/privacy-and-discovery";
-import { getCampfireWithSlug } from "@/features/mods/features/mockhooks";
 import ModSettingsTabError from "@/features/mods/features/settings/mods-settings-tab-error";
 import SettingsTabSkeleton from "@/features/mods/features/settings/settings-tab-skeleton";
+import { useCampfireWithSlug } from "@/features/mods/features/mockhooks";
 
 const SettingsTab = ({ slug }: { slug: string }) => {
   const user = {
@@ -22,7 +22,7 @@ const SettingsTab = ({ slug }: { slug: string }) => {
     isError,
     error,
     refetch,
-  } = getCampfireWithSlug(slug, user?.id);
+  } = useCampfireWithSlug(slug, user?.id);
 
   const tabOptions: {
     key: string;
