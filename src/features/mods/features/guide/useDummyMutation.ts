@@ -21,7 +21,7 @@ export const useDummyMutation = <TInput = any, TData = any>(
   const [isError, setIsError] = useState(false);
   const [error, setError] = useState<Error | null>(null);
 
-  const mutate = (payload: TInput) => {
+  const mutate = async (payload: TInput) => {
     console.log(`[${name}] payload:`, payload);
 
     setIsPending(true);
@@ -29,19 +29,18 @@ export const useDummyMutation = <TInput = any, TData = any>(
     setError(null);
 
     // fake async request
-    setTimeout(() => {
-      try {
-        // pretend backend returns what you sent
-        setData(payload as unknown as TData);
-        setIsPending(false);
-        toast.success(`${name} updated successfully`);
-      } catch (err) {
-        setIsPending(false);
-        setIsError(true);
-        setError(err as Error);
-        toast.error(`Failed to update ${name}`);
-      }
-    }, 800);
+    try {
+      await new Promise((resolve) => setTimeout(resolve, 1500));
+
+      setData(payload as unknown as TData);
+      setIsPending(false);
+      toast.success(`${name} updated successfully`);
+    } catch (err) {
+      setIsPending(false);
+      setIsError(true);
+      setError(err as Error);
+      toast.error(`Failed to update ${name}`);
+    }
   };
 
   return {

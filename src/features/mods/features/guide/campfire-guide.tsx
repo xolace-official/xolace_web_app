@@ -9,8 +9,8 @@ import SettingsItem, {
 } from "@/features/mods/features/settings/settings-items";
 import GuidePreviewDrawer from "@/features/mods/features/guide/guide-preview-drawer";
 import GuidePreview from "@/features/mods/features/guide/guide-preview";
-import Loader2Component from "@/features/mods/shared/Loader2Component";
 import { useDummyMutation } from "./useDummyMutation";
+import CampfireGuideSkeleton from "@/features/mods/features/guide/guide-skeleton";
 
 //Dummy ui resource
 const initialGuideData: {
@@ -181,11 +181,7 @@ const CampfireGuide = ({ slug }: { slug: string }) => {
   };
 
   if (isLoading) {
-    return (
-      <div className="flex flex-col items-center justify-center py-12">
-        <Loader2Component message="Loading campfire guide..." />
-      </div>
-    );
+    return <CampfireGuideSkeleton />;
   }
 
   if (isError) {

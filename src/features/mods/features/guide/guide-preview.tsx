@@ -56,7 +56,7 @@ const GuidePreview = ({
       </div>
 
       <div className={"flex w-full flex-col items-start gap-1"}>
-        <Alert className="rounded-xl bg-neutral-50 dark:bg-neutral-900">
+        <Alert className="rounded-xl bg-muted">
           <AlertDescription className="flex flex-wrap items-center gap-1 text-sm">
             {subsitutedWelcomeMsg}
           </AlertDescription>
