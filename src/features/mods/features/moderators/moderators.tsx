@@ -18,7 +18,7 @@ import ModeratorActionsPopover from "@/features/mods/features/moderators/action-
 import InviteModModal from "@/features/mods/features/moderators/invites-mod-modal";
 import { ParamsSearchBar } from "@/components/shared/params-search-bar";
 import { debounce } from "nuqs";
-import { useFiltersServer } from "@/components/shared/search-params";
+import { useModsFiltersServer } from "@/features/mods/features/moderators/mods-filter";
 
 interface ModeratorsProps {
   campfireId: string;
@@ -69,7 +69,7 @@ function useMockCampfireModerators() {
 const Moderators: React.FC<ModeratorsProps> = ({ campfireId }) => {
   const [showInviteModal, setShowInviteModal] = useState<boolean>(false);
   const [isPending, startTransition] = useTransition();
-  const [{ query }, setSearchParams] = useFiltersServer({
+  const [{ query }, setSearchParams] = useModsFiltersServer({
     limitUrlUpdates: debounce(250),
     shallow: false,
   });

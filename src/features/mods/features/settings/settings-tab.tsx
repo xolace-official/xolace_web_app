@@ -1,11 +1,12 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useTransition } from "react";
 import GeneralSettings from "./general";
 import PrivacyAndDiscovery from "@/features/mods/features/settings/privacy-and-discovery";
 import ModSettingsTabError from "@/features/mods/features/settings/mods-settings-tab-error";
 import SettingsTabSkeleton from "@/features/mods/features/settings/settings-tab-skeleton";
 import { useCampfireWithSlug } from "@/features/mods/features/mockhooks";
+import { useModsFiltersServer } from "@/features/mods/features/moderators/mods-filter";
 
 const SettingsTab = ({ slug }: { slug: string }) => {
   const user = {
@@ -13,7 +14,9 @@ const SettingsTab = ({ slug }: { slug: string }) => {
     name: "",
   };
 
-  const [activeTab, setActiveTab] = useState("general");
+  const [_, startTransition] = useTransition();
+  const [{ tab }, setSearchParams] = useModsFiltersServer({ startTransition });
+  const [activeTab, setActiveTab] = useState(tab);
 
   // fetch campfire details
   const {
@@ -61,7 +64,15 @@ const SettingsTab = ({ slug }: { slug: string }) => {
           {tabOptions.map((tab) => (
             <button
               key={tab.key}
-              onClick={() => setActiveTab(tab.key)}
+              onClick={() => {
+                setActiveTab(tab.key);
+                startTransition(async () => {
+                  await setSearchParams({
+                    tab: tab.key,
+                    query: "",
+                  });
+                });
+              }}
               className={`pb-1 text-sm md:text-base font-medium border-b-3 px-2 transition-colors ${
                 activeTab === tab.key
                   ? "border-b border-destructive text-destructive"
