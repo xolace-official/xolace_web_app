@@ -1,11 +1,6 @@
 import { PageContainer } from "@/components/app/page-container";
-import { CompleteProfileCard } from "@/components/cards/complete-profile-card";
 import { ThemeSwitcher } from "@/components/shared/theme-switcher";
-import { FeedList } from "@/features/feed/feed-list";
-import { RightSideContent } from "@/features/feed/right-side-content";
 import CampfireGuide from "@/features/mods/features/guide/campfire-guide";
-import React from "react";
-import { PageHeading } from "@/components/shared/layout/page-heading";
 
 export const GuidePage = ({ guide }: { guide: string }) => {
   return (

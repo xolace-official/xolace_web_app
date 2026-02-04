@@ -1,7 +1,5 @@
 import { PageContainer } from "@/components/app/page-container";
 import { ThemeSwitcher } from "@/components/shared/theme-switcher";
-
-import React from "react";
 import ModsAndMembersTab from "@/features/mods/features/moderators/mods-and-members-tab";
 
 export const ModeratorsPage = ({ moderators }: { moderators: string }) => {
