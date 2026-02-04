@@ -1,26 +1,30 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useTransition } from "react";
 import Moderators from "@/features/mods/features/moderators/moderators";
 import ApprovedCampers from "@/features/mods/features/moderators/approved-campers";
 import InvitesMod from "@/features/mods/features/moderators/invites-mod";
 import ModeratorRecruiting from "@/features/mods/features/moderators/recruiting";
 import ModMemberTabSkeleton from "@/features/mods/features/moderators/ModMemberTabSkeleton";
-import { getCampfireIdWithSlug } from "@/features/mods/features/mockhooks";
+import { useCampfireWithSlug } from "@/features/mods/features/mockhooks";
+import { useModsFiltersServer } from "@/features/mods/features/moderators/mods-filter";
 
 function ModMembersTabError(props: { refetch: any; error: any; slug: string }) {
   return null;
 }
 
 const ModsAndMemberTab = ({ slug }: { slug: string }) => {
-  const [activeTab, setActiveTab] = useState("moderators");
+  const [_, startTransition] = useTransition();
+  const [{ tab }, setSearchParams] = useModsFiltersServer({ startTransition });
+  const [activeTab, setActiveTab] = useState(tab);
+
   const {
     data: campfireData,
     isPending,
     isError,
     error,
     refetch,
-  } = getCampfireIdWithSlug(slug);
+  } = useCampfireWithSlug(slug);
 
   if (isPending) {
     return <ModMemberTabSkeleton />;
@@ -65,18 +69,24 @@ const ModsAndMemberTab = ({ slug }: { slug: string }) => {
 
   return (
     <div className="flex flex-col items-start w-full justify-start gap-4">
-      <h3 className="font-semibold text-2xl">Mods & Members</h3>
-
       <div className="flex flex-col w-full gap-4">
         <div className="flex gap-4">
           {tabOptions.map((tab) => (
             <button
               key={tab.key}
-              onClick={() => setActiveTab(tab.key)}
-              className={`pb-1 text-sm md:text-base font-medium border-b-3 transition-colors ${
+              onClick={() => {
+                setActiveTab(tab.key);
+                startTransition(async () => {
+                  await setSearchParams({
+                    tab: tab.key,
+                    query: "",
+                  });
+                });
+              }}
+              className={`pb-1 text-sm md:text-base font-medium border-b-3 px-2 transition-colors ${
                 activeTab === tab.key
-                  ? "border-ocean-500 text-ocean-500 dark:text-ocean-300 dark:border-ocean-300"
-                  : "border-transparent text-gray-500 hover:text-gray-700 dark:hover:text-gray-300"
+                  ? "border-b border-destructive text-destructive"
+                  : "border-transparent"
               }`}
             >
               {tab.label}

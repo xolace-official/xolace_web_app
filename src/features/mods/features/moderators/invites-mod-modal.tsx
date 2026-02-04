@@ -8,16 +8,9 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Textarea } from "@/components/ui/textarea";
-import {
-  Loader2,
-  Search,
-  UserRoundPlusIcon,
-  X,
-  AlertCircle,
-} from "lucide-react";
+import { Loader2, UserRoundPlusIcon, X, AlertCircle } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { formatDistanceToNow } from "date-fns";
@@ -28,6 +21,7 @@ import {
   useDebounce,
   useSearchUsers,
 } from "@/features/mods/features/mockhooks";
+import { SearchBar } from "@/components/shared/search-bar";
 
 export interface ModInviteProps {
   id: string;
@@ -179,7 +173,7 @@ const InviteModModal: React.FC<InviteModModalProps> = ({
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="w-full max-w-[98vw] sm:max-w-[600px] max-h-[90vh] overflow-y-auto border-0 rounded-2xl!">
+      <DialogContent className="w-full max-w-[98vw] sm:max-w-[500px] border-0 rounded-2xl!">
         <DialogHeader>
           <DialogTitle className="flex items-center gap-1">
             <UserRoundPlusIcon className="h-5 w-5" />
@@ -192,21 +186,19 @@ const InviteModModal: React.FC<InviteModModalProps> = ({
           <div className="relative">
             {!selectedMod ? (
               <>
-                <div className="relative">
-                  <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
-                  <Input
-                    type="text"
-                    placeholder="Search users to invite..."
+                {/* Search */}
+                <div className={"w-full flex gap-4 items-center"}>
+                  <SearchBar
                     value={searchTerm}
-                    onChange={(e) => setSearchTerm(e.target.value)}
-                    className="pl-10 rounded-lg"
-                    disabled={createInviteMutation.isPending}
+                    onChange={(value) => {
+                      setSearchTerm(value);
+                    }}
                   />
                 </div>
 
                 {/* Search Results */}
                 {debouncedSearchTerm.length >= 3 && (
-                  <div className="absolute z-10 w-full mt-1 bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 rounded-lg shadow-lg max-h-60 overflow-y-auto">
+                  <div className="absolute z-10 w-full mt-1 bg-muted border rounded-lg shadow-lg max-h-60 overflow-y-auto">
                     {isSearching && (
                       <div className="flex items-center justify-center p-4 text-sm text-gray-500">
                         <Loader2 className="mr-2 h-4 w-4 animate-spin" />{" "}
@@ -220,7 +212,7 @@ const InviteModModal: React.FC<InviteModModalProps> = ({
                       </div>
                     )}
                     {!isSearching && foundUsers && foundUsers.length === 0 && (
-                      <div className="p-4 text-sm text-gray-500 text-center">
+                      <div className="p-4 text-sm text-muted-foreground text-center">
                         No users found matching &quot;{debouncedSearchTerm}
                         &quot;
                       </div>
@@ -228,10 +220,10 @@ const InviteModModal: React.FC<InviteModModalProps> = ({
                     {foundUsers?.map((mod) => (
                       <div
                         key={mod.id}
-                        className="flex items-center p-3 hover:bg-neutral-100 dark:hover:bg-neutral-800 cursor-pointer border-b border-neutral-100 dark:border-neutral-800 last:border-b-0"
+                        className="flex items-center p-3 hover:bg-muted-foreground cursor-pointer border-b border last:border-b-0"
                         onClick={() => handleUserSelect(mod)}
                       >
-                        <Avatar className="w-10 h-10 border-2 border-neutral-200 dark:border-neutral-700">
+                        <Avatar className="w-10 h-10 border-2">
                           <AvatarImage
                             src={mod.avatar_url}
                             alt={mod.username}
@@ -241,10 +233,10 @@ const InviteModModal: React.FC<InviteModModalProps> = ({
                           </AvatarFallback>
                         </Avatar>
                         <div className="ml-3 flex-1">
-                          <div className="text-sm font-medium text-neutral-900 dark:text-neutral-100">
+                          <div className="text-sm font-medium text-foregorund">
                             {mod.username}
                           </div>
-                          <div className="text-xs text-neutral-500 dark:text-neutral-400">
+                          <div className="text-xs text-muted-foreground">
                             {formatDistanceToNow(new Date(mod.created_at))} old
                             • {mod.reputation.toLocaleString()} reputation
                           </div>
@@ -256,8 +248,8 @@ const InviteModModal: React.FC<InviteModModalProps> = ({
               </>
             ) : (
               /* Selected User Display */
-              <div className="flex items-center p-4 bg-neutral-50 dark:bg-neutral-800 rounded-lg border">
-                <Avatar className="w-10 h-10 border-2 border-neutral-200 dark:border-neutral-600">
+              <div className="flex items-center p-4 bg-muted rounded-lg border">
+                <Avatar className="w-10 h-10 border-2 border">
                   <AvatarImage
                     src={selectedMod.avatar_url}
                     alt={selectedMod.username}
@@ -267,10 +259,10 @@ const InviteModModal: React.FC<InviteModModalProps> = ({
                   </AvatarFallback>
                 </Avatar>
                 <div className="ml-3 flex-1">
-                  <div className="text-sm font-semibold text-neutral-900 dark:text-neutral-100">
+                  <div className="text-sm font-semibold text-muted-foregorund">
                     {selectedMod.username}
                   </div>
-                  <div className="text-xs text-neutral-500 dark:text-neutral-400">
+                  <div className="text-xs text-muted-foregorund">
                     {formatDistanceToNow(new Date(selectedMod.created_at))} old
                     • {selectedMod.reputation.toLocaleString()} reputation
                   </div>
@@ -280,7 +272,7 @@ const InviteModModal: React.FC<InviteModModalProps> = ({
                   size="sm"
                   onClick={handleCancelSelection}
                   disabled={createInviteMutation.isPending}
-                  className="h-8 w-8 p-0 hover:bg-neutral-200 dark:hover:bg-neutral-700"
+                  className="h-8 w-8 p-0 hover:bg-muted"
                 >
                   <X className="h-4 w-4" />
                 </Button>
@@ -291,10 +283,10 @@ const InviteModModal: React.FC<InviteModModalProps> = ({
           {/* Permissions */}
           <div className="space-y-4">
             <div>
-              <h4 className="text-sm font-semibold text-neutral-900 dark:text-neutral-100 mb-2">
+              <h4 className="text-sm font-semibold mb-2">
                 Firekeeper Permissions
               </h4>
-              <p className="text-xs text-neutral-600 dark:text-neutral-400 mb-4">
+              <p className="text-xs text-foreground mb-4">
                 Select the permission groups for this firekeeper. They will have
                 access to all permissions within the selected groups.
               </p>
@@ -302,7 +294,7 @@ const InviteModModal: React.FC<InviteModModalProps> = ({
 
             {permissionGroups?.map((group) => (
               <div key={group.group} className="space-y-2">
-                <div className="flex items-start space-x-3 p-3 py-1 rounded-lg border-0 border-neutral-200 dark:border-neutral-700 hover:bg-neutral-50 dark:hover:bg-neutral-800/50">
+                <div className="flex flex-row gap-2 items-start space-x-3 p-3 py-2 rounded-lg hover:border hover:bg-muted">
                   <Checkbox
                     id={group.group}
                     checked={
@@ -317,14 +309,14 @@ const InviteModModal: React.FC<InviteModModalProps> = ({
                   <div className="flex-1 space-y-1">
                     <label
                       htmlFor={group.group}
-                      className="text-sm font-medium cursor-pointer text-neutral-900 dark:text-neutral-100"
+                      className="text-sm font-medium cursor-pointer "
                     >
                       {group.label}
                     </label>
-                    <p className="text-xs text-neutral-600 dark:text-neutral-400">
+                    <p className="text-xs text-foreground">
                       {group.description}
                     </p>
-                    <div className="text-xs text-neutral-500 dark:text-neutral-500">
+                    <div className="text-xs text-muted-foreground">
                       Includes:{" "}
                       {group.permissions.map((p) => p.display_name).join(", ")}
                     </div>
@@ -357,7 +349,7 @@ const InviteModModal: React.FC<InviteModModalProps> = ({
               </Button>
             ) : (
               <div className="space-y-2">
-                <label className="text-sm font-medium text-neutral-900 dark:text-neutral-100">
+                <label className="text-sm font-medium text-muted-foreground">
                   Personal Message (Optional)
                 </label>
                 <Textarea
@@ -369,7 +361,7 @@ const InviteModModal: React.FC<InviteModModalProps> = ({
                   maxLength={500}
                 />
                 <div className="flex justify-between items-center">
-                  <span className="text-xs text-neutral-500">
+                  <span className="text-xs text-foreground">
                     {invitationMessage.length}/500 characters
                   </span>
                   <Button
@@ -390,7 +382,7 @@ const InviteModModal: React.FC<InviteModModalProps> = ({
           </div>
 
           {/* Action Buttons */}
-          <div className="flex justify-end space-x-3 pt-4 border-t border-neutral-200 dark:border-neutral-700">
+          <div className="flex flex-row gap-2 md:gap-4 justify-end space-x-3 pt-4 border-t">
             <Button
               variant="outline"
               onClick={handleCancel}

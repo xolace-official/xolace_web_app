@@ -10,46 +10,92 @@ import {
 } from "@/components/ui/table";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
-import { Plus, Search, Loader2 } from "lucide-react";
-import { Input } from "@/components/ui/input";
-import React, { useState } from "react";
+import { Plus, Loader2 } from "lucide-react";
+import React, { useState, useTransition } from "react";
 import { formatDistanceToNow } from "date-fns";
 import { toast } from "sonner";
 import ModeratorActionsPopover from "@/features/mods/features/moderators/action-popover";
 import InviteModModal from "@/features/mods/features/moderators/invites-mod-modal";
-import { getCampfireModerators } from "@/features/mods/features/mockhooks";
+import { ParamsSearchBar } from "@/components/shared/params-search-bar";
+import { debounce } from "nuqs";
+import { useFiltersServer } from "@/components/shared/search-params";
 
 interface ModeratorsProps {
   campfireId: string;
 }
 
-const Moderators: React.FC<ModeratorsProps> = ({ campfireId }) => {
-  const [searchTerm, setSearchTerm] = useState("");
-  const [showInviteModal, setShowInviteModal] = useState<boolean>(false);
+const DUMMY_MODERATORS = [
+  {
+    id: "1",
+    username: "fedejnr",
+    avatar_url: "/avatars/1.png",
+    role: "creator",
+    permission_summary: "Everything",
+    permission_count: 12,
+    can_edit: true,
+    joined_at: new Date("2024-01-10").toISOString(),
+  },
+  {
+    id: "2",
+    username: "john_doe",
+    avatar_url: "/avatars/2.png",
+    role: "moderator",
+    permission_summary: "Posts, Comments",
+    permission_count: 3,
+    can_edit: false,
+    joined_at: new Date("2024-05-22").toISOString(),
+  },
+  {
+    id: "3",
+    username: "mary_mod",
+    avatar_url: "",
+    role: "moderator",
+    permission_summary: "Reports",
+    permission_count: 1,
+    can_edit: true,
+    joined_at: new Date("2024-08-01").toISOString(),
+  },
+];
 
-  // Fetch moderators data
+function useMockCampfireModerators() {
+  return {
+    data: DUMMY_MODERATORS,
+    isLoading: false,
+    isError: false,
+    error: null,
+  };
+}
+
+const Moderators: React.FC<ModeratorsProps> = ({ campfireId }) => {
+  const [showInviteModal, setShowInviteModal] = useState<boolean>(false);
+  const [isPending, startTransition] = useTransition();
+  const [{ query }, setSearchParams] = useFiltersServer({
+    limitUrlUpdates: debounce(250),
+    shallow: false,
+  });
+
   const {
     data: moderators,
     isLoading,
     isError,
     error,
-  } = getCampfireModerators(campfireId);
+  } = useMockCampfireModerators();
 
   // Filter moderators based on search term
   const filteredModerators = React.useMemo(() => {
     if (!moderators) return [];
 
-    if (searchTerm.trim() === "") {
+    if (query.trim() === "") {
       return moderators;
     }
 
-    const term = searchTerm.toLowerCase();
+    const term = query.toLowerCase();
     return moderators.filter(
       (moderator) =>
         moderator.username.toLowerCase().includes(term) ||
         moderator.id.toString().includes(term),
     );
-  }, [moderators, searchTerm]);
+  }, [moderators, query]);
 
   const handleTeamOrder = () => {
     // TODO: Implement team order functionality
@@ -75,9 +121,7 @@ const Moderators: React.FC<ModeratorsProps> = ({ campfireId }) => {
   if (isError) {
     return (
       <div className="w-full flex flex-col items-center justify-center py-8">
-        <p className="text-sm text-red-500 mb-4">
-          Failed to load moderators: {error?.message || "Unknown error"}
-        </p>
+        <p className="text-sm text-red-500 mb-4">Failed to load moderators</p>
         <Button
           variant="outline"
           onClick={() => window.location.reload()}
@@ -95,7 +139,7 @@ const Moderators: React.FC<ModeratorsProps> = ({ campfireId }) => {
         {/* Header Actions */}
         <div className="flex gap-2 justify-end">
           <Button
-            className="flex items-center gap-1 rounded-full bg-lavender-500 py-2 text-white text-sm hover:bg-lavender-600 transition-colors"
+            className="flex items-center gap-1 rounded-full  py-2 text-sm transition-colors"
             onClick={() => setShowInviteModal(true)}
           >
             <Plus className="h-4 w-4" />
@@ -108,25 +152,33 @@ const Moderators: React.FC<ModeratorsProps> = ({ campfireId }) => {
         </div>
 
         {/* Search */}
-        <div className="relative w-full rounded-full">
-          <span className="absolute inset-y-0 start-0 flex items-center ps-3">
-            <Search className="w-4 h-4 text-muted-foreground" />
-          </span>
-          <Input
-            type="text"
-            name="searchInput"
-            placeholder="Search firekeepers..."
-            className="ps-10 w-full md:w-64 lg:w-80 rounded-full border border-gray-300 dark:border-gray-700 px-4 py-2 text-sm"
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
+        <div className={"w-full flex gap-4 items-center"}>
+          <ParamsSearchBar
+            value={query}
+            onChange={(value) => {
+              startTransition(async () => {
+                await setSearchParams(
+                  { query: value },
+                  {
+                    limitUrlUpdates: value ? debounce(250) : undefined,
+                  },
+                );
+              });
+            }}
+            onClear={() => {
+              startTransition(async () => {
+                await setSearchParams({ query: "" });
+              });
+            }}
+            isLoading={isPending}
           />
         </div>
 
         {/* Moderators Table */}
-        <div className="overflow-x-auto rounded-lg border border-neutral-200 dark:border-neutral-800">
+        <div className="overflow-x-auto rounded-lg border ">
           <Table>
             <TableHeader>
-              <TableRow className="bg-neutral-50 dark:bg-neutral-900">
+              <TableRow className="bg-muted">
                 <TableHead className="font-semibold">USERNAME</TableHead>
                 <TableHead className="font-semibold">PERMISSIONS</TableHead>
                 <TableHead className="font-semibold">YOU CAN EDIT</TableHead>
@@ -138,20 +190,11 @@ const Moderators: React.FC<ModeratorsProps> = ({ campfireId }) => {
                 <TableRow>
                   <TableCell colSpan={4} className="text-center py-8">
                     <div className="flex flex-col items-center space-y-2">
-                      <p className="text-neutral-500 dark:text-neutral-400">
-                        {searchTerm.trim()
+                      <p className="">
+                        {query.trim()
                           ? "No moderators found matching your search."
                           : "No moderators found."}
                       </p>
-                      {searchTerm.trim() && (
-                        <Button
-                          variant="ghost"
-                          onClick={() => setSearchTerm("")}
-                          className="text-sm"
-                        >
-                          Clear search
-                        </Button>
-                      )}
                     </div>
                   </TableCell>
                 </TableRow>
@@ -159,11 +202,11 @@ const Moderators: React.FC<ModeratorsProps> = ({ campfireId }) => {
                 filteredModerators.map((mod) => (
                   <TableRow
                     key={mod.id}
-                    className="hover:bg-neutral-50 dark:hover:bg-neutral-800/50 transition-colors"
+                    className="hover:bg-muted transition-colors"
                   >
                     <TableCell>
                       <div className="flex items-center gap-3">
-                        <Avatar className="h-10 w-10 border border-neutral-200 dark:border-neutral-700">
+                        <Avatar className="h-10 w-10 border">
                           <AvatarImage
                             src={mod.avatar_url}
                             alt={mod.username}
@@ -173,11 +216,9 @@ const Moderators: React.FC<ModeratorsProps> = ({ campfireId }) => {
                           </AvatarFallback>
                         </Avatar>
                         <div className="flex flex-col">
-                          <span className="font-medium text-neutral-900 dark:text-neutral-100">
-                            {mod.username}
-                          </span>
+                          <span className="font-medium ">{mod.username}</span>
                           {mod.role === "creator" && (
-                            <span className="text-xs text-ocean-600 dark:text-ocean-400 font-medium">
+                            <span className="text-xs text-muted-foreground font-medium">
                               Founder
                             </span>
                           )}
@@ -190,7 +231,7 @@ const Moderators: React.FC<ModeratorsProps> = ({ campfireId }) => {
                           {mod.permission_summary || "Everything"}
                         </span>
                         {mod.permission_count && (
-                          <span className="text-xs text-neutral-500 dark:text-neutral-400">
+                          <span className="text-xs text-muted-foreground">
                             {mod.permission_count} permission
                             {mod.permission_count !== 1 ? "s" : ""}
                           </span>
@@ -200,9 +241,7 @@ const Moderators: React.FC<ModeratorsProps> = ({ campfireId }) => {
                     <TableCell>
                       <span
                         className={`text-sm font-medium ${
-                          mod.can_edit
-                            ? "text-green-600 dark:text-green-400"
-                            : "text-neutral-500 dark:text-neutral-400"
+                          mod.can_edit ? "text-accent" : "text-foreground"
                         }`}
                       >
                         {mod.can_edit ? "Yes" : "No"}
@@ -213,7 +252,7 @@ const Moderators: React.FC<ModeratorsProps> = ({ campfireId }) => {
                         <span className="text-sm text-neutral-900 dark:text-neutral-100">
                           {formatDistanceToNow(new Date(mod.joined_at))} ago
                         </span>
-                        <span className="text-xs text-neutral-500 dark:text-neutral-400">
+                        <span className="text-xs text-muted-foreground">
                           {new Date(mod.joined_at).toLocaleDateString("en-US", {
                             month: "short",
                             day: "numeric",
@@ -231,7 +270,7 @@ const Moderators: React.FC<ModeratorsProps> = ({ campfireId }) => {
 
         {/* Stats Footer */}
         {moderators && moderators.length > 0 && (
-          <div className="text-xs text-neutral-500 dark:text-neutral-400 text-center">
+          <div className="text-xs text-muted-foreground text-center">
             Showing {filteredModerators.length} of {moderators.length}{" "}
             firekeeper{moderators.length !== 1 ? "s" : ""}
           </div>

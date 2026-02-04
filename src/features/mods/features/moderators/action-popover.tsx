@@ -25,7 +25,7 @@ const ModeratorActionsPopover: React.FC<ModeratorActionsPopoverProps> = ({
       <PopoverTrigger asChild>
         <Button
           variant="outline"
-          className={`rounded-full border border-neutral-400 hover:bg-neutral-50 dark:hover:bg-neutral-800 transition-colors`}
+          className={`rounded-full border transition-colors`}
           aria-label="More options"
         >
           <Ellipsis size={14} />
@@ -33,7 +33,7 @@ const ModeratorActionsPopover: React.FC<ModeratorActionsPopoverProps> = ({
       </PopoverTrigger>
 
       <PopoverContent
-        className="w-56 p-0 bg-bg dark:bg-bg-dark"
+        className="w-56 p-0 bg-muted"
         align="end"
         side="bottom"
         sideOffset={8}

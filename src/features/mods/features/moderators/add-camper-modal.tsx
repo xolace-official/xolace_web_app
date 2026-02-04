@@ -8,8 +8,7 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Loader2, Search, Plus, X, AlertCircle } from "lucide-react";
+import { Loader2, Plus, X, AlertCircle } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { formatDistanceToNow } from "date-fns";
@@ -18,6 +17,7 @@ import {
   useDebounce,
   useSearchUsers,
 } from "@/features/mods/features/mockhooks";
+import { SearchBar } from "@/components/shared/search-bar";
 
 export interface UserSearchResult {
   id: string;
@@ -109,15 +109,12 @@ const AddApprovedCamperModal: React.FC<AddApprovedCamperModalProps> = ({
           <div className="relative">
             {!selectedUser ? (
               <>
-                <div className="relative">
-                  <Search className="absolute left-3 top-1/2 transform -translate-y-1/2  h-4 w-4" />
-                  <Input
-                    type="text"
-                    placeholder="Search users to approve..."
+                <div className={"w-full flex gap-4 items-center"}>
+                  <SearchBar
                     value={searchTerm}
-                    onChange={(e) => setSearchTerm(e.target.value)}
-                    className="pl-10 rounded-lg"
-                    disabled={addApprovedUserMutation.isPending}
+                    onChange={(value) => {
+                      setSearchTerm(value);
+                    }}
                   />
                 </div>
 
@@ -145,7 +142,7 @@ const AddApprovedCamperModal: React.FC<AddApprovedCamperModalProps> = ({
                     {foundUsers?.map((user) => (
                       <div
                         key={user.id}
-                        className="flex items-center p-3 cursor-pointer border-b last:border-b-0"
+                        className="z-50 flex items-center p-3 bg-muted hover:bg-muted-foreground cursor-pointer border-b border last:border-b-0"
                         onClick={() => handleUserSelect(user)}
                       >
                         <Avatar className="w-10 h-10 border-2 ">

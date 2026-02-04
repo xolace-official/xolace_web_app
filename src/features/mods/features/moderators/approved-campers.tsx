@@ -1,8 +1,7 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import { Plus, Search, Loader2 } from "lucide-react";
-import { Input } from "@/components/ui/input";
+import { Plus, Loader2 } from "lucide-react";
 import {
   Table,
   TableBody,
@@ -12,18 +11,58 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import React, { useState } from "react";
+import React, { useState, useTransition } from "react";
 import { formatDistanceToNow } from "date-fns";
 import AddApprovedCamperModal from "@/features/mods/features/moderators/add-camper-modal";
-import { getApprovedUsers } from "@/features/mods/features/mockhooks";
+import { useFiltersServer } from "@/components/shared/search-params";
+import { debounce } from "nuqs";
+import { ParamsSearchBar } from "@/components/shared/params-search-bar";
+import { useModsFiltersServer } from "@/features/mods/features/moderators/mods-filter";
 
 interface ApprovedCampersProps {
   campfireId: string;
 }
 
+const DUMMY_MODERATORS = [
+  {
+    id: "1",
+    username: "fedejnr",
+    avatar_url: "/avatars/1.png",
+    reputation: 23,
+    joined_at: new Date("2024-01-10").toISOString(),
+  },
+  {
+    id: "2",
+    username: "john_doe",
+    avatar_url: "/avatars/2.png",
+    reputation: 23,
+    joined_at: new Date("2024-05-22").toISOString(),
+  },
+  {
+    id: "3",
+    username: "mary_mod",
+    avatar_url: "",
+    reputation: 23,
+    joined_at: new Date("2024-08-01").toISOString(),
+  },
+];
+
+function useMockCampfireModerators() {
+  return {
+    data: DUMMY_MODERATORS,
+    isLoading: false,
+    isError: false,
+    error: null,
+  };
+}
+
 const ApprovedCampers: React.FC<ApprovedCampersProps> = ({ campfireId }) => {
-  const [searchTerm, setSearchTerm] = useState("");
   const [showAddCamperModal, setShowAddCamperModal] = useState(false);
+  const [isPending, startTransition] = useTransition();
+  const [{ query }, setSearchParams] = useModsFiltersServer({
+    limitUrlUpdates: debounce(250),
+    shallow: false,
+  });
 
   // Fetch approved users data
   const {
@@ -31,23 +70,23 @@ const ApprovedCampers: React.FC<ApprovedCampersProps> = ({ campfireId }) => {
     isLoading,
     isError,
     error,
-  } = getApprovedUsers(campfireId);
+  } = useMockCampfireModerators();
 
   // Filter approved users based on search term
   const filteredUsers = React.useMemo(() => {
     if (!approvedUsers) return [];
 
-    if (searchTerm.trim() === "") {
+    if (query.trim() === "") {
       return approvedUsers;
     }
 
-    const term = searchTerm.toLowerCase();
+    const term = query.toLowerCase();
     return approvedUsers.filter(
       (user) =>
         user.username.toLowerCase().includes(term) ||
         user.id.toString().includes(term),
     );
-  }, [approvedUsers, searchTerm]);
+  }, [approvedUsers, query]);
 
   const handleAddCamper = (userId: string) => {
     console.log("Adding approved camper:", userId);
@@ -57,8 +96,8 @@ const ApprovedCampers: React.FC<ApprovedCampersProps> = ({ campfireId }) => {
   if (isLoading) {
     return (
       <div className="w-full flex flex-col items-center justify-center py-8">
-        <Loader2 className="h-8 w-8 animate-spin text-ocean-500" />
-        <p className="text-sm text-neutral-600 dark:text-neutral-400 mt-2">
+        <Loader2 className="h-8 w-8 animate-spin text-foreground" />
+        <p className="text-sm text-muted-foreground mt-2">
           Loading approved users...
         </p>
       </div>
@@ -69,7 +108,7 @@ const ApprovedCampers: React.FC<ApprovedCampersProps> = ({ campfireId }) => {
     return (
       <div className="w-full flex flex-col items-center justify-center py-8">
         <p className="text-sm text-red-500 mb-4">
-          Failed to load approved users: {error?.message || "Unknown error"}
+          Failed to load approved users
         </p>
         <Button
           variant="outline"
@@ -85,7 +124,7 @@ const ApprovedCampers: React.FC<ApprovedCampersProps> = ({ campfireId }) => {
   return (
     <>
       <div className="w-full flex flex-col space-y-4">
-        <p className="text-neutral-500 text-sm">
+        <p className="text-foregorund text-sm">
           Think of approved users as campers with special access to the fire,
           they can gather without being held back by some of the usual limits.
         </p>
@@ -93,7 +132,7 @@ const ApprovedCampers: React.FC<ApprovedCampersProps> = ({ campfireId }) => {
         {/* Header Actions */}
         <div className="flex gap-2 justify-end">
           <Button
-            className="flex items-center gap-1 rounded-full bg-lavender-500 px-4 py-2 text-white text-sm hover:bg-lavender-600 transition-colors"
+            className="flex items-center gap-1 rounded-full px-4 py-2 text-sm  transition-colors"
             onClick={() => setShowAddCamperModal(true)}
           >
             <Plus className="h-4 w-4" />
@@ -102,25 +141,33 @@ const ApprovedCampers: React.FC<ApprovedCampersProps> = ({ campfireId }) => {
         </div>
 
         {/* Search */}
-        <div className="relative w-full rounded-full">
-          <span className="absolute inset-y-0 start-0 flex items-center ps-3">
-            <Search className="w-4 h-4 text-muted-foreground" />
-          </span>
-          <Input
-            type="text"
-            name="searchInput"
-            placeholder="Search approved campers..."
-            className="ps-10 w-full md:w-64 lg:w-80 rounded-full border border-gray-300 dark:border-gray-700 px-4 py-2 text-sm"
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
+        <div className={"w-full flex gap-4 items-center"}>
+          <ParamsSearchBar
+            value={query}
+            onChange={(value) => {
+              startTransition(async () => {
+                await setSearchParams(
+                  { query: value },
+                  {
+                    limitUrlUpdates: value ? debounce(250) : undefined,
+                  },
+                );
+              });
+            }}
+            onClear={() => {
+              startTransition(async () => {
+                await setSearchParams({ query: "" });
+              });
+            }}
+            isLoading={isPending}
           />
         </div>
 
         {/* Approved Users Table */}
-        <div className="overflow-x-auto rounded-lg border border-neutral-200 dark:border-neutral-800">
+        <div className="overflow-x-auto rounded-lg border">
           <Table>
             <TableHeader>
-              <TableRow className="bg-neutral-50 dark:bg-neutral-900">
+              <TableRow className="bg-muted">
                 <TableHead className="font-semibold">USERNAME</TableHead>
                 <TableHead className="font-semibold">REPUTATION</TableHead>
                 <TableHead className="font-semibold">JOINED</TableHead>
@@ -131,20 +178,11 @@ const ApprovedCampers: React.FC<ApprovedCampersProps> = ({ campfireId }) => {
                 <TableRow>
                   <TableCell colSpan={3} className="text-center py-8">
                     <div className="flex flex-col items-center space-y-2">
-                      <p className="text-neutral-500 dark:text-neutral-400">
-                        {searchTerm.trim()
+                      <p className="text-foreground">
+                        {query.trim()
                           ? "No approved users found matching your search."
                           : "No approved users found."}
                       </p>
-                      {searchTerm.trim() && (
-                        <Button
-                          variant="ghost"
-                          onClick={() => setSearchTerm("")}
-                          className="text-sm"
-                        >
-                          Clear search
-                        </Button>
-                      )}
                     </div>
                   </TableCell>
                 </TableRow>
@@ -152,11 +190,11 @@ const ApprovedCampers: React.FC<ApprovedCampersProps> = ({ campfireId }) => {
                 filteredUsers.map((user) => (
                   <TableRow
                     key={user.id}
-                    className="hover:bg-neutral-50 dark:hover:bg-neutral-800/50 transition-colors"
+                    className="hover:bg-muted transition-colors"
                   >
                     <TableCell>
                       <div className="flex items-center gap-3">
-                        <Avatar className="h-10 w-10 border border-neutral-200 dark:border-neutral-700">
+                        <Avatar className="h-10 w-10 border">
                           <AvatarImage
                             src={user.avatar_url}
                             alt={user.username}
@@ -165,22 +203,22 @@ const ApprovedCampers: React.FC<ApprovedCampersProps> = ({ campfireId }) => {
                             {user.username.substring(0, 2).toUpperCase()}
                           </AvatarFallback>
                         </Avatar>
-                        <span className="font-medium text-neutral-900 dark:text-neutral-100">
+                        <span className="font-medium text-foreground">
                           {user.username}
                         </span>
                       </div>
                     </TableCell>
                     <TableCell>
-                      <span className="text-sm text-neutral-900 dark:text-neutral-100">
+                      <span className="text-sm text-foreground">
                         {user.reputation.toLocaleString()}
                       </span>
                     </TableCell>
                     <TableCell>
                       <div className="flex flex-col">
-                        <span className="text-sm text-neutral-900 dark:text-neutral-100">
+                        <span className="text-sm text-foreground">
                           {formatDistanceToNow(new Date(user.joined_at))} ago
                         </span>
-                        <span className="text-xs text-neutral-500 dark:text-neutral-400">
+                        <span className="text-xs text-muted-foreground">
                           {new Date(user.joined_at).toLocaleDateString(
                             "en-US",
                             {
@@ -201,7 +239,7 @@ const ApprovedCampers: React.FC<ApprovedCampersProps> = ({ campfireId }) => {
 
         {/* Stats Footer */}
         {approvedUsers && approvedUsers.length > 0 && (
-          <div className="text-xs text-neutral-500 dark:text-neutral-400 text-center">
+          <div className="text-xs text-foreground text-center">
             Showing {filteredUsers.length} of {approvedUsers.length} approved
             user{approvedUsers.length !== 1 ? "s" : ""}
           </div>
