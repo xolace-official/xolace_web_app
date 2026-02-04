@@ -1,5 +1,5 @@
+import { ExternalLinkIcon, InfoIcon, MailIcon, ShieldIcon } from "lucide-react";
 import Link from "next/link";
-import { InfoIcon, ShieldIcon, MailIcon, ExternalLinkIcon } from "lucide-react";
 import { SettingsPanel, SettingsPanelSection } from "@/components/settings";
 
 const quickLinks = [
@@ -47,27 +47,30 @@ export function QuickLinksSection() {
       <h2 className="text-sm font-semibold">Quick Links</h2>
 
       <SettingsPanel>
-        {quickLinks.map((link) => (
-          <SettingsPanelSection
-            key={link.href}
-            title={
-              <span className="flex items-center gap-2">
-                <link.icon className="size-4 text-muted-foreground" />
-                {link.label}
-              </span>
-            }
-            description={link.description}
-          >
-            <Link
-              href={link.href}
-              target={link.external ? "_blank" : undefined}
-              rel={link.external ? "noopener noreferrer" : undefined}
-              className="text-muted-foreground hover:text-foreground transition-colors"
+        {quickLinks.map((link) => {
+          const Icon = link.icon;
+          return (
+            <SettingsPanelSection
+              key={link.href}
+              title={
+                <span className="flex items-center gap-2">
+                  <Icon className="size-4 text-muted-foreground" />
+                  {link.label}
+                </span>
+              }
+              description={link.description}
             >
-              <ExternalLinkIcon className="size-4" />
-            </Link>
-          </SettingsPanelSection>
-        ))}
+              <Link
+                href={link.href}
+                target={link.external ? "_blank" : undefined}
+                rel={link.external ? "noopener noreferrer" : undefined}
+                className="text-muted-foreground hover:text-foreground transition-colors"
+              >
+                {link.external && <ExternalLinkIcon className="size-4" />}
+              </Link>
+            </SettingsPanelSection>
+          );
+        })}
       </SettingsPanel>
 
       {/* Social Links */}
