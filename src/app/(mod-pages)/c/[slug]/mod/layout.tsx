@@ -74,18 +74,8 @@ export default async function ModLayout({ children, params }: ModLayoutProps) {
           } as React.CSSProperties
         }
       >
-        <Suspense
-          fallback={<div className="text-sm animate-pulse">Loading ...</div>}
-        >
-          <ModsSidebarLeft />
-        </Suspense>
-        <MainContainer>
-          <Suspense
-            fallback={<div className="text-sm animate-pulse">Loading ...</div>}
-          >
-            {children}
-          </Suspense>
-        </MainContainer>
+        <ModsSidebarLeft />
+        <MainContainer>{children}</MainContainer>
       </SidebarProvider>
     </div>
   );
