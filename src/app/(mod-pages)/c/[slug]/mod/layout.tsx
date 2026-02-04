@@ -79,7 +79,13 @@ export default async function ModLayout({ children, params }: ModLayoutProps) {
         >
           <ModsSidebarLeft />
         </Suspense>
-        <MainContainer>{children}</MainContainer>
+        <MainContainer>
+          <Suspense
+            fallback={<div className="text-sm animate-pulse">Loading ...</div>}
+          >
+            {children}
+          </Suspense>
+        </MainContainer>
       </SidebarProvider>
     </div>
   );
