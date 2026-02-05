@@ -7,6 +7,7 @@ import ModSettingsTabError from "@/features/mods/features/settings/mods-settings
 import SettingsTabSkeleton from "@/features/mods/features/settings/settings-tab-skeleton";
 import { useCampfireWithSlug } from "@/features/mods/features/mockhooks";
 import { useModsFiltersServer } from "@/features/mods/features/moderators/mods-filter";
+import { useSettingsFiltersServer } from "@/features/mods/features/settings/settings-filter";
 
 const SettingsTab = ({ slug }: { slug: string }) => {
   const user = {
@@ -15,7 +16,9 @@ const SettingsTab = ({ slug }: { slug: string }) => {
   };
 
   const [_, startTransition] = useTransition();
-  const [{ tab }, setSearchParams] = useModsFiltersServer({ startTransition });
+  const [{ tab }, setSearchParams] = useSettingsFiltersServer({
+    startTransition,
+  });
   const [activeTab, setActiveTab] = useState(tab);
 
   // fetch campfire details
