@@ -120,7 +120,7 @@ const AddApprovedCamperModal: React.FC<AddApprovedCamperModalProps> = ({
 
                 {/* Search Results */}
                 {debouncedSearchTerm.length >= 3 && (
-                  <div className="absolute z-10 w-full mt-1  border rounded-lg shadow-lg max-h-60 overflow-y-auto">
+                  <div className="absolute z-10 w-full mt-1 border bg-muted rounded-lg shadow-lg max-h-60 overflow-y-auto">
                     {isSearching && (
                       <div className="flex items-center justify-center p-4 text-sm">
                         <Loader2 className="mr-2 h-4 w-4 animate-spin" />{" "}
@@ -142,7 +142,7 @@ const AddApprovedCamperModal: React.FC<AddApprovedCamperModalProps> = ({
                     {foundUsers?.map((user) => (
                       <div
                         key={user.id}
-                        className="z-50 flex items-center p-3 bg-muted hover:bg-muted-foreground cursor-pointer border-b border last:border-b-0"
+                        className=" flex items-center p-3  hover:bg-muted-foreground cursor-pointer border-b border last:border-b-0"
                         onClick={() => handleUserSelect(user)}
                       >
                         <Avatar className="w-10 h-10 border-2 ">
@@ -212,7 +212,7 @@ const AddApprovedCamperModal: React.FC<AddApprovedCamperModalProps> = ({
           </Alert>
 
           {/* Action Buttons */}
-          <div className="flex justify-end space-x-3 pt-4 border-t">
+          <div className="flex justify-end space-x-3 pt-4">
             <Button
               variant="outline"
               onClick={handleCancel}
