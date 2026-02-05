@@ -2,7 +2,6 @@
 
 import { usePathname, useRouter, useParams } from "next/navigation";
 import Link from "next/link";
-import { Button } from "@/components/ui/button";
 
 import { useSidebar } from "@/components/ui/sidebar";
 import {
@@ -18,7 +17,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { ArrowLeft, Loader2 } from "lucide-react";
+import { ChevronLeft, Loader2 } from "lucide-react";
 import React from "react";
 import { getModsSidebarSections } from "@/features/mods/layout/constants";
 
@@ -64,14 +63,15 @@ export function ModsNavMain() {
 
   return (
     <SidebarMenu className="gap-6 pt-0 px-2 md:px-4 ">
-      <Button
-        variant={"ghostDestructive"}
-        size={"sm"}
-        className={"flex gap-1 items-center justify-start w-full"}
-        onClick={() => router.push(`/x/${params.slug}`)}
-      >
-        <ArrowLeft size={16} /> <span>Exit mod tools</span>
-      </Button>
+      <SidebarMenuItem>
+        <SidebarMenuButton
+          tooltip="Back to app"
+          onClick={() => router.push(`/x/${params.slug}`)}
+        >
+          <ChevronLeft size={16} />
+          <span>Exit mod tools</span>
+        </SidebarMenuButton>
+      </SidebarMenuItem>
 
       <div
         className={"flex flex-col gap-2 w-full items-center justify-start px-2"}

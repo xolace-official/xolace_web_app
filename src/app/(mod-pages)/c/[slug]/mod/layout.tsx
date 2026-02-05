@@ -66,17 +66,19 @@ export default async function ModLayout({ children, params }: ModLayoutProps) {
 
   // User has access, render mod layout
   return (
-    <div className="bg-background tracking-normal">
-      <SidebarProvider
-        style={
-          {
-            "--sidebar-width": "calc(var(--spacing) * 72)",
-          } as React.CSSProperties
-        }
-      >
-        <ModsSidebarLeft />
-        <MainContainer>{children}</MainContainer>
-      </SidebarProvider>
-    </div>
+    <Suspense>
+      <div className="bg-background tracking-normal">
+        <SidebarProvider
+          style={
+            {
+              "--sidebar-width": "calc(var(--spacing) * 72)",
+            } as React.CSSProperties
+          }
+        >
+          <ModsSidebarLeft />
+          <MainContainer>{children}</MainContainer>
+        </SidebarProvider>
+      </div>
+    </Suspense>
   );
 }
