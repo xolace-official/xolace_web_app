@@ -2,7 +2,7 @@
 
 import { FileText, Loader2, Trash2, Video, VolumeIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { formatDate, formatDuration } from "@/utils";
+import { formatDateTime, formatDuration } from "@/utils";
 import type {
   CollectionEntityType,
   CollectionItemHydrated,
@@ -160,7 +160,7 @@ function EntityContent({ entity, type }: EntityContentProps) {
             {post.content_text}
           </p>
           <p className="text-xs text-muted-foreground mt-1">
-            {post.author_name_snapshot} • {formatDate(post.created_at)}
+            {post.author_name_snapshot} • {formatDateTime(post.created_at)}
           </p>
         </>
       );
