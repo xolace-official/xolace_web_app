@@ -18,8 +18,8 @@ import {
 } from "@/components/ui/card";
 import {
   campfire_realms,
-  InteractionStyle,
-  RealmKey,
+  type InteractionStyle,
+  type RealmKey,
 } from "@/features/campfires";
 
 interface RealmCardData {

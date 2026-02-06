@@ -4,6 +4,9 @@ const nextConfig: NextConfig = {
   /* config options here */
   cacheComponents: true,
   reactCompiler: true,
+  experimental: {
+    optimizePackageImports: ["lucide-react", "@tabler/icons-react"],
+  },
   images: {
     remotePatterns: [
       {

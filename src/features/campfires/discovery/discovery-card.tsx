@@ -1,57 +1,19 @@
-import {
-  Heart,
-  Lightbulb,
-  MessageCircle,
-  Palette,
-  Sprout,
-  Users,
-} from "lucide-react";
+import { Users } from "lucide-react";
 import Link from "next/link";
+import { memo } from "react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
+import {
+  type CampfireInterface,
+  getInteractionConfig,
+} from "@/features/campfires";
 import { formatNumber } from "@/utils";
-import { CampfireInterface, InteractionStyle } from "@/features/campfires";
 
-const getInteractionConfig = (style: InteractionStyle) => {
-  switch (style) {
-    case "collaborative":
-      return {
-        icon: Users,
-        iconColor: "text-accent",
-      };
-    case "supportive":
-      return {
-        icon: Heart,
-        iconColor: "text-chart-1",
-      };
-    case "motivational":
-      return {
-        icon: Lightbulb,
-        iconColor: "text-chart-5",
-      };
-    case "expressive":
-      return {
-        icon: Palette,
-        iconColor: "text-chart-2",
-      };
-    case "educational":
-      return {
-        icon: Sprout,
-        iconColor: "text-chart-4",
-      };
-    default:
-      return {
-        icon: MessageCircle,
-        iconColor: "text-muted-foreground",
-      };
-  }
-};
-
-export const DiscoveryCard = ({
+export const DiscoveryCard = memo(function DiscoveryCard({
   discovery,
 }: {
   discovery: CampfireInterface;
-}) => {
+}) {
   const config = getInteractionConfig(discovery.interaction_style);
   const IconComponent = config.icon;
 
@@ -156,4 +118,4 @@ export const DiscoveryCard = ({
       </div>
     </Link>
   );
-};
+});

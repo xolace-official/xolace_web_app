@@ -2,7 +2,7 @@
 
 import { SearchX } from "lucide-react";
 import { debounce } from "nuqs";
-import { useTransition } from "react";
+import { useCallback, useMemo, useTransition } from "react";
 import { EmptyContent } from "@/components/app/empty-content";
 import { useFiltersServer } from "@/components/shared/search-params";
 import { Button } from "@/components/ui/button";
@@ -18,23 +18,28 @@ export const CampfireDiscoveryList = () => {
   });
 
   // Filter the data based on the search params
-  let filteredData = dummy_campfires;
+  const filteredData = useMemo(() => {
+    return dummy_campfires.filter((item) => {
+      // Check realm filter first (cheapest check)
+      if (realm && realm !== "all" && item.interaction_style !== realm) {
+        return false;
+      }
 
-  filteredData = filteredData.filter((item) => {
-    const matchesRealm =
-      !realm || realm === "all" || item.interaction_style === realm;
-    const matchesQuery =
-      !query ||
-      item.name?.toLowerCase().includes(query.toLowerCase()) ||
-      item.interaction_style?.toLowerCase().includes(query.toLowerCase()) ||
-      item.member_count?.toString().includes(query.toLowerCase());
+      // Check query filter if present
+      if (query) {
+        const q = query.toLowerCase();
+        return (
+          item.name?.toLowerCase().includes(q) ||
+          item.interaction_style?.toLowerCase().includes(q) ||
+          item.member_count?.toString().includes(q)
+        );
+      }
 
-    //const matchesLane = lane; //lane implementation will be done later
+      return true;
+    });
+  }, [query, realm]);
 
-    return matchesRealm && matchesQuery;
-  });
-
-  const handleResetFiltering = () => {
+  const handleResetFiltering = useCallback(() => {
     startTransition(async () => {
       await setSearchParams({
         query: "",
@@ -42,7 +47,7 @@ export const CampfireDiscoveryList = () => {
         lane: "",
       });
     });
-  };
+  }, [realm, setSearchParams]);
 
   return (
     <div className={"w-full grid grid-cols-1 items-start gap-4"}>

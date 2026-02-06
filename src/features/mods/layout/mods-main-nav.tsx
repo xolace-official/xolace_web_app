@@ -121,7 +121,7 @@ export function ModsNavMain() {
                 moderatedCampfires.map((c) => (
                   <SelectItem key={c.id} value={c.slug}>
                     <div className="flex items-center gap-2">
-                      <Avatar className="h-6 w-6 rounded-full">
+                      <Avatar className="h-6 w-6 rounded-full border border-muted-foreground">
                         <AvatarImage src={c.icon_url || ""} alt={c.name} />
                         <AvatarFallback>{c.name.charAt(0)}</AvatarFallback>
                       </Avatar>

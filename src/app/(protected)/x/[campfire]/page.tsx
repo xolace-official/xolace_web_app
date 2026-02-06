@@ -5,9 +5,11 @@ interface Props {
   params: Promise<{ campfire: string }>;
 }
 
+const SEPARATOR_REGEX = /[-_]/g;
+
 function toPascalCase(str: string): string {
   return str
-    .replace(/[-_]/g, " ")
+    .replace(SEPARATOR_REGEX, " ")
     .split(" ")
     .map((word) => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
     .join("");

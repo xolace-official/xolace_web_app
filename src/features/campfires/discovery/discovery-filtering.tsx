@@ -1,7 +1,7 @@
 "use client";
 import { Search, SearchX } from "lucide-react";
 import { debounce } from "nuqs";
-import { useState, useTransition } from "react";
+import { useCallback, useState, useTransition } from "react";
 import { ParamsSearchBar } from "@/components/shared/params-search-bar";
 import { useFiltersServer } from "@/components/shared/search-params";
 import { Button } from "@/components/ui/button";
@@ -23,39 +23,67 @@ export const DiscoveryFiltering = () => {
   ) as RealmKey;
 
   // Handle realm click - update URL directly
-  const handleRealmClick = (key: RealmKey) => {
-    // If clicking the same realm, no need to update (optional optimization)
-    if (key === validRealm) return;
+  const handleRealmClick = useCallback(
+    (key: RealmKey) => {
+      // If clicking the same realm, no need to update (optional optimization)
+      if (key === validRealm) return;
 
-    startTransition(async () => {
-      await setSearchParams({
-        realm: key,
-        lane: "", // Reset lane when realm changes
+      startTransition(async () => {
+        await setSearchParams({
+          realm: key,
+          lane: "", // Reset lane when realm changes
+        });
       });
-    });
-  };
+    },
+    [validRealm, setSearchParams],
+  );
 
   // Handle lane click - update URL directly
-  const handleLaneClick = (laneKey: string) => {
-    // Toggle: if clicking currently selected lane, deselect it (set to null/empty)
-    const newLane = lane === laneKey ? "" : laneKey;
+  const handleLaneClick = useCallback(
+    (laneKey: string) => {
+      // Toggle: if clicking currently selected lane, deselect it (set to null/empty)
+      const newLane = lane === laneKey ? "" : laneKey;
 
-    startTransition(async () => {
-      await setSearchParams({
-        lane: newLane,
+      startTransition(async () => {
+        await setSearchParams({
+          lane: newLane,
+        });
       });
-    });
-  };
+    },
+    [lane, setSearchParams],
+  );
 
   // Handle hiding search bar and clearing query
-  const handleHideSearch = () => {
+  const handleHideSearch = useCallback(() => {
     setShowSearchBar(false);
     startTransition(async () => {
       await setSearchParams({
         query: "",
       });
     });
-  };
+  }, [setSearchParams]);
+
+  // Handle query change
+  const handleQueryChange = useCallback(
+    (value: string) => {
+      startTransition(async () => {
+        await setSearchParams(
+          { query: value },
+          {
+            limitUrlUpdates: value ? debounce(250) : undefined,
+          },
+        );
+      });
+    },
+    [setSearchParams],
+  );
+
+  // Handle query clear
+  const handleQueryClear = useCallback(() => {
+    startTransition(async () => {
+      await setSearchParams({ query: "" });
+    });
+  }, [setSearchParams]);
 
   const selectedRealmData = campfire_realms.find((r) => r.key === validRealm);
   const lanes = selectedRealmData?.lanes || [];
@@ -99,21 +127,8 @@ export const DiscoveryFiltering = () => {
         <div className={"w-full flex gap-4 items-center"}>
           <ParamsSearchBar
             value={query}
-            onChange={(value) => {
-              startTransition(async () => {
-                await setSearchParams(
-                  { query: value },
-                  {
-                    limitUrlUpdates: value ? debounce(250) : undefined,
-                  },
-                );
-              });
-            }}
-            onClear={() => {
-              startTransition(async () => {
-                await setSearchParams({ query: "" });
-              });
-            }}
+            onChange={handleQueryChange}
+            onClear={handleQueryClear}
             isLoading={isPending}
           />
           <Button size="sm" variant="destructive" onClick={handleHideSearch}>
@@ -129,7 +144,7 @@ export const DiscoveryFiltering = () => {
           >
             <Search />
           </Button>
-          {lanes.length > 0 && (
+          {lanes.length > 0 ? (
             <div
               className={
                 "flex items-center gap-4 overflow-x-auto scrollbar-hide scroll-smooth min-w-0 flex-1"
@@ -149,7 +164,7 @@ export const DiscoveryFiltering = () => {
                 );
               })}
             </div>
-          )}
+          ) : null}
         </div>
       )}
     </div>
