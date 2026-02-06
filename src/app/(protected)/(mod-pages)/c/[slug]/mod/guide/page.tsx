@@ -1,9 +1,9 @@
 import React from "react";
 import type { Metadata } from "next";
-import { GuidePage } from "@/app/(mod-pages)/c/[slug]/mod/guide/guide-page";
+import { GuidePage } from "@/app/(protected)/(mod-pages)/c/[slug]/mod/guide/guide-page";
 
 export const metadata: Metadata = {
-  title: "Guide",
+  title: "Guide • Mod Tools",
   description: "Manage your campfire guide",
 };
 

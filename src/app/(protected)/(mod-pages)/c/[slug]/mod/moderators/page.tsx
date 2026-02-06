@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
-import { ModeratorsPage } from "@/app/(mod-pages)/c/[slug]/mod/moderators/moderators-page";
+import { ModeratorsPage } from "./moderators-page";
 
 export const metadata: Metadata = {
-  title: "Moderator",
+  title: "Moderator • Mod Tools",
   description: "Discover moderator tool for managing their campfire",
 };
 

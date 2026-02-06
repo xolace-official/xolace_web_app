@@ -6,6 +6,7 @@ import {
   Sidebar,
   SidebarContent,
   SidebarHeader,
+  SidebarMenu,
 } from "@/components/ui/sidebar";
 import { ModsNavMain } from "@/features/mods/layout/mods-main-nav";
 import { DesktopSidebarToggler } from "@/components/app/desktop-sidebar-toggler";
@@ -13,19 +14,8 @@ import { DesktopSidebarToggler } from "@/components/app/desktop-sidebar-toggler"
 export function ModsSidebarLeft({
   ...props
 }: React.ComponentProps<typeof Sidebar>) {
-  const sidebarVariant: "default" | "inset" = "default";
-
   return (
-    <Sidebar
-      className="print:hidden top-(--header-height) h-[calc(100svh-var(--header-height))]!"
-      collapsible={"icon"}
-      variant={sidebarVariant === "default" ? "sidebar" : sidebarVariant}
-      {...props}
-    >
-      <SidebarHeader className="relative">
-        <DesktopSidebarToggler />
-      </SidebarHeader>
-
+    <SidebarMenu>
       <SidebarContent>
         {/* <SidebarGroup className="mt-2">*/}
         {/*  <SidebarGroupContent>*/}
@@ -42,6 +32,6 @@ export function ModsSidebarLeft({
 
         <ModsNavMain />
       </SidebarContent>
-    </Sidebar>
+    </SidebarMenu>
   );
 }

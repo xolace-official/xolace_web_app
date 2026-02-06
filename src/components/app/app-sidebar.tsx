@@ -46,6 +46,8 @@ import { Separators } from "../ui/separators";
 import { CollapsibleNav } from "./collapsible-nav";
 import { DesktopSidebarToggler } from "./desktop-sidebar-toggler";
 import { NavMain } from "./nav-main";
+import { ModsSidebarLeft } from "@/features/mods/layout/mod-siderbar-left";
+import React from "react";
 
 export function AppSidebar() {
   const router = useRouter();
@@ -53,6 +55,9 @@ export function AppSidebar() {
 
   const sidebarVariant: "default" | "inset" = "default";
   //const search = true;
+
+  const modPathRegex = /^\/c\/[^\/]+\/mod/;
+  const isModPath = modPathRegex.test(pathname);
 
   return (
     <Sidebar
@@ -109,12 +114,18 @@ export function AppSidebar() {
               </SidebarGroupContent>
             </SidebarGroup>
           </>
-        ) : (
+        ) : isModPath ? (
           <>
             <SidebarGroup>
               <SidebarContent>
-                <NavMain />
+                <ModsSidebarLeft />
               </SidebarContent>
+            </SidebarGroup>
+          </>
+        ) : (
+          <>
+            <SidebarGroup>
+              <NavMain />
             </SidebarGroup>
 
             <Separators />
