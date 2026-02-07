@@ -61,7 +61,7 @@ export const defaultUrl = process.env.VERCEL_URL
   ? `https://${process.env.VERCEL_URL}`
   : "http://localhost:3000";
 
-export const formatDate = (dateString: string) => {
+export const formatDateTime = (dateString: string) => {
   const date = toDate(dateString);
   if (!date) return "";
   return date.toLocaleDateString("en-US", {
@@ -69,4 +69,11 @@ export const formatDate = (dateString: string) => {
     month: "short",
     day: "numeric",
   });
+};
+
+export const truncateText = (text: string, limit: number) => {
+  if (text.length > limit) {
+    return text.substring(0, limit) + " ...";
+  }
+  return text;
 };

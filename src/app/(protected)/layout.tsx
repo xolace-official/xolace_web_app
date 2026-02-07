@@ -9,13 +9,22 @@ import {
   SaveToCollectionDrawer,
 } from "@/features/collections";
 
+/**
+ * Renders the protected application layout including providers, sidebar, and collection UI.
+ *
+ * Wraps `children` with query and collection context providers, supplies a sidebar context,
+ * injects Google Fonts into the document head, and composes the AppSidebar, MainContainer,
+ * and SaveToCollectionDrawer into a single layout.
+ *
+ * @param children - Content to render inside the main container of the protected layout
+ * @returns The composed layout element that contains the sidebar, main content, and collection drawer
+ */
 export default async function ProtectedLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
   // const defaultOpen = cookieStore.get("sidebar_state")?.value === "true";
-
   return (
     <Suspense>
       <Head>

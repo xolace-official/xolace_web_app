@@ -1,0 +1,105 @@
+"use client";
+
+import React, { useState } from "react";
+import { Alert, AlertDescription } from "@/components/ui/alert";
+import { Info } from "lucide-react";
+import SettingsItem, {
+  SettingsItemProps,
+} from "@/features/mods/features/settings/settings-items";
+import { CampfireInterface } from "@/features/campfires";
+
+interface PrivacyAndDiscoveryProps {
+  campfire: CampfireInterface | null;
+}
+
+const PrivacyAndDiscovery = ({ campfire }: PrivacyAndDiscoveryProps) => {
+  const [openIndex, setOpenIndex] = useState<number | null>(null);
+
+  const privacyAndDiscoveryOptions: SettingsItemProps[] = [
+    {
+      label: "Campfire Type",
+      value: campfire?.visibility,
+      description: "Who can view and contribute to your community",
+      type: "select",
+      options: ["public"],
+      disabled: true,
+    },
+    {
+      label: "Anonymous users",
+      value: "On",
+      description: "Restrict your campfire to those whose account is anonymous",
+      type: "select",
+      options: ["On", "Off"],
+      disabled: true,
+    },
+    // {
+    //   label: "Appear in feeds",
+    //   description:
+    //     "Allow your campfire to appear in x/all, x/popular, and trending lists",
+    //   toggle: true,
+    //   toggleValue: false,
+    // },
+    // {
+    //   label: "Appear in recommendations",
+    //   description:
+    //     "Let Xolace recommend your campfire to people with similar interests",
+    //   toggle: true,
+    //   toggleValue: true,
+    // },
+  ];
+
+  const handleSave = (
+    label: string,
+    val: string | { label: string; value: string }[],
+  ) => {
+    console.log(`Saving ${label}:`, val);
+
+    switch (label) {
+      case "Campfire Type":
+        if (typeof val === "string") {
+          // update campfire type
+        }
+        break;
+      case "Anonymous users":
+        if (typeof val === "string") {
+          // update ano users
+        }
+        break;
+      default:
+        console.warn(`No update handler for setting: ${label}`);
+        break;
+    }
+  };
+
+  return (
+    <div className="w-full flex flex-col space-y-4">
+      <Alert className="rounded-xl bg-muted">
+        <Info className="h-4 w-4" />
+        <AlertDescription className="flex flex-wrap items-center gap-1 text-sm">
+          All privacy settings are currently disabled.
+          <a
+            href="/policies"
+            className="underline underline-offset-2 font-medium hover:text-primary"
+          >
+            Learn more
+          </a>
+        </AlertDescription>
+      </Alert>
+
+      <div className="rounded-2xl mt-4 flex flex-col gap-6">
+        {privacyAndDiscoveryOptions.map((option, index) => (
+          <SettingsItem
+            key={index}
+            {...option}
+            isOpen={openIndex === index}
+            onClick={() => setOpenIndex(openIndex === index ? null : index)}
+            onClose={() => setOpenIndex(null)}
+            onSave={handleSave}
+          />
+        ))}
+      </div>
+    </div>
+  );
+};
+
+export default PrivacyAndDiscovery;

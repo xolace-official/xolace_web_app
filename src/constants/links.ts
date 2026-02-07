@@ -6,6 +6,7 @@ import {
   HandHelping,
   HeartPulse,
   LibraryBig,
+  LucideIcon,
   Mailbox,
   MessageSquareDiff,
   Plus,
@@ -13,7 +14,12 @@ import {
   TvMinimalPlay,
 } from "lucide-react";
 
-export const sidebarLinks = [
+export const sidebarLinks: {
+  icon: LucideIcon;
+  route: string;
+  label: string;
+  new?: boolean;
+}[] = [
   {
     icon: FlameKindling,
     route: "/feed",
