@@ -239,7 +239,7 @@ const InviteModModal: React.FC<InviteModModalProps> = ({
                             </AvatarFallback>
                           </Avatar>
                           <div className="ml-3 flex-1">
-                            <div className="text-sm font-medium text-foregorund">
+                            <div className="text-sm font-medium text-foreground">
                               {mod.username}
                             </div>
                             <div className="text-xs text-muted-foreground">
@@ -265,10 +265,10 @@ const InviteModModal: React.FC<InviteModModalProps> = ({
                     </AvatarFallback>
                   </Avatar>
                   <div className="ml-3 flex-1">
-                    <div className="text-sm font-semibold text-muted-foregorund">
+                    <div className="text-sm font-semibold text-muted-foreground">
                       {selectedMod.username}
                     </div>
-                    <div className="text-xs text-muted-foregorund">
+                    <div className="text-xs text-muted-foreground">
                       {formatDistanceToNow(new Date(selectedMod.created_at))}{" "}
                       old • {selectedMod.reputation.toLocaleString()} reputation
                     </div>

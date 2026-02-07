@@ -23,6 +23,6 @@ export const useModsFiltersServer = (options: Options = {}) =>
   useQueryStates(searchParams, { shallow: true, urlKeys, ...options });
 
 // use case : typed links for a particular route
-export const getModsLink = createTypedLink("/albums", searchParams, {
+export const getModsLink = createTypedLink("/moderators", searchParams, {
   urlKeys,
 });

@@ -66,8 +66,7 @@ const SettingsItem = memo(function SettingsItem({
 
   useEffect(() => {
     setResources(resourcesList);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [resourcesList]);
 
   const handleEdit = (idx: number, res: { label: string; value: string }) => {
     setEditingIndex(idx);
@@ -150,7 +149,8 @@ const SettingsItem = memo(function SettingsItem({
 
   return (
     <div className="flex w-full flex-col">
-      <div
+      <button
+        type="button"
         className={`${disabled ? "cursor-not-allowed opacity-50" : "cursor-pointer"} group flex w-full items-center justify-between gap-5`}
         onClick={() => {
           if (disabled || isLoading) return;
@@ -189,7 +189,7 @@ const SettingsItem = memo(function SettingsItem({
             </div>
           </div>
         )}
-      </div>
+      </button>
 
       {isOpen && !toggle && (
         <form
@@ -230,7 +230,7 @@ const SettingsItem = memo(function SettingsItem({
               </SelectTrigger>
               <SelectContent className={"w-full"}>
                 {options.map((opt, i) => (
-                  <SelectItem key={i} value={opt}>
+                  <SelectItem key={`${i}-${opt}`} value={opt}>
                     {opt}
                   </SelectItem>
                 ))}
@@ -259,7 +259,7 @@ const SettingsItem = memo(function SettingsItem({
                 <div className="space-y-3">
                   {resources.map((res, idx) => (
                     <div
-                      key={idx}
+                      key={`${idx}-${res.label}`}
                       className="flex items-center justify-between gap-3 rounded-lg border  p-3 transition-all duration-200 hover:shadow-sm bg-muted"
                     >
                       {editingIndex === idx ? (
@@ -277,7 +277,7 @@ const SettingsItem = memo(function SettingsItem({
                               placeholder="https://example.com"
                               className="flex-1 focus:ring-2"
                             />
-                            {editValue && editValue.startsWith("https://") && (
+                            {editValue?.startsWith("https://") && (
                               <Button
                                 type="button"
                                 variant="outline"
