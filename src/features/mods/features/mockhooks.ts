@@ -79,7 +79,13 @@ const MOCK_USERS: UserSearchResult[] = [
   },
 ];
 
-// 1. useDebounce Hook
+/**
+ * Debounces a value and exposes the latest value only after the specified delay.
+ *
+ * @param value - The input value to debounce
+ * @param delay - Delay in milliseconds to wait after the last change before updating
+ * @returns The debounced value; updates to this value occur only after `delay` milliseconds without further changes
+ */
 export function useDebounce<T>(value: T, delay: number): T {
   const [debouncedValue, setDebouncedValue] = useState<T>(value);
 
@@ -96,7 +102,14 @@ export function useDebounce<T>(value: T, delay: number): T {
   return debouncedValue;
 }
 
-// 2. useSearchUsers Hook
+/**
+ * Performs a simulated username search using the provided term.
+ *
+ * @returns An object with:
+ * - `data`: an array of matching `UserSearchResult` records or `null` when there are no results or the query is too short
+ * - `isLoading`: `true` while the simulated request is in progress, `false` otherwise
+ * - `isError`: `true` when the simulated request failed, `false` otherwise
+ */
 export function useSearchUsers(searchTerm: string) {
   const [data, setData] = useState<UserSearchResult[] | null>(null);
   const [isLoading, setIsLoading] = useState(false);
@@ -143,7 +156,15 @@ export function useSearchUsers(searchTerm: string) {
   return { data, isLoading, isError };
 }
 
-// 3. useAddApprovedUser Hook
+/**
+ * Creates a mutation hook that simulates approving a user for the specified campfire.
+ *
+ * @param campfireId - The campfire identifier to which approvals will be applied
+ * @returns An object containing:
+ *  - `mutateAsync` — a function that accepts `{ userId }` and returns `{ success: true, userId, campfireId }` on success (throws on failure),
+ *  - `isPending` — `true` while the approval is in progress, `false` otherwise,
+ *  - `error` — the last `Error` encountered or `null` if none
+ */
 export function useAddApprovedUser(campfireId: string) {
   const [isPending, setIsPending] = useState(false);
   const [error, setError] = useState<Error | null>(null);
@@ -281,6 +302,16 @@ const MOCK_APPROVED_USERS_BY_CAMPFIRE: Record<string, ApprovedUser[]> = {
   ],
 };
 
+/**
+ * Fetches approved users for a given campfire (mocked) and exposes loading and error state.
+ *
+ * @param campfireId - The campfire identifier to fetch approved users for
+ * @returns An object with:
+ *   - `data`: The array of approved users for the campfire, or `null` if not loaded.
+ *   - `isLoading`: `true` while the mock fetch is in progress, `false` otherwise.
+ *   - `isError`: `true` if the mock fetch failed, `false` otherwise.
+ *   - `error`: The `Error` produced when a fetch fails, or `null` when there is no error.
+ */
 export function getApprovedUsers(campfireId: string) {
   const [data, setData] = useState<ApprovedUser[] | null>(null);
   const [isLoading, setIsLoading] = useState(true);
@@ -459,6 +490,13 @@ const MOCK_PERMISSION_GROUPS: PermissionGroup[] = [
   },
 ];
 
+/**
+ * Fetches mock permission groups on mount and provides the result with a loading flag.
+ *
+ * Initiates a simulated fetch of permission groups and stores them in `data`.
+ *
+ * @returns An object with `data` — the permission groups or `null` if not yet loaded, and `isLoading` — `true` while the simulated fetch is in progress, `false` otherwise.
+ */
 export function getPermissionGroups() {
   const [data, setData] = useState<PermissionGroup[] | null>(null);
   const [isLoading, setIsLoading] = useState(true);
@@ -484,6 +522,15 @@ export interface CreateInviteParams {
   invitationMessage?: string;
 }
 
+/**
+ * Creates firekeeper invitations for a campfire and exposes a mutation function and its state.
+ *
+ * @param campfireId - ID of the campfire to send the invitation to
+ * @returns An object with:
+ *  - `mutateAsync(params)` — function that sends an invitation for the specified invitee and permissions; resolves with a result object on success or throws an `Error` on failure.
+ *  - `isPending` — `true` while the invitation request is in progress, `false` otherwise.
+ *  - `error` — the last `Error` encountered or `null` if none.
+ */
 export function useCreateFirekeeperInviteV2(campfireId: string) {
   const [isPending, setIsPending] = useState(false);
   const [error, setError] = useState<Error | null>(null);
@@ -666,6 +713,18 @@ const MOCK_MODERATORS_BY_CAMPFIRE: Record<string, Moderator[]> = {
   ],
 };
 
+/**
+ * Provide moderator data and loading/error state for a given campfire identifier.
+ *
+ * This hook returns the current list of moderators for the specified campfire and tracks loading and error conditions; the data is sourced from the module's mock dataset and may simulate transient failures.
+ *
+ * @param campfireId - The identifier (slug or id) of the campfire to fetch moderators for
+ * @returns An object with:
+ *   - `data`: the array of `Moderator` objects for the campfire, or `null` if not loaded
+ *   - `isLoading`: `true` while the moderators are being fetched, `false` otherwise
+ *   - `isError`: `true` if a fetch error occurred, `false` otherwise
+ *   - `error`: the `Error` instance when a fetch fails, or `null` when there is no error
+ */
 export function getCampfireModerators(campfireId: string) {
   const [data, setData] = useState<Moderator[] | null>(null);
   const [isLoading, setIsLoading] = useState(true);
@@ -705,7 +764,13 @@ export function getCampfireModerators(campfireId: string) {
 
 // ============================================
 // HOOK: getCampfireWithSlug
-// ============================================
+/**
+ * Fetches a campfire by its slug and exposes the result along with loading and error state, plus a refetch function.
+ *
+ * @param slug - The slug of the campfire to resolve.
+ * @param userId - Optional user identifier; changing this value will re-trigger the fetch.
+ * @returns An object containing the fetched campfire (`data`) or `null`, `isPending` and `isError` flags, an `error` when present, and a `refetch` function to re-run the fetch.
+ */
 
 export function useCampfireWithSlug(slug: string, userId?: string) {
   const [data, setData] = useState<CampfireInterface | null>(null);
@@ -765,6 +830,15 @@ export interface MutationCallbacks {
   onError?: (error: Error) => void;
 }
 
+/**
+ * Exposes mutation helpers to update a campfire's settings using an in-memory simulation.
+ *
+ * @returns An object with:
+ * - `mutate` — starts an update with `UpdateCampfireParams` and optional `MutationCallbacks`; invokes callbacks on success or error.
+ * - `mutateAsync` — performs the same update and returns a result object on success; throws an `Error` on failure.
+ * - `isPending` — `true` when an update is in progress, `false` otherwise.
+ * - `error` — the last `Error` encountered during a mutation, or `null` if none.
+ */
 export function useUpdateCampfireMutation() {
   const [isPending, setIsPending] = useState(false);
   const [error, setError] = useState<Error | null>(null);

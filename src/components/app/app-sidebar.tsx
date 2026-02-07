@@ -49,6 +49,18 @@ import { NavMain } from "./nav-main";
 import { ModsSidebarLeft } from "@/features/mods/layout/mod-siderbar-left";
 import React from "react";
 
+/**
+ * Render the application's main sidebar containing navigation, settings, and user controls.
+ *
+ * Displays one of three content modes based on the current route:
+ * - Settings view when the pathname starts with "/settings"
+ * - Moderation view when the pathname matches the mod route pattern
+ * - Default navigation otherwise
+ *
+ * The sidebar includes header controls, collapsible navigation sections, and a footer user menu with settings and logout actions.
+ *
+ * @returns A React element representing the application's sidebar UI
+ */
 export function AppSidebar() {
   const router = useRouter();
   const pathname = usePathname();

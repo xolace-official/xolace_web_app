@@ -9,6 +9,14 @@ import Moderators from "@/features/mods/features/moderators/moderators";
 import { useModsFiltersServer } from "@/features/mods/features/moderators/mods-filter";
 import ModeratorRecruiting from "@/features/mods/features/moderators/recruiting";
 
+/**
+ * Placeholder error component for the moderators/members tab shown when fetching data fails.
+ *
+ * @param refetch - Function to retry the failed fetch.
+ * @param error - The error object returned from the fetch.
+ * @param slug - The campfire slug associated with the fetch request.
+ * @returns `null` — this component does not render any UI.
+ */
 function ModMembersTabError(props: { refetch: any; error: any; slug: string }) {
   return null;
 }

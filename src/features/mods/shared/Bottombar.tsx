@@ -5,6 +5,15 @@ import { usePathname } from "next/navigation";
 import { sidebarLinks } from "@/constants";
 import { ThemeSwitcher } from "@/components/shared/theme-switcher";
 
+/**
+ * Renders the application's bottom navigation bar with links and a theme toggle.
+ *
+ * Maps `sidebarLinks` to render each link's icon and the first word of its label,
+ * applies an active style when the current pathname matches the link's route,
+ * and hides specific routes on smaller viewports. Also includes a ThemeSwitcher control.
+ *
+ * @returns A JSX element representing the bottom navigation bar.
+ */
 function Bottombar() {
   const pathName = usePathname();
 

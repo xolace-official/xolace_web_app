@@ -52,10 +52,26 @@ export const substituteUsername = (str: string, username: string) => {
   return str;
 };
 
+/**
+ * Creates a URL-friendly slug from a title by lowercasing and replacing sequences of whitespace with a single hyphen.
+ *
+ * @param title - The input string to convert into a slug
+ * @returns The slugified string with lowercase letters and whitespace replaced by `-`
+ */
 export function generateSlug(title: string) {
   return title.toLowerCase().replace(/\s+/g, "-");
 }
 
+/**
+ * Creates a URL-friendly Campfire-style slug from the given text.
+ *
+ * The resulting slug is lowercase ASCII, uses hyphens for word separation,
+ * contains only letters (a–z), numbers (0–9) and hyphens, and has no leading,
+ * trailing, or consecutive hyphens.
+ *
+ * @param text - The input text to convert into a slug
+ * @returns The generated slug; an empty string if no valid characters remain
+ */
 export function generateCampfireSlug(text: string) {
   return (
     text

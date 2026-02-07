@@ -40,6 +40,13 @@ const moderatedCampfires: {
     icon_url: "whltlwl",
   },
 ];
+/**
+ * Render the moderator sidebar navigation used in the mod tools UI.
+ *
+ * Renders a back/exit button, a campfire selector (driven by route slug), and a list of sidebar sections with navigable items that close the mobile sidebar when activated.
+ *
+ * @returns A React element that displays the moderator sidebar navigation with back navigation, campfire selection, and section links.
+ */
 export function ModsNavMain() {
   // get the slug params
   const params = useParams<{ slug: string }>();
