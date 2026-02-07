@@ -11,7 +11,7 @@ export const ModeratorsPage = ({ moderators }: { moderators: string }) => {
       containerClassName={"w-full flex-1"}
       contentClassName={"w-full max-w-none flex flex-col"}
     >
-      <div className="flex flex-col gap-6">
+      <div className="flex flex-col gap-6 px-2 md:px-0">
         <ModsAndMembersTab slug={moderators} />
       </div>
     </PageContainer>

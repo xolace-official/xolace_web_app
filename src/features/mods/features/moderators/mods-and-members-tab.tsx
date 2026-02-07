@@ -73,6 +73,7 @@ const ModsAndMemberTab = ({ slug }: { slug: string }) => {
         <div className="flex gap-4">
           {tabOptions.map((tab) => (
             <button
+              type="button"
               key={tab.key}
               onClick={() => {
                 setActiveTab(tab.key);
