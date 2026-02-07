@@ -1,5 +1,4 @@
 import { Loader2 } from "lucide-react";
-import React from "react";
 
 const ModMemberTabSkeleton = () => {
   return (
@@ -39,6 +38,7 @@ const ModMemberTabSkeleton = () => {
                   .fill(0)
                   .map((_, i) => (
                     <div
+                      // biome-ignore lint/suspicious/noArrayIndexKey: just for skeletons
                       key={i}
                       className="h-4 bg-muted rounded animate-pulse"
                     />

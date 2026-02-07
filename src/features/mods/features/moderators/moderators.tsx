@@ -74,12 +74,7 @@ const Moderators: React.FC<ModeratorsProps> = ({ campfireId }) => {
     shallow: false,
   });
 
-  const {
-    data: moderators,
-    isLoading,
-    isError,
-    error,
-  } = useMockCampfireModerators();
+  const { data: moderators, isLoading, isError } = useMockCampfireModerators();
 
   // Filter moderators based on search term
   const filteredModerators = React.useMemo(() => {

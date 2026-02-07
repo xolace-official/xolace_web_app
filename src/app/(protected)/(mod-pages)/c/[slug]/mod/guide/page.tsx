@@ -1,4 +1,3 @@
-import React from "react";
 import type { Metadata } from "next";
 import { GuidePage } from "@/app/(protected)/(mod-pages)/c/[slug]/mod/guide/guide-page";
 
