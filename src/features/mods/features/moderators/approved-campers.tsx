@@ -52,6 +52,15 @@ const DUMMY_MODERATORS = [
   },
 ];
 
+/**
+ * Provides mock campfire moderator data and simple loading/error flags for development and testing.
+ *
+ * @returns An object with:
+ * - `data`: an array of mock moderator records
+ * - `isLoading`: `false`
+ * - `isError`: `false`
+ * - `error`: `null`
+ */
 function useMockCampfireModerators() {
   return {
     data: DUMMY_MODERATORS,

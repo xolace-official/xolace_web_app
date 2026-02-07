@@ -147,6 +147,18 @@ interface EntityContentProps {
   type: CollectionEntityType;
 }
 
+/**
+ * Renders a compact preview of a collection entity for use in a list card.
+ *
+ * For `post` and `voice` types, displays the entity's `content_text` and a line with
+ * the author's name snapshot and a formatted creation timestamp. For `video`, displays
+ * the title (or "Untitled video" if missing), an optional description, and a line with
+ * the author's display name and a formatted duration.
+ *
+ * @param entity - The hydrated entity to render; when falsy the component returns `null`
+ * @param type - The collection entity type that determines which preview layout to render
+ * @returns A JSX element containing the entity preview, or `null` if `entity` is falsy or the `type` is unsupported
+ */
 function EntityContent({ entity, type }: EntityContentProps) {
   if (!entity) return null;
 
