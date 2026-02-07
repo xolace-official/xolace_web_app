@@ -14,7 +14,7 @@ export const DesktopSidebarToggler = () => {
     <Tooltip>
       <TooltipTrigger asChild>
         <Button
-          className="bg-background absolute top-16 -right-5 hidden h-10 w-10 cursor-pointer items-center justify-center rounded-full border-r border-b-0 border-gray-300 hover:border-gray-600 md:flex dark:border-gray-600/40 dark:hover:border-gray-200"
+          className="text-muted-foreground bg-background absolute top-16 -right-5 hidden h-10 w-10 cursor-pointer items-center justify-center rounded-full border-r border-b-0 border-gray-300 hover:border-gray-600 md:flex dark:border-gray-600/40 dark:hover:border-gray-200"
           onClick={toggleSidebar}
         >
           {open ? (
