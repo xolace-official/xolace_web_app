@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
+import { Suspense } from "react";
 import { GuidePage } from "@/app/(protected)/(mod-pages)/c/[slug]/mod/guide/guide-page";
+import CampfireGuideSkeleton from "@/features/mods/features/guide/guide-skeleton";
 
 export const metadata: Metadata = {
   title: "Guide • Mod Tools",
@@ -13,7 +15,11 @@ interface Props {
 const Page = async ({ params }: Props) => {
   const { slug } = await params;
 
-  return <GuidePage guide={slug} />;
+  return (
+    <Suspense fallback={<CampfireGuideSkeleton />}>
+      <GuidePage guide={slug} />
+    </Suspense>
+  );
 };
 
 export default Page;

@@ -1,16 +1,22 @@
 "use client";
 
-import React, { useState } from "react";
-import { Card } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
+import dynamic from "next/dynamic";
+import { useState } from "react";
 import { toast } from "sonner";
-import SettingsItem, {
-  SettingsItemProps,
-} from "@/features/mods/features/settings/settings-items";
-import GuidePreviewDrawer from "@/features/mods/features/guide/guide-preview-drawer";
+import { Button } from "@/components/ui/button";
+import { Card } from "@/components/ui/card";
 import GuidePreview from "@/features/mods/features/guide/guide-preview";
-import { useDummyMutation } from "./useDummyMutation";
+import SettingsItem, {
+  type SettingsItemProps,
+} from "@/features/mods/features/settings/settings-items";
+
+const GuidePreviewDrawer = dynamic(
+  () => import("@/features/mods/features/guide/guide-preview-drawer"),
+  { ssr: false },
+);
+
 import CampfireGuideSkeleton from "@/features/mods/features/guide/guide-skeleton";
+import { useDummyMutation } from "./useDummyMutation";
 
 //Dummy ui resource
 const initialGuideData: {

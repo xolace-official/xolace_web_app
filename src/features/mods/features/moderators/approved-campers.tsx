@@ -1,7 +1,11 @@
 "use client";
 
+import { formatDistanceToNow } from "date-fns";
+import { Loader2, Plus } from "lucide-react";
+import dynamic from "next/dynamic";
+import React, { useState, useTransition } from "react";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
-import { Plus, Loader2 } from "lucide-react";
 import {
   Table,
   TableBody,
@@ -10,11 +14,12 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import React, { useState, useTransition } from "react";
-import { formatDistanceToNow } from "date-fns";
-import AddApprovedCamperModal from "@/features/mods/features/moderators/add-camper-modal";
-import { useFiltersServer } from "@/components/shared/search-params";
+
+const AddApprovedCamperModal = dynamic(
+  () => import("@/features/mods/features/moderators/add-camper-modal"),
+  { ssr: false },
+);
+
 import { debounce } from "nuqs";
 import { ParamsSearchBar } from "@/components/shared/params-search-bar";
 import { useModsFiltersServer } from "@/features/mods/features/moderators/mods-filter";
@@ -246,12 +251,14 @@ const ApprovedCampers: React.FC<ApprovedCampersProps> = ({ campfireId }) => {
         )}
       </div>
 
-      <AddApprovedCamperModal
-        isOpen={showAddCamperModal}
-        onClose={() => setShowAddCamperModal(false)}
-        campfireId={campfireId}
-        onAdd={handleAddCamper}
-      />
+      {showAddCamperModal && (
+        <AddApprovedCamperModal
+          isOpen={showAddCamperModal}
+          onClose={() => setShowAddCamperModal(false)}
+          campfireId={campfireId}
+          onAdd={handleAddCamper}
+        />
+      )}
     </>
   );
 };

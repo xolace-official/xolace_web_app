@@ -1,13 +1,12 @@
 "use client";
 
-import React, { useState, useTransition } from "react";
-import GeneralSettings from "./general";
-import PrivacyAndDiscovery from "@/features/mods/features/settings/privacy-and-discovery";
-import ModSettingsTabError from "@/features/mods/features/settings/mods-settings-tab-error";
-import SettingsTabSkeleton from "@/features/mods/features/settings/settings-tab-skeleton";
+import { useState, useTransition } from "react";
 import { useCampfireWithSlug } from "@/features/mods/features/mockhooks";
-import { useModsFiltersServer } from "@/features/mods/features/moderators/mods-filter";
+import ModSettingsTabError from "@/features/mods/features/settings/mods-settings-tab-error";
+import PrivacyAndDiscovery from "@/features/mods/features/settings/privacy-and-discovery";
 import { useSettingsFiltersServer } from "@/features/mods/features/settings/settings-filter";
+import SettingsTabSkeleton from "@/features/mods/features/settings/settings-tab-skeleton";
+import GeneralSettings from "./general";
 
 const SettingsTab = ({ slug }: { slug: string }) => {
   const user = {
@@ -30,26 +29,9 @@ const SettingsTab = ({ slug }: { slug: string }) => {
     refetch,
   } = useCampfireWithSlug(slug, user?.id);
 
-  const tabOptions: {
-    key: string;
-    label: string;
-    children: React.ReactNode;
-  }[] = [
-    {
-      key: "general",
-      label: "General",
-      children: <GeneralSettings campfire={campfire} />,
-    },
-    {
-      key: "privacyAndDiscovery",
-      label: "Privacy & Discovery",
-      children: <PrivacyAndDiscovery campfire={campfire} />,
-    },
-    // {
-    //   key: "notifications",
-    //   label: "Notifications",
-    //   children: <SettingsNotification/>
-    // }
+  const tabs = [
+    { key: "general", label: "General" },
+    { key: "privacyAndDiscovery", label: "Privacy & Discovery" },
   ];
 
   if (isPending) {
@@ -64,8 +46,9 @@ const SettingsTab = ({ slug }: { slug: string }) => {
     <div className="flex flex-col items-start w-full justify-start gap-4 max-w-2xl">
       <div className="flex flex-col w-full gap-4">
         <div className="flex gap-4">
-          {tabOptions.map((tab) => (
+          {tabs.map((tab) => (
             <button
+              type="button"
               key={tab.key}
               onClick={() => {
                 setActiveTab(tab.key);
@@ -88,7 +71,10 @@ const SettingsTab = ({ slug }: { slug: string }) => {
         </div>
 
         <div className="w-full mt-4">
-          {tabOptions.find((tab) => tab.key === activeTab)?.children}
+          {activeTab === "general" && <GeneralSettings campfire={campfire} />}
+          {activeTab === "privacyAndDiscovery" && (
+            <PrivacyAndDiscovery campfire={campfire} />
+          )}
         </div>
       </div>
     </div>

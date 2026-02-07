@@ -1,6 +1,5 @@
 "use client";
 
-import type React from "react";
 import { useState, useTransition } from "react";
 import { useCampfireWithSlug } from "@/features/mods/features/mockhooks";
 import ApprovedCampers from "@/features/mods/features/moderators/approved-campers";
@@ -41,38 +40,18 @@ const ModsAndMemberTab = ({ slug }: { slug: string }) => {
 
   const campfireId = campfireData.id;
 
-  const tabOptions: {
-    key: string;
-    label: string;
-    children: React.ReactNode;
-  }[] = [
-    {
-      key: "moderators",
-      label: "Moderators",
-      children: <Moderators campfireId={campfireId} />,
-    },
-    {
-      key: "approvedCampers",
-      label: "Approved Campers",
-      children: <ApprovedCampers campfireId={campfireId} />,
-    },
-    {
-      key: "invites",
-      label: "Invites",
-      children: <InvitesMod />,
-    },
-    {
-      key: "recruiting",
-      label: "Recruiting",
-      children: <ModeratorRecruiting />,
-    },
+  const tabs = [
+    { key: "moderators", label: "Moderators" },
+    { key: "approvedCampers", label: "Approved Campers" },
+    { key: "invites", label: "Invites" },
+    { key: "recruiting", label: "Recruiting" },
   ];
 
   return (
     <div className="flex flex-col items-start w-full justify-start gap-4">
       <div className="flex flex-col w-full gap-4">
         <div className="flex gap-4">
-          {tabOptions.map((tab) => (
+          {tabs.map((tab) => (
             <button
               type="button"
               key={tab.key}
@@ -97,7 +76,12 @@ const ModsAndMemberTab = ({ slug }: { slug: string }) => {
         </div>
 
         <div className="w-full mt-4">
-          {tabOptions.find((tab) => tab.key === activeTab)?.children}
+          {activeTab === "moderators" && <Moderators campfireId={campfireId} />}
+          {activeTab === "approvedCampers" && (
+            <ApprovedCampers campfireId={campfireId} />
+          )}
+          {activeTab === "invites" && <InvitesMod />}
+          {activeTab === "recruiting" && <ModeratorRecruiting />}
         </div>
       </div>
     </div>

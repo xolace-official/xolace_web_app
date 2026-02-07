@@ -1,11 +1,11 @@
 "use client";
 
 import { ChevronRight, ExternalLink, Minus, Pencil, Save } from "lucide-react";
-import React, { useState, useEffect } from "react";
-import { Switch } from "@/components/ui/switch";
+import { memo, useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
+import { toast } from "sonner";
+import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
 import {
   Select,
   SelectContent,
@@ -13,8 +13,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Button } from "@/components/ui/button";
-import { toast } from "sonner";
+import { Switch } from "@/components/ui/switch";
+import { Textarea } from "@/components/ui/textarea";
 import { truncateText } from "@/utils";
 
 export interface SettingsItemProps {
@@ -40,7 +40,7 @@ export interface SettingsItemProps {
   isLoading?: boolean;
 }
 
-const SettingsItem = ({
+const SettingsItem = memo(function SettingsItem({
   label,
   value,
   description,
@@ -57,7 +57,7 @@ const SettingsItem = ({
   resourcesList = [],
   onToggle,
   isLoading,
-}: SettingsItemProps) => {
+}: SettingsItemProps) {
   const [editingIndex, setEditingIndex] = useState<number | null>(null);
   const [editLabel, setEditLabel] = useState("");
   const [editValue, setEditValue] = useState("");
@@ -397,6 +397,6 @@ const SettingsItem = ({
       )}
     </div>
   );
-};
+});
 
 export default SettingsItem;

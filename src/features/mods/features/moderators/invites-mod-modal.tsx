@@ -1,6 +1,14 @@
 "use client";
 
-import React, { useState, useMemo } from "react";
+import { formatDistanceToNow } from "date-fns";
+import { AlertCircle, Loader2, UserRoundPlusIcon, X } from "lucide-react";
+import React, { useMemo, useState } from "react";
+import { toast } from "sonner";
+import { SearchBar } from "@/components/shared/search-bar";
+import { Alert, AlertDescription } from "@/components/ui/alert";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Button } from "@/components/ui/button";
+import { Checkbox } from "@/components/ui/checkbox";
 import {
   Dialog,
   DialogContent,
@@ -8,21 +16,13 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { Button } from "@/components/ui/button";
-import { Checkbox } from "@/components/ui/checkbox";
 import { Textarea } from "@/components/ui/textarea";
-import { Loader2, UserRoundPlusIcon, X, AlertCircle } from "lucide-react";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Alert, AlertDescription } from "@/components/ui/alert";
-import { formatDistanceToNow } from "date-fns";
-import { toast } from "sonner";
 import {
   getPermissionGroups,
   useCreateFirekeeperInviteV2,
   useDebounce,
   useSearchUsers,
 } from "@/features/mods/features/mockhooks";
-import { SearchBar } from "@/components/shared/search-bar";
 
 export interface ModInviteProps {
   id: string;
@@ -69,8 +69,9 @@ const InviteModModal: React.FC<InviteModModalProps> = ({
   const createInviteMutation = useCreateFirekeeperInviteV2(campfireId);
 
   // Initialize permissions when groups are loaded
+  const hasPermissions = Object.keys(selectedPermissions).length > 0;
   React.useEffect(() => {
-    if (permissionGroups && Object.keys(selectedPermissions).length === 0) {
+    if (permissionGroups && !hasPermissions) {
       const initialPermissions = permissionGroups.reduce((acc, group) => {
         acc[group.group] = {
           selected: group.group === "manage_content", // Default select content management
@@ -80,7 +81,7 @@ const InviteModModal: React.FC<InviteModModalProps> = ({
       }, {} as SelectedPermissions);
       setSelectedPermissions(initialPermissions);
     }
-  }, [permissionGroups, selectedPermissions]);
+  }, [permissionGroups, hasPermissions]);
 
   // Calculate selected permission IDs
   const selectedPermissionIds = useMemo(() => {
@@ -222,9 +223,10 @@ const InviteModModal: React.FC<InviteModModalProps> = ({
                           </div>
                         )}
                       {foundUsers?.map((mod) => (
-                        <div
+                        <button
+                          type="button"
                           key={mod.id}
-                          className="flex items-center p-3 hover:bg-muted-foreground cursor-pointer border-b border last:border-b-0"
+                          className="w-full text-left flex items-center p-3 hover:bg-muted-foreground cursor-pointer border-b border last:border-b-0 transition-colors"
                           onClick={() => handleUserSelect(mod)}
                         >
                           <Avatar className="w-10 h-10 border-2">
@@ -245,7 +247,7 @@ const InviteModModal: React.FC<InviteModModalProps> = ({
                               old • {mod.reputation.toLocaleString()} reputation
                             </div>
                           </div>
-                        </div>
+                        </button>
                       ))}
                     </div>
                   )}
@@ -253,7 +255,7 @@ const InviteModModal: React.FC<InviteModModalProps> = ({
               ) : (
                 /* Selected User Display */
                 <div className="flex items-center p-4 bg-muted rounded-lg border">
-                  <Avatar className="w-10 h-10 border-2 border">
+                  <Avatar className="w-10 h-10 border">
                     <AvatarImage
                       src={selectedMod.avatar_url}
                       alt={selectedMod.username}
@@ -355,6 +357,7 @@ const InviteModModal: React.FC<InviteModModalProps> = ({
                 </Button>
               ) : (
                 <div className="space-y-2">
+                  {/** biome-ignore lint/a11y/noLabelWithoutControl: still tied to a textarea */}
                   <label className="text-sm font-medium text-muted-foreground">
                     Personal Message (Optional)
                   </label>

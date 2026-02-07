@@ -1,5 +1,12 @@
 "use client";
 
+import { formatDistanceToNow } from "date-fns";
+import { Loader2, Plus } from "lucide-react";
+import dynamic from "next/dynamic";
+import React, { useState, useTransition } from "react";
+import { toast } from "sonner";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Button } from "@/components/ui/button";
 import {
   Table,
   TableBody,
@@ -8,16 +15,15 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Button } from "@/components/ui/button";
-import { Plus, Loader2 } from "lucide-react";
-import React, { useState, useTransition } from "react";
-import { formatDistanceToNow } from "date-fns";
-import { toast } from "sonner";
 import ModeratorActionsPopover from "@/features/mods/features/moderators/action-popover";
-import InviteModModal from "@/features/mods/features/moderators/invites-mod-modal";
-import { ParamsSearchBar } from "@/components/shared/params-search-bar";
+
+const InviteModModal = dynamic(
+  () => import("@/features/mods/features/moderators/invites-mod-modal"),
+  { ssr: false },
+);
+
 import { debounce } from "nuqs";
+import { ParamsSearchBar } from "@/components/shared/params-search-bar";
 import { useModsFiltersServer } from "@/features/mods/features/moderators/mods-filter";
 
 interface ModeratorsProps {
@@ -225,12 +231,12 @@ const Moderators: React.FC<ModeratorsProps> = ({ campfireId }) => {
                         <span className="text-sm font-medium text-neutral-900 dark:text-neutral-100">
                           {mod.permission_summary || "Everything"}
                         </span>
-                        {mod.permission_count && (
+                        {mod.permission_count > 0 ? (
                           <span className="text-xs text-muted-foreground">
                             {mod.permission_count} permission
                             {mod.permission_count !== 1 ? "s" : ""}
                           </span>
-                        )}
+                        ) : null}
                       </div>
                     </TableCell>
                     <TableCell>
@@ -272,11 +278,13 @@ const Moderators: React.FC<ModeratorsProps> = ({ campfireId }) => {
         )}
       </div>
 
-      <InviteModModal
-        isOpen={showInviteModal}
-        onClose={() => setShowInviteModal(false)}
-        campfireId={campfireId}
-      />
+      {showInviteModal && (
+        <InviteModModal
+          isOpen={showInviteModal}
+          onClose={() => setShowInviteModal(false)}
+          campfireId={campfireId}
+        />
+      )}
     </>
   );
 };
