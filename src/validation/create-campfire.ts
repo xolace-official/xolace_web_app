@@ -1,6 +1,6 @@
 //Campfire purpose options - type enum
 
-import { FullFormType } from "@/features/campfires/creation/create-campfire-modal";
+import { z } from "zod";
 import { campfire_realms } from "@/features/campfires";
 
 // export enum CampfirePurpose {
@@ -63,6 +63,36 @@ export enum CampfireLane {
   Discussion = "discussion",
   Inspiration = "inspiration",
 }
+
+// Campfire creation form schemas
+export const MAX_WORDS = 20;
+
+const StepOneSchema = z.object({
+  name: z.string().min(2, { message: "Campfire name is required." }),
+  description: z
+    .string()
+    .min(5, { message: "Please describe your Campfire." })
+    .refine((val) => val.trim().split(/\s+/).length <= MAX_WORDS, {
+      message: `Description must be ${MAX_WORDS} words or fewer.`,
+    }),
+});
+
+const StepTwoSchema = z.object({
+  visibility: z.enum(CampfireVisibility),
+  realm: z.enum(CampfireRealm),
+  lane: z.enum(CampfireLane),
+  rules: z.array(z.string()).optional(),
+});
+
+const StepThreeSchema = z.object({
+  icon_url: z.string().optional(),
+  banner_url: z.string().optional(),
+});
+
+export const FullFormSchema =
+  StepOneSchema.merge(StepTwoSchema).merge(StepThreeSchema);
+
+export type FullFormType = z.infer<typeof FullFormSchema>;
 
 // Campfire creation definition fields
 export type CampfireFieldDefinition = {
