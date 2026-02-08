@@ -1,13 +1,14 @@
 //Campfire purpose options - type enum
 
 import { FullFormType } from "@/features/campfires/creation/create-campfire-modal";
+import { campfire_realms } from "@/features/campfires";
 
-export enum CampfirePurpose {
-  Support = "support_circle",
-  Growth = "growth_group",
-  Creative = "creative_outlet",
-  General = "general_discussion",
-}
+// export enum CampfirePurpose {
+//   Support = "support_circle",
+//   Growth = "growth_group",
+//   Creative = "creative_outlet",
+//   General = "general_discussion",
+// }
 //support_circle, growth_group, creative_outlet, general_discussion
 
 export interface CampfireRule {
@@ -21,6 +22,46 @@ export interface CampfireRule {
 export enum CampfireVisibility {
   Public = "public",
   // Private = "Private",
+}
+
+export enum CampfireRealm {
+  Collaborative = "collaborative",
+  Supportive = "supportive",
+  Motivational = "motivational",
+  Educational = "educational",
+  Expressive = "expressive",
+}
+
+export enum CampfireLane {
+  // Collaborative lanes
+  Projects = "projects",
+  Resources = "resources",
+  Feedback = "feedback",
+  Partnerships = "partnerships",
+
+  // Supportive lanes
+  Advice = "advice",
+  Encouragement = "encouragement",
+  Experiences = "experiences",
+  Questions = "questions",
+
+  // Motivational lanes
+  Goals = "goals",
+  Progress = "progress",
+  Challenges = "challenges",
+  Wins = "wins",
+
+  // Educational lanes
+  Tutorials = "tutorials",
+  Guides = "guides",
+  EducationalResources = "resources", // Note: duplicate key name with Collaborative
+  QA = "qa",
+
+  // Expressive lanes
+  Showcase = "showcase",
+  Creations = "creations",
+  Discussion = "discussion",
+  Inspiration = "inspiration",
 }
 
 // Campfire creation definition fields
@@ -63,16 +104,16 @@ export const campfireFieldsByStep: CampfireFieldDefinition[][] = [
 
   // Step 2
   [
-    {
-      name: "purpose",
-      label: "Purpose",
-      type: "select",
-      placeholder: "Select purpose",
-      options: Object.values(CampfirePurpose).map((val) => ({
-        value: val,
-        label: val.replace("_", " ").toUpperCase(),
-      })),
-    },
+    // {
+    //   name: "purpose",
+    //   label: "Purpose",
+    //   type: "select",
+    //   placeholder: "Select purpose",
+    //   options: Object.values(CampfirePurpose).map((val) => ({
+    //     value: val,
+    //     label: val.replace("_", " ").toUpperCase(),
+    //   })),
+    // },
     {
       name: "visibility",
       label: "Visibility",
@@ -82,6 +123,23 @@ export const campfireFieldsByStep: CampfireFieldDefinition[][] = [
         value: val,
         label: val.replace("_", " ").toUpperCase(),
       })),
+    },
+    {
+      name: "realm",
+      label: "Realm",
+      type: "select",
+      placeholder: "Select realm",
+      options: campfire_realms.map((realm) => ({
+        value: realm.key,
+        label: realm.name.replace("_", "").toUpperCase(),
+      })),
+    },
+    {
+      name: "lane",
+      label: "Lane",
+      type: "select",
+      placeholder: "Select real to select",
+      options: [],
     },
   ],
 
@@ -113,11 +171,11 @@ export interface CampfireAvatarInterface {
 
 export const getBgSeverity = (purpose: string) => {
   switch (purpose) {
-    case CampfirePurpose.Creative:
+    case CampfireRealm.Supportive:
       return "bg-green-200 text-green-800";
-    case CampfirePurpose.Growth:
+    case CampfireRealm.Motivational:
       return "bg-orange-200 text-orange-800";
-    case CampfirePurpose.Support:
+    case CampfireRealm.Collaborative:
       return "bg-yellow-200 text-yellow-800";
     default:
       return "bg-neutral-200 text-neutral-800";
@@ -130,7 +188,8 @@ export interface UserCampfireFavoriteJoin {
   slug: string;
   description: string;
   members: number;
-  purpose: CampfirePurpose;
+  realm: CampfireRealm;
+  lane: CampfireLane;
   iconURL?: string;
   isFavorite: boolean;
   isJoined: boolean;

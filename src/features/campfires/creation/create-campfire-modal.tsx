@@ -50,12 +50,15 @@ import { generateCampfireSlug } from "@/lib/utils";
 import { toast } from "sonner";
 import {
   campfireFieldsByStep,
-  CampfirePurpose,
   CampfireRule,
   CampfireVisibility,
+  CampfireLane,
+  CampfireRealm,
 } from "@/validation/create-campfire";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { useCreateCampfireMutation } from "@/hooks/campfires/use-create-campfire";
+import { campfireRealmsResponse } from "@backend/routes/campfire/campfire.validation";
+import { campfire_realms } from "@/features/campfires";
 
 const MAX_WORDS = 20;
 const MAX_RULES = 4;
@@ -82,8 +85,9 @@ const StepOneSchema = z.object({
 });
 
 const StepTwoSchema = z.object({
-  purpose: z.nativeEnum(CampfirePurpose),
-  visibility: z.nativeEnum(CampfireVisibility),
+  visibility: z.enum(CampfireVisibility),
+  realm: z.enum(CampfireRealm),
+  lane: z.enum(CampfireLane),
   rules: z.array(z.string()).optional(),
 });
 
@@ -154,8 +158,9 @@ const CreateCampfireModal = ({
     defaultValues: {
       name: "",
       description: "",
-      purpose: CampfirePurpose.General,
       visibility: CampfireVisibility.Public,
+      realm: "" as CampfireRealm,
+      lane: "" as CampfireLane,
       rules: [],
       icon_url: "",
       banner_url: "",
@@ -163,15 +168,16 @@ const CreateCampfireModal = ({
     mode: "onTouched",
   });
 
-  const { banner_url, icon_url, name, description } = form.watch();
+  const { banner_url, icon_url, name, description, realm } = form.watch();
 
   const handleFinalSubmit = async (data: FullFormType) => {
     const formData = new FormData();
     const generatedSlug = generateCampfireSlug(data.name);
     formData.append("name", `x/${data.name}`);
     formData.append("description", data.description);
-    formData.append("purpose", data.purpose);
     formData.append("visibility", data.visibility);
+    formData.append("realm", data.realm);
+    formData.append("lane", data.lane);
     formData.append("rules", JSON.stringify(rules));
     formData.append("slug", generatedSlug);
 
@@ -211,6 +217,20 @@ const CreateCampfireModal = ({
       setStep((prev) => prev + 1);
       return;
     }
+
+    if (step === 2) {
+      // Check if realm is selected
+      if (!realm) {
+        toast.error("Please select a realm");
+        return;
+      }
+      const selectedLane = form.watch("lane");
+      if (!selectedLane) {
+        toast.error("Please select a lane");
+        return;
+      }
+    }
+
     const currentStepFields = campfireFieldsByStep[step - 1];
     const fieldsToValidate = currentStepFields.map((f) => f.name);
 
@@ -258,17 +278,18 @@ const CreateCampfireModal = ({
   };
 
   // Helper function to get purpose
-  const getPurposeDisplayName = () => {
-    const purpose = form.watch("purpose");
+  const getRealmDisplayName = () => {
+    const realm = form.watch("realm");
 
-    if (purpose) {
-      const purposeMap: Record<CampfirePurpose, string> = {
-        [CampfirePurpose.Creative]: "Creative",
-        [CampfirePurpose.Support]: "Support",
-        [CampfirePurpose.Growth]: "Growth",
-        [CampfirePurpose.General]: "General",
+    if (campfireRealmsResponse) {
+      const realmMap: Record<CampfireRealm, string> = {
+        [CampfireRealm.Collaborative]: "Collaborative",
+        [CampfireRealm.Supportive]: "Supportive",
+        [CampfireRealm.Educational]: "Educational",
+        [CampfireRealm.Expressive]: "Expressive",
+        [CampfireRealm.Motivational]: "Motivational",
       };
-      return purposeMap[purpose] || "General";
+      return realmMap[realm] || "Expressive";
     }
     return "General";
   };
@@ -288,6 +309,22 @@ const CreateCampfireModal = ({
     return text.length > maxLength ? text.slice(0, maxLength) + "..." : text;
   };
 
+  // Function to get lanes based on selected realm
+  const getLaneOptions = () => {
+    if (!realm) return [];
+
+    const selectedRealm = campfire_realms.find((r) => r.key === realm);
+
+    if (!selectedRealm) return [];
+
+    return selectedRealm.lanes.map(([key, name]) => ({
+      value: key,
+      label: name.toUpperCase(),
+    }));
+  };
+
+  const laneOptions = getLaneOptions();
+
   return (
     <Dialog open={open} onOpenChange={handleOpenChange}>
       <DialogContent
@@ -305,7 +342,7 @@ const CreateCampfireModal = ({
         <Form {...form}>
           <div className="w-full space-y-4">
             <div className="grid grid-cols-1 items-start gap-8 md:grid-cols-12">
-              <div className="order-2 col-span-1 max-h-[50vh] space-y-4 overflow-y-auto sm:max-h-[72vh] md:order-1 md:col-span-7">
+              <div className="order-2 col-span-1 max-h-[50vh] space-y-4 overflow-y-auto sm:max-h-[72vh] md:order-1 md:col-span-7 z-99">
                 {step < 4 &&
                   campfireFieldsByStep[step - 1].map(
                     ({ name, label, type, placeholder, options }) => (
@@ -356,18 +393,38 @@ const CreateCampfireModal = ({
 
                                 {type === "select" && options && (
                                   <Select
-                                    onValueChange={field.onChange}
+                                    onValueChange={(value) => {
+                                      field.onChange(value);
+                                      if (name === "realm") {
+                                        form.setValue(
+                                          "lane",
+                                          "" as CampfireLane,
+                                        );
+                                      }
+                                    }}
                                     value={
                                       typeof field.value === "string"
                                         ? field.value
                                         : ""
                                     }
+                                    disabled={name === "lane" && !realm}
                                   >
-                                    <SelectTrigger className={"w-full"}>
-                                      <SelectValue placeholder={placeholder} />
+                                    <SelectTrigger
+                                      className={"w-full rounded-lg"}
+                                    >
+                                      <SelectValue
+                                        placeholder={
+                                          name === "lane" && !realm
+                                            ? "Select Realm first"
+                                            : placeholder
+                                        }
+                                      />
                                     </SelectTrigger>
-                                    <SelectContent className={"w-full"}>
-                                      {options.map((opt) => (
+                                    <SelectContent className="w-full max-w-[var(--radix-select-trigger-width)]">
+                                      {(name === "lane"
+                                        ? laneOptions
+                                        : options || []
+                                      ).map((opt) => (
                                         <SelectItem
                                           key={opt.value}
                                           value={opt.value}
@@ -660,7 +717,7 @@ const CreateCampfireModal = ({
                               </div>
                             </FormControl>
                             <div className="flex items-center justify-between">
-                              <div className="text-destructive flex-1 text-xs">
+                              <div className="text-destructive flex-1 text-xs break-words">
                                 <FormMessage />
                               </div>
                               {type === "textarea" &&
@@ -773,7 +830,7 @@ const CreateCampfireModal = ({
                         "flex w-full items-end justify-end px-4 text-sm"
                       }
                     >
-                      <TagCard _id={"purpose"} name={getPurposeDisplayName()} />
+                      <TagCard _id={"realm"} name={getRealmDisplayName()} />
                     </p>
                   )}
                 </div>
@@ -786,7 +843,7 @@ const CreateCampfireModal = ({
                 <span className="font-semibold">Mod Code of Conduct</span> and
                 acknowledge that you understand the{" "}
                 <Link
-                  href="/policies"
+                  href={"/policies"}
                   target="_blank"
                   className="text-muted-foreground font-semibold"
                 >
@@ -802,7 +859,7 @@ const CreateCampfireModal = ({
                     key={i}
                     className={cn(
                       "h-2 w-2 rounded-full",
-                      i + 1 === step ? "bg-primary" : "bg-muted-foreground",
+                      i + 1 === step ? "bg-accent" : "bg-muted-foreground",
                     )}
                   />
                 ))}
