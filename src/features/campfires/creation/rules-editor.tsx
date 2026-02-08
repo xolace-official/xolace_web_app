@@ -61,7 +61,7 @@ export default function RulesEditor({
         </div>
         <Button
           size="sm"
-          className="gap-2"
+          className="gap-1"
           onClick={addRule}
           disabled={rules.length >= 10}
         >
@@ -71,10 +71,10 @@ export default function RulesEditor({
       </div>
 
       <div className="space-y-3">
-        {rules.map((rule, i) => (
+        {rules?.toReversed().map((rule, i) => (
           <Card key={rule.id} className="p-3">
-            <div className="grid gap-3 sm:grid-cols-[1fr_120px]">
-              <div className="space-y-3">
+            <div className="grid gap-2 sm:grid-cols-[1fr_120px]">
+              <div className="space-y-2">
                 <div className="grid gap-2">
                   <Label htmlFor={`title-${rule.id}`}>Rule title</Label>
                   <Input
@@ -86,7 +86,6 @@ export default function RulesEditor({
                       })
                     }
                     placeholder="Be respectful"
-                    className="border rounded-xl border-2"
                   />
                   <p className="text-xs text-muted-foreground">
                     {Math.min(rule.title.length, 100)}/100
@@ -103,7 +102,7 @@ export default function RulesEditor({
                       })
                     }
                     placeholder="Provide more details about this rule."
-                    className={`border-border rounded-xl border-2 text-base leading-relaxed transition-all duration-200 min-h-[50px]`}
+                    className={`text-base leading-relaxed transition-all duration-200 h-[50px]`}
                   />
                   <p className="text-xs text-muted-foreground">
                     {Math.min((rule.description ?? "").length, 500)}/500
@@ -111,31 +110,33 @@ export default function RulesEditor({
                 </div>
               </div>
 
-              <div className="flex h-full items-start justify-end gap-2">
-                <Button
-                  variant="outline"
-                  size="icon"
-                  onClick={() => move(rule.id, "up")}
-                  disabled={i === 0}
-                >
-                  <ArrowUp className="size-4" />
-                </Button>
-                <Button
-                  variant="outline"
-                  size="icon"
-                  onClick={() => move(rule.id, "down")}
-                  disabled={i === rules.length - 1}
-                >
-                  <ArrowDown className="size-4" />
-                </Button>
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  className="text-destructive"
-                  onClick={() => removeRule(rule.id)}
-                >
-                  <Trash2 className="size-4" />
-                </Button>
+              <div className="flex h-full items-start justify-end ">
+                <div className="w-full flex items-center justify-evenly">
+                  <Button
+                    variant="outline"
+                    size="icon"
+                    onClick={() => move(rule.id, "up")}
+                    disabled={i === 0}
+                  >
+                    <ArrowUp className="size-4" />
+                  </Button>
+                  <Button
+                    variant="outline"
+                    size="icon"
+                    onClick={() => move(rule.id, "down")}
+                    disabled={i === rules.length - 1}
+                  >
+                    <ArrowDown className="size-4" />
+                  </Button>
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    className="text-destructive"
+                    onClick={() => removeRule(rule.id)}
+                  >
+                    <Trash2 className="size-4" />
+                  </Button>
+                </div>
               </div>
             </div>
           </Card>

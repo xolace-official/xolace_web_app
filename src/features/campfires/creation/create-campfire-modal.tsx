@@ -342,413 +342,418 @@ const CreateCampfireModal = ({
         <Form {...form}>
           <div className="w-full space-y-4">
             <div className="grid grid-cols-1 items-start gap-8 md:grid-cols-12">
-              <div className="order-2 col-span-1 max-h-[50vh] space-y-4 overflow-y-auto sm:max-h-[72vh] md:order-1 md:col-span-7 z-99">
-                {step < 4 &&
-                  campfireFieldsByStep[step - 1].map(
-                    ({ name, label, type, placeholder, options }) => (
-                      <FormField
-                        key={name}
-                        control={form.control}
-                        name={name}
-                        render={({ field }) => (
-                          <FormItem>
-                            <FormLabel>{label}</FormLabel>
-                            <FormControl>
-                              <div>
-                                {type === "input" && (
-                                  <Input placeholder={placeholder} {...field} />
-                                )}
-                                {type === "textarea" &&
-                                name === "description" ? (
-                                  <>
+              <div className="order-2 col-span-1 md:order-1 md:col-span-7">
+                <div className="max-h-[calc(100vh-280px)] overflow-y-auto space-y-4 pr-2">
+                  {" "}
+                  {step < 4 &&
+                    campfireFieldsByStep[step - 1].map(
+                      ({ name, label, type, placeholder, options }) => (
+                        <FormField
+                          key={name}
+                          control={form.control}
+                          name={name}
+                          render={({ field }) => (
+                            <FormItem>
+                              <FormLabel>{label}</FormLabel>
+                              <FormControl>
+                                <div>
+                                  {type === "input" && (
+                                    <Input
+                                      placeholder={placeholder}
+                                      {...field}
+                                    />
+                                  )}
+                                  {type === "textarea" &&
+                                  name === "description" ? (
+                                    <>
+                                      <Textarea
+                                        placeholder={placeholder}
+                                        value={field.value}
+                                        onChange={(e) => {
+                                          const value = e.target.value;
+                                          const words = value
+                                            .trim()
+                                            .split(/\s+/)
+                                            .filter(Boolean);
+
+                                          if (words.length <= MAX_WORDS) {
+                                            field.onChange(e);
+                                            setWordCount(words.length);
+                                          } else {
+                                            const truncated = words
+                                              .slice(0, MAX_WORDS)
+                                              .join(" ");
+                                            field.onChange(truncated);
+                                            setWordCount(MAX_WORDS);
+                                          }
+                                        }}
+                                      />
+                                    </>
+                                  ) : type === "textarea" ? (
                                     <Textarea
                                       placeholder={placeholder}
-                                      value={field.value}
-                                      onChange={(e) => {
-                                        const value = e.target.value;
-                                        const words = value
-                                          .trim()
-                                          .split(/\s+/)
-                                          .filter(Boolean);
+                                      {...field}
+                                    />
+                                  ) : null}
 
-                                        if (words.length <= MAX_WORDS) {
-                                          field.onChange(e);
-                                          setWordCount(words.length);
-                                        } else {
-                                          const truncated = words
-                                            .slice(0, MAX_WORDS)
-                                            .join(" ");
-                                          field.onChange(truncated);
-                                          setWordCount(MAX_WORDS);
+                                  {type === "select" && options && (
+                                    <Select
+                                      onValueChange={(value) => {
+                                        field.onChange(value);
+                                        if (name === "realm") {
+                                          form.setValue(
+                                            "lane",
+                                            "" as CampfireLane,
+                                          );
                                         }
                                       }}
-                                    />
-                                  </>
-                                ) : type === "textarea" ? (
-                                  <Textarea
-                                    placeholder={placeholder}
-                                    {...field}
-                                  />
-                                ) : null}
-
-                                {type === "select" && options && (
-                                  <Select
-                                    onValueChange={(value) => {
-                                      field.onChange(value);
-                                      if (name === "realm") {
-                                        form.setValue(
-                                          "lane",
-                                          "" as CampfireLane,
-                                        );
+                                      value={
+                                        typeof field.value === "string"
+                                          ? field.value
+                                          : ""
                                       }
-                                    }}
-                                    value={
-                                      typeof field.value === "string"
-                                        ? field.value
-                                        : ""
-                                    }
-                                    disabled={name === "lane" && !realm}
-                                  >
-                                    <SelectTrigger
-                                      className={"w-full rounded-lg"}
+                                      disabled={name === "lane" && !realm}
                                     >
-                                      <SelectValue
-                                        placeholder={
-                                          name === "lane" && !realm
-                                            ? "Select Realm first"
-                                            : placeholder
-                                        }
-                                      />
-                                    </SelectTrigger>
-                                    <SelectContent className="w-full max-w-[var(--radix-select-trigger-width)]">
-                                      {(name === "lane"
-                                        ? laneOptions
-                                        : options || []
-                                      ).map((opt) => (
-                                        <SelectItem
-                                          key={opt.value}
-                                          value={opt.value}
-                                        >
-                                          {opt.label}
-                                        </SelectItem>
-                                      ))}
-                                    </SelectContent>
-                                  </Select>
-                                )}
-
-                                {name === "rules" && type === "checkbox" && (
-                                  <Popover modal={false}>
-                                    <PopoverTrigger asChild>
-                                      <Button
-                                        type="button"
-                                        variant="outline"
-                                        className="h-auto min-h-[2.5rem] w-full items-start justify-start p-2 text-left whitespace-normal"
+                                      <SelectTrigger
+                                        className={"w-full rounded-lg"}
                                       >
-                                        <div className="w-full text-left break-words whitespace-normal">
-                                          {field.value?.length
-                                            ? RULE_OPTIONS.filter((r) =>
-                                                field.value?.includes(r.id),
-                                              )
-                                                .map((r) => r.label)
-                                                .join(", ")
-                                            : "Select rules"}
-                                        </div>
-                                      </Button>
-                                    </PopoverTrigger>
-                                    <PopoverContent className="w-[var(--radix-popover-trigger-width)] p-2">
-                                      <div className="flex flex-col gap-2">
-                                        {RULE_OPTIONS.map((rule) => {
-                                          const selected =
-                                            field.value?.includes(rule.id);
-                                          const disabled =
-                                            !selected &&
-                                            (field.value?.length || 0) >=
-                                              MAX_RULES;
-                                          return (
-                                            <label
-                                              key={rule.id}
-                                              className="flex cursor-pointer items-center gap-2"
-                                            >
-                                              <Checkbox
-                                                checked={selected}
-                                                disabled={disabled}
-                                                onCheckedChange={(checked) => {
-                                                  let newValues: string[];
+                                        <SelectValue
+                                          placeholder={
+                                            name === "lane" && !realm
+                                              ? "Select Realm first"
+                                              : placeholder
+                                          }
+                                        />
+                                      </SelectTrigger>
+                                      <SelectContent className="w-full max-w-[var(--radix-select-trigger-width)]">
+                                        {(name === "lane"
+                                          ? laneOptions
+                                          : options || []
+                                        ).map((opt) => (
+                                          <SelectItem
+                                            key={opt.value}
+                                            value={opt.value}
+                                          >
+                                            {opt.label}
+                                          </SelectItem>
+                                        ))}
+                                      </SelectContent>
+                                    </Select>
+                                  )}
 
-                                                  if (checked) {
-                                                    newValues = [
-                                                      ...(Array.isArray(
+                                  {name === "rules" && type === "checkbox" && (
+                                    <Popover modal={false}>
+                                      <PopoverTrigger asChild>
+                                        <Button
+                                          type="button"
+                                          variant="outline"
+                                          className="h-auto min-h-[2.5rem] w-full items-start justify-start p-2 text-left whitespace-normal"
+                                        >
+                                          <div className="w-full text-left break-words whitespace-normal">
+                                            {field.value?.length
+                                              ? RULE_OPTIONS.filter((r) =>
+                                                  field.value?.includes(r.id),
+                                                )
+                                                  .map((r) => r.label)
+                                                  .join(", ")
+                                              : "Select rules"}
+                                          </div>
+                                        </Button>
+                                      </PopoverTrigger>
+                                      <PopoverContent className="w-[var(--radix-popover-trigger-width)] p-2">
+                                        <div className="flex flex-col gap-2">
+                                          {RULE_OPTIONS.map((rule) => {
+                                            const selected =
+                                              field.value?.includes(rule.id);
+                                            const disabled =
+                                              !selected &&
+                                              (field.value?.length || 0) >=
+                                                MAX_RULES;
+                                            return (
+                                              <label
+                                                key={rule.id}
+                                                className="flex cursor-pointer items-center gap-2"
+                                              >
+                                                <Checkbox
+                                                  checked={selected}
+                                                  disabled={disabled}
+                                                  onCheckedChange={(
+                                                    checked,
+                                                  ) => {
+                                                    let newValues: string[];
+
+                                                    if (checked) {
+                                                      newValues = [
+                                                        ...(Array.isArray(
+                                                          field.value,
+                                                        )
+                                                          ? field.value
+                                                          : []),
+                                                        rule.id,
+                                                      ];
+                                                    } else {
+                                                      newValues = Array.isArray(
                                                         field.value,
                                                       )
-                                                        ? field.value
-                                                        : []),
-                                                      rule.id,
-                                                    ];
-                                                  } else {
-                                                    newValues = Array.isArray(
-                                                      field.value,
-                                                    )
-                                                      ? field.value.filter(
-                                                          (id) =>
-                                                            id !== rule.id,
-                                                        )
-                                                      : [];
-                                                  }
+                                                        ? field.value.filter(
+                                                            (id) =>
+                                                              id !== rule.id,
+                                                          )
+                                                        : [];
+                                                    }
 
-                                                  field.onChange(newValues);
-                                                }}
-                                              />
-                                              {rule.label}
-                                            </label>
+                                                    field.onChange(newValues);
+                                                  }}
+                                                />
+                                                {rule.label}
+                                              </label>
+                                            );
+                                          })}
+                                        </div>
+                                      </PopoverContent>
+                                    </Popover>
+                                  )}
+
+                                  {/* default view for banner */}
+                                  {type === "file" &&
+                                    label === "Banner URL" &&
+                                    !bannerBlob &&
+                                    !banner_url && (
+                                      <label
+                                        className={cn(
+                                          "flex h-40 cursor-pointer items-center justify-center rounded-lg border",
+                                          "bg-muted/40 hover:bg-muted/60 transition",
+                                        )}
+                                      >
+                                        <Input
+                                          type="file"
+                                          accept="image/*"
+                                          placeholder={placeholder}
+                                          onChange={(e) => {
+                                            const file = e.target.files?.[0];
+                                            if (file) {
+                                              setBannerBlobType(file.type);
+                                              const previewUrl =
+                                                URL.createObjectURL(file);
+                                              field.onChange(previewUrl);
+                                            }
+                                          }}
+                                          className="sr-only"
+                                        />
+
+                                        <div className="text-muted-foreground flex items-center gap-2 text-sm">
+                                          <Upload className="size-4" />
+                                          Upload banner image
+                                        </div>
+                                      </label>
+                                    )}
+
+                                  {/* cropper view for banner */}
+                                  {type === "file" &&
+                                    label === "Banner URL" &&
+                                    banner_url &&
+                                    !bannerBlob && (
+                                      <ImageCropper
+                                        key="banner"
+                                        src={banner_url || "/placeholder.svg"}
+                                        aspect={1028 / 128}
+                                        output={{ width: 1028, height: 128 }}
+                                        zoomLabel="Zoom"
+                                        onCancel={() => {
+                                          field.onChange("");
+                                          setBannerBlob(null);
+                                        }}
+                                        onCropped={(blob) => {
+                                          setBannerBlob(blob);
+                                          field.onChange(
+                                            URL.createObjectURL(blob),
                                           );
-                                        })}
-                                      </div>
-                                    </PopoverContent>
-                                  </Popover>
-                                )}
-
-                                {/* default view for banner */}
-                                {type === "file" &&
-                                  label === "Banner URL" &&
-                                  !bannerBlob &&
-                                  !banner_url && (
-                                    <label
-                                      className={cn(
-                                        "flex h-40 cursor-pointer items-center justify-center rounded-lg border",
-                                        "bg-muted/40 hover:bg-muted/60 transition",
-                                      )}
-                                    >
-                                      <Input
-                                        type="file"
-                                        accept="image/*"
-                                        placeholder={placeholder}
-                                        onChange={(e) => {
-                                          const file = e.target.files?.[0];
-                                          if (file) {
-                                            setBannerBlobType(file.type);
-                                            const previewUrl =
-                                              URL.createObjectURL(file);
-                                            field.onChange(previewUrl);
-                                          }
                                         }}
-                                        className="sr-only"
                                       />
+                                    )}
 
-                                      <div className="text-muted-foreground flex items-center gap-2 text-sm">
-                                        <Upload className="size-4" />
-                                        Upload banner image
-                                      </div>
-                                    </label>
-                                  )}
-
-                                {/* cropper view for banner */}
-                                {type === "file" &&
-                                  label === "Banner URL" &&
-                                  banner_url &&
-                                  !bannerBlob && (
-                                    <ImageCropper
-                                      key="banner"
-                                      src={banner_url || "/placeholder.svg"}
-                                      aspect={1028 / 128}
-                                      output={{ width: 1028, height: 128 }}
-                                      zoomLabel="Zoom"
-                                      onCancel={() => {
-                                        field.onChange("");
-                                        setBannerBlob(null);
-                                      }}
-                                      onCropped={(blob) => {
-                                        setBannerBlob(blob);
-                                        field.onChange(
-                                          URL.createObjectURL(blob),
-                                        );
-                                      }}
-                                    />
-                                  )}
-
-                                {/* preview view for banner */}
-                                {type === "file" &&
-                                  label === "Banner URL" &&
-                                  bannerBlob && (
-                                    <div className="relative overflow-hidden rounded-lg border">
-                                      <Image
-                                        src={
-                                          URL.createObjectURL(bannerBlob) ||
-                                          "/placeholder.svg"
-                                        }
-                                        alt="Banner preview"
-                                        height={128}
-                                        width={1028}
-                                        className="h-28 w-full object-cover"
-                                      />
-                                      <div className="flex items-center gap-2 p-2">
-                                        <Button
-                                          variant="outline"
-                                          size="sm"
-                                          className="gap-2"
-                                          onClick={() => {
-                                            field.onChange(
-                                              URL.createObjectURL(bannerBlob),
-                                            );
-                                            setBannerBlob(null);
-                                          }}
-                                        >
-                                          <ImageIcon className="size-4" />
-                                          Re&#45;crop
-                                        </Button>
-                                        <Button
-                                          variant="ghost"
-                                          size="sm"
-                                          className="text-destructive hover:text-destructive ml-auto gap-2"
-                                          onClick={() => {
-                                            field.onChange("");
-                                            setBannerBlob(null);
-                                          }}
-                                        >
-                                          <Trash2 className="size-4" />
-                                          Remove
-                                        </Button>
-                                      </div>
-                                    </div>
-                                  )}
-
-                                {/* default view for icon */}
-                                {type === "file" &&
-                                  label === "Icon URL" &&
-                                  !iconBlob &&
-                                  !icon_url && (
-                                    <label
-                                      className={cn(
-                                        "flex h-32 cursor-pointer items-center justify-center rounded-lg border border-dashed",
-                                        "bg-muted/40 hover:bg-muted/60 transition",
-                                      )}
-                                    >
-                                      <Input
-                                        type="file"
-                                        accept="image/*"
-                                        placeholder={placeholder}
-                                        onChange={(e) => {
-                                          const file = e.target.files?.[0];
-                                          if (file) {
-                                            setIconBlobType(file.type);
-                                            const previewUrl =
-                                              URL.createObjectURL(file);
-                                            field.onChange(previewUrl);
+                                  {/* preview view for banner */}
+                                  {type === "file" &&
+                                    label === "Banner URL" &&
+                                    bannerBlob && (
+                                      <div className="relative overflow-hidden rounded-lg border">
+                                        <Image
+                                          src={
+                                            URL.createObjectURL(bannerBlob) ||
+                                            "/placeholder.svg"
                                           }
+                                          alt="Banner preview"
+                                          height={128}
+                                          width={1028}
+                                          className="h-28 w-full object-cover"
+                                        />
+                                        <div className="flex items-center gap-2 p-2">
+                                          <Button
+                                            variant="outline"
+                                            size="sm"
+                                            className="gap-2"
+                                            onClick={() => {
+                                              field.onChange(
+                                                URL.createObjectURL(bannerBlob),
+                                              );
+                                              setBannerBlob(null);
+                                            }}
+                                          >
+                                            <ImageIcon className="size-4" />
+                                            Re&#45;crop
+                                          </Button>
+                                          <Button
+                                            variant="ghost"
+                                            size="sm"
+                                            className="text-destructive hover:text-destructive ml-auto gap-2"
+                                            onClick={() => {
+                                              field.onChange("");
+                                              setBannerBlob(null);
+                                            }}
+                                          >
+                                            <Trash2 className="size-4" />
+                                            Remove
+                                          </Button>
+                                        </div>
+                                      </div>
+                                    )}
+
+                                  {/* default view for icon */}
+                                  {type === "file" &&
+                                    label === "Icon URL" &&
+                                    !iconBlob &&
+                                    !icon_url && (
+                                      <label
+                                        className={cn(
+                                          "flex h-32 cursor-pointer items-center justify-center rounded-lg border border-dashed",
+                                          "bg-muted/40 hover:bg-muted/60 transition",
+                                        )}
+                                      >
+                                        <Input
+                                          type="file"
+                                          accept="image/*"
+                                          placeholder={placeholder}
+                                          onChange={(e) => {
+                                            const file = e.target.files?.[0];
+                                            if (file) {
+                                              setIconBlobType(file.type);
+                                              const previewUrl =
+                                                URL.createObjectURL(file);
+                                              field.onChange(previewUrl);
+                                            }
+                                          }}
+                                          className="sr-only"
+                                        />
+
+                                        <div className="text-muted-foreground flex items-center gap-2 text-sm">
+                                          <Upload className="size-4" />
+                                          Upload icon image
+                                        </div>
+                                      </label>
+                                    )}
+
+                                  {/* icon cropper */}
+                                  {type === "file" &&
+                                    label === "Icon URL" &&
+                                    icon_url &&
+                                    !iconBlob && (
+                                      <ImageCropper
+                                        key="icon"
+                                        src={icon_url || "/placeholder.svg"}
+                                        aspect={1}
+                                        output={{ width: 256, height: 256 }}
+                                        zoomLabel="Zoom"
+                                        onCancel={() => {
+                                          field.onChange("");
+                                          setIconBlob(null);
                                         }}
-                                        className="sr-only"
+                                        onCropped={(blob) => {
+                                          setIconBlob(blob);
+                                          field.onChange(
+                                            URL.createObjectURL(blob),
+                                          );
+                                        }}
                                       />
+                                    )}
 
-                                      <div className="text-muted-foreground flex items-center gap-2 text-sm">
-                                        <Upload className="size-4" />
-                                        Upload icon image
+                                  {/* preview icon */}
+                                  {type === "file" &&
+                                    label === "Icon URL" &&
+                                    iconBlob && (
+                                      <div className="flex items-center gap-4">
+                                        <Image
+                                          src={
+                                            URL.createObjectURL(iconBlob) ||
+                                            "/placeholder.svg"
+                                          }
+                                          height={64}
+                                          width={64}
+                                          alt="Icon preview"
+                                          className="h-16 w-16 rounded-md border object-cover"
+                                        />
+                                        <div className="flex gap-2">
+                                          <Button
+                                            variant="outline"
+                                            size="sm"
+                                            className="gap-2"
+                                            onClick={() => {
+                                              field.onChange(
+                                                URL.createObjectURL(iconBlob),
+                                              );
+                                              setIconBlob(null);
+                                            }}
+                                          >
+                                            <ImageIcon className="size-4" />
+                                            Re&#45;crop
+                                          </Button>
+                                          <Button
+                                            variant="ghost"
+                                            size="sm"
+                                            className="text-destructive hover:text-destructive gap-2"
+                                            onClick={() => {
+                                              field.onChange("");
+                                              setIconBlob(null);
+                                            }}
+                                          >
+                                            <Trash2 className="size-4" />
+                                            Remove
+                                          </Button>
+                                        </div>
                                       </div>
-                                    </label>
-                                  )}
-
-                                {/* icon cropper */}
-                                {type === "file" &&
-                                  label === "Icon URL" &&
-                                  icon_url &&
-                                  !iconBlob && (
-                                    <ImageCropper
-                                      key="icon"
-                                      src={icon_url || "/placeholder.svg"}
-                                      aspect={1}
-                                      output={{ width: 256, height: 256 }}
-                                      zoomLabel="Zoom"
-                                      onCancel={() => {
-                                        field.onChange("");
-                                        setIconBlob(null);
-                                      }}
-                                      onCropped={(blob) => {
-                                        setIconBlob(blob);
-                                        field.onChange(
-                                          URL.createObjectURL(blob),
-                                        );
-                                      }}
-                                    />
-                                  )}
-
-                                {/* preview icon */}
-                                {type === "file" &&
-                                  label === "Icon URL" &&
-                                  iconBlob && (
-                                    <div className="flex items-center gap-4">
-                                      <Image
-                                        src={
-                                          URL.createObjectURL(iconBlob) ||
-                                          "/placeholder.svg"
-                                        }
-                                        height={64}
-                                        width={64}
-                                        alt="Icon preview"
-                                        className="h-16 w-16 rounded-md border object-cover"
-                                      />
-                                      <div className="flex gap-2">
-                                        <Button
-                                          variant="outline"
-                                          size="sm"
-                                          className="gap-2"
-                                          onClick={() => {
-                                            field.onChange(
-                                              URL.createObjectURL(iconBlob),
-                                            );
-                                            setIconBlob(null);
-                                          }}
-                                        >
-                                          <ImageIcon className="size-4" />
-                                          Re&#45;crop
-                                        </Button>
-                                        <Button
-                                          variant="ghost"
-                                          size="sm"
-                                          className="text-destructive hover:text-destructive gap-2"
-                                          onClick={() => {
-                                            field.onChange("");
-                                            setIconBlob(null);
-                                          }}
-                                        >
-                                          <Trash2 className="size-4" />
-                                          Remove
-                                        </Button>
-                                      </div>
-                                    </div>
+                                    )}
+                                </div>
+                              </FormControl>
+                              <div className="flex items-center justify-between">
+                                <div className="text-destructive flex-1 text-xs break-words">
+                                  <FormMessage />
+                                </div>
+                                {type === "textarea" &&
+                                  name === "description" && (
+                                    <p className="text-muted-foreground text-right text-xs">
+                                      {wordCount} / {MAX_WORDS} words
+                                    </p>
                                   )}
                               </div>
-                            </FormControl>
-                            <div className="flex items-center justify-between">
-                              <div className="text-destructive flex-1 text-xs break-words">
-                                <FormMessage />
-                              </div>
-                              {type === "textarea" &&
-                                name === "description" && (
-                                  <p className="text-muted-foreground text-right text-xs">
-                                    {wordCount} / {MAX_WORDS} words
-                                  </p>
-                                )}
-                            </div>
-                          </FormItem>
-                        )}
-                      />
-                    ),
-                  )}
-
-                {step === 4 && (
-                  <div className="space-y-6">
-                    {/* <div className="space-y-2">
+                            </FormItem>
+                          )}
+                        />
+                      ),
+                    )}
+                  {step === 4 && (
+                    <div className="space-y-6">
+                      {/* <div className="space-y-2">
                       <h3 className="text-xl font-medium">Rules</h3>
                       <p className="text-muted-foreground text-sm">
                         Set expectations for your campfire. You can always edit
                         these later.
                       </p>
                     </div> */}
-                    <RulesEditor rules={rules} onChange={setRules} />
-                  </div>
-                )}
-
-                {step === 5 && (
-                  <div className="space-y-6">
-                    {/* <div className="space-y-2">
+                      <RulesEditor rules={rules} onChange={setRules} />
+                    </div>
+                  )}
+                  {step === 5 && (
+                    <div className="space-y-6">
+                      {/* <div className="space-y-2">
                       <h3 className="text-xl font-medium">
                         Confirm your campfire
                       </h3>
@@ -758,20 +763,21 @@ const CreateCampfireModal = ({
                       </p>
                     </div> */}
 
-                    {/*<WarningAlert*/}
-                    {/*  title="Important Notice"*/}
-                    {/*  description="Only public communities appear in search. Changing this later requires a request."*/}
-                    {/*  supportingText="Your current Campfire visibility is public"*/}
-                    {/*/>*/}
-                    <Alert variant={"destructive"}>
-                      <AlertTitle>Important Notice</AlertTitle>
-                      <AlertDescription>
-                        Only public communities appear in search. Changing this
-                        later requires a request.
-                      </AlertDescription>
-                    </Alert>
-                  </div>
-                )}
+                      {/*<WarningAlert*/}
+                      {/*  title="Important Notice"*/}
+                      {/*  description="Only public communities appear in search. Changing this later requires a request."*/}
+                      {/*  supportingText="Your current Campfire visibility is public"*/}
+                      {/*/>*/}
+                      <Alert variant={"destructive"}>
+                        <AlertTitle>Important Notice</AlertTitle>
+                        <AlertDescription>
+                          Only public communities appear in search. Changing
+                          this later requires a request.
+                        </AlertDescription>
+                      </Alert>
+                    </div>
+                  )}
+                </div>
               </div>
 
               {/*profile card*/}
