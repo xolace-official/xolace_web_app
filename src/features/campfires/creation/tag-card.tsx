@@ -15,7 +15,7 @@ interface TagCardProps {
 const TagCard = ({ _id, name, posts, showCount }: TagCardProps) => {
   return (
     <>
-      {_id === "purpose" ? (
+      {_id === "realm" ? (
         <Badge variant="outline">
           <Tag className="mr-1 h-3 w-3" />
           {name}
