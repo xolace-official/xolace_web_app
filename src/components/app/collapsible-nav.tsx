@@ -20,12 +20,11 @@ import {
   SidebarMenuSubButton,
   SidebarMenuSubItem,
 } from "@/components/ui/sidebar";
-import { useState } from "react";
-import CreateCampfireModal from "@/features/campfires/creation/create-campfire-modal";
 // import { NewBadge } from './shared/NewBadge';
 
 export function CollapsibleNav({
   items,
+  onOpenCreateModal,
 }: {
   items: {
     key: string;
@@ -44,11 +43,10 @@ export function CollapsibleNav({
       isBeta?: boolean;
     }[];
   }[];
+  onOpenCreateModal?: () => void;
 }) {
   const pathName = usePathname();
   const { setOpenMobile } = useSidebar();
-  const [createCampfireModal, setCreateCampfireModal] =
-    useState<boolean>(false);
 
   return (
     <>
@@ -94,11 +92,16 @@ export function CollapsibleNav({
                             asChild
                             className="relative py-5"
                             isActive={isActive}
-                            onClick={
-                              subItem.onClick
-                                ? subItem.onClick
-                                : () => setOpenMobile(false)
-                            }
+                            onClick={() => {
+                              if (subItem.onClick) {
+                                subItem.onClick();
+                              }
+                              if (subItem.key === "createCampfire") {
+                                onOpenCreateModal?.();
+                              }
+
+                              setOpenMobile(false);
+                            }}
                           >
                             {subItem.url ? (
                               <Link
@@ -116,7 +119,7 @@ export function CollapsibleNav({
                               <SidebarMenuSubButton
                                 onClick={() => {
                                   if (subItem.key === "createCampfire") {
-                                    setCreateCampfireModal(true);
+                                    onOpenCreateModal?.();
                                   }
                                 }}
                               >
@@ -137,12 +140,6 @@ export function CollapsibleNav({
           ))}
         </SidebarMenu>
       </SidebarGroup>
-      {createCampfireModal && (
-        <CreateCampfireModal
-          open={createCampfireModal}
-          onOpenChange={setCreateCampfireModal}
-        />
-      )}
     </>
   );
 }

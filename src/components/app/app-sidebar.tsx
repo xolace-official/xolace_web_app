@@ -47,7 +47,8 @@ import { CollapsibleNav } from "./collapsible-nav";
 import { DesktopSidebarToggler } from "./desktop-sidebar-toggler";
 import { NavMain } from "./nav-main";
 import { ModsSidebarLeft } from "@/features/mods/layout/mod-siderbar-left";
-import React from "react";
+import React, { useState } from "react";
+import CreateCampfireModal from "@/features/campfires/creation/create-campfire-modal";
 
 /**
  * Render the application's main sidebar containing navigation, settings, and user controls.
@@ -64,6 +65,8 @@ import React from "react";
 export function AppSidebar() {
   const router = useRouter();
   const pathname = usePathname();
+  const [createCampfireModal, setCreateCampfireModal] =
+    useState<boolean>(false);
 
   const sidebarVariant: "default" | "inset" = "default";
   //const search = true;
@@ -72,163 +75,174 @@ export function AppSidebar() {
   const isModPath = modPathRegex.test(pathname);
 
   return (
-    <Sidebar
-      className="print:hidden"
-      collapsible={"icon"}
-      variant={sidebarVariant === "default" ? "sidebar" : sidebarVariant}
-    >
-      <SidebarHeader className="relative">
-        <DesktopSidebarToggler />
-        <div className="flex items-center gap-2 text-primary">
-          <div className="h-8 w-8 flex items-center justify-center shrink-0">
-            <PenIcon className="h-5 w-5" />
+    <>
+      <Sidebar
+        className="print:hidden"
+        collapsible={"icon"}
+        variant={sidebarVariant === "default" ? "sidebar" : sidebarVariant}
+      >
+        <SidebarHeader className="relative">
+          <DesktopSidebarToggler />
+          <div className="flex items-center gap-2 text-primary">
+            <div className="h-8 w-8 flex items-center justify-center shrink-0">
+              <PenIcon className="h-5 w-5" />
+            </div>
           </div>
-        </div>
-      </SidebarHeader>
+        </SidebarHeader>
 
-      <SidebarContent>
-        {pathname.startsWith("/settings") ? (
-          <>
-            <SidebarGroup className="mt-2">
-              <SidebarGroupContent>
-                <SidebarMenu>
-                  <SidebarMenuItem>
-                    <SidebarMenuButton tooltip="Back to app" asChild>
-                      <Link href="/feed">
-                        <ChevronLeft size={16} />
-                        <span>Back to app</span>
-                      </Link>
-                    </SidebarMenuButton>
-                  </SidebarMenuItem>
-                </SidebarMenu>
-              </SidebarGroupContent>
-            </SidebarGroup>
-
-            <SidebarGroup>
-              <SidebarGroupLabel>Settings</SidebarGroupLabel>
-              <SidebarGroupContent>
-                <SidebarMenu>
-                  {settingsNavigation.map((link) => (
-                    <SidebarMenuItem key={link.pathname}>
-                      <SidebarMenuButton
-                        tooltip={link.label}
-                        isActive={pathname === link.pathname}
-                        asChild
-                      >
-                        <Link href={link.pathname}>
-                          {link.icon}
-                          <span>{link.label}</span>
+        <SidebarContent>
+          {pathname.startsWith("/settings") ? (
+            <>
+              <SidebarGroup className="mt-2">
+                <SidebarGroupContent>
+                  <SidebarMenu>
+                    <SidebarMenuItem>
+                      <SidebarMenuButton tooltip="Back to app" asChild>
+                        <Link href="/feed">
+                          <ChevronLeft size={16} />
+                          <span>Back to app</span>
                         </Link>
                       </SidebarMenuButton>
                     </SidebarMenuItem>
-                  ))}
-                </SidebarMenu>
-              </SidebarGroupContent>
-            </SidebarGroup>
-          </>
-        ) : isModPath ? (
-          <>
-            <SidebarGroup>
-              <SidebarContent>
-                <ModsSidebarLeft />
-              </SidebarContent>
-            </SidebarGroup>
-          </>
-        ) : (
-          <>
-            <SidebarGroup>
-              <NavMain />
-            </SidebarGroup>
+                  </SidebarMenu>
+                </SidebarGroupContent>
+              </SidebarGroup>
 
-            <Separators />
-            <CollapsibleNav items={COLLAPSIBLE_CAMPFIRE_NAV_LINKS} />
+              <SidebarGroup>
+                <SidebarGroupLabel>Settings</SidebarGroupLabel>
+                <SidebarGroupContent>
+                  <SidebarMenu>
+                    {settingsNavigation.map((link) => (
+                      <SidebarMenuItem key={link.pathname}>
+                        <SidebarMenuButton
+                          tooltip={link.label}
+                          isActive={pathname === link.pathname}
+                          asChild
+                        >
+                          <Link href={link.pathname}>
+                            {link.icon}
+                            <span>{link.label}</span>
+                          </Link>
+                        </SidebarMenuButton>
+                      </SidebarMenuItem>
+                    ))}
+                  </SidebarMenu>
+                </SidebarGroupContent>
+              </SidebarGroup>
+            </>
+          ) : isModPath ? (
+            <>
+              <SidebarGroup>
+                <SidebarContent>
+                  <ModsSidebarLeft />
+                </SidebarContent>
+              </SidebarGroup>
+            </>
+          ) : (
+            <>
+              <SidebarGroup>
+                <NavMain />
+              </SidebarGroup>
 
-            <Separators />
-            <CollapsibleNav items={COLLAPSIBLE_HEALTH_SPACE_NAV_LINKS} />
-          </>
-        )}
-      </SidebarContent>
-      <SidebarFooter>
-        <SidebarMenu>
-          <SidebarMenuItem>
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <SidebarMenuButton
-                  size="lg"
-                  className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
-                >
-                  <Avatar className="h-8 w-8 rounded-lg">
-                    <AvatarImage
-                      src={DEFAULT_PROFILE_IMAGE}
-                      alt="profile image"
-                    />
-                    <AvatarFallback className="rounded-lg">
-                      "User"
-                    </AvatarFallback>
-                  </Avatar>
+              <Separators />
+              <CollapsibleNav
+                items={COLLAPSIBLE_CAMPFIRE_NAV_LINKS}
+                onOpenCreateModal={() => setCreateCampfireModal(true)}
+              />
 
-                  <div className="grid flex-1 text-left text-sm leading-tight">
-                    <span className="truncate font-semibold">{"User"}</span>
+              <Separators />
+              <CollapsibleNav items={COLLAPSIBLE_HEALTH_SPACE_NAV_LINKS} />
+            </>
+          )}
+        </SidebarContent>
+        <SidebarFooter>
+          <SidebarMenu>
+            <SidebarMenuItem>
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <SidebarMenuButton
+                    size="lg"
+                    className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
+                  >
+                    <Avatar className="h-8 w-8 rounded-lg">
+                      <AvatarImage
+                        src={DEFAULT_PROFILE_IMAGE}
+                        alt="profile image"
+                      />
+                      <AvatarFallback className="rounded-lg">
+                        "User"
+                      </AvatarFallback>
+                    </Avatar>
 
-                    <span className="truncate text-xs">
-                      Open Source Edition
-                    </span>
-                  </div>
-
-                  <ArrowUpNarrowWide className="ml-auto size-4" />
-                </SidebarMenuButton>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent
-                className="w-(--radix-dropdown-menu-trigger-width) min-w-56 rounded-lg"
-                side="bottom"
-                align="end"
-                sideOffset={4}
-              >
-                <DropdownMenuLabel className="p-0 font-normal">
-                  <div className="flex items-center gap-2 px-1 py-1.5 text-left text-sm">
                     <div className="grid flex-1 text-left text-sm leading-tight">
-                      <span className="truncate font-medium opacity-90">
-                        {"email"}
+                      <span className="truncate font-semibold">{"User"}</span>
+
+                      <span className="truncate text-xs">
+                        Open Source Edition
                       </span>
                     </div>
-                  </div>
-                </DropdownMenuLabel>
-                <DropdownMenuSeparator />
-                <DropdownMenuGroup>
-                  <DropdownMenuItem onClick={() => {}}>
-                    <CommandIcon />
-                    Open Commands
-                    <span className="ml-auto">
-                      <ShrubIcon />
-                    </span>
-                  </DropdownMenuItem>
 
-                  <DropdownMenuItem onClick={() => router.push("/settings")}>
-                    <GemIcon />
-                    Settings
-                  </DropdownMenuItem>
-                </DropdownMenuGroup>
-                <DropdownMenuSeparator />
-                <DropdownMenuItem
-                  onSelect={async () => {
-                    // const res = await signOutAction();
-                    // if (res.success) {
-                    // 	// we don't want to use router because we want a full page navigation
-                    // 	window.open("/sign-in", "_self");
-                    // }
-                  }}
+                    <ArrowUpNarrowWide className="ml-auto size-4" />
+                  </SidebarMenuButton>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent
+                  className="w-(--radix-dropdown-menu-trigger-width) min-w-56 rounded-lg"
+                  side="bottom"
+                  align="end"
+                  sideOffset={4}
                 >
-                  <SignalIcon />
-                  Log out
-                </DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
-          </SidebarMenuItem>
-        </SidebarMenu>
-      </SidebarFooter>
+                  <DropdownMenuLabel className="p-0 font-normal">
+                    <div className="flex items-center gap-2 px-1 py-1.5 text-left text-sm">
+                      <div className="grid flex-1 text-left text-sm leading-tight">
+                        <span className="truncate font-medium opacity-90">
+                          {"email"}
+                        </span>
+                      </div>
+                    </div>
+                  </DropdownMenuLabel>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuGroup>
+                    <DropdownMenuItem onClick={() => {}}>
+                      <CommandIcon />
+                      Open Commands
+                      <span className="ml-auto">
+                        <ShrubIcon />
+                      </span>
+                    </DropdownMenuItem>
 
-      <SidebarRail />
-    </Sidebar>
+                    <DropdownMenuItem onClick={() => router.push("/settings")}>
+                      <GemIcon />
+                      Settings
+                    </DropdownMenuItem>
+                  </DropdownMenuGroup>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem
+                    onSelect={async () => {
+                      // const res = await signOutAction();
+                      // if (res.success) {
+                      // 	// we don't want to use router because we want a full page navigation
+                      // 	window.open("/sign-in", "_self");
+                      // }
+                    }}
+                  >
+                    <SignalIcon />
+                    Log out
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+            </SidebarMenuItem>
+          </SidebarMenu>
+        </SidebarFooter>
+
+        <SidebarRail />
+      </Sidebar>
+      {createCampfireModal && (
+        <CreateCampfireModal
+          open={createCampfireModal}
+          onOpenChange={setCreateCampfireModal}
+        />
+      )}
+    </>
   );
 }
 
