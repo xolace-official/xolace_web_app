@@ -343,7 +343,7 @@ const CreateCampfireModal = ({
           <div className="w-full space-y-4">
             <div className="grid grid-cols-1 items-start gap-8 md:grid-cols-12">
               <div className="order-2 col-span-1 md:order-1 md:col-span-7">
-                <div className="max-h-[50vh] md:max-h-[calc(100vh-280px)] overflow-y-auto space-y-4 pr-2">
+                <div className="max-h-[30vh] md:max-h-[calc(100vh-280px)] overflow-y-auto space-y-4 pr-2">
                   {" "}
                   {step < 4 &&
                     campfireFieldsByStep[step - 1].map(
