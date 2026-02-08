@@ -138,7 +138,7 @@ export const campfireFieldsByStep: CampfireFieldDefinition[][] = [
       name: "lane",
       label: "Lane",
       type: "select",
-      placeholder: "Select real to select",
+      placeholder: "Select realm first",
       options: [],
     },
   ],

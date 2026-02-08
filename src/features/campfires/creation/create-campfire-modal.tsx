@@ -418,11 +418,7 @@ const CreateCampfireModal = ({
                                         className={"w-full rounded-lg"}
                                       >
                                         <SelectValue
-                                          placeholder={
-                                            name === "lane" && !realm
-                                              ? "Select Realm first"
-                                              : placeholder
-                                          }
+                                          placeholder={placeholder}
                                         />
                                       </SelectTrigger>
                                       <SelectContent className="w-full max-w-[var(--radix-select-trigger-width)]">
