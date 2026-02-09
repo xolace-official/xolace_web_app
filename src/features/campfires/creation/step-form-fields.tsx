@@ -1,10 +1,12 @@
 "use client";
 
-import { useWatch, type UseFormReturn } from "react-hook-form";
+import { ImageIcon, Trash2, Upload } from "lucide-react";
 import dynamic from "next/dynamic";
 import Image from "next/image";
-import { ImageIcon, Trash2, Upload } from "lucide-react";
-
+import { useEffect, useMemo, useState } from "react";
+import { type UseFormReturn, useWatch } from "react-hook-form";
+import { Button } from "@/components/ui/button";
+import { Checkbox } from "@/components/ui/checkbox";
 import {
   FormControl,
   FormField,
@@ -13,33 +15,32 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
-import {
-  Select,
-  SelectTrigger,
-  SelectValue,
-  SelectContent,
-  SelectItem,
-} from "@/components/ui/select";
-import { Button } from "@/components/ui/button";
-import { Checkbox } from "@/components/ui/checkbox";
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import { cn } from "@/lib/utils";
 import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { Textarea } from "@/components/ui/textarea";
+import { campfire_realms } from "@/features/campfires";
+import { cn } from "@/lib/utils";
+import type { FullFormType } from "@/validation/create-campfire";
+import {
+  type CampfireLane,
   campfireFieldsByStep,
-  CampfireLane,
   MAX_WORDS,
 } from "@/validation/create-campfire";
-import type { FullFormType } from "@/validation/create-campfire";
-import { campfire_realms } from "@/features/campfires";
 
 const ImageCropper = dynamic(() => import("./image-cropper"), { ssr: false });
 
 const MAX_RULES = 4;
+const WHITESPACE_RE = /\s+/;
 
 const RULE_OPTIONS = [
   { id: "no_spam", label: "No spam or self-promotion" },
@@ -51,6 +52,8 @@ const RULE_OPTIONS = [
   { id: "english_only", label: "English only" },
   { id: "no_piracy", label: "No piracy or illegal content" },
 ];
+
+const RULE_OPTIONS_BY_ID = new Map(RULE_OPTIONS.map((r) => [r.id, r]));
 
 interface StepFormFieldsProps {
   step: number;
@@ -83,7 +86,29 @@ export default function StepFormFields({
   const iconUrl = useWatch({ control: form.control, name: "icon_url" });
   const realm = useWatch({ control: form.control, name: "realm" });
 
-  const laneOptions = (() => {
+  // Stable object URLs for blob previews — computed once per blob, revoked on change/unmount
+  const [bannerPreviewUrl, setBannerPreviewUrl] = useState<string | null>(null);
+  const [iconPreviewUrl, setIconPreviewUrl] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (bannerBlob) {
+      const url = URL.createObjectURL(bannerBlob);
+      setBannerPreviewUrl(url);
+      return () => URL.revokeObjectURL(url);
+    }
+    setBannerPreviewUrl(null);
+  }, [bannerBlob]);
+
+  useEffect(() => {
+    if (iconBlob) {
+      const url = URL.createObjectURL(iconBlob);
+      setIconPreviewUrl(url);
+      return () => URL.revokeObjectURL(url);
+    }
+    setIconPreviewUrl(null);
+  }, [iconBlob]);
+
+  const laneOptions = useMemo(() => {
     if (!realm) return [];
     const selectedRealm = campfire_realms.find((r) => r.key === realm);
     if (!selectedRealm) return [];
@@ -91,7 +116,7 @@ export default function StepFormFields({
       value: key,
       label: name.toUpperCase(),
     }));
-  })();
+  }, [realm]);
 
   return (
     <>
@@ -110,30 +135,28 @@ export default function StepFormFields({
                       <Input placeholder={placeholder} {...field} />
                     ) : null}
                     {type === "textarea" && name === "description" ? (
-                      <>
-                        <Textarea
-                          placeholder={placeholder}
-                          value={field.value}
-                          onChange={(e) => {
-                            const value = e.target.value;
-                            const words = value
-                              .trim()
-                              .split(/\s+/)
-                              .filter(Boolean);
+                      <Textarea
+                        placeholder={placeholder}
+                        value={field.value}
+                        onChange={(e) => {
+                          const value = e.target.value;
+                          const words = value
+                            .trim()
+                            .split(WHITESPACE_RE)
+                            .filter(Boolean);
 
-                            if (words.length <= MAX_WORDS) {
-                              field.onChange(e);
-                              setWordCount(words.length);
-                            } else {
-                              const truncated = words
-                                .slice(0, MAX_WORDS)
-                                .join(" ");
-                              field.onChange(truncated);
-                              setWordCount(MAX_WORDS);
-                            }
-                          }}
-                        />
-                      </>
+                          if (words.length <= MAX_WORDS) {
+                            field.onChange(e);
+                            setWordCount(words.length);
+                          } else {
+                            const truncated = words
+                              .slice(0, MAX_WORDS)
+                              .join(" ");
+                            field.onChange(truncated);
+                            setWordCount(MAX_WORDS);
+                          }
+                        }}
+                      />
                     ) : type === "textarea" ? (
                       <Textarea placeholder={placeholder} {...field} />
                     ) : null}
@@ -175,11 +198,13 @@ export default function StepFormFields({
                             className="h-auto min-h-[2.5rem] w-full items-start justify-start p-2 text-left whitespace-normal"
                           >
                             <div className="w-full text-left break-words whitespace-normal">
-                              {field.value?.length
-                                ? RULE_OPTIONS.filter((r) =>
-                                    field.value?.includes(r.id),
-                                  )
-                                    .map((r) => r.label)
+                              {Array.isArray(field.value) && field.value.length
+                                ? field.value
+                                    .map(
+                                      (id: string) =>
+                                        RULE_OPTIONS_BY_ID.get(id)?.label,
+                                    )
+                                    .filter(Boolean)
                                     .join(", ")
                                 : "Select rules"}
                             </div>
@@ -286,13 +311,12 @@ export default function StepFormFields({
                     ) : null}
 
                     {/* preview view for banner */}
-                    {type === "file" && label === "Banner URL" && bannerBlob ? (
+                    {type === "file" &&
+                    label === "Banner URL" &&
+                    bannerPreviewUrl ? (
                       <div className="relative overflow-hidden rounded-lg border">
                         <Image
-                          src={
-                            URL.createObjectURL(bannerBlob) ||
-                            "/placeholder.svg"
-                          }
+                          src={bannerPreviewUrl}
                           alt="Banner preview"
                           height={128}
                           width={1028}
@@ -304,7 +328,7 @@ export default function StepFormFields({
                             size="sm"
                             className="gap-2"
                             onClick={() => {
-                              field.onChange(URL.createObjectURL(bannerBlob));
+                              field.onChange(bannerPreviewUrl);
                               setBannerBlob(null);
                             }}
                           >
@@ -383,12 +407,12 @@ export default function StepFormFields({
                     ) : null}
 
                     {/* preview icon */}
-                    {type === "file" && label === "Icon URL" && iconBlob ? (
+                    {type === "file" &&
+                    label === "Icon URL" &&
+                    iconPreviewUrl ? (
                       <div className="flex items-center gap-4">
                         <Image
-                          src={
-                            URL.createObjectURL(iconBlob) || "/placeholder.svg"
-                          }
+                          src={iconPreviewUrl}
                           height={64}
                           width={64}
                           alt="Icon preview"
@@ -400,7 +424,7 @@ export default function StepFormFields({
                             size="sm"
                             className="gap-2"
                             onClick={() => {
-                              field.onChange(URL.createObjectURL(iconBlob));
+                              field.onChange(iconPreviewUrl);
                               setIconBlob(null);
                             }}
                           >

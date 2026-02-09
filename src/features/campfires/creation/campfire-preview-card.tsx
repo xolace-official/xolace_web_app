@@ -1,9 +1,10 @@
 "use client";
 
-import { useWatch, type Control } from "react-hook-form";
 import Image from "next/image";
-import TagCard from "./tag-card";
+import { type Control, useWatch } from "react-hook-form";
+import { cn } from "@/lib/utils";
 import { CampfireRealm, type FullFormType } from "@/validation/create-campfire";
+import TagCard from "./tag-card";
 
 const REALM_DISPLAY_MAP: Record<CampfireRealm, string> = {
   [CampfireRealm.Collaborative]: "Collaborative",
@@ -15,7 +16,7 @@ const REALM_DISPLAY_MAP: Record<CampfireRealm, string> = {
 
 function truncateText(text: string, maxLength = 20) {
   if (!text) return "";
-  return text.length > maxLength ? text.slice(0, maxLength) + "..." : text;
+  return text.length > maxLength ? `${text.slice(0, maxLength)}...` : text;
 }
 
 interface CampfirePreviewCardProps {
@@ -33,19 +34,18 @@ export default function CampfirePreviewCard({
   const iconUrl = useWatch({ control, name: "icon_url" });
   const bannerUrl = useWatch({ control, name: "banner_url" });
 
-  const displayName =
-    name && name.trim() ? `x/${name.trim()}` : "x/campfire name";
-  const displayDescription =
-    description && description.trim()
-      ? description.trim()
-      : "Your campfire description";
+  const displayName = name?.trim() ? `x/${name.trim()}` : "x/campfire name";
+  const displayDescription = description?.trim() || "Your campfire description";
   const realmDisplayName = REALM_DISPLAY_MAP[realm] || "Expressive";
-  const hasIcon = iconUrl && iconUrl.trim();
-  const hasBanner = bannerUrl && bannerUrl.trim();
+  const hasIcon = iconUrl?.trim();
+  const hasBanner = bannerUrl?.trim();
 
   return (
     <div
-      className={`order-1 col-span-1 rounded-2xl shadow-lg md:order-2 md:col-span-5 ${step < 3 && "border pt-2"}`}
+      className={cn(
+        "order-1 col-span-1 rounded-2xl shadow-lg md:order-2 md:col-span-5",
+        step < 3 && "border pt-2",
+      )}
     >
       <div className="flex flex-col items-start justify-start gap-2 pb-2">
         {step >= 3 ? (
@@ -62,7 +62,7 @@ export default function CampfirePreviewCard({
           {step >= 3 ? (
             hasIcon ? (
               <Image
-                src={iconUrl!}
+                src={iconUrl ?? ""}
                 height={20}
                 width={20}
                 alt="Campfire icon"

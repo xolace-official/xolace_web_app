@@ -1,10 +1,10 @@
 "use client";
 
-import { useState } from "react";
-import { useRouter } from "next/navigation";
-import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-
+import { useRouter } from "next/navigation";
+import { useState } from "react";
+import { useForm } from "react-hook-form";
+import { toast } from "sonner";
 import {
   Dialog,
   DialogContent,
@@ -13,24 +13,22 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { Form } from "@/components/ui/form";
-
-import { generateCampfireSlug } from "@/lib/utils";
-import { toast } from "sonner";
-import {
-  campfireFieldsByStep,
-  CampfireVisibility,
-  CampfireLane,
-  CampfireRealm,
-  FullFormSchema,
-} from "@/validation/create-campfire";
-import type { CampfireRule, FullFormType } from "@/validation/create-campfire";
-import { toFile } from "@/utils/helpers/uploadImageToBucket";
 import { useCreateCampfireMutation } from "@/hooks/campfires/use-create-campfire";
-
-import StepFormFields from "./step-form-fields";
+import { generateCampfireSlug } from "@/lib/utils";
+import { toFile } from "@/utils/helpers/uploadImageToBucket";
+import {
+  type CampfireLane,
+  type CampfireRealm,
+  type CampfireRule,
+  CampfireVisibility,
+  campfireFieldsByStep,
+  FullFormSchema,
+  type FullFormType,
+} from "@/validation/create-campfire";
+import CampfirePreviewCard from "./campfire-preview-card";
 import RulesEditor from "./rules-editor";
 import { StepConfirm, StepConfirmTerms } from "./step-confirm";
-import CampfirePreviewCard from "./campfire-preview-card";
+import StepFormFields from "./step-form-fields";
 import StepNavigation from "./step-navigation";
 
 const TOTAL_STEPS = campfireFieldsByStep.length + 2;
