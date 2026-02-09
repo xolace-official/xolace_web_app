@@ -70,6 +70,23 @@ interface StepFormFieldsProps {
   setWordCount: (count: number) => void;
 }
 
+/**
+ * Render dynamic form fields for a specific step of the campfire creation flow.
+ *
+ * Renders inputs, textareas (with description word-count enforcement), selects (realm/lane), rule checkboxes (with a max selection), and file upload flows for banner and icon images including cropping, preview, re-crop and remove actions. Integrates with the provided react-hook-form instance and external blob state for image previews.
+ *
+ * @param step - Current step index (1-based) to determine which fields to render
+ * @param form - react-hook-form controller (UseFormReturn<FullFormType>) used to read and write field values
+ * @param bannerBlob - Current banner image blob used for previewing and uploading; null when absent
+ * @param setBannerBlob - Setter to update the banner blob state
+ * @param iconBlob - Current icon image blob used for previewing and uploading; null when absent
+ * @param setIconBlob - Setter to update the icon blob state
+ * @param setBannerBlobType - Setter to record the MIME type of the selected banner file
+ * @param setIconBlobType - Setter to record the MIME type of the selected icon file
+ * @param wordCount - Current word count for the description field
+ * @param setWordCount - Setter to update the description word count
+ * @returns A JSX element containing the rendered form fields for the specified step
+ */
 export default function StepFormFields({
   step,
   form,

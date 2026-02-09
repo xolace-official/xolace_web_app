@@ -14,6 +14,13 @@ const REALM_DISPLAY_MAP: Record<CampfireRealm, string> = {
   [CampfireRealm.Motivational]: "Motivational",
 };
 
+/**
+ * Shortens a string to a maximum length, appending an ellipsis when truncated.
+ *
+ * @param text - The input string to shorten. If falsy, an empty string is returned.
+ * @param maxLength - Maximum allowed characters before truncation (defaults to 20).
+ * @returns The original `text` when its length is less than or equal to `maxLength`, otherwise a truncated version ending with `...`.
+ */
 function truncateText(text: string, maxLength = 20) {
   if (!text) return "";
   return text.length > maxLength ? `${text.slice(0, maxLength)}...` : text;
@@ -24,6 +31,12 @@ interface CampfirePreviewCardProps {
   control: Control<FullFormType>;
 }
 
+/**
+ * Render a live preview card for a campfire using the current form values.
+ *
+ * @param step - The current creation step; controls which preview elements (banner, icon, realm tag) are shown.
+ * @returns A JSX element displaying the campfire's name, truncated description, optional banner and icon, and a realm tag.
+ */
 export default function CampfirePreviewCard({
   step,
   control,
