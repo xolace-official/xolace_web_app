@@ -3,10 +3,13 @@
 import { ImageIcon, Trash2, Upload } from "lucide-react";
 import dynamic from "next/dynamic";
 import Image from "next/image";
-import { useEffect, useMemo, useState } from "react";
-import { type UseFormReturn, useWatch } from "react-hook-form";
+import { type ReactNode, useEffect, useMemo, useRef, useState } from "react";
+import {
+  type ControllerRenderProps,
+  type UseFormReturn,
+  useWatch,
+} from "react-hook-form";
 import { Button } from "@/components/ui/button";
-import { Checkbox } from "@/components/ui/checkbox";
 import {
   FormControl,
   FormField,
@@ -15,11 +18,6 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
 import {
   Select,
   SelectContent,
@@ -39,21 +37,7 @@ import {
 
 const ImageCropper = dynamic(() => import("./image-cropper"), { ssr: false });
 
-const MAX_RULES = 4;
 const WHITESPACE_RE = /\s+/;
-
-const RULE_OPTIONS = [
-  { id: "no_spam", label: "No spam or self-promotion" },
-  { id: "be_respectful", label: "Be respectful" },
-  { id: "stay_on_topic", label: "Stay on topic" },
-  { id: "no_hate", label: "No hate speech or bullying" },
-  { id: "use_search", label: "Use the search before posting" },
-  { id: "no_politics", label: "No political discussions" },
-  { id: "english_only", label: "English only" },
-  { id: "no_piracy", label: "No piracy or illegal content" },
-];
-
-const RULE_OPTIONS_BY_ID = new Map(RULE_OPTIONS.map((r) => [r.id, r]));
 
 interface StepFormFieldsProps {
   step: number;
@@ -103,7 +87,11 @@ export default function StepFormFields({
   const iconUrl = useWatch({ control: form.control, name: "icon_url" });
   const realm = useWatch({ control: form.control, name: "realm" });
 
-  // Stable object URLs for blob previews — computed once per blob, revoked on change/unmount
+  // Stable object URLs for the original file — persists across re-crops, revoked on replace/remove/unmount
+  const bannerFileUrlRef = useRef<string | null>(null);
+  const iconFileUrlRef = useRef<string | null>(null);
+
+  // Preview URLs for cropped blob display — computed once per blob, revoked on change/unmount
   const [bannerPreviewUrl, setBannerPreviewUrl] = useState<string | null>(null);
   const [iconPreviewUrl, setIconPreviewUrl] = useState<string | null>(null);
 
@@ -125,6 +113,18 @@ export default function StepFormFields({
     setIconPreviewUrl(null);
   }, [iconBlob]);
 
+  // Revoke file URL refs on unmount
+  useEffect(() => {
+    return () => {
+      if (bannerFileUrlRef.current) {
+        URL.revokeObjectURL(bannerFileUrlRef.current);
+      }
+      if (iconFileUrlRef.current) {
+        URL.revokeObjectURL(iconFileUrlRef.current);
+      }
+    };
+  }, []);
+
   const laneOptions = useMemo(() => {
     if (!realm) return [];
     const selectedRealm = campfire_realms.find((r) => r.key === realm);
@@ -134,6 +134,284 @@ export default function StepFormFields({
       label: name.toUpperCase(),
     }));
   }, [realm]);
+
+  const renderFieldControl = (
+    config: {
+      name: string;
+      type: string;
+      placeholder?: string;
+      options?: { value: string; label: string }[];
+    },
+    field: ControllerRenderProps<FullFormType, keyof FullFormType>,
+  ): ReactNode => {
+    const { name: fieldName, type: fieldType, placeholder, options } = config;
+
+    switch (fieldType) {
+      case "input":
+        return (
+          <Input
+            placeholder={placeholder}
+            {...field}
+            value={typeof field.value === "string" ? field.value : ""}
+          />
+        );
+
+      case "textarea":
+        if (fieldName === "description") {
+          return (
+            <Textarea
+              placeholder={placeholder}
+              value={typeof field.value === "string" ? field.value : ""}
+              onChange={(e) => {
+                const value = e.target.value;
+                const words = value.trim().split(WHITESPACE_RE).filter(Boolean);
+
+                if (words.length <= MAX_WORDS) {
+                  field.onChange(e);
+                  setWordCount(words.length);
+                } else {
+                  const truncated = words.slice(0, MAX_WORDS).join(" ");
+                  field.onChange(truncated);
+                  setWordCount(MAX_WORDS);
+                }
+              }}
+            />
+          );
+        }
+        return (
+          <Textarea
+            placeholder={placeholder}
+            {...field}
+            value={typeof field.value === "string" ? field.value : ""}
+          />
+        );
+
+      case "select":
+        if (!options) return null;
+        return (
+          <Select
+            onValueChange={(value) => {
+              field.onChange(value);
+              if (fieldName === "realm") {
+                form.setValue("lane", "" as CampfireLane);
+              }
+            }}
+            value={typeof field.value === "string" ? field.value : ""}
+            disabled={fieldName === "lane" && !realm}
+          >
+            <SelectTrigger className="w-full rounded-lg">
+              <SelectValue placeholder={placeholder} />
+            </SelectTrigger>
+            <SelectContent className="w-full max-w-(--radix-select-trigger-width)">
+              {(fieldName === "lane" ? laneOptions : options).map((opt) => (
+                <SelectItem key={opt.value} value={opt.value}>
+                  {opt.label}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        );
+
+      case "file": {
+        if (fieldName === "banner_url") {
+          if (bannerPreviewUrl) {
+            return (
+              <div className="relative overflow-hidden rounded-lg border">
+                <Image
+                  src={bannerPreviewUrl}
+                  alt="Banner preview"
+                  height={128}
+                  width={1028}
+                  className="h-28 w-full object-cover"
+                />
+                <div className="flex items-center gap-2 p-2">
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    className="gap-2"
+                    onClick={() => setBannerBlob(null)}
+                  >
+                    <ImageIcon className="size-4" />
+                    Re&#45;crop
+                  </Button>
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    className="text-destructive hover:text-destructive ml-auto gap-2"
+                    onClick={() => {
+                      if (bannerFileUrlRef.current) {
+                        URL.revokeObjectURL(bannerFileUrlRef.current);
+                        bannerFileUrlRef.current = null;
+                      }
+                      field.onChange("");
+                      setBannerBlob(null);
+                    }}
+                  >
+                    <Trash2 className="size-4" />
+                    Remove
+                  </Button>
+                </div>
+              </div>
+            );
+          }
+          if (bannerUrl) {
+            return (
+              <ImageCropper
+                key="banner"
+                src={bannerUrl || "/placeholder.svg"}
+                aspect={1028 / 128}
+                output={{ width: 1028, height: 128 }}
+                zoomLabel="Zoom"
+                onCancel={() => {
+                  if (bannerFileUrlRef.current) {
+                    URL.revokeObjectURL(bannerFileUrlRef.current);
+                    bannerFileUrlRef.current = null;
+                  }
+                  field.onChange("");
+                  setBannerBlob(null);
+                }}
+                onCropped={(blob) => setBannerBlob(blob)}
+              />
+            );
+          }
+          return (
+            <label
+              htmlFor="banner-url"
+              className={cn(
+                "flex h-40 cursor-pointer items-center justify-center rounded-lg border",
+                "bg-muted/40 hover:bg-muted/60 transition",
+              )}
+            >
+              <Input
+                id="banner-url"
+                type="file"
+                accept="image/*"
+                placeholder={placeholder}
+                onChange={(e) => {
+                  const file = e.target.files?.[0];
+                  if (file) {
+                    setBannerBlobType(file.type);
+                    if (bannerFileUrlRef.current) {
+                      URL.revokeObjectURL(bannerFileUrlRef.current);
+                    }
+                    const fileUrl = URL.createObjectURL(file);
+                    bannerFileUrlRef.current = fileUrl;
+                    field.onChange(fileUrl);
+                  }
+                }}
+                className="sr-only"
+              />
+              <div className="text-muted-foreground flex items-center gap-2 text-sm">
+                <Upload className="size-4" />
+                Upload banner image
+              </div>
+            </label>
+          );
+        }
+
+        if (fieldName === "icon_url") {
+          if (iconPreviewUrl) {
+            return (
+              <div className="flex items-center gap-4">
+                <Image
+                  src={iconPreviewUrl}
+                  height={64}
+                  width={64}
+                  alt="Icon preview"
+                  className="h-16 w-16 rounded-md border object-cover"
+                />
+                <div className="flex gap-2">
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    className="gap-2"
+                    onClick={() => setIconBlob(null)}
+                  >
+                    <ImageIcon className="size-4" />
+                    Re&#45;crop
+                  </Button>
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    className="text-destructive hover:text-destructive gap-2"
+                    onClick={() => {
+                      if (iconFileUrlRef.current) {
+                        URL.revokeObjectURL(iconFileUrlRef.current);
+                        iconFileUrlRef.current = null;
+                      }
+                      field.onChange("");
+                      setIconBlob(null);
+                    }}
+                  >
+                    <Trash2 className="size-4" />
+                    Remove
+                  </Button>
+                </div>
+              </div>
+            );
+          }
+          if (iconUrl) {
+            return (
+              <ImageCropper
+                key="icon"
+                src={iconUrl || "/placeholder.svg"}
+                aspect={1}
+                output={{ width: 256, height: 256 }}
+                zoomLabel="Zoom"
+                onCancel={() => {
+                  if (iconFileUrlRef.current) {
+                    URL.revokeObjectURL(iconFileUrlRef.current);
+                    iconFileUrlRef.current = null;
+                  }
+                  field.onChange("");
+                  setIconBlob(null);
+                }}
+                onCropped={(blob) => setIconBlob(blob)}
+              />
+            );
+          }
+          return (
+            <label
+              htmlFor="icon-url"
+              className={cn(
+                "flex h-32 cursor-pointer items-center justify-center rounded-lg border border-dashed",
+                "bg-muted/40 hover:bg-muted/60 transition",
+              )}
+            >
+              <Input
+                id="icon-url"
+                type="file"
+                accept="image/*"
+                placeholder={placeholder}
+                onChange={(e) => {
+                  const file = e.target.files?.[0];
+                  if (file) {
+                    setIconBlobType(file.type);
+                    if (iconFileUrlRef.current) {
+                      URL.revokeObjectURL(iconFileUrlRef.current);
+                    }
+                    const fileUrl = URL.createObjectURL(file);
+                    iconFileUrlRef.current = fileUrl;
+                    field.onChange(fileUrl);
+                  }
+                }}
+                className="sr-only"
+              />
+              <div className="text-muted-foreground flex items-center gap-2 text-sm">
+                <Upload className="size-4" />
+                Upload icon image
+              </div>
+            </label>
+          );
+        }
+
+        return null;
+      }
+
+      default:
+        return null;
+    }
+  };
 
   return (
     <>
@@ -148,325 +426,14 @@ export default function StepFormFields({
                 <FormLabel>{label}</FormLabel>
                 <FormControl>
                   <div>
-                    {type === "input" ? (
-                      <Input placeholder={placeholder} {...field} />
-                    ) : null}
-                    {type === "textarea" && name === "description" ? (
-                      <Textarea
-                        placeholder={placeholder}
-                        value={field.value}
-                        onChange={(e) => {
-                          const value = e.target.value;
-                          const words = value
-                            .trim()
-                            .split(WHITESPACE_RE)
-                            .filter(Boolean);
-
-                          if (words.length <= MAX_WORDS) {
-                            field.onChange(e);
-                            setWordCount(words.length);
-                          } else {
-                            const truncated = words
-                              .slice(0, MAX_WORDS)
-                              .join(" ");
-                            field.onChange(truncated);
-                            setWordCount(MAX_WORDS);
-                          }
-                        }}
-                      />
-                    ) : type === "textarea" ? (
-                      <Textarea placeholder={placeholder} {...field} />
-                    ) : null}
-
-                    {type === "select" && options ? (
-                      <Select
-                        onValueChange={(value) => {
-                          field.onChange(value);
-                          if (name === "realm") {
-                            form.setValue("lane", "" as CampfireLane);
-                          }
-                        }}
-                        value={
-                          typeof field.value === "string" ? field.value : ""
-                        }
-                        disabled={name === "lane" && !realm}
-                      >
-                        <SelectTrigger className="w-full rounded-lg">
-                          <SelectValue placeholder={placeholder} />
-                        </SelectTrigger>
-                        <SelectContent className="w-full max-w-[var(--radix-select-trigger-width)]">
-                          {(name === "lane" ? laneOptions : options || []).map(
-                            (opt) => (
-                              <SelectItem key={opt.value} value={opt.value}>
-                                {opt.label}
-                              </SelectItem>
-                            ),
-                          )}
-                        </SelectContent>
-                      </Select>
-                    ) : null}
-
-                    {name === "rules" && type === "checkbox" ? (
-                      <Popover modal={false}>
-                        <PopoverTrigger asChild>
-                          <Button
-                            type="button"
-                            variant="outline"
-                            className="h-auto min-h-[2.5rem] w-full items-start justify-start p-2 text-left whitespace-normal"
-                          >
-                            <div className="w-full text-left break-words whitespace-normal">
-                              {Array.isArray(field.value) && field.value.length
-                                ? field.value
-                                    .map(
-                                      (id: string) =>
-                                        RULE_OPTIONS_BY_ID.get(id)?.label,
-                                    )
-                                    .filter(Boolean)
-                                    .join(", ")
-                                : "Select rules"}
-                            </div>
-                          </Button>
-                        </PopoverTrigger>
-                        <PopoverContent className="w-[var(--radix-popover-trigger-width)] p-2">
-                          <div className="flex flex-col gap-2">
-                            {RULE_OPTIONS.map((rule) => {
-                              const selected = field.value?.includes(rule.id);
-                              const disabled =
-                                !selected &&
-                                (field.value?.length || 0) >= MAX_RULES;
-                              return (
-                                <label
-                                  key={rule.id}
-                                  className="flex cursor-pointer items-center gap-2"
-                                >
-                                  <Checkbox
-                                    checked={selected}
-                                    disabled={disabled}
-                                    onCheckedChange={(checked) => {
-                                      let newValues: string[];
-
-                                      if (checked) {
-                                        newValues = [
-                                          ...(Array.isArray(field.value)
-                                            ? field.value
-                                            : []),
-                                          rule.id,
-                                        ];
-                                      } else {
-                                        newValues = Array.isArray(field.value)
-                                          ? field.value.filter(
-                                              (id) => id !== rule.id,
-                                            )
-                                          : [];
-                                      }
-
-                                      field.onChange(newValues);
-                                    }}
-                                  />
-                                  {rule.label}
-                                </label>
-                              );
-                            })}
-                          </div>
-                        </PopoverContent>
-                      </Popover>
-                    ) : null}
-
-                    {/* default view for banner */}
-                    {type === "file" &&
-                    label === "Banner URL" &&
-                    !bannerBlob &&
-                    !bannerUrl ? (
-                      <label
-                        className={cn(
-                          "flex h-40 cursor-pointer items-center justify-center rounded-lg border",
-                          "bg-muted/40 hover:bg-muted/60 transition",
-                        )}
-                      >
-                        <Input
-                          type="file"
-                          accept="image/*"
-                          placeholder={placeholder}
-                          onChange={(e) => {
-                            const file = e.target.files?.[0];
-                            if (file) {
-                              setBannerBlobType(file.type);
-                              const previewUrl = URL.createObjectURL(file);
-                              field.onChange(previewUrl);
-                            }
-                          }}
-                          className="sr-only"
-                        />
-
-                        <div className="text-muted-foreground flex items-center gap-2 text-sm">
-                          <Upload className="size-4" />
-                          Upload banner image
-                        </div>
-                      </label>
-                    ) : null}
-
-                    {/* cropper view for banner */}
-                    {type === "file" &&
-                    label === "Banner URL" &&
-                    bannerUrl &&
-                    !bannerBlob ? (
-                      <ImageCropper
-                        key="banner"
-                        src={bannerUrl || "/placeholder.svg"}
-                        aspect={1028 / 128}
-                        output={{ width: 1028, height: 128 }}
-                        zoomLabel="Zoom"
-                        onCancel={() => {
-                          field.onChange("");
-                          setBannerBlob(null);
-                        }}
-                        onCropped={(blob) => {
-                          setBannerBlob(blob);
-                          field.onChange(URL.createObjectURL(blob));
-                        }}
-                      />
-                    ) : null}
-
-                    {/* preview view for banner */}
-                    {type === "file" &&
-                    label === "Banner URL" &&
-                    bannerPreviewUrl ? (
-                      <div className="relative overflow-hidden rounded-lg border">
-                        <Image
-                          src={bannerPreviewUrl}
-                          alt="Banner preview"
-                          height={128}
-                          width={1028}
-                          className="h-28 w-full object-cover"
-                        />
-                        <div className="flex items-center gap-2 p-2">
-                          <Button
-                            variant="outline"
-                            size="sm"
-                            className="gap-2"
-                            onClick={() => {
-                              field.onChange(bannerPreviewUrl);
-                              setBannerBlob(null);
-                            }}
-                          >
-                            <ImageIcon className="size-4" />
-                            Re&#45;crop
-                          </Button>
-                          <Button
-                            variant="ghost"
-                            size="sm"
-                            className="text-destructive hover:text-destructive ml-auto gap-2"
-                            onClick={() => {
-                              field.onChange("");
-                              setBannerBlob(null);
-                            }}
-                          >
-                            <Trash2 className="size-4" />
-                            Remove
-                          </Button>
-                        </div>
-                      </div>
-                    ) : null}
-
-                    {/* default view for icon */}
-                    {type === "file" &&
-                    label === "Icon URL" &&
-                    !iconBlob &&
-                    !iconUrl ? (
-                      <label
-                        className={cn(
-                          "flex h-32 cursor-pointer items-center justify-center rounded-lg border border-dashed",
-                          "bg-muted/40 hover:bg-muted/60 transition",
-                        )}
-                      >
-                        <Input
-                          type="file"
-                          accept="image/*"
-                          placeholder={placeholder}
-                          onChange={(e) => {
-                            const file = e.target.files?.[0];
-                            if (file) {
-                              setIconBlobType(file.type);
-                              const previewUrl = URL.createObjectURL(file);
-                              field.onChange(previewUrl);
-                            }
-                          }}
-                          className="sr-only"
-                        />
-
-                        <div className="text-muted-foreground flex items-center gap-2 text-sm">
-                          <Upload className="size-4" />
-                          Upload icon image
-                        </div>
-                      </label>
-                    ) : null}
-
-                    {/* icon cropper */}
-                    {type === "file" &&
-                    label === "Icon URL" &&
-                    iconUrl &&
-                    !iconBlob ? (
-                      <ImageCropper
-                        key="icon"
-                        src={iconUrl || "/placeholder.svg"}
-                        aspect={1}
-                        output={{ width: 256, height: 256 }}
-                        zoomLabel="Zoom"
-                        onCancel={() => {
-                          field.onChange("");
-                          setIconBlob(null);
-                        }}
-                        onCropped={(blob) => {
-                          setIconBlob(blob);
-                          field.onChange(URL.createObjectURL(blob));
-                        }}
-                      />
-                    ) : null}
-
-                    {/* preview icon */}
-                    {type === "file" &&
-                    label === "Icon URL" &&
-                    iconPreviewUrl ? (
-                      <div className="flex items-center gap-4">
-                        <Image
-                          src={iconPreviewUrl}
-                          height={64}
-                          width={64}
-                          alt="Icon preview"
-                          className="h-16 w-16 rounded-md border object-cover"
-                        />
-                        <div className="flex gap-2">
-                          <Button
-                            variant="outline"
-                            size="sm"
-                            className="gap-2"
-                            onClick={() => {
-                              field.onChange(iconPreviewUrl);
-                              setIconBlob(null);
-                            }}
-                          >
-                            <ImageIcon className="size-4" />
-                            Re&#45;crop
-                          </Button>
-                          <Button
-                            variant="ghost"
-                            size="sm"
-                            className="text-destructive hover:text-destructive gap-2"
-                            onClick={() => {
-                              field.onChange("");
-                              setIconBlob(null);
-                            }}
-                          >
-                            <Trash2 className="size-4" />
-                            Remove
-                          </Button>
-                        </div>
-                      </div>
-                    ) : null}
+                    {renderFieldControl(
+                      { name, type, placeholder, options },
+                      field,
+                    )}
                   </div>
                 </FormControl>
                 <div className="flex items-center justify-between">
-                  <div className="text-destructive flex-1 text-xs break-words">
+                  <div className="text-destructive flex-1 text-xs wrap-break-word">
                     <FormMessage />
                   </div>
                   {type === "textarea" && name === "description" ? (

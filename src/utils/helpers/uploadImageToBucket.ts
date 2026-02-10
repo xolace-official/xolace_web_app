@@ -1,4 +1,4 @@
-import { SupabaseClient } from "@supabase/supabase-js";
+import type { SupabaseClient } from "@supabase/supabase-js";
 
 /**
  * Produce a File object from a Blob or return the provided File unchanged.
@@ -45,9 +45,17 @@ export const uploadImageToBucket = async ({
     return { success: false, path: null, message: "No file provided" };
   }
 
-  // Give a name if it’s just a Blob
-  const safeFileName =
-    file instanceof File ? file.name : `upload_${Date.now()}`;
+  // Derive name from the actual file being uploaded, not the raw parameter
+  const rawName =
+    fileToUpload instanceof File ? fileToUpload.name : `upload_${Date.now()}`;
+
+  // Sanitize: strip path separators, control chars, unsafe punctuation; replace spaces with underscores
+  const safeFileName = rawName
+    .replace(/[\/\\]/g, "")
+    // biome-ignore lint/suspicious/noControlCharactersInRegex: safe regex
+    .replace(/[\u0000-\u001f\u007f]/g, "")
+    .replace(/[<>:"|?*]/g, "")
+    .replace(/\s+/g, "_");
 
   const fileName = `${owner || "unowned"}_${safeFileName}`;
   const filePath = folder ? `${folder}/${fileName}` : fileName;
@@ -81,12 +89,14 @@ export const uploadImageToBucket = async ({
     }
 
     return { success: true, path: filePath, message: "Upload successful" };
-  } catch (storageError: any) {
+  } catch (storageError: unknown) {
+    const message =
+      storageError instanceof Error ? storageError.message : "Unknown error";
     console.error("Storage operation failed:", storageError);
     return {
       success: false,
       path: null,
-      message: `Storage operation failed: ${storageError.message}`,
+      message: `Storage operation failed: ${message}`,
     };
   }
 };

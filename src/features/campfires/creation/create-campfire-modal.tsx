@@ -33,7 +33,7 @@ import StepNavigation from "./step-navigation";
 
 const TOTAL_STEPS = campfireFieldsByStep.length + 2;
 
-const stepTitles = [
+const STEP_TITLES = [
   {
     title: "Start your Campfire",
     description:
@@ -99,7 +99,7 @@ const CreateCampfireModal = ({
   const handleFinalSubmit = async (data: FullFormType) => {
     const formData = new FormData();
     const generatedSlug = generateCampfireSlug(data.name);
-    formData.append("name", `x/${data.name}`);
+    formData.append("name", data.name);
     formData.append("description", data.description);
     formData.append("visibility", data.visibility);
     formData.append("realm", data.realm);
@@ -134,12 +134,23 @@ const CreateCampfireModal = ({
           router.push(`/x/${generatedSlug}`);
         }
       },
+      onError: (error: Error) => {
+        toast.error(error.message || "Failed to create campfire");
+        setStep(TOTAL_STEPS);
+      },
     });
   };
 
   const nextStep = async () => {
     if (step === 4) {
       setStep((prev) => prev + 1);
+      return;
+    }
+
+    if (step < 1 || step - 1 >= campfireFieldsByStep.length) {
+      if (step < TOTAL_STEPS) {
+        setStep((prev) => prev + 1);
+      }
       return;
     }
 
@@ -180,6 +191,12 @@ const CreateCampfireModal = ({
     if (!newOpen) {
       form.reset();
       setStep(1);
+      setBannerBlob(null);
+      setIconBlob(null);
+      setBannerBlobType("");
+      setIconBlobType("");
+      setRules([]);
+      setWordCount(0);
     }
     onOpenChange(newOpen);
   };
@@ -192,9 +209,9 @@ const CreateCampfireModal = ({
         className="w-full max-w-[95vw] sm:max-w-[750px] rounded-2xl!  sm:rounded-3xl"
       >
         <DialogHeader className={`${step === 4 ? "mb-5" : "mb-3"}`}>
-          <DialogTitle>{stepTitles[step - 1].title}</DialogTitle>
+          <DialogTitle>{STEP_TITLES[step - 1].title}</DialogTitle>
           <DialogDescription>
-            {stepTitles[step - 1].description}
+            {STEP_TITLES[step - 1].description}
           </DialogDescription>
         </DialogHeader>
 

@@ -47,7 +47,7 @@ import { CollapsibleNav } from "./collapsible-nav";
 import { DesktopSidebarToggler } from "./desktop-sidebar-toggler";
 import { NavMain } from "./nav-main";
 import { ModsSidebarLeft } from "@/features/mods/layout/mod-siderbar-left";
-import React, { useState } from "react";
+import { useState } from "react";
 import CreateCampfireModal from "@/features/campfires/creation/create-campfire-modal";
 
 /**
@@ -65,8 +65,7 @@ import CreateCampfireModal from "@/features/campfires/creation/create-campfire-m
 export function AppSidebar() {
   const router = useRouter();
   const pathname = usePathname();
-  const [createCampfireModal, setCreateCampfireModal] =
-    useState<boolean>(false);
+  const [createCampfireModal, setCreateCampfireModal] = useState(false);
 
   const sidebarVariant: "default" | "inset" = "default";
   //const search = true;
