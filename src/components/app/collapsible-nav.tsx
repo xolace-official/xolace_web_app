@@ -116,18 +116,12 @@ export function CollapsibleNav({
                               {subItem.isBeta && <NewBadge size="sm" />} */}
                               </Link>
                             ) : (
-                              <SidebarMenuSubButton
-                                onClick={() => {
-                                  if (subItem.key === "createCampfire") {
-                                    onOpenCreateModal?.();
-                                  }
-                                }}
-                              >
+                              <span className="flex items-center">
                                 <span className="text-sidebar-label flex items-center gap-2">
                                   {subItem.icon && <subItem.icon size={16} />}
                                   {subItem.title}
                                 </span>
-                              </SidebarMenuSubButton>
+                              </span>
                             )}
                           </SidebarMenuSubButton>
                         </SidebarMenuSubItem>

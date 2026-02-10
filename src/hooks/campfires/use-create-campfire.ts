@@ -11,40 +11,34 @@ interface CreateCampfireResponse {
   message?: string;
 }
 
-// Simulated API call
+// TODO: Replace this mock with the real API integration
 const createCampfire = async (
   formData: FormData,
 ): Promise<CreateCampfireResponse> => {
-  // Simulate network delay
   await new Promise((resolve) => setTimeout(resolve, 2000));
 
-  // Get form data for logging
   const name = formData.get("name") as string;
-  const description = formData.get("description") as string;
   const slug = formData.get("slug") as string;
 
-  console.log("Creating campfire with data:", {
-    name,
-    description,
-    slug,
-    purpose: formData.get("purpose"),
-    visibility: formData.get("visibility"),
-    rules: formData.get("rules"),
-  });
+  if (process.env.NODE_ENV === "development") {
+    console.log("Creating campfire with data:", {
+      name,
+      slug,
+      realm: formData.get("realm"),
+      visibility: formData.get("visibility"),
+      rules: formData.get("rules"),
+    });
+  }
 
-  // Simulate success response
   return {
     success: true,
     data: {
       id: `campfire_${Date.now()}`,
-      slug: slug,
-      name: name,
+      slug,
+      name,
     },
     message: "Campfire created successfully!",
   };
-
-  // Uncomment below to simulate error
-  // throw new Error('Failed to create campfire');
 };
 
 export const useCreateCampfireMutation = () => {

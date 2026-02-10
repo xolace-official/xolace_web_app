@@ -3,7 +3,7 @@
 import { ImageIcon, Trash2, Upload } from "lucide-react";
 import dynamic from "next/dynamic";
 import Image from "next/image";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { type UseFormReturn, useWatch } from "react-hook-form";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
@@ -86,7 +86,11 @@ export default function StepFormFields({
   const iconUrl = useWatch({ control: form.control, name: "icon_url" });
   const realm = useWatch({ control: form.control, name: "realm" });
 
-  // Stable object URLs for blob previews — computed once per blob, revoked on change/unmount
+  // Stable object URLs for the original file — persists across re-crops, revoked on replace/remove/unmount
+  const bannerFileUrlRef = useRef<string | null>(null);
+  const iconFileUrlRef = useRef<string | null>(null);
+
+  // Preview URLs for cropped blob display — computed once per blob, revoked on change/unmount
   const [bannerPreviewUrl, setBannerPreviewUrl] = useState<string | null>(null);
   const [iconPreviewUrl, setIconPreviewUrl] = useState<string | null>(null);
 
@@ -107,6 +111,18 @@ export default function StepFormFields({
     }
     setIconPreviewUrl(null);
   }, [iconBlob]);
+
+  // Revoke file URL refs on unmount
+  useEffect(() => {
+    return () => {
+      if (bannerFileUrlRef.current) {
+        URL.revokeObjectURL(bannerFileUrlRef.current);
+      }
+      if (iconFileUrlRef.current) {
+        URL.revokeObjectURL(iconFileUrlRef.current);
+      }
+    };
+  }, []);
 
   const laneOptions = useMemo(() => {
     if (!realm) return [];
@@ -177,7 +193,7 @@ export default function StepFormFields({
                         <SelectTrigger className="w-full rounded-lg">
                           <SelectValue placeholder={placeholder} />
                         </SelectTrigger>
-                        <SelectContent className="w-full max-w-[var(--radix-select-trigger-width)]">
+                        <SelectContent className="w-full max-w-(--radix-select-trigger-width)">
                           {(name === "lane" ? laneOptions : options || []).map(
                             (opt) => (
                               <SelectItem key={opt.value} value={opt.value}>
@@ -197,7 +213,7 @@ export default function StepFormFields({
                             variant="outline"
                             className="h-auto min-h-[2.5rem] w-full items-start justify-start p-2 text-left whitespace-normal"
                           >
-                            <div className="w-full text-left break-words whitespace-normal">
+                            <div className="w-full text-left wrap-break-word whitespace-normal">
                               {Array.isArray(field.value) && field.value.length
                                 ? field.value
                                     .map(
@@ -210,7 +226,7 @@ export default function StepFormFields({
                             </div>
                           </Button>
                         </PopoverTrigger>
-                        <PopoverContent className="w-[var(--radix-popover-trigger-width)] p-2">
+                        <PopoverContent className="w-(--radix-popover-trigger-width) p-2">
                           <div className="flex flex-col gap-2">
                             {RULE_OPTIONS.map((rule) => {
                               const selected = field.value?.includes(rule.id);
@@ -220,9 +236,11 @@ export default function StepFormFields({
                               return (
                                 <label
                                   key={rule.id}
+                                  htmlFor={`rule-${rule.id}`}
                                   className="flex cursor-pointer items-center gap-2"
                                 >
                                   <Checkbox
+                                    id={`rule-${rule.id}`}
                                     checked={selected}
                                     disabled={disabled}
                                     onCheckedChange={(checked) => {
@@ -261,12 +279,14 @@ export default function StepFormFields({
                     !bannerBlob &&
                     !bannerUrl ? (
                       <label
+                        htmlFor="banner-url"
                         className={cn(
                           "flex h-40 cursor-pointer items-center justify-center rounded-lg border",
                           "bg-muted/40 hover:bg-muted/60 transition",
                         )}
                       >
                         <Input
+                          id="banner-url"
                           type="file"
                           accept="image/*"
                           placeholder={placeholder}
@@ -274,8 +294,12 @@ export default function StepFormFields({
                             const file = e.target.files?.[0];
                             if (file) {
                               setBannerBlobType(file.type);
-                              const previewUrl = URL.createObjectURL(file);
-                              field.onChange(previewUrl);
+                              if (bannerFileUrlRef.current) {
+                                URL.revokeObjectURL(bannerFileUrlRef.current);
+                              }
+                              const fileUrl = URL.createObjectURL(file);
+                              bannerFileUrlRef.current = fileUrl;
+                              field.onChange(fileUrl);
                             }
                           }}
                           className="sr-only"
@@ -300,12 +324,15 @@ export default function StepFormFields({
                         output={{ width: 1028, height: 128 }}
                         zoomLabel="Zoom"
                         onCancel={() => {
+                          if (bannerFileUrlRef.current) {
+                            URL.revokeObjectURL(bannerFileUrlRef.current);
+                            bannerFileUrlRef.current = null;
+                          }
                           field.onChange("");
                           setBannerBlob(null);
                         }}
                         onCropped={(blob) => {
                           setBannerBlob(blob);
-                          field.onChange(URL.createObjectURL(blob));
                         }}
                       />
                     ) : null}
@@ -328,7 +355,6 @@ export default function StepFormFields({
                             size="sm"
                             className="gap-2"
                             onClick={() => {
-                              field.onChange(bannerPreviewUrl);
                               setBannerBlob(null);
                             }}
                           >
@@ -340,6 +366,10 @@ export default function StepFormFields({
                             size="sm"
                             className="text-destructive hover:text-destructive ml-auto gap-2"
                             onClick={() => {
+                              if (bannerFileUrlRef.current) {
+                                URL.revokeObjectURL(bannerFileUrlRef.current);
+                                bannerFileUrlRef.current = null;
+                              }
                               field.onChange("");
                               setBannerBlob(null);
                             }}
@@ -357,12 +387,14 @@ export default function StepFormFields({
                     !iconBlob &&
                     !iconUrl ? (
                       <label
+                        htmlFor="icon-url"
                         className={cn(
                           "flex h-32 cursor-pointer items-center justify-center rounded-lg border border-dashed",
                           "bg-muted/40 hover:bg-muted/60 transition",
                         )}
                       >
                         <Input
+                          id="icon-url"
                           type="file"
                           accept="image/*"
                           placeholder={placeholder}
@@ -370,8 +402,12 @@ export default function StepFormFields({
                             const file = e.target.files?.[0];
                             if (file) {
                               setIconBlobType(file.type);
-                              const previewUrl = URL.createObjectURL(file);
-                              field.onChange(previewUrl);
+                              if (iconFileUrlRef.current) {
+                                URL.revokeObjectURL(iconFileUrlRef.current);
+                              }
+                              const fileUrl = URL.createObjectURL(file);
+                              iconFileUrlRef.current = fileUrl;
+                              field.onChange(fileUrl);
                             }
                           }}
                           className="sr-only"
@@ -396,12 +432,15 @@ export default function StepFormFields({
                         output={{ width: 256, height: 256 }}
                         zoomLabel="Zoom"
                         onCancel={() => {
+                          if (iconFileUrlRef.current) {
+                            URL.revokeObjectURL(iconFileUrlRef.current);
+                            iconFileUrlRef.current = null;
+                          }
                           field.onChange("");
                           setIconBlob(null);
                         }}
                         onCropped={(blob) => {
                           setIconBlob(blob);
-                          field.onChange(URL.createObjectURL(blob));
                         }}
                       />
                     ) : null}
@@ -424,7 +463,6 @@ export default function StepFormFields({
                             size="sm"
                             className="gap-2"
                             onClick={() => {
-                              field.onChange(iconPreviewUrl);
                               setIconBlob(null);
                             }}
                           >
@@ -436,6 +474,10 @@ export default function StepFormFields({
                             size="sm"
                             className="text-destructive hover:text-destructive gap-2"
                             onClick={() => {
+                              if (iconFileUrlRef.current) {
+                                URL.revokeObjectURL(iconFileUrlRef.current);
+                                iconFileUrlRef.current = null;
+                              }
                               field.onChange("");
                               setIconBlob(null);
                             }}
@@ -449,7 +491,7 @@ export default function StepFormFields({
                   </div>
                 </FormControl>
                 <div className="flex items-center justify-between">
-                  <div className="text-destructive flex-1 text-xs break-words">
+                  <div className="text-destructive flex-1 text-xs wrap-break-word">
                     <FormMessage />
                   </div>
                   {type === "textarea" && name === "description" ? (

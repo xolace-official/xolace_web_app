@@ -3,6 +3,7 @@
 import Image from "next/image";
 import { type Control, useWatch } from "react-hook-form";
 import { cn } from "@/lib/utils";
+import { truncateText } from "@/utils";
 import { CampfireRealm, type FullFormType } from "@/validation/create-campfire";
 import TagCard from "./tag-card";
 
@@ -13,11 +14,6 @@ const REALM_DISPLAY_MAP: Record<CampfireRealm, string> = {
   [CampfireRealm.Expressive]: "Expressive",
   [CampfireRealm.Motivational]: "Motivational",
 };
-
-function truncateText(text: string, maxLength = 20) {
-  if (!text) return "";
-  return text.length > maxLength ? `${text.slice(0, maxLength)}...` : text;
-}
 
 interface CampfirePreviewCardProps {
   step: number;
@@ -62,7 +58,7 @@ export default function CampfirePreviewCard({
           {step >= 3 ? (
             hasIcon ? (
               <Image
-                src={iconUrl ?? ""}
+                src={iconUrl!}
                 height={20}
                 width={20}
                 alt="Campfire icon"
@@ -84,8 +80,8 @@ export default function CampfirePreviewCard({
             </p>
           </div>
         </div>
-        <p className="tex-sm flex px-4 text-foreground">
-          {truncateText(displayDescription)}
+        <p className="text-sm flex px-4 text-foreground">
+          {truncateText(displayDescription, 20)}
         </p>
         {step !== 1 ? (
           <p className="flex w-full items-end justify-end px-4 text-sm">

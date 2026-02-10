@@ -1,11 +1,11 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
-import React from "react";
-import Cropper from "react-easy-crop";
+import { useCallback, useState } from "react";
+import Cropper, { type Area } from "react-easy-crop";
+import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
-import { Slider } from "@/components/ui/slider";
 import { Card } from "@/components/ui/card";
+import { Slider } from "@/components/ui/slider";
 import { cn } from "@/lib/utils";
 
 type Props = {
@@ -27,16 +27,16 @@ export default function ImageCropper({
   onCropped = () => {},
   className,
 }: Props) {
-  const [crop, setCrop] = React.useState<{ x: number; y: number }>({
+  const [crop, setCrop] = useState<{ x: number; y: number }>({
     x: 0,
     y: 0,
   });
-  const [zoom, setZoom] = React.useState(1);
-  const [croppedAreaPixels, setCroppedAreaPixels] = React.useState<any>(null);
-  const [loading, setLoading] = React.useState(false);
+  const [zoom, setZoom] = useState(1);
+  const [croppedAreaPixels, setCroppedAreaPixels] = useState<Area | null>(null);
+  const [loading, setLoading] = useState(false);
 
-  const onCropComplete = React.useCallback(
-    (_croppedArea: any, croppedAreaPx: any) => {
+  const onCropComplete = useCallback(
+    (_croppedArea: Area, croppedAreaPx: Area) => {
       setCroppedAreaPixels(croppedAreaPx);
     },
     [],
@@ -45,6 +45,15 @@ export default function ImageCropper({
   async function createCroppedImage() {
     setLoading(true);
     try {
+      if (
+        !croppedAreaPixels ||
+        croppedAreaPixels.width === 0 ||
+        croppedAreaPixels.height === 0
+      ) {
+        toast.error("No crop area selected. Please adjust the crop.");
+        setLoading(false);
+        return;
+      }
       const blob = await getCroppedBlob(
         src,
         croppedAreaPixels,
@@ -54,7 +63,7 @@ export default function ImageCropper({
       onCropped(blob);
     } catch (err) {
       console.error(err);
-      alert("Failed to crop image.");
+      toast.error("Failed to crop image.");
     } finally {
       setLoading(false);
     }
@@ -62,7 +71,7 @@ export default function ImageCropper({
 
   return (
     <Card className={cn("overflow-hidden", className)}>
-      <div className="relative aspect-[16/9] w-full bg-muted">
+      <div className="relative aspect-video w-full bg-muted">
         <Cropper
           image={src}
           crop={crop}
