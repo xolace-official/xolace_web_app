@@ -10,7 +10,6 @@ import {
   useWatch,
 } from "react-hook-form";
 import { Button } from "@/components/ui/button";
-import { Checkbox } from "@/components/ui/checkbox";
 import {
   FormControl,
   FormField,
@@ -19,11 +18,6 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
 import {
   Select,
   SelectContent,
@@ -43,21 +37,7 @@ import {
 
 const ImageCropper = dynamic(() => import("./image-cropper"), { ssr: false });
 
-const MAX_RULES = 4;
 const WHITESPACE_RE = /\s+/;
-
-const RULE_OPTIONS = [
-  { id: "no_spam", label: "No spam or self-promotion" },
-  { id: "be_respectful", label: "Be respectful" },
-  { id: "stay_on_topic", label: "Stay on topic" },
-  { id: "no_hate", label: "No hate speech or bullying" },
-  { id: "use_search", label: "Use the search before posting" },
-  { id: "no_politics", label: "No political discussions" },
-  { id: "english_only", label: "English only" },
-  { id: "no_piracy", label: "No piracy or illegal content" },
-];
-
-const RULE_OPTIONS_BY_ID = new Map(RULE_OPTIONS.map((r) => [r.id, r]));
 
 interface StepFormFieldsProps {
   step: number;
@@ -151,7 +131,13 @@ export default function StepFormFields({
 
     switch (fieldType) {
       case "input":
-        return <Input placeholder={placeholder} {...field} />;
+        return (
+          <Input
+            placeholder={placeholder}
+            {...field}
+            value={typeof field.value === "string" ? field.value : ""}
+          />
+        );
 
       case "textarea":
         if (fieldName === "description") {
@@ -175,7 +161,13 @@ export default function StepFormFields({
             />
           );
         }
-        return <Textarea placeholder={placeholder} {...field} />;
+        return (
+          <Textarea
+            placeholder={placeholder}
+            {...field}
+            value={typeof field.value === "string" ? field.value : ""}
+          />
+        );
 
       case "select":
         if (!options) return null;
@@ -202,59 +194,6 @@ export default function StepFormFields({
             </SelectContent>
           </Select>
         );
-
-      case "checkbox": {
-        if (fieldName !== "rules") return null;
-        const values = Array.isArray(field.value) ? field.value : [];
-        return (
-          <Popover modal={false}>
-            <PopoverTrigger asChild>
-              <Button
-                type="button"
-                variant="outline"
-                className="h-auto min-h-[2.5rem] w-full items-start justify-start p-2 text-left whitespace-normal"
-              >
-                <div className="w-full text-left wrap-break-word whitespace-normal">
-                  {values.length
-                    ? values
-                        .map((id) => RULE_OPTIONS_BY_ID.get(id)?.label)
-                        .filter(Boolean)
-                        .join(", ")
-                    : "Select rules"}
-                </div>
-              </Button>
-            </PopoverTrigger>
-            <PopoverContent className="w-(--radix-popover-trigger-width) p-2">
-              <div className="flex flex-col gap-2">
-                {RULE_OPTIONS.map((rule) => {
-                  const selected = values.includes(rule.id);
-                  const disabled = !selected && values.length >= MAX_RULES;
-                  return (
-                    <label
-                      key={rule.id}
-                      htmlFor={`rule-${rule.id}`}
-                      className="flex cursor-pointer items-center gap-2"
-                    >
-                      <Checkbox
-                        id={`rule-${rule.id}`}
-                        checked={selected}
-                        disabled={disabled}
-                        onCheckedChange={(checked) => {
-                          const newValues = checked
-                            ? [...values, rule.id]
-                            : values.filter((id) => id !== rule.id);
-                          field.onChange(newValues);
-                        }}
-                      />
-                      {rule.label}
-                    </label>
-                  );
-                })}
-              </div>
-            </PopoverContent>
-          </Popover>
-        );
-      }
 
       case "file": {
         if (fieldName === "banner_url") {

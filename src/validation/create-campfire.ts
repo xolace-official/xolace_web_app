@@ -81,7 +81,16 @@ const StepTwoSchema = z.object({
   visibility: z.enum(CampfireVisibility),
   realm: z.enum(CampfireRealm),
   lane: z.enum(CampfireLane),
-  rules: z.array(z.string()).optional(),
+  rules: z
+    .array(
+      z.object({
+        id: z.number(),
+        title: z.string(),
+        description: z.string().nullable(),
+        display_order: z.number(),
+      }),
+    )
+    .optional(),
 });
 
 const StepThreeSchema = z.object({

@@ -46,10 +46,14 @@ export default function CampfirePreviewCard({
       <div className="flex flex-col items-start justify-start gap-2 pb-2">
         {step >= 3 ? (
           hasBanner ? (
-            <div
-              className="h-8 w-full rounded-t-2xl bg-cover bg-center"
-              style={{ backgroundImage: `url(${bannerUrl})` }}
-            />
+            <div className="relative h-8 w-full overflow-hidden rounded-t-2xl">
+              <Image
+                src={bannerUrl!}
+                alt="Campfire banner"
+                fill
+                className="object-cover object-center"
+              />
+            </div>
           ) : (
             <div className="bg-muted flex h-8 w-full rounded-t-2xl" />
           )
