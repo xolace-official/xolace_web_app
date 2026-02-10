@@ -20,10 +20,19 @@ import {
   SidebarMenuSubButton,
   SidebarMenuSubItem,
 } from "@/components/ui/sidebar";
-// import { NewBadge } from './shared/NewBadge';
+/**
+ * Renders a collapsible sidebar navigation from the provided menu items.
+ *
+ * Renders each top-level item as a collapsible section with optional icon and title, and renders any sub-items as navigable or actionable entries.
+ *
+ * @param items - Array of navigation items. Each item should include `key`, `title`, and `url`, may include `icon`, `isActive`, `isBeta`, and may contain a nested `items` array of sub-items. Sub-items may include `key`, `title`, optional `url`, `icon`, `onClick`, `isNew`, and `isBeta`.
+ * @param onOpenCreateModal - Optional callback invoked when a sub-item with `key === "createCampfire"` is activated.
+ * @returns A React element containing the collapsible sidebar menu and its sub-items.
+ */
 
 export function CollapsibleNav({
   items,
+  onOpenCreateModal,
 }: {
   items: {
     key: string;
@@ -42,90 +51,97 @@ export function CollapsibleNav({
       isBeta?: boolean;
     }[];
   }[];
+  onOpenCreateModal?: () => void;
 }) {
   const pathName = usePathname();
   const { setOpenMobile } = useSidebar();
+
   return (
-    <SidebarGroup>
-      <SidebarMenu className="px-4">
-        {items.map((item) => (
-          <Collapsible
-            key={item.key}
-            asChild
-            defaultOpen={item.isActive}
-            className="group/collapsible"
-          >
-            <SidebarMenuItem>
-              <CollapsibleTrigger asChild>
-                <SidebarMenuButton
-                  tooltip={item.title}
-                  className="py-5 tracking-widest uppercase focus:ring-0 focus:outline-none focus-visible:ring-0 focus-visible:outline-none"
-                >
-                  {item.icon && <item.icon />}
-                  <span className="text-muted-foreground text-xs leading-4">
-                    {item.title}
-                    {/* {item.isBeta && (
-                      <KvngBadge variant='gradient' className='ml-2 py-0' size="xs" color="purple"  >BETA</KvngBadge> 
+    <>
+      <SidebarGroup>
+        <SidebarMenu className="px-4">
+          {items.map((item) => (
+            <Collapsible
+              key={item.key}
+              asChild
+              defaultOpen={item.isActive}
+              className="group/collapsible"
+            >
+              <SidebarMenuItem>
+                <CollapsibleTrigger asChild>
+                  <SidebarMenuButton
+                    tooltip={item.title}
+                    className="py-5 tracking-widest uppercase focus:ring-0 focus:outline-none focus-visible:ring-0 focus-visible:outline-none"
+                  >
+                    {item.icon && <item.icon />}
+                    <span className="text-muted-foreground text-xs leading-4">
+                      {item.title}
+                      {/* {item.isBeta && (
+                      <KvngBadge variant='gradient' className='ml-2 py-0' size="xs" color="purple"  >BETA</KvngBadge>
                     )} */}
-                  </span>
-                  <ChevronRight className="ml-auto transition-transform duration-200 group-data-[state=open]/collapsible:rotate-90" />
-                </SidebarMenuButton>
-              </CollapsibleTrigger>
-              <CollapsibleContent>
-                <SidebarMenuSub>
-                  {item.items?.map((subItem) => {
-                    let isActive = false;
-                    if (subItem.url) {
-                      isActive =
-                        (pathName.includes(subItem.url) &&
-                          subItem.url.length > 1) ||
-                        pathName === subItem.url;
-                    }
+                    </span>
+                    <ChevronRight className="ml-auto transition-transform duration-200 group-data-[state=open]/collapsible:rotate-90" />
+                  </SidebarMenuButton>
+                </CollapsibleTrigger>
+                <CollapsibleContent>
+                  <SidebarMenuSub>
+                    {item.items?.map((subItem) => {
+                      let isActive = false;
+                      if (subItem.url) {
+                        isActive =
+                          (pathName.includes(subItem.url) &&
+                            subItem.url.length > 1) ||
+                          pathName === subItem.url;
+                      }
 
-                    return (
-                      <SidebarMenuSubItem key={subItem.key}>
-                        <SidebarMenuSubButton
-                          asChild
-                          className="relative py-5"
-                          isActive={isActive}
-                          onClick={
-                            subItem.onClick
-                              ? subItem.onClick
-                              : () => setOpenMobile(false)
-                          }
-                        >
-                          {subItem.url ? (
-                            <Link
-                              href={subItem.url}
-                              className="flex items-center justify-start"
-                            >
-                              <span className="text-sidebar-label flex items-center gap-2">
-                                {subItem.icon && <subItem.icon size={16} />}
-                                {subItem.title}
-                              </span>
-                              {/* {subItem.isNew && <NewBadge size="sm" />}
+                      return (
+                        <SidebarMenuSubItem key={subItem.key}>
+                          <SidebarMenuSubButton
+                            asChild
+                            className="relative py-5"
+                            isActive={isActive}
+                            onClick={() => {
+                              if (subItem.onClick) {
+                                subItem.onClick();
+                              }
+                              if (subItem.key === "createCampfire") {
+                                onOpenCreateModal?.();
+                              }
+
+                              setOpenMobile(false);
+                            }}
+                          >
+                            {subItem.url ? (
+                              <Link
+                                href={subItem.url}
+                                className="flex items-center justify-start"
+                              >
+                                <span className="text-sidebar-label flex items-center gap-2">
+                                  {subItem.icon && <subItem.icon size={16} />}
+                                  {subItem.title}
+                                </span>
+                                {/* {subItem.isNew && <NewBadge size="sm" />}
                               {subItem.isBeta && <NewBadge size="sm" />} */}
-                            </Link>
-                          ) : (
-                            <span className="text-sidebar-label flex cursor-pointer items-center relative">
-                              {subItem.icon && <subItem.icon size={16} />}
-                              {subItem.title}
-
-                              {/* {subItem.isBeta && (
-                                <KvngBadge className='absolute right-0 top-1 py-0 px-1' size="xs" >BETA</KvngBadge>
-                              )} */}
-                            </span>
-                          )}
-                        </SidebarMenuSubButton>
-                      </SidebarMenuSubItem>
-                    );
-                  })}
-                </SidebarMenuSub>
-              </CollapsibleContent>
-            </SidebarMenuItem>
-          </Collapsible>
-        ))}
-      </SidebarMenu>
-    </SidebarGroup>
+                              </Link>
+                            ) : (
+                              <span className="flex items-center">
+                                <span className="text-sidebar-label flex items-center gap-2">
+                                  {subItem.icon && <subItem.icon size={16} />}
+                                  {subItem.title}
+                                </span>
+                              </span>
+                            )}
+                          </SidebarMenuSubButton>
+                        </SidebarMenuSubItem>
+                      );
+                    })}
+                  </SidebarMenuSub>
+                </CollapsibleContent>
+              </SidebarMenuItem>
+            </Collapsible>
+          ))}
+        </SidebarMenu>
+      </SidebarGroup>
+    </>
   );
 }
