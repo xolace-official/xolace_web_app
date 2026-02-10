@@ -20,7 +20,15 @@ import {
   SidebarMenuSubButton,
   SidebarMenuSubItem,
 } from "@/components/ui/sidebar";
-// import { NewBadge } from './shared/NewBadge';
+/**
+ * Renders a collapsible sidebar navigation from the provided menu items.
+ *
+ * Renders each top-level item as a collapsible section with optional icon and title, and renders any sub-items as navigable or actionable entries.
+ *
+ * @param items - Array of navigation items. Each item should include `key`, `title`, and `url`, may include `icon`, `isActive`, `isBeta`, and may contain a nested `items` array of sub-items. Sub-items may include `key`, `title`, optional `url`, `icon`, `onClick`, `isNew`, and `isBeta`.
+ * @param onOpenCreateModal - Optional callback invoked when a sub-item with `key === "createCampfire"` is activated.
+ * @returns A React element containing the collapsible sidebar menu and its sub-items.
+ */
 
 export function CollapsibleNav({
   items,

@@ -14,6 +14,18 @@ type Props = {
   onChange?: (rules: CampfireRule[]) => void;
 };
 
+/**
+ * Editable UI for creating, editing, reordering, and removing campfire rules.
+ *
+ * The component enforces a maximum of 10 rules, keeps each rule's `display_order`
+ * sequential starting at 0, and constrains title and description lengths to 100
+ * and 500 characters respectively. Reordering updates `display_order` to match
+ * the new indices.
+ *
+ * @param rules - Optional initial list of `CampfireRule` items (defaults to an empty array)
+ * @param onChange - Callback invoked with the updated `CampfireRule[]` whenever rules are added, updated, removed, or reordered
+ * @returns The rendered RulesEditor React element
+ */
 export default function RulesEditor({
   rules = [],
   onChange = () => {},

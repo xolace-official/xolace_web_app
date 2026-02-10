@@ -15,6 +15,21 @@ interface StepNavigationProps {
   isSubmitting: boolean;
 }
 
+/**
+ * Render step indicators and navigation controls for a multi-step form.
+ *
+ * Watches the form's `name` and `description` fields to enable/disable the Next button
+ * and switches the final action to a Create button that reflects submission state.
+ *
+ * @param step - Current 1-based step index
+ * @param totalSteps - Total number of steps in the flow
+ * @param control - react-hook-form Control for the form (used to watch `name` and `description`)
+ * @param onNext - Handler invoked to advance to the next step
+ * @param onPrev - Handler invoked to go back to the previous step
+ * @param onSubmit - Handler invoked to submit the form on the final step
+ * @param isSubmitting - True while the form submission is in progress
+ * @returns The navigation UI as JSX for the current step state
+ */
 export default function StepNavigation({
   step,
   totalSteps,

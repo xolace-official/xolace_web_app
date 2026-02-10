@@ -20,6 +20,12 @@ interface CampfirePreviewCardProps {
   control: Control<FullFormType>;
 }
 
+/**
+ * Render a live preview card for a campfire using the current form values.
+ *
+ * @param step - The current creation step; controls which preview elements (banner, icon, realm tag) are shown.
+ * @returns A JSX element displaying the campfire's name, truncated description, optional banner and icon, and a realm tag.
+ */
 export default function CampfirePreviewCard({
   step,
   control,

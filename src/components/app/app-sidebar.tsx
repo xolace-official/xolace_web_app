@@ -245,6 +245,11 @@ export function AppSidebar() {
   );
 }
 
+/**
+ * Renders a responsive button that toggles the application's sidebar.
+ *
+ * @returns A button element that triggers the sidebar toggle when clicked.
+ */
 export function SidebarToggle() {
   const { toggleSidebar } = useSidebar();
 

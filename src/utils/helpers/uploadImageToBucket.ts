@@ -1,5 +1,13 @@
 import type { SupabaseClient } from "@supabase/supabase-js";
 
+/**
+ * Produce a File object from a Blob or return the provided File unchanged.
+ *
+ * @param input - The source Blob or File.
+ * @param filename - Filename to assign when wrapping a Blob.
+ * @param type - Optional MIME type to set when creating a File; defaults to the Blob's type.
+ * @returns A File instance (the original File or a new File wrapping the Blob).
+ */
 export function toFile(
   input: File | Blob,
   filename: string,

@@ -18,6 +18,18 @@ type Props = {
   className?: string;
 };
 
+/**
+ * Interactive image cropper UI that lets users position and zoom an image, then export the cropped region as a PNG Blob.
+ *
+ * @param src - Source URL or data URI of the image to crop
+ * @param aspect - Desired crop aspect ratio (defaults to `1`)
+ * @param output - Target output dimensions for the exported image; shape `{ width, height }` (defaults to `{ width: 512, height: 512 }`)
+ * @param zoomLabel - Label text displayed next to the zoom control (defaults to `"Zoom"`)
+ * @param onCancel - Callback invoked when the Cancel button is pressed
+ * @param onCropped - Callback invoked with the resulting PNG `Blob` when the user saves the crop
+ * @param className - Optional additional CSS class names applied to the root card element
+ * @returns The ImageCropper React element
+ */
 export default function ImageCropper({
   src,
   aspect = 1,
@@ -110,7 +122,16 @@ export default function ImageCropper({
   );
 }
 
-// Utilities
+/**
+ * Creates a PNG Blob containing the specified cropped region of an image scaled to the target size.
+ *
+ * @param src - Source image URL or data URI.
+ * @param crop - Crop rectangle in source-image pixel coordinates (`x`, `y`, `width`, `height`).
+ * @param targetW - Output image width in pixels.
+ * @param targetH - Output image height in pixels.
+ * @returns A PNG `Blob` of the cropped region resized to `targetW` × `targetH`.
+ * @throws If a 2D canvas rendering context cannot be obtained or if canvas-to-Blob conversion fails.
+ */
 async function getCroppedBlob(
   src: string,
   crop: { width: number; height: number; x: number; y: number },
@@ -146,6 +167,14 @@ async function getCroppedBlob(
   });
 }
 
+/**
+ * Load an image from a URL or data URI and produce the corresponding HTMLImageElement when it finishes loading.
+ *
+ * The returned promise rejects if the image fails to load.
+ *
+ * @param src - The image source (URL or data URI)
+ * @returns The loaded `HTMLImageElement`
+ */
 function loadImage(src: string): Promise<HTMLImageElement> {
   return new Promise((resolve, reject) => {
     const img = new Image();

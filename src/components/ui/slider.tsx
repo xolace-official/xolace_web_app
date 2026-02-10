@@ -5,6 +5,18 @@ import * as React from "react";
 
 import { cn } from "@/lib/utils";
 
+/**
+ * Renders a styled slider component that supports single-value or range selection.
+ *
+ * The number of thumbs is determined from `value` or `defaultValue`; if neither is an array, two thumbs are rendered spanning `[min, max]`. All other props are forwarded to the underlying Radix Slider root.
+ *
+ * @param className - Additional CSS class names to apply to the slider root
+ * @param defaultValue - Initial slider value(s); may be a single number or an array for range sliders
+ * @param value - Controlled slider value(s); may be a single number or an array for range sliders
+ * @param min - Minimum slider value (default: 0)
+ * @param max - Maximum slider value (default: 100)
+ * @returns The rendered React slider element
+ */
 function Slider({
   className,
   defaultValue,
