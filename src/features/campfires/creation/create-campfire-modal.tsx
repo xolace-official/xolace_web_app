@@ -33,7 +33,7 @@ import StepNavigation from "./step-navigation";
 
 const TOTAL_STEPS = campfireFieldsByStep.length + 2;
 
-const stepTitles = [
+const STEP_TITLES = [
   {
     title: "Start your Campfire",
     description:
@@ -209,9 +209,9 @@ const CreateCampfireModal = ({
         className="w-full max-w-[95vw] sm:max-w-[750px] rounded-2xl!  sm:rounded-3xl"
       >
         <DialogHeader className={`${step === 4 ? "mb-5" : "mb-3"}`}>
-          <DialogTitle>{stepTitles[step - 1].title}</DialogTitle>
+          <DialogTitle>{STEP_TITLES[step - 1].title}</DialogTitle>
           <DialogDescription>
-            {stepTitles[step - 1].description}
+            {STEP_TITLES[step - 1].description}
           </DialogDescription>
         </DialogHeader>
 
