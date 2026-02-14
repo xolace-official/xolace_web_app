@@ -4,8 +4,8 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 import {
   getGetApiV1AuthProfileMeQueryKey,
-  getPutApiV1AuthProfileMutationOptions,
   type PutApiV1AuthProfileBody,
+  putApiV1AuthProfile,
 } from "@/api-client";
 import { useAppStore } from "@/providers/app-store-provider";
 
@@ -15,13 +15,14 @@ export function useProfileMutations() {
   const updateProfile = useAppStore((s) => s.updateProfile);
 
   const mutation = useMutation({
-    ...getPutApiV1AuthProfileMutationOptions({
-      fetch: {
+    mutationKey: ["putApiV1AuthProfile"],
+    mutationFn: async ({ data }: { data: PutApiV1AuthProfileBody }) => {
+      return putApiV1AuthProfile(data, {
         headers: {
           Authorization: `Bearer ${session.access_token}`,
         },
-      },
-    }),
+      });
+    },
     onMutate: async ({ data }) => {
       // Optimistically update Zustand store
       updateProfile(data);
