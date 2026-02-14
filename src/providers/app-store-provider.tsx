@@ -64,7 +64,6 @@ export function AppStoreProvider({
   });
 
   const isLoading = profileQuery.isLoading || preferencesQuery.isLoading;
-  const isError = profileQuery.isError || preferencesQuery.isError;
 
   // Extract success data from discriminated union responses
   const profileData =
@@ -75,6 +74,14 @@ export function AppStoreProvider({
     preferencesQuery.data?.status === 200
       ? (preferencesQuery.data.data as GetApiV1AuthPreferences200)
       : undefined;
+
+  // Treat fetch-level errors or non-200 responses as errors
+  const hasNon200Response =
+    !isLoading &&
+    ((profileQuery.data && profileQuery.data.status !== 200) ||
+      (preferencesQuery.data && preferencesQuery.data.status !== 200));
+  const isError =
+    profileQuery.isError || preferencesQuery.isError || hasNon200Response;
 
   // Create or access store
   if (!storeRef.current && profileData && preferencesData) {
@@ -106,11 +113,11 @@ export function AppStoreProvider({
     }
   }, [preferencesData]);
 
-  if (isLoading || !storeRef.current) {
+  if (isError) {
     return <PrimaryFullPageLoading />;
   }
 
-  if (isError) {
+  if (isLoading || !storeRef.current) {
     return <PrimaryFullPageLoading />;
   }
 
