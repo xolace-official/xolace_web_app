@@ -16,25 +16,29 @@ import { Input } from "@/components/ui/input";
 import { useProfileMutations } from "@/features/user/hooks/use-profile-mutations";
 import { useAppStore } from "@/providers/app-store-provider";
 
+const USERNAME_REGEX = /^[a-zA-Z0-9_-]+$/;
+
 export function UsernameSection() {
   const profile = useAppStore((s) => s.profile);
   const { mutate, isPending } = useProfileMutations();
-
   const currentUsername = profile.username ?? "";
 
   const [open, setOpen] = useState(false);
   const [username, setUsername] = useState(currentUsername);
 
-  const usernameRegex = /^[a-zA-Z0-9_-]+$/;
   const isValidUsername =
     username.length >= 3 &&
     username.length <= 30 &&
-    usernameRegex.test(username);
+    USERNAME_REGEX.test(username);
 
   const handleSubmit = () => {
     if (!isValidUsername) return;
-    mutate({ username });
-    setOpen(false);
+    mutate(
+      { username },
+      {
+        onSuccess: () => setOpen(false),
+      },
+    );
   };
 
   return (

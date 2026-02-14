@@ -4,8 +4,8 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 import {
   getGetApiV1AuthProfileMeQueryKey,
-  type PutApiV1AuthProfileBody,
   putApiV1AuthProfile,
+  type PutApiV1AuthProfileBody,
 } from "@/api-client";
 import { useAppStore } from "@/providers/app-store-provider";
 
@@ -63,7 +63,10 @@ export function useProfileMutations() {
 
   return {
     updateProfileMutation: mutation,
-    mutate: (data: PutApiV1AuthProfileBody) => mutation.mutate({ data }),
+    mutate: (
+      data: PutApiV1AuthProfileBody,
+      options?: Parameters<typeof mutation.mutate>[1],
+    ) => mutation.mutate({ data }, options),
     isPending: mutation.isPending,
   };
 }
