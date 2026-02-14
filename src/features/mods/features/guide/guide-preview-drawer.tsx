@@ -1,7 +1,8 @@
 // components/mods/features/guide/guide-preview-drawer.tsx
 "use client";
 
-import React from "react";
+import { Eye } from "lucide-react";
+import { Button } from "@/components/ui/button";
 import {
   Drawer,
   DrawerContent,
@@ -10,8 +11,6 @@ import {
   DrawerTitle,
   DrawerTrigger,
 } from "@/components/ui/drawer";
-import { Button } from "@/components/ui/button";
-import { Eye } from "lucide-react";
 import GuidePreview from "@/features/mods/features/guide/guide-preview";
 
 interface GuidePreviewDrawerProps {

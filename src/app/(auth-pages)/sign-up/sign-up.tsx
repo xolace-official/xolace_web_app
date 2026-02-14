@@ -1,11 +1,21 @@
 "use client";
 
-import { IconMail, IconUser } from "@tabler/icons-react";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { IconCheck, IconMail, IconUser, IconX } from "@tabler/icons-react";
+import { useMutation, useQuery } from "@tanstack/react-query";
+import { Loader2 } from "lucide-react";
 import { motion } from "motion/react";
-import Form from "next/form";
 import Link from "next/link";
-import { useActionState } from "react";
-import { signupFormAction } from "@/actions/auth";
+import { useRouter } from "next/navigation";
+import { useEffect } from "react";
+import { Controller, useForm } from "react-hook-form";
+import { toast } from "sonner";
+import type { z } from "zod";
+import { signUpAction } from "@/actions/auth";
+import {
+  getApiV1PublicUsernameCheck,
+  getGetApiV1PublicUsernameCheckQueryKey,
+} from "@/api-client";
 import { Checkbox } from "@/components/molecule-ui/checkbox";
 import { FormInput } from "@/components/shared/auth/form-input";
 import { ResponsiveInfoTrigger } from "@/components/shared/responsive-info-trigger";
@@ -21,29 +31,105 @@ import {
 import {
   Field,
   FieldDescription,
+  FieldError,
   FieldGroup,
   FieldSet,
 } from "@/components/ui/field";
 import { AuthHeader } from "@/features/auth/auth-form-wrapper";
-import type { SignupFormState } from "@/validation";
+import { useDebounceValue } from "@/hooks/use-debounce-value";
+import { signupSchema } from "@/validation";
+
+type SignUpFormValues = z.infer<typeof signupSchema>;
 
 export default function SignUpPage() {
-  const [formState, formAction] = useActionState<SignupFormState, FormData>(
-    signupFormAction,
-    {
-      values: {
-        username: "",
-        email: "",
-        password: "",
-      },
-      errors: null,
-      success: false,
+  const router = useRouter();
+
+  const {
+    register,
+    handleSubmit,
+    setError,
+    clearErrors,
+    watch,
+    control,
+    formState: { errors, isValid },
+  } = useForm<SignUpFormValues>({
+    resolver: zodResolver(signupSchema),
+    mode: "onChange",
+    defaultValues: {
+      username: "",
+      email: "",
+      password: "",
+      terms: false as unknown as true,
     },
-  );
+  });
+
+  // Real-time username availability check
+  const watchedUsername = watch("username");
+  const [debouncedUsername] = useDebounceValue(watchedUsername, 500);
+
+  const usernameRegex = /^[a-zA-Z0-9_-]+$/;
+  const shouldCheckUsername =
+    debouncedUsername.length >= 3 && usernameRegex.test(debouncedUsername);
+
+  const usernameCheckQuery = useQuery({
+    queryKey: getGetApiV1PublicUsernameCheckQueryKey({
+      username: debouncedUsername,
+    }),
+    queryFn: () => getApiV1PublicUsernameCheck({ username: debouncedUsername }),
+    enabled: shouldCheckUsername,
+    retry: false,
+  });
+
+  const usernameStatus = !shouldCheckUsername
+    ? "idle"
+    : usernameCheckQuery.isFetching
+      ? "checking"
+      : usernameCheckQuery.data?.data.available
+        ? "available"
+        : "taken";
+
+  // Sync availability result with form errors
+  useEffect(() => {
+    if (usernameStatus === "taken") {
+      setError("username", {
+        type: "manual",
+        message: "Username is already taken.",
+      });
+    } else if (
+      usernameStatus === "available" &&
+      errors.username?.type === "manual"
+    ) {
+      clearErrors("username");
+    }
+  }, [usernameStatus, setError, clearErrors, errors.username?.type]);
+
+  const signUpMutation = useMutation({
+    mutationFn: async (data: SignUpFormValues) => {
+      const res = await signUpAction({
+        username: data.username,
+        email: data.email,
+        password: data.password,
+      });
+
+      if (!res.success) {
+        throw new Error(res.message);
+      }
+
+      return res;
+    },
+    onSuccess: (res) => {
+      toast.success(res.message);
+      router.push("/sign-in");
+    },
+    onError: (error) => {
+      setError("root", { message: error.message });
+      toast.error(error.message);
+    },
+  });
 
   return (
     <motion.div
-      key="sign-in"
+      key="sign-up"
       initial={{ opacity: 0.2 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0.2 }}
@@ -64,56 +150,69 @@ export default function SignUpPage() {
           </CardDescription>
         </CardHeader>
         <CardContent className="max-sm:px-3">
-          <Form action={formAction} id="signup-form">
+          <form
+            id="signup-form"
+            onSubmit={handleSubmit((values: SignUpFormValues) =>
+              signUpMutation.mutate(values),
+            )}
+          >
             <FieldSet>
               <FieldGroup>
-                {/* Username Field with Icon */}
+                {/* Username Field */}
                 <FormInput
+                  {...register("username")}
                   id="username"
-                  name="username"
-                  defaultValue={formState.values?.username}
                   type="text"
                   label="Username"
                   placeholder="Enter your username"
                   required
+                  disabled={signUpMutation.isPending}
                   leftAddon={
                     <IconUser className="size-4 text-muted-foreground" />
                   }
                   rightAddon={
-                    <ResponsiveInfoTrigger
-                      content={
-                        <p>Definitely not the name your mommy gave you 🙂‍↕️</p>
-                      }
-                    />
+                    usernameStatus === "checking" ? (
+                      <Loader2 className="size-4 animate-spin text-muted-foreground" />
+                    ) : usernameStatus === "available" ? (
+                      <IconCheck className="size-4 text-success" />
+                    ) : usernameStatus === "taken" ? (
+                      <IconX className="size-4 text-destructive" />
+                    ) : (
+                      <ResponsiveInfoTrigger
+                        content={
+                          <p>Definitely not the name your mommy gave you 🙂‍↕️</p>
+                        }
+                      />
+                    )
                   }
-                  error={formState.errors?.username}
+                  error={errors.username?.message}
                 />
 
-                {/* Email Field with Icon */}
+                {/* Email Field */}
                 <FormInput
+                  {...register("email")}
                   id="email"
-                  name="email"
-                  defaultValue={formState.values?.email}
                   type="email"
                   label="Email"
                   placeholder="you@example.com"
                   required
+                  disabled={signUpMutation.isPending}
                   leftAddon={
                     <IconMail className="size-4 text-muted-foreground" />
                   }
-                  error={formState.errors?.email}
+                  error={errors.email?.message}
                 />
 
-                {/* Password Field with Toggle and Info Icon */}
+                {/* Password Field */}
                 <FormInput
+                  {...register("password")}
                   id="password"
-                  name="password"
-                  defaultValue={formState.values?.password}
                   type="password"
                   label="Password"
                   placeholder="Enter your password"
                   required
                   enablePasswordToggle
+                  disabled={signUpMutation.isPending}
                   leftAddon={
                     <ResponsiveInfoTrigger
                       content={
@@ -124,31 +223,64 @@ export default function SignUpPage() {
                       }
                     />
                   }
-                  error={formState.errors?.password}
+                  error={errors.password?.message}
                 />
               </FieldGroup>
 
               <FieldGroup>
-                <Field orientation="horizontal">
-                  <Checkbox id="sign-up-form-agree-to-terms" defaultChecked />
-                  <FieldDescription className="text-xs font-extralight">
-                    I am not in crisis or suicidal and I agree to the Xolace{" "}
-                    <Link href="/terms" className="underline">
-                      Terms of Service
-                    </Link>{" "}
-                    &{" "}
-                    <Link href="/privacy" className="underline">
-                      Privacy Policy
-                    </Link>
-                  </FieldDescription>
-                </Field>
+                <Controller
+                  name="terms"
+                  control={control}
+                  render={({ field }) => (
+                    <Field orientation="horizontal">
+                      <Checkbox
+                        id="sign-up-form-agree-to-terms"
+                        checked={field.value}
+                        onCheckedChange={(checked) =>
+                          field.onChange(checked === true)
+                        }
+                        disabled={signUpMutation.isPending}
+                      />
+                      <FieldDescription className="text-xs font-extralight">
+                        I am not in crisis or suicidal and I agree to the Xolace{" "}
+                        <Link href="/terms" className="underline">
+                          Terms of Service
+                        </Link>{" "}
+                        &{" "}
+                        <Link href="/privacy" className="underline">
+                          Privacy Policy
+                        </Link>
+                      </FieldDescription>
+                    </Field>
+                  )}
+                />
+                {errors.terms?.message && (
+                  <FieldError>{errors.terms.message}</FieldError>
+                )}
               </FieldGroup>
+
+              {/* Server error */}
+              {errors.root?.message && (
+                <p className="text-sm font-medium text-destructive">
+                  {errors.root.message}
+                </p>
+              )}
             </FieldSet>
-          </Form>
+          </form>
         </CardContent>
         <CardFooter className="flex flex-col gap-3 max-sm:px-3">
-          <Button type="submit" form="signup-form" className="w-full">
-            Sign Up
+          <Button
+            type="submit"
+            form="signup-form"
+            className="w-full"
+            disabled={
+              !isValid ||
+              signUpMutation.isPending ||
+              usernameStatus === "checking" ||
+              usernameStatus === "taken"
+            }
+          >
+            {signUpMutation.isPending ? "Creating account..." : "Sign Up"}
           </Button>
 
           <div className="text-center text-sm text-muted-foreground">

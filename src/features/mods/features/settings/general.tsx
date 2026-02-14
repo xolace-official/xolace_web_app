@@ -1,11 +1,11 @@
 "use client";
 
 import React, { useState } from "react";
-import SettingsItem, { SettingsItemProps } from "./settings-items";
+import SettingsItem, { type SettingsItemProps } from "./settings-items";
 import { toast } from "sonner";
 import { generateCampfireSlug } from "@/lib/utils";
 import { Loader2 } from "lucide-react";
-import { CampfireInterface } from "@/features/campfires";
+import type { CampfireInterface } from "@/features/campfires";
 import { useUpdateCampfireMutation } from "@/features/mods/features/mockhooks";
 
 interface GeneralSettingsProps {
@@ -98,7 +98,7 @@ const GeneralSettings = ({ campfire }: GeneralSettingsProps) => {
     <div className="flex w-full flex-col items-start gap-6">
       {generalSettingsOptions.map((option, index) => (
         <SettingsItem
-          key={index}
+          key={`${option.type}-${index}`}
           {...option}
           isOpen={openIndex === index}
           onClick={() => setOpenIndex(openIndex === index ? null : index)}

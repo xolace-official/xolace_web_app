@@ -1,12 +1,12 @@
 "use client";
 
-import React, { useState } from "react";
-import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Info } from "lucide-react";
+import { useState } from "react";
+import { Alert, AlertDescription } from "@/components/ui/alert";
+import type { CampfireInterface } from "@/features/campfires";
 import SettingsItem, {
-  SettingsItemProps,
+  type SettingsItemProps,
 } from "@/features/mods/features/settings/settings-items";
-import { CampfireInterface } from "@/features/campfires";
 
 interface PrivacyAndDiscoveryProps {
   campfire: CampfireInterface | null;
@@ -89,7 +89,7 @@ const PrivacyAndDiscovery = ({ campfire }: PrivacyAndDiscoveryProps) => {
       <div className="rounded-2xl mt-4 flex flex-col gap-6">
         {privacyAndDiscoveryOptions.map((option, index) => (
           <SettingsItem
-            key={index}
+            key={`${option.type}-${index}`}
             {...option}
             isOpen={openIndex === index}
             onClick={() => setOpenIndex(openIndex === index ? null : index)}

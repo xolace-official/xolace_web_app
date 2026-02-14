@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
-import { UserSearchResult } from "@/features/mods/features/moderators/add-camper-modal";
-import { CampfireInterface, dummy_campfires } from "@/features/campfires";
+import type { UserSearchResult } from "@/features/mods/features/moderators/add-camper-modal";
+import { type CampfireInterface, dummy_campfires } from "@/features/campfires";
 
 // Mock user database
 const MOCK_USERS: UserSearchResult[] = [

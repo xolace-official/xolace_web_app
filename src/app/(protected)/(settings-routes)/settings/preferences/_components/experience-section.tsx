@@ -1,8 +1,5 @@
-"use client";
-
-import { SettingsPanel, SettingsPanelSection } from "@/components/settings";
-import { Checkbox } from "@/components/ui/checkbox";
 import type { PreferenceToggleOption } from "./preference-types";
+import { TogglePreferencesSection } from "./toggle-preferences-section";
 
 const experienceOptions: PreferenceToggleOption[] = [
   {
@@ -23,38 +20,5 @@ const experienceOptions: PreferenceToggleOption[] = [
 ];
 
 export function ExperienceSection() {
-  // TODO: Get preferences from your preferences store
-  // const { preferences, updatePreference, isLoading } = usePreferencesStore();
-
-  // Placeholder values - replace with actual state
-  const preferences = {
-    guided_tour_enabled: true,
-    auto_save_drafts: false,
-    daily_prompt_enabled: true,
-  };
-  const isLoading = false;
-
-  const handleToggle = (key: string, value: boolean) => {
-    // TODO: Call mutation to update preference
-    // updatePreference(key, value);
-    console.log(`Update ${key}:`, value);
-  };
-
-  return (
-    <SettingsPanel>
-      {experienceOptions.map((option) => (
-        <SettingsPanelSection
-          key={option.key}
-          title={option.label}
-          description={option.description}
-        >
-          <Checkbox
-            checked={preferences[option.key as keyof typeof preferences]}
-            onCheckedChange={(checked) => handleToggle(option.key, !!checked)}
-            disabled={isLoading}
-          />
-        </SettingsPanelSection>
-      ))}
-    </SettingsPanel>
-  );
+  return <TogglePreferencesSection options={experienceOptions} />;
 }

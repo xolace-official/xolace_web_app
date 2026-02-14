@@ -1,78 +1,94 @@
 "use server";
 
+import { createClient } from "@/lib/supabase/server";
 import {
   type ForgotPasswordFormState,
   forgotPasswordSchema,
-  type SigninFormState,
-  type SignupFormState,
+  type SignInActionResult,
   signinSchema,
+  type SignUpActionResult,
   signupSchema,
 } from "@/validation";
 import { type ContactFormState, contactSchema } from "@/validation/landing";
 
-export async function signinFormAction(
-  _prevState: SigninFormState,
-  formData: FormData,
-) {
-  const values = {
-    email: formData.get("email") as string,
-    password: formData.get("password") as string,
-  };
+export async function signInAction(data: {
+  email: string;
+  password: string;
+}): Promise<SignInActionResult> {
+  const parsed = signinSchema.safeParse(data);
 
-  const result = signinSchema.safeParse(values);
-
-  if (!result.success) {
+  if (!parsed.success) {
     return {
-      values,
       success: false,
-      errors: result.error.flatten().fieldErrors,
+      message: "Invalid credentials. Please check your inputs.",
     };
   }
 
-  // Do something with the values.
-  // Call your database or API here.
+  const supabase = await createClient();
 
-  return {
-    values: {
-      email: "",
-      password: "",
-    },
-    errors: null,
-    success: true,
-  };
+  const { error } = await supabase.auth.signInWithPassword({
+    email: parsed.data.email,
+    password: parsed.data.password,
+  });
+
+  if (error) {
+    return { success: false, message: "Invalid email or password." };
+  }
+
+  return { success: true, message: "Signed in successfully." };
 }
 
-export async function signupFormAction(
-  _prevState: SignupFormState,
-  formData: FormData,
-) {
-  const values = {
-    username: formData.get("username") as string,
-    email: formData.get("email") as string,
-    password: formData.get("password") as string,
-  };
+export async function signUpAction(data: {
+  username: string;
+  email: string;
+  password: string;
+}): Promise<SignUpActionResult> {
+  const parsed = signupSchema.safeParse({ ...data, terms: true });
 
-  const result = signupSchema.safeParse(values);
-
-  if (!result.success) {
+  if (!parsed.success) {
     return {
-      values,
       success: false,
-      errors: result.error.flatten().fieldErrors,
+      message: "Invalid form data. Please check your inputs.",
     };
   }
 
-  // Do something with the values.
-  // Call your database or API here.
+  const supabase = await createClient();
+
+  // Pre-check username availability (DB constraint is the real guard)
+  const { data: existing } = await supabase
+    .from("profiles")
+    .select("id")
+    .ilike("username", parsed.data.username)
+    .maybeSingle();
+
+  if (existing) {
+    return { success: false, message: "Username is already taken." };
+  }
+
+  const { error } = await supabase.auth.signUp({
+    email: parsed.data.email,
+    password: parsed.data.password,
+    options: {
+      data: { username: parsed.data.username },
+    },
+  });
+
+  if (error) {
+    if (error.message.includes("already registered")) {
+      return {
+        success: false,
+        message: "An account with this email already exists.",
+      };
+    }
+    return {
+      success: false,
+      message: "An error occurred during sign-up. Please try again.",
+    };
+  }
 
   return {
-    values: {
-      username: "",
-      email: "",
-      password: "",
-    },
-    errors: null,
     success: true,
+    message: "Check your email to verify your account.",
   };
 }
 

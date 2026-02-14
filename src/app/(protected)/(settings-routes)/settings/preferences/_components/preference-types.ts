@@ -1,23 +1,26 @@
+import type { GetApiV1AuthPreferences200 } from "@/api-client";
+
+/**
+ * Extract keys from preferences whose values are boolean (including optional boolean).
+ * This ensures compile-time safety: if a key is renamed or removed from the API type,
+ * any toggle option referencing it will cause a type error.
+ */
+export type PreferenceBooleanKey = {
+  [K in keyof GetApiV1AuthPreferences200]-?: NonNullable<
+    GetApiV1AuthPreferences200[K]
+  > extends boolean
+    ? K
+    : never;
+}[keyof GetApiV1AuthPreferences200];
+
 /**
  * Preference option configuration for toggle-based preferences
  */
 export interface PreferenceToggleOption {
-  key: PreferenceToggleKey;
+  key: PreferenceBooleanKey;
   label: string;
   description: string;
 }
-
-/**
- * Keys for boolean toggle preferences
- */
-export type PreferenceToggleKey =
-  | "guided_tour_enabled"
-  | "auto_save_drafts"
-  | "daily_prompt_enabled"
-  | "allow_anonymous_replies"
-  | "mark_sensitive_by_default"
-  | "notifications_enabled"
-  | "push_enabled";
 
 /**
  * Theme options enum matching database

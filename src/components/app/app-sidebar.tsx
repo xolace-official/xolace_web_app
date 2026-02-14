@@ -70,7 +70,7 @@ export function AppSidebar() {
   const sidebarVariant: "default" | "inset" = "default";
   //const search = true;
 
-  const modPathRegex = /^\/c\/[^\/]+\/mod/;
+  const modPathRegex = /^\/c\/[^/]+\/mod/;
   const isModPath = modPathRegex.test(pathname);
 
   return (

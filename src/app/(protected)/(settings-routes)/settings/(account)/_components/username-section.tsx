@@ -13,35 +13,32 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
+import { useProfileMutations } from "@/features/user/hooks/use-profile-mutations";
+import { useAppStore } from "@/providers/app-store-provider";
+
+const USERNAME_REGEX = /^[a-zA-Z0-9_-]+$/;
 
 export function UsernameSection() {
-  // TODO: Get profile data from your auth/user context or store
-  // const { profile } = useUserStore();
-  // TODO: Add mutation hook for updating profile
-  // const { updateProfileMutation } = useProfileMutations();
-
-  // Placeholder values - replace with actual state
-  const currentUsername = "";
-  const isPending = false;
+  const profile = useAppStore((s) => s.profile);
+  const { mutate, isPending } = useProfileMutations();
+  const currentUsername = profile.username ?? "";
 
   const [open, setOpen] = useState(false);
   const [username, setUsername] = useState(currentUsername);
 
-  const handleSubmit = () => {
-    if (!username.trim()) return;
+  const isValidUsername =
+    username.length >= 3 &&
+    username.length <= 30 &&
+    USERNAME_REGEX.test(username);
 
-    // TODO: Call mutation to update username
-    // updateProfileMutation.mutate(
-    //   { username },
-    //   {
-    //     onSuccess: () => {
-    //       toast.success("Username updated");
-    //       setOpen(false);
-    //     },
-    //   }
-    // );
-    console.log("Update username:", username);
-    setOpen(false);
+  const handleSubmit = () => {
+    if (!isValidUsername) return;
+    mutate(
+      { username },
+      {
+        onSuccess: () => setOpen(false),
+      },
+    );
   };
 
   return (
@@ -66,8 +63,15 @@ export function UsernameSection() {
             placeholder={currentUsername || "What would you like to be called?"}
             onChange={(e) => setUsername(e.target.value)}
             disabled={isPending}
-            maxLength={32}
+            maxLength={30}
           />
+          {username.length > 0 && !isValidUsername && (
+            <p className="mt-2 text-xs text-destructive">
+              {username.length < 3
+                ? "Username must be at least 3 characters."
+                : "Only letters, numbers, underscores, and hyphens allowed."}
+            </p>
+          )}
         </div>
 
         <DialogFooter>
@@ -77,7 +81,7 @@ export function UsernameSection() {
             </Button>
           </DialogClose>
           <Button
-            disabled={!username.trim() || isPending}
+            disabled={!isValidUsername || isPending}
             size="sm"
             onClick={handleSubmit}
           >

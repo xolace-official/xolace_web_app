@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import { GlimpseVideo } from "@/app/(protected)/(health-space)/glimpse/[videoId]/glimpse-video";
-import { HealthTipsDetailsPage } from "@/app/(protected)/(health-space)/health-tips/[slug]/details-page";
 
 export const metadata: Metadata = {
   title: "Glimpse",

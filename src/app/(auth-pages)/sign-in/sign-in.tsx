@@ -1,11 +1,15 @@
 "use client";
 
+import { zodResolver } from "@hookform/resolvers/zod";
 import { IconMail } from "@tabler/icons-react";
+import { useMutation } from "@tanstack/react-query";
 import { motion } from "motion/react";
-import Form from "next/form";
 import Link from "next/link";
-import { useActionState } from "react";
-import { signinFormAction } from "@/actions/auth";
+import { useRouter } from "next/navigation";
+import { useForm } from "react-hook-form";
+import { toast } from "sonner";
+import type { z } from "zod";
+import { signInAction } from "@/actions/auth";
 import { FormInput } from "@/components/shared/auth/form-input";
 import { ResponsiveInfoTrigger } from "@/components/shared/responsive-info-trigger";
 import { Button } from "@/components/ui/button";
@@ -20,20 +24,46 @@ import {
 import { FieldGroup } from "@/components/ui/field";
 import { Separators } from "@/components/ui/separators";
 import { AuthHeader } from "@/features/auth/auth-form-wrapper";
-import type { SigninFormState } from "@/validation";
+import { signinSchema } from "@/validation";
+
+type SignInFormValues = z.infer<typeof signinSchema>;
 
 export default function SignInPage() {
-  const [formState, formAction] = useActionState<SigninFormState, FormData>(
-    signinFormAction,
-    {
-      values: {
-        email: "",
-        password: "",
-      },
-      errors: null,
-      success: false,
+  const router = useRouter();
+
+  const {
+    register,
+    handleSubmit,
+    setError,
+    formState: { errors, isValid },
+  } = useForm<SignInFormValues>({
+    resolver: zodResolver(signinSchema),
+    mode: "onChange",
+    defaultValues: {
+      email: "",
+      password: "",
     },
-  );
+  });
+
+  const signInMutation = useMutation({
+    mutationFn: async (data: SignInFormValues) => {
+      const res = await signInAction(data);
+
+      if (!res.success) {
+        throw new Error(res.message);
+      }
+
+      return res;
+    },
+    onSuccess: () => {
+      toast.success("Welcome back!");
+      router.push("/feed");
+    },
+    onError: (error) => {
+      setError("root", { message: error.message });
+      toast.error(error.message);
+    },
+  });
 
   return (
     <motion.div
@@ -53,34 +83,39 @@ export default function SignInPage() {
           </CardDescription>
         </CardHeader>
         <CardContent className="max-sm:px-3">
-          <Form action={formAction} id="signin-form">
+          <form
+            id="signin-form"
+            onSubmit={handleSubmit((values: SignInFormValues) =>
+              signInMutation.mutate(values),
+            )}
+          >
             <FieldGroup>
-              {/* Email Field with Icon */}
+              {/* Email Field */}
               <FormInput
+                {...register("email")}
                 id="email"
-                name="email"
-                defaultValue={formState.values?.email}
                 type="email"
                 label="Email"
                 placeholder="you@example.com"
                 required
+                disabled={signInMutation.isPending}
                 leftAddon={
                   <IconMail className="size-4 text-muted-foreground" />
                 }
-                error={formState.errors?.email}
+                error={errors.email?.message}
               />
 
-              {/* Password Field with Toggle and Info Icon */}
+              {/* Password Field */}
               <FormInput
+                {...register("password")}
                 id="password"
-                name="password"
-                defaultValue={formState.values?.password}
                 type="password"
                 label="Password"
                 placeholder="Enter your password"
                 required
                 enablePasswordToggle
                 showForgotPasswordLink
+                disabled={signInMutation.isPending}
                 leftAddon={
                   <ResponsiveInfoTrigger
                     content={
@@ -91,14 +126,26 @@ export default function SignInPage() {
                     }
                   />
                 }
-                error={formState.errors?.password}
+                error={errors.password?.message}
               />
             </FieldGroup>
-          </Form>
+
+            {/* Server error */}
+            {errors.root?.message && (
+              <p className="mt-3 text-sm font-medium text-destructive">
+                {errors.root.message}
+              </p>
+            )}
+          </form>
         </CardContent>
         <CardFooter className="flex flex-col gap-3 max-sm:px-3">
-          <Button type="submit" form="signin-form" className="w-full">
-            Sign In
+          <Button
+            type="submit"
+            form="signin-form"
+            className="w-full"
+            disabled={!isValid || signInMutation.isPending}
+          >
+            {signInMutation.isPending ? "Signing in..." : "Sign In"}
           </Button>
 
           <Separators
@@ -110,7 +157,7 @@ export default function SignInPage() {
             gradient
           />
 
-          <Button variant="outline" form="signin-form" className="w-full">
+          <Button variant="outline" className="w-full">
             Sign In Anonymously
           </Button>
 

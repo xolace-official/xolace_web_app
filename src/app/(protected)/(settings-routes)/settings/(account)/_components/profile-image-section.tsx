@@ -1,23 +1,21 @@
 "use client";
 
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
-  MascotPicker,
   MASCOT_OPTIONS,
+  MascotPicker,
 } from "@/components/shared/settings/mascot-picker";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { useProfileMutations } from "@/features/user/hooks/use-profile-mutations";
+import { useAppStore } from "@/providers/app-store-provider";
 
-// TODO: Replace with actual default profile image
 const DEFAULT_PROFILE_IMAGE = "/mascots/default.png";
 
 export function ProfileImageSection() {
-  // TODO: Get profile data from your auth/user context or store
-  // const { profile } = useUserStore();
-  // TODO: Add mutation hook for updating profile
-  // const { updateProfileMutation } = useProfileMutations();
+  const profile = useAppStore((s) => s.profile);
+  const { mutate } = useProfileMutations();
 
-  // Placeholder values - replace with actual state
-  const profileImage: string | null = null;
-  const username = "User";
+  const profileImage = profile.avatar_url ?? null;
+  const username = profile.username ?? "User";
 
   const selectedMascot = profileImage
     ? MASCOT_OPTIONS.find((m) => m.id === profileImage)
@@ -25,9 +23,7 @@ export function ProfileImageSection() {
   const displayImage = selectedMascot?.src ?? DEFAULT_PROFILE_IMAGE;
 
   const handleValueChange = (value: string | null) => {
-    // TODO: Call mutation to update profile image
-    // updateProfileMutation.mutate({ profile_image: value });
-    console.log("Update profile image:", value);
+    mutate({ avatar_url: value });
   };
 
   return (

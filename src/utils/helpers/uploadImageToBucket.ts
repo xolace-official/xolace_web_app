@@ -51,7 +51,7 @@ export const uploadImageToBucket = async ({
 
   // Sanitize: strip path separators, control chars, unsafe punctuation; replace spaces with underscores
   const safeFileName = rawName
-    .replace(/[\/\\]/g, "")
+    .replace(/[/\\]/g, "")
     // biome-ignore lint/suspicious/noControlCharactersInRegex: safe regex
     .replace(/[\u0000-\u001f\u007f]/g, "")
     .replace(/[<>:"|?*]/g, "")

@@ -6,7 +6,7 @@ import {
   HandHelping,
   HeartPulse,
   LibraryBig,
-  LucideIcon,
+  type LucideIcon,
   Mailbox,
   MessageSquareDiff,
   Plus,
