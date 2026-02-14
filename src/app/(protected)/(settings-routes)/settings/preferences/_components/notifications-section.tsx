@@ -4,7 +4,10 @@ import { SettingsPanel, SettingsPanelSection } from "@/components/settings";
 import { Checkbox } from "@/components/ui/checkbox";
 import { usePreferenceMutations } from "@/features/user/hooks/use-preference-mutations";
 import { useAppStore } from "@/providers/app-store-provider";
-import type { PreferenceToggleOption } from "./preference-types";
+import type {
+  PreferenceBooleanKey,
+  PreferenceToggleOption,
+} from "./preference-types";
 
 const notificationOptions: PreferenceToggleOption[] = [
   {
@@ -23,7 +26,7 @@ export function NotificationsSection() {
   const preferences = useAppStore((s) => s.preferences);
   const { mutate, isPending } = usePreferenceMutations();
 
-  const handleToggle = (key: string, value: boolean) => {
+  const handleToggle = (key: PreferenceBooleanKey, value: boolean) => {
     mutate({ [key]: value });
   };
 
@@ -36,9 +39,7 @@ export function NotificationsSection() {
           description={option.description}
         >
           <Checkbox
-            checked={
-              preferences[option.key as keyof typeof preferences] as boolean
-            }
+            checked={!!preferences[option.key]}
             onCheckedChange={(checked) => handleToggle(option.key, !!checked)}
             disabled={isPending}
           />

@@ -5,8 +5,8 @@ import {
   type ForgotPasswordFormState,
   forgotPasswordSchema,
   type SignInActionResult,
-  type SignUpActionResult,
   signinSchema,
+  type SignUpActionResult,
   signupSchema,
 } from "@/validation";
 import { type ContactFormState, contactSchema } from "@/validation/landing";
@@ -32,7 +32,7 @@ export async function signInAction(data: {
   });
 
   if (error) {
-    return { success: false, message: error.message };
+    return { success: false, message: "Invalid email or password." };
   }
 
   return { success: true, message: "Signed in successfully." };
@@ -80,7 +80,10 @@ export async function signUpAction(data: {
         message: "An account with this email already exists.",
       };
     }
-    return { success: false, message: error.message };
+    return {
+      success: false,
+      message: "An error occurred during sign-up. Please try again.",
+    };
   }
 
   return {

@@ -25,8 +25,14 @@ export function UsernameSection() {
   const [open, setOpen] = useState(false);
   const [username, setUsername] = useState(currentUsername);
 
+  const usernameRegex = /^[a-zA-Z0-9_-]+$/;
+  const isValidUsername =
+    username.length >= 3 &&
+    username.length <= 30 &&
+    usernameRegex.test(username);
+
   const handleSubmit = () => {
-    if (!username.trim()) return;
+    if (!isValidUsername) return;
     mutate({ username });
     setOpen(false);
   };
@@ -53,8 +59,17 @@ export function UsernameSection() {
             placeholder={currentUsername || "What would you like to be called?"}
             onChange={(e) => setUsername(e.target.value)}
             disabled={isPending}
-            maxLength={32}
+            maxLength={30}
           />
+          {username.length > 0 && !isValidUsername && (
+            <p className="mt-2 text-xs text-destructive">
+              {username.length < 3
+                ? "Username must be at least 3 characters."
+                : username.length > 30
+                  ? "Username must be at most 30 characters."
+                  : "Only letters, numbers, underscores, and hyphens allowed."}
+            </p>
+          )}
         </div>
 
         <DialogFooter>
@@ -64,7 +79,7 @@ export function UsernameSection() {
             </Button>
           </DialogClose>
           <Button
-            disabled={!username.trim() || isPending}
+            disabled={!isValidUsername || isPending}
             size="sm"
             onClick={handleSubmit}
           >
