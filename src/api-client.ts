@@ -43,6 +43,17 @@ export type PostApiV1PublicSignin401 = {
   detail?: string;
 };
 
+export type GetApiV1PublicUsernameCheckParams = {
+  /**
+   * @minLength 3
+   */
+  username: string;
+};
+
+export type GetApiV1PublicUsernameCheck200 = {
+  available: boolean;
+};
+
 export type GetApiV1AuthProfileMe200AccountState =
   (typeof GetApiV1AuthProfileMe200AccountState)[keyof typeof GetApiV1AuthProfileMe200AccountState];
 
@@ -2139,6 +2150,382 @@ export const usePostApiV1PublicSignin = <
 
   return useMutation(mutationOptions, queryClient);
 };
+
+/**
+ * Check if a username is already taken.
+ * @summary Check username availability
+ */
+export type getApiV1PublicUsernameCheckResponse200 = {
+  data: GetApiV1PublicUsernameCheck200;
+  status: 200;
+};
+
+export type getApiV1PublicUsernameCheckResponseSuccess =
+  getApiV1PublicUsernameCheckResponse200 & {
+    headers: Headers;
+  };
+
+export type getApiV1PublicUsernameCheckResponse =
+  getApiV1PublicUsernameCheckResponseSuccess;
+
+export const getGetApiV1PublicUsernameCheckUrl = (
+  params: GetApiV1PublicUsernameCheckParams,
+) => {
+  const normalizedParams = new URLSearchParams();
+
+  Object.entries(params || {}).forEach(([key, value]) => {
+    if (value !== undefined) {
+      normalizedParams.append(key, value === null ? "null" : value.toString());
+    }
+  });
+
+  const stringifiedParams = normalizedParams.toString();
+
+  return stringifiedParams.length > 0
+    ? `/api/v1/public/username-check?${stringifiedParams}`
+    : `/api/v1/public/username-check`;
+};
+
+export const getApiV1PublicUsernameCheck = async (
+  params: GetApiV1PublicUsernameCheckParams,
+  options?: RequestInit,
+): Promise<getApiV1PublicUsernameCheckResponse> => {
+  const res = await fetch(getGetApiV1PublicUsernameCheckUrl(params), {
+    ...options,
+    method: "GET",
+  });
+
+  const body = [204, 205, 304].includes(res.status) ? null : await res.text();
+
+  const data: getApiV1PublicUsernameCheckResponse["data"] = body
+    ? JSON.parse(body)
+    : {};
+  return {
+    data,
+    status: res.status,
+    headers: res.headers,
+  } as getApiV1PublicUsernameCheckResponse;
+};
+
+export const getGetApiV1PublicUsernameCheckInfiniteQueryKey = (
+  params?: GetApiV1PublicUsernameCheckParams,
+) => {
+  return [
+    "infinite",
+    `/api/v1/public/username-check`,
+    ...(params ? [params] : []),
+  ] as const;
+};
+
+export const getGetApiV1PublicUsernameCheckQueryKey = (
+  params?: GetApiV1PublicUsernameCheckParams,
+) => {
+  return [
+    `/api/v1/public/username-check`,
+    ...(params ? [params] : []),
+  ] as const;
+};
+
+export const getGetApiV1PublicUsernameCheckInfiniteQueryOptions = <
+  TData = InfiniteData<Awaited<ReturnType<typeof getApiV1PublicUsernameCheck>>>,
+  TError = unknown,
+>(
+  params: GetApiV1PublicUsernameCheckParams,
+  options?: {
+    query?: Partial<
+      UseInfiniteQueryOptions<
+        Awaited<ReturnType<typeof getApiV1PublicUsernameCheck>>,
+        TError,
+        TData
+      >
+    >;
+    fetch?: RequestInit;
+  },
+) => {
+  const { query: queryOptions, fetch: fetchOptions } = options ?? {};
+
+  const queryKey =
+    queryOptions?.queryKey ??
+    getGetApiV1PublicUsernameCheckInfiniteQueryKey(params);
+
+  const queryFn: QueryFunction<
+    Awaited<ReturnType<typeof getApiV1PublicUsernameCheck>>
+  > = ({ signal }) =>
+    getApiV1PublicUsernameCheck(params, { signal, ...fetchOptions });
+
+  return { queryKey, queryFn, ...queryOptions } as UseInfiniteQueryOptions<
+    Awaited<ReturnType<typeof getApiV1PublicUsernameCheck>>,
+    TError,
+    TData
+  > & { queryKey: DataTag<QueryKey, TData, TError> };
+};
+
+export type GetApiV1PublicUsernameCheckInfiniteQueryResult = NonNullable<
+  Awaited<ReturnType<typeof getApiV1PublicUsernameCheck>>
+>;
+export type GetApiV1PublicUsernameCheckInfiniteQueryError = unknown;
+
+export function useGetApiV1PublicUsernameCheckInfinite<
+  TData = InfiniteData<Awaited<ReturnType<typeof getApiV1PublicUsernameCheck>>>,
+  TError = unknown,
+>(
+  params: GetApiV1PublicUsernameCheckParams,
+  options: {
+    query: Partial<
+      UseInfiniteQueryOptions<
+        Awaited<ReturnType<typeof getApiV1PublicUsernameCheck>>,
+        TError,
+        TData
+      >
+    > &
+      Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getApiV1PublicUsernameCheck>>,
+          TError,
+          Awaited<ReturnType<typeof getApiV1PublicUsernameCheck>>
+        >,
+        "initialData"
+      >;
+    fetch?: RequestInit;
+  },
+  queryClient?: QueryClient,
+): DefinedUseInfiniteQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>;
+};
+export function useGetApiV1PublicUsernameCheckInfinite<
+  TData = InfiniteData<Awaited<ReturnType<typeof getApiV1PublicUsernameCheck>>>,
+  TError = unknown,
+>(
+  params: GetApiV1PublicUsernameCheckParams,
+  options?: {
+    query?: Partial<
+      UseInfiniteQueryOptions<
+        Awaited<ReturnType<typeof getApiV1PublicUsernameCheck>>,
+        TError,
+        TData
+      >
+    > &
+      Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getApiV1PublicUsernameCheck>>,
+          TError,
+          Awaited<ReturnType<typeof getApiV1PublicUsernameCheck>>
+        >,
+        "initialData"
+      >;
+    fetch?: RequestInit;
+  },
+  queryClient?: QueryClient,
+): UseInfiniteQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>;
+};
+export function useGetApiV1PublicUsernameCheckInfinite<
+  TData = InfiniteData<Awaited<ReturnType<typeof getApiV1PublicUsernameCheck>>>,
+  TError = unknown,
+>(
+  params: GetApiV1PublicUsernameCheckParams,
+  options?: {
+    query?: Partial<
+      UseInfiniteQueryOptions<
+        Awaited<ReturnType<typeof getApiV1PublicUsernameCheck>>,
+        TError,
+        TData
+      >
+    >;
+    fetch?: RequestInit;
+  },
+  queryClient?: QueryClient,
+): UseInfiniteQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>;
+};
+/**
+ * @summary Check username availability
+ */
+
+export function useGetApiV1PublicUsernameCheckInfinite<
+  TData = InfiniteData<Awaited<ReturnType<typeof getApiV1PublicUsernameCheck>>>,
+  TError = unknown,
+>(
+  params: GetApiV1PublicUsernameCheckParams,
+  options?: {
+    query?: Partial<
+      UseInfiniteQueryOptions<
+        Awaited<ReturnType<typeof getApiV1PublicUsernameCheck>>,
+        TError,
+        TData
+      >
+    >;
+    fetch?: RequestInit;
+  },
+  queryClient?: QueryClient,
+): UseInfiniteQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>;
+} {
+  const queryOptions = getGetApiV1PublicUsernameCheckInfiniteQueryOptions(
+    params,
+    options,
+  );
+
+  const query = useInfiniteQuery(
+    queryOptions,
+    queryClient,
+  ) as UseInfiniteQueryResult<TData, TError> & {
+    queryKey: DataTag<QueryKey, TData, TError>;
+  };
+
+  query.queryKey = queryOptions.queryKey;
+
+  return query;
+}
+
+export const getGetApiV1PublicUsernameCheckQueryOptions = <
+  TData = Awaited<ReturnType<typeof getApiV1PublicUsernameCheck>>,
+  TError = unknown,
+>(
+  params: GetApiV1PublicUsernameCheckParams,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof getApiV1PublicUsernameCheck>>,
+        TError,
+        TData
+      >
+    >;
+    fetch?: RequestInit;
+  },
+) => {
+  const { query: queryOptions, fetch: fetchOptions } = options ?? {};
+
+  const queryKey =
+    queryOptions?.queryKey ?? getGetApiV1PublicUsernameCheckQueryKey(params);
+
+  const queryFn: QueryFunction<
+    Awaited<ReturnType<typeof getApiV1PublicUsernameCheck>>
+  > = ({ signal }) =>
+    getApiV1PublicUsernameCheck(params, { signal, ...fetchOptions });
+
+  return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
+    Awaited<ReturnType<typeof getApiV1PublicUsernameCheck>>,
+    TError,
+    TData
+  > & { queryKey: DataTag<QueryKey, TData, TError> };
+};
+
+export type GetApiV1PublicUsernameCheckQueryResult = NonNullable<
+  Awaited<ReturnType<typeof getApiV1PublicUsernameCheck>>
+>;
+export type GetApiV1PublicUsernameCheckQueryError = unknown;
+
+export function useGetApiV1PublicUsernameCheck<
+  TData = Awaited<ReturnType<typeof getApiV1PublicUsernameCheck>>,
+  TError = unknown,
+>(
+  params: GetApiV1PublicUsernameCheckParams,
+  options: {
+    query: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof getApiV1PublicUsernameCheck>>,
+        TError,
+        TData
+      >
+    > &
+      Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getApiV1PublicUsernameCheck>>,
+          TError,
+          Awaited<ReturnType<typeof getApiV1PublicUsernameCheck>>
+        >,
+        "initialData"
+      >;
+    fetch?: RequestInit;
+  },
+  queryClient?: QueryClient,
+): DefinedUseQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>;
+};
+export function useGetApiV1PublicUsernameCheck<
+  TData = Awaited<ReturnType<typeof getApiV1PublicUsernameCheck>>,
+  TError = unknown,
+>(
+  params: GetApiV1PublicUsernameCheckParams,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof getApiV1PublicUsernameCheck>>,
+        TError,
+        TData
+      >
+    > &
+      Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getApiV1PublicUsernameCheck>>,
+          TError,
+          Awaited<ReturnType<typeof getApiV1PublicUsernameCheck>>
+        >,
+        "initialData"
+      >;
+    fetch?: RequestInit;
+  },
+  queryClient?: QueryClient,
+): UseQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>;
+};
+export function useGetApiV1PublicUsernameCheck<
+  TData = Awaited<ReturnType<typeof getApiV1PublicUsernameCheck>>,
+  TError = unknown,
+>(
+  params: GetApiV1PublicUsernameCheckParams,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof getApiV1PublicUsernameCheck>>,
+        TError,
+        TData
+      >
+    >;
+    fetch?: RequestInit;
+  },
+  queryClient?: QueryClient,
+): UseQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>;
+};
+/**
+ * @summary Check username availability
+ */
+
+export function useGetApiV1PublicUsernameCheck<
+  TData = Awaited<ReturnType<typeof getApiV1PublicUsernameCheck>>,
+  TError = unknown,
+>(
+  params: GetApiV1PublicUsernameCheckParams,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof getApiV1PublicUsernameCheck>>,
+        TError,
+        TData
+      >
+    >;
+    fetch?: RequestInit;
+  },
+  queryClient?: QueryClient,
+): UseQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>;
+} {
+  const queryOptions = getGetApiV1PublicUsernameCheckQueryOptions(
+    params,
+    options,
+  );
+
+  const query = useQuery(queryOptions, queryClient) as UseQueryResult<
+    TData,
+    TError
+  > & { queryKey: DataTag<QueryKey, TData, TError> };
+
+  query.queryKey = queryOptions.queryKey;
+
+  return query;
+}
 
 /**
  * Get user's own profile both public and private

@@ -1,15 +1,21 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
-import { IconMail, IconUser } from "@tabler/icons-react";
-import { useMutation } from "@tanstack/react-query";
+import { IconCheck, IconMail, IconUser, IconX } from "@tabler/icons-react";
+import { useMutation, useQuery } from "@tanstack/react-query";
+import { Loader2 } from "lucide-react";
 import { motion } from "motion/react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { useEffect } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { toast } from "sonner";
 import type { z } from "zod";
 import { signUpAction } from "@/actions/auth";
+import {
+  getApiV1PublicUsernameCheck,
+  getGetApiV1PublicUsernameCheckQueryKey,
+} from "@/api-client";
 import { Checkbox } from "@/components/molecule-ui/checkbox";
 import { FormInput } from "@/components/shared/auth/form-input";
 import { ResponsiveInfoTrigger } from "@/components/shared/responsive-info-trigger";
@@ -30,6 +36,7 @@ import {
   FieldSet,
 } from "@/components/ui/field";
 import { AuthHeader } from "@/features/auth/auth-form-wrapper";
+import { useDebounceValue } from "@/hooks/use-debounce-value";
 import { signupSchema } from "@/validation";
 
 type SignUpFormValues = z.infer<typeof signupSchema>;
@@ -41,6 +48,8 @@ export default function SignUpPage() {
     register,
     handleSubmit,
     setError,
+    clearErrors,
+    watch,
     control,
     formState: { errors, isValid },
   } = useForm<SignUpFormValues>({
@@ -53,6 +62,46 @@ export default function SignUpPage() {
       terms: false as unknown as true,
     },
   });
+
+  // Real-time username availability check
+  const watchedUsername = watch("username");
+  const [debouncedUsername] = useDebounceValue(watchedUsername, 500);
+
+  const usernameRegex = /^[a-zA-Z0-9_-]+$/;
+  const shouldCheckUsername =
+    debouncedUsername.length >= 3 && usernameRegex.test(debouncedUsername);
+
+  const usernameCheckQuery = useQuery({
+    queryKey: getGetApiV1PublicUsernameCheckQueryKey({
+      username: debouncedUsername,
+    }),
+    queryFn: () => getApiV1PublicUsernameCheck({ username: debouncedUsername }),
+    enabled: shouldCheckUsername,
+    retry: false,
+  });
+
+  const usernameStatus = !shouldCheckUsername
+    ? "idle"
+    : usernameCheckQuery.isFetching
+      ? "checking"
+      : usernameCheckQuery.data?.data.available
+        ? "available"
+        : "taken";
+
+  // Sync availability result with form errors
+  useEffect(() => {
+    if (usernameStatus === "taken") {
+      setError("username", {
+        type: "manual",
+        message: "Username is already taken.",
+      });
+    } else if (
+      usernameStatus === "available" &&
+      errors.username?.type === "manual"
+    ) {
+      clearErrors("username");
+    }
+  }, [usernameStatus, setError, clearErrors, errors.username?.type]);
 
   const signUpMutation = useMutation({
     mutationFn: async (data: SignUpFormValues) => {
@@ -122,11 +171,19 @@ export default function SignUpPage() {
                     <IconUser className="size-4 text-muted-foreground" />
                   }
                   rightAddon={
-                    <ResponsiveInfoTrigger
-                      content={
-                        <p>Definitely not the name your mommy gave you 🙂‍↕️</p>
-                      }
-                    />
+                    usernameStatus === "checking" ? (
+                      <Loader2 className="size-4 animate-spin text-muted-foreground" />
+                    ) : usernameStatus === "available" ? (
+                      <IconCheck className="size-4 text-green-500" />
+                    ) : usernameStatus === "taken" ? (
+                      <IconX className="size-4 text-destructive" />
+                    ) : (
+                      <ResponsiveInfoTrigger
+                        content={
+                          <p>Definitely not the name your mommy gave you 🙂‍↕️</p>
+                        }
+                      />
+                    )
                   }
                   error={errors.username?.message}
                 />
@@ -216,7 +273,12 @@ export default function SignUpPage() {
             type="submit"
             form="signup-form"
             className="w-full"
-            disabled={!isValid || signUpMutation.isPending}
+            disabled={
+              !isValid ||
+              signUpMutation.isPending ||
+              usernameStatus === "checking" ||
+              usernameStatus === "taken"
+            }
           >
             {signUpMutation.isPending ? "Creating account..." : "Sign Up"}
           </Button>
