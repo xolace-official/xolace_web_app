@@ -13,34 +13,21 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
+import { useProfileMutations } from "@/features/user/hooks/use-profile-mutations";
+import { useAppStore } from "@/providers/app-store-provider";
 
 export function UsernameSection() {
-  // TODO: Get profile data from your auth/user context or store
-  // const { profile } = useUserStore();
-  // TODO: Add mutation hook for updating profile
-  // const { updateProfileMutation } = useProfileMutations();
+  const profile = useAppStore((s) => s.profile);
+  const { mutate, isPending } = useProfileMutations();
 
-  // Placeholder values - replace with actual state
-  const currentUsername = "";
-  const isPending = false;
+  const currentUsername = profile.username ?? "";
 
   const [open, setOpen] = useState(false);
   const [username, setUsername] = useState(currentUsername);
 
   const handleSubmit = () => {
     if (!username.trim()) return;
-
-    // TODO: Call mutation to update username
-    // updateProfileMutation.mutate(
-    //   { username },
-    //   {
-    //     onSuccess: () => {
-    //       toast.success("Username updated");
-    //       setOpen(false);
-    //     },
-    //   }
-    // );
-    console.log("Update username:", username);
+    mutate({ username });
     setOpen(false);
   };
 

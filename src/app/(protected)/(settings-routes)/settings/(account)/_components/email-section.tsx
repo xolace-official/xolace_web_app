@@ -13,21 +13,12 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
+import { useAppStore } from "@/providers/app-store-provider";
 
 export function EmailSection() {
-  // TODO: Get session/user data from your auth context or store
-  // const { session } = useUserStore();
-  // TODO: Add mutation hook for updating email
-  // const updateEmailMutation = useMutation({
-  //   mutationFn: updateUserEmailAction,
-  //   onSuccess: () => {
-  //     toast.success("Email updated");
-  //     setOpen(false);
-  //   },
-  // });
+  const session = useAppStore((s) => s.session);
 
-  // Placeholder values - replace with actual state
-  const currentEmail = "";
+  const currentEmail = session.user.email ?? "";
   const isPending = false;
 
   const [open, setOpen] = useState(false);
@@ -36,8 +27,8 @@ export function EmailSection() {
   const handleSubmit = () => {
     if (!email.trim()) return;
 
-    // TODO: Call mutation to update email
-    // updateEmailMutation.mutate({ email });
+    // TODO: Email updates go through Supabase Auth, not profile API
+    // This will need a dedicated server action (e.g. updateUserEmailAction)
     console.log("Update email:", email);
     setOpen(false);
   };

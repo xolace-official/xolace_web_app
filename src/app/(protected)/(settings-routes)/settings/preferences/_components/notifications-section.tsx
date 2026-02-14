@@ -1,7 +1,9 @@
 "use client";
 
-import { Checkbox } from "@/components/ui/checkbox";
 import { SettingsPanel, SettingsPanelSection } from "@/components/settings";
+import { Checkbox } from "@/components/ui/checkbox";
+import { usePreferenceMutations } from "@/features/user/hooks/use-preference-mutations";
+import { useAppStore } from "@/providers/app-store-provider";
 import type { PreferenceToggleOption } from "./preference-types";
 
 const notificationOptions: PreferenceToggleOption[] = [
@@ -18,20 +20,11 @@ const notificationOptions: PreferenceToggleOption[] = [
 ];
 
 export function NotificationsSection() {
-  // TODO: Get preferences from your preferences store
-  // const { preferences, updatePreference, isLoading } = usePreferencesStore();
-
-  // Placeholder values - replace with actual state
-  const preferences = {
-    notifications_enabled: true,
-    push_enabled: true,
-  };
-  const isLoading = false;
+  const preferences = useAppStore((s) => s.preferences);
+  const { mutate, isPending } = usePreferenceMutations();
 
   const handleToggle = (key: string, value: boolean) => {
-    // TODO: Call mutation to update preference
-    // updatePreference(key, value);
-    console.log(`Update ${key}:`, value);
+    mutate({ [key]: value });
   };
 
   return (
@@ -43,9 +36,11 @@ export function NotificationsSection() {
           description={option.description}
         >
           <Checkbox
-            checked={preferences[option.key as keyof typeof preferences]}
+            checked={
+              preferences[option.key as keyof typeof preferences] as boolean
+            }
             onCheckedChange={(checked) => handleToggle(option.key, !!checked)}
-            disabled={isLoading}
+            disabled={isPending}
           />
         </SettingsPanelSection>
       ))}

@@ -7,7 +7,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { Card } from "@/components/ui/card";
 import { ArrowDown, ArrowUp, Plus, Trash2 } from "lucide-react";
-import { CampfireRule } from "@/validation/create-campfire";
+import type { CampfireRule } from "@/validation/create-campfire";
 
 type Props = {
   rules?: CampfireRule[];

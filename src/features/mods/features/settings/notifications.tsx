@@ -1,8 +1,8 @@
 "use client";
 
-import React, { useState } from "react";
+import { useState } from "react";
 import SettingsItem, {
-  SettingsItemProps,
+  type SettingsItemProps,
 } from "@/features/mods/features/settings/settings-items";
 
 const SettingsNotification = () => {
@@ -84,7 +84,7 @@ const SettingsNotification = () => {
     <div className="w-full flex items-start flex-col gap-6">
       {settingsItems.map((item, index) => (
         <SettingsItem
-          key={index}
+          key={`${item.label}-${index}`}
           {...item}
           isOpen={openIndex === index}
           onClick={() => setOpenIndex(openIndex === index ? null : index)}

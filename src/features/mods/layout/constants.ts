@@ -1,5 +1,5 @@
 import { Users, Settings, Book } from "lucide-react";
-import { ComponentType } from "react";
+import type { ComponentType } from "react";
 
 export interface ModsSidebarLink {
   icon: ComponentType<{ className?: string; strokeWidth?: number }>;

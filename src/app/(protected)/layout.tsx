@@ -1,30 +1,31 @@
 import Head from "next/head";
+import { redirect } from "next/navigation";
 import { Suspense } from "react";
 import { AppSidebar } from "@/components/app/app-sidebar";
 import { MainContainer } from "@/components/app/main-container";
 import { SidebarProvider } from "@/components/ui/sidebar";
 import { QueryProvider } from "@/providers/query-provider";
+import { AppStoreProvider } from "@/providers/app-store-provider";
 import {
   SaveToCollectionProvider,
   SaveToCollectionDrawer,
 } from "@/features/collections";
+import { createClient } from "@/lib/supabase/server";
 
-/**
- * Renders the protected application layout including providers, sidebar, and collection UI.
- *
- * Wraps `children` with query and collection context providers, supplies a sidebar context,
- * injects Google Fonts into the document head, and composes the AppSidebar, MainContainer,
- * and SaveToCollectionDrawer into a single layout.
- *
- * @param children - Content to render inside the main container of the protected layout
- * @returns The composed layout element that contains the sidebar, main content, and collection drawer
- */
 export default async function ProtectedLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  // const defaultOpen = cookieStore.get("sidebar_state")?.value === "true";
+  const supabase = await createClient();
+  const {
+    data: { session },
+  } = await supabase.auth.getSession();
+
+  if (!session) {
+    return redirect("/auth/login");
+  }
+
   return (
     <Suspense>
       <Head>
@@ -40,21 +41,23 @@ export default async function ProtectedLayout({
         />
       </Head>
       <QueryProvider>
-        <SaveToCollectionProvider>
-          <div className="bg-background tracking-normal">
-            <SidebarProvider
-              style={
-                {
-                  "--sidebar-width": "calc(var(--spacing) * 72)",
-                } as React.CSSProperties
-              }
-            >
-              <AppSidebar />
-              <MainContainer>{children}</MainContainer>
-            </SidebarProvider>
-          </div>
-          <SaveToCollectionDrawer />
-        </SaveToCollectionProvider>
+        <AppStoreProvider initialState={{ session }}>
+          <SaveToCollectionProvider>
+            <div className="bg-background tracking-normal">
+              <SidebarProvider
+                style={
+                  {
+                    "--sidebar-width": "calc(var(--spacing) * 72)",
+                  } as React.CSSProperties
+                }
+              >
+                <AppSidebar />
+                <MainContainer>{children}</MainContainer>
+              </SidebarProvider>
+            </div>
+            <SaveToCollectionDrawer />
+          </SaveToCollectionProvider>
+        </AppStoreProvider>
       </QueryProvider>
     </Suspense>
   );
