@@ -12,6 +12,7 @@ export interface AppState {
   preferences: GetApiV1AuthPreferences200;
 
   // Actions
+  updateSession: (session: Session) => void;
   updateProfile: (profile: Partial<GetApiV1AuthProfileMe200>) => void;
   updatePreferences: (prefs: Partial<GetApiV1AuthPreferences200>) => void;
 }
@@ -23,6 +24,9 @@ export const createAppStore = (
 ) => {
   return createStore<AppState>((set) => ({
     ...initialState,
+    updateSession: (session) => {
+      set({ session });
+    },
     updateProfile: (profile) => {
       set((state) => ({ profile: { ...state.profile, ...profile } }));
     },

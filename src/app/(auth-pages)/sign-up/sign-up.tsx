@@ -174,7 +174,7 @@ export default function SignUpPage() {
                     usernameStatus === "checking" ? (
                       <Loader2 className="size-4 animate-spin text-muted-foreground" />
                     ) : usernameStatus === "available" ? (
-                      <IconCheck className="size-4 text-green-500" />
+                      <IconCheck className="size-4 text-success" />
                     ) : usernameStatus === "taken" ? (
                       <IconX className="size-4 text-destructive" />
                     ) : (

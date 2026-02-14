@@ -11,6 +11,7 @@ import {
 } from "react";
 import { useStore as useZustandStore } from "zustand";
 import { useShallow } from "zustand/react/shallow";
+import { RefreshCw } from "lucide-react";
 import {
   type GetApiV1AuthPreferences200,
   type GetApiV1AuthProfileMe200,
@@ -18,6 +19,8 @@ import {
   useGetApiV1AuthProfileMe,
 } from "@/api-client";
 import { PrimaryFullPageLoading } from "@/components/routes/primary-loading";
+import { Button } from "@/components/ui/button";
+import { createBrowserSupabase } from "@/lib/supabase/client";
 import {
   type AppState,
   type AppStore,
@@ -113,8 +116,41 @@ export function AppStoreProvider({
     }
   }, [preferencesData]);
 
+  // Sync Supabase auth state (token refresh) → Zustand
+  useEffect(() => {
+    const supabase = createBrowserSupabase();
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange((_event, session) => {
+      if (session && storeRef.current) {
+        storeRef.current.getState().updateSession(session);
+      }
+    });
+    return () => subscription.unsubscribe();
+  }, []);
+
+  const isRetrying = profileQuery.isRefetching || preferencesQuery.isRefetching;
+
   if (isError) {
-    return <PrimaryFullPageLoading />;
+    return (
+      <div className="size-full min-h-screen flex flex-col items-center justify-center gap-4 px-4">
+        <p className="text-sm text-muted-foreground text-center text-balance">
+          Something went wrong loading your profile. Please try again.
+        </p>
+        <Button
+          variant="outline"
+          size="sm"
+          disabled={isRetrying}
+          onClick={() => {
+            profileQuery.refetch();
+            preferencesQuery.refetch();
+          }}
+        >
+          <RefreshCw className={`size-4 ${isRetrying ? "animate-spin" : ""}`} />
+          {isRetrying ? "Retrying..." : "Try again"}
+        </Button>
+      </div>
+    );
   }
 
   if (isLoading || !storeRef.current) {

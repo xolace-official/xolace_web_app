@@ -50,8 +50,7 @@ export default function StepNavigation({
       <div className="flex items-center justify-center space-x-2">
         {Array.from({ length: totalSteps }).map((_, i) => (
           <div
-            // biome-ignore lint/suspicious/noArrayIndexKey: just for steps
-            key={i}
+            key={`step-indicator-${i + 1}`}
             className={cn(
               "h-2 w-2 rounded-full",
               i + 1 === step ? "bg-accent" : "bg-muted-foreground",

@@ -36,20 +36,8 @@ export const signinSchema = z.object({
   password: z
     .string()
     .min(8, { error: "Password must be at least 8 characters long." })
-    .refine(
-      (value) => {
-        const hasUppercase = /[A-Z]/.test(value);
-        const hasNumber = /[0-9]/.test(value);
-        if (!hasUppercase || !hasNumber) {
-          return false;
-        }
-        return true;
-      },
-      {
-        error:
-          "Password must contain at least one uppercase letter and one number.",
-      },
-    ),
+    .regex(/[A-Z]/, { error: "Must contain at least one uppercase letter." })
+    .regex(/[0-9]/, { error: "Must contain at least one number." }),
 });
 
 export const signupSchema = z.object({
