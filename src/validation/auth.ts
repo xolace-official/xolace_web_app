@@ -15,9 +15,15 @@ export type ForgotPasswordFormState = {
 };
 
 export type SignupFormState = {
-  values?: z.infer<typeof signupSchema>;
+  values?: Omit<z.infer<typeof signupSchema>, "terms">;
   errors: null | Partial<Record<keyof z.infer<typeof signupSchema>, string[]>>;
   success: boolean;
+  message?: string;
+};
+
+export type SignUpActionResult = {
+  success: boolean;
+  message: string;
 };
 
 export const signinSchema = z.object({
@@ -42,27 +48,22 @@ export const signinSchema = z.object({
 });
 
 export const signupSchema = z.object({
-  username: z.string().min(2, {
-    error: "Username must be at least 2 characters.",
-  }),
+  username: z
+    .string()
+    .min(3, { error: "Username must be at least 3 characters." })
+    .max(30, { error: "Username must be at most 30 characters." })
+    .regex(/^[a-zA-Z0-9_-]+$/, {
+      error: "Only letters, numbers, underscores, and hyphens allowed.",
+    }),
   email: z.email(),
   password: z
     .string()
-    .min(8, { error: "Password must be at least 8 characters long." })
-    .refine(
-      (value) => {
-        const hasUppercase = /[A-Z]/.test(value);
-        const hasNumber = /[0-9]/.test(value);
-        if (!hasUppercase || !hasNumber) {
-          return false;
-        }
-        return true;
-      },
-      {
-        error:
-          "Password must contain at least one uppercase letter and one number.",
-      },
-    ),
+    .min(8, { error: "Must be at least 8 characters." })
+    .regex(/[A-Z]/, { error: "Must contain at least one uppercase letter." })
+    .regex(/[0-9]/, { error: "Must contain at least one number." }),
+  terms: z.literal(true, {
+    error: "You must agree to the terms to continue.",
+  }),
 });
 
 export const forgotPasswordSchema = z.object({
