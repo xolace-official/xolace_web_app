@@ -92,6 +92,21 @@ export async function signUpAction(data: {
   };
 }
 
+export async function signInAnonymouslyAction(): Promise<SignInActionResult> {
+  const supabase = await createClient();
+
+  const { error } = await supabase.auth.signInAnonymously();
+
+  if (error) {
+    return {
+      success: false,
+      message: "Could not sign in anonymously. Please try again.",
+    };
+  }
+
+  return { success: true, message: "Signed in anonymously." };
+}
+
 export async function forgotPasswordFormAction(
   _prevState: ForgotPasswordFormState,
   formData: FormData,

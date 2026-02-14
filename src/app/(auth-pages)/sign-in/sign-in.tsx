@@ -23,6 +23,7 @@ import {
 } from "@/components/ui/card";
 import { FieldGroup } from "@/components/ui/field";
 import { Separators } from "@/components/ui/separators";
+import { AnonymousSignIn } from "@/features/auth/anonymous-sign-in";
 import { AuthHeader } from "@/features/auth/auth-form-wrapper";
 import { signinSchema } from "@/validation";
 
@@ -157,9 +158,7 @@ export default function SignInPage() {
             gradient
           />
 
-          <Button variant="outline" className="w-full">
-            Sign In Anonymously
-          </Button>
+          <AnonymousSignIn />
 
           <div className="text-center text-sm text-muted-foreground">
             Don&apos;t have an account?{" "}
