@@ -24,20 +24,28 @@ export function useProfileMutations() {
       });
     },
     onMutate: async ({ data }) => {
-      // Optimistically update Zustand store
+      await queryClient.cancelQueries({
+        queryKey: getGetApiV1AuthProfileMeQueryKey(),
+      });
+      const previousProfile = queryClient.getQueryData(
+        getGetApiV1AuthProfileMeQueryKey(),
+      );
       updateProfile(data);
+      return { previousProfile };
     },
     onSuccess: () => {
       toast.success("Profile updated");
     },
-    onError: (error) => {
+    onError: (error, _variables, context) => {
       toast.error("Failed to update profile", {
         description: error.message,
       });
-      // Re-sync from server
-      queryClient.invalidateQueries({
-        queryKey: getGetApiV1AuthProfileMeQueryKey(),
-      });
+      if (context?.previousProfile) {
+        queryClient.setQueryData(
+          getGetApiV1AuthProfileMeQueryKey(),
+          context.previousProfile,
+        );
+      }
     },
     onSettled: () => {
       queryClient.invalidateQueries({
