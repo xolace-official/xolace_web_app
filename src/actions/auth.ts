@@ -107,6 +107,56 @@ export async function signInAnonymouslyAction(): Promise<SignInActionResult> {
   return { success: true, message: "Signed in anonymously." };
 }
 
+export async function verifyOtpAction(data: {
+  email: string;
+  token: string;
+}): Promise<SignInActionResult> {
+  if (!data.email || !data.token || data.token.length !== 6) {
+    return { success: false, message: "Please enter a valid 6-digit code." };
+  }
+
+  const supabase = await createClient();
+
+  const { error } = await supabase.auth.verifyOtp({
+    email: data.email,
+    token: data.token,
+    type: "signup",
+  });
+
+  if (error) {
+    return {
+      success: false,
+      message: "Invalid or expired code. Please try again.",
+    };
+  }
+
+  return { success: true, message: "Email verified successfully!" };
+}
+
+export async function resendOtpAction(data: {
+  email: string;
+}): Promise<SignInActionResult> {
+  if (!data.email) {
+    return { success: false, message: "Email is required." };
+  }
+
+  const supabase = await createClient();
+
+  const { error } = await supabase.auth.resend({
+    email: data.email,
+    type: "signup",
+  });
+
+  if (error) {
+    return {
+      success: false,
+      message: "Could not resend code. Please try again later.",
+    };
+  }
+
+  return { success: true, message: "A new code has been sent to your email." };
+}
+
 export async function forgotPasswordFormAction(
   _prevState: ForgotPasswordFormState,
   formData: FormData,

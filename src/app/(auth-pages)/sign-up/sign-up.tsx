@@ -117,9 +117,9 @@ export default function SignUpPage() {
 
       return res;
     },
-    onSuccess: (res) => {
+    onSuccess: (res, variables) => {
       toast.success(res.message);
-      router.push("/sign-in");
+      router.push(`/verify-otp?email=${encodeURIComponent(variables.email)}`);
     },
     onError: (error) => {
       setError("root", { message: error.message });
