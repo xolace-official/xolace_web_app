@@ -1,16 +1,16 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
-import { IconMail } from "@tabler/icons-react";
 import { useMutation } from "@tanstack/react-query";
-import { ArrowLeft, MailCheck } from "lucide-react";
+import { CheckCircle2, KeyRound } from "lucide-react";
 import { motion } from "motion/react";
 import Link from "next/link";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import type { z } from "zod";
-import { forgotPasswordAction } from "@/actions/auth";
+import { resetPasswordAction } from "@/actions/auth";
 import { FormInput } from "@/components/shared/auth/form-input";
+import { ResponsiveInfoTrigger } from "@/components/shared/responsive-info-trigger";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -22,27 +22,28 @@ import {
 } from "@/components/ui/card";
 import { FieldGroup } from "@/components/ui/field";
 import { AuthHeader } from "@/features/auth/auth-form-wrapper";
-import { forgotPasswordSchema } from "@/validation";
+import { resetPasswordSchema } from "@/validation";
 
-type ForgotPasswordValues = z.infer<typeof forgotPasswordSchema>;
+type ResetPasswordValues = z.infer<typeof resetPasswordSchema>;
 
-export default function ForgotPasswordPage() {
+export default function ResetPasswordPage() {
   const {
     register,
     handleSubmit,
     setError,
     formState: { errors, isValid },
-  } = useForm<ForgotPasswordValues>({
-    resolver: zodResolver(forgotPasswordSchema),
+  } = useForm<ResetPasswordValues>({
+    resolver: zodResolver(resetPasswordSchema),
     mode: "onChange",
     defaultValues: {
-      email: "",
+      password: "",
+      confirmPassword: "",
     },
   });
 
   const resetMutation = useMutation({
-    mutationFn: async (data: ForgotPasswordValues) => {
-      const res = await forgotPasswordAction(data);
+    mutationFn: async (data: ResetPasswordValues) => {
+      const res = await resetPasswordAction(data);
 
       if (!res.success) {
         throw new Error(res.message);
@@ -59,59 +60,38 @@ export default function ForgotPasswordPage() {
     },
   });
 
-  // Success state — show confirmation message
+  // Success state
   if (resetMutation.isSuccess) {
     return (
       <motion.div
-        key="forgot-password-success"
+        key="reset-password-success"
         initial={{ opacity: 0.2 }}
         animate={{ opacity: 1 }}
         exit={{ opacity: 0.2 }}
         transition={{ duration: 0.4 }}
         className="w-full"
       >
-        <AuthHeader title="Check your inbox" subtitle="Reset link sent" />
+        <AuthHeader title="All set!" subtitle="Password updated" />
         <Card className="w-full md:max-w-md">
           <CardHeader className="max-sm:px-3">
             <div className="flex items-center gap-3">
               <div className="rounded-full bg-muted p-2">
-                <MailCheck className="size-6 text-primary" />
+                <CheckCircle2 className="size-6 text-primary" />
               </div>
               <div>
-                <CardTitle>Email sent</CardTitle>
+                <CardTitle>Password changed</CardTitle>
                 <CardDescription>
-                  If an account exists with that email, you&apos;ll receive a
-                  password reset link shortly.
+                  Your password has been updated successfully. You can now sign
+                  in with your new password.
                 </CardDescription>
               </div>
             </div>
           </CardHeader>
 
-          <CardContent className="max-sm:px-3">
-            <p className="text-sm text-muted-foreground">
-              Didn&apos;t receive the email? Check your spam folder or try again
-              with a different email address.
-            </p>
-          </CardContent>
-
           <CardFooter className="flex flex-col gap-3 max-sm:px-3">
-            <Button
-              variant="outline"
-              className="w-full"
-              onClick={() => resetMutation.reset()}
-            >
-              Try a different email
+            <Button asChild className="w-full">
+              <Link href="/sign-in">Sign In</Link>
             </Button>
-
-            <div className="text-center text-sm text-muted-foreground">
-              <Link
-                href="/sign-in"
-                className="inline-flex items-center gap-1 underline underline-offset-4 hover:text-primary"
-              >
-                <ArrowLeft className="size-3" />
-                Back to Sign In
-              </Link>
-            </div>
           </CardFooter>
         </Card>
       </motion.div>
@@ -120,42 +100,68 @@ export default function ForgotPasswordPage() {
 
   return (
     <motion.div
-      key="forgot-password"
+      key="reset-password"
       initial={{ opacity: 0.2 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0.2 }}
       transition={{ duration: 0.4 }}
       className="w-full"
     >
-      <AuthHeader title="Forgot your password?" subtitle="No worries" />
+      <AuthHeader title="Set a new password" subtitle="Almost done" />
       <Card className="w-full md:max-w-md">
         <CardHeader className="max-sm:px-3">
-          <CardTitle>Reset Password</CardTitle>
-          <CardDescription>
-            Enter your email and we&apos;ll send you a link to reset your
-            password.
-          </CardDescription>
+          <div className="flex items-center gap-3">
+            <div className="rounded-full bg-muted p-2">
+              <KeyRound className="size-6 text-primary" />
+            </div>
+            <div>
+              <CardTitle>Reset Password</CardTitle>
+              <CardDescription>
+                Choose a strong password you haven&apos;t used before.
+              </CardDescription>
+            </div>
+          </div>
         </CardHeader>
         <CardContent className="max-sm:px-3">
           <form
-            id="forgot-password-form"
-            onSubmit={handleSubmit((values: ForgotPasswordValues) =>
+            id="reset-password-form"
+            onSubmit={handleSubmit((values: ResetPasswordValues) =>
               resetMutation.mutate(values),
             )}
           >
             <FieldGroup>
               <FormInput
-                {...register("email")}
-                id="email"
-                type="email"
-                label="Email"
-                placeholder="you@example.com"
+                {...register("password")}
+                id="password"
+                type="password"
+                label="New Password"
+                placeholder="Enter your new password"
                 required
+                enablePasswordToggle
                 disabled={resetMutation.isPending}
                 leftAddon={
-                  <IconMail className="size-4 text-muted-foreground" />
+                  <ResponsiveInfoTrigger
+                    content={
+                      <p>
+                        Password must be at least 8 characters with one
+                        uppercase and one number
+                      </p>
+                    }
+                  />
                 }
-                error={errors.email?.message}
+                error={errors.password?.message}
+              />
+
+              <FormInput
+                {...register("confirmPassword")}
+                id="confirmPassword"
+                type="password"
+                label="Confirm Password"
+                placeholder="Confirm your new password"
+                required
+                enablePasswordToggle
+                disabled={resetMutation.isPending}
+                error={errors.confirmPassword?.message}
               />
             </FieldGroup>
 
@@ -169,11 +175,11 @@ export default function ForgotPasswordPage() {
         <CardFooter className="flex flex-col gap-3 max-sm:px-3">
           <Button
             type="submit"
-            form="forgot-password-form"
+            form="reset-password-form"
             className="w-full"
             disabled={!isValid || resetMutation.isPending}
           >
-            {resetMutation.isPending ? "Sending..." : "Send Reset Link"}
+            {resetMutation.isPending ? "Updating..." : "Update Password"}
           </Button>
 
           <div className="text-center text-sm text-muted-foreground">

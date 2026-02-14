@@ -62,3 +62,17 @@ export const signupSchema = z.object({
 export const forgotPasswordSchema = z.object({
   email: z.email(),
 });
+
+export const resetPasswordSchema = z
+  .object({
+    password: z
+      .string()
+      .min(8, { error: "Must be at least 8 characters." })
+      .regex(/[A-Z]/, { error: "Must contain at least one uppercase letter." })
+      .regex(/[0-9]/, { error: "Must contain at least one number." }),
+    confirmPassword: z.string(),
+  })
+  .refine((data) => data.password === data.confirmPassword, {
+    message: "Passwords do not match.",
+    path: ["confirmPassword"],
+  });
