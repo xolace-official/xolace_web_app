@@ -20,6 +20,12 @@ export const getPreferences: AppRouteHandler<GetPreferencesRoute> = async (
       .single();
 
     if (error) {
+      if (error.code === "PGRST116") {
+        return c.json(
+          { message: HttpStatusPhrases.NOT_FOUND },
+          HttpStatusCodes.NOT_FOUND,
+        );
+      }
       throw new Error(error.message);
     }
 

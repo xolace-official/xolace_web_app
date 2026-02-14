@@ -33,6 +33,10 @@ export const getPreferences = createRoute({
       unauthorizedErrorSchema,
       "Authentication required",
     ),
+    [HttpStatusCodes.NOT_FOUND]: jsonContent(
+      createMessageObjectSchema(HttpStatusPhrases.NOT_FOUND),
+      "The user has no preferences",
+    ),
     [HttpStatusCodes.INTERNAL_SERVER_ERROR]: jsonContent(
       internalServerErrorSchema,
       "Internal Server Error",

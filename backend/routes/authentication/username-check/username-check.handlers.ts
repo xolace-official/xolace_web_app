@@ -9,13 +9,15 @@ export const checkUsername: AppRouteHandler<UsernameCheckRoute> = async (c) => {
 
   const supabase = createClient(env.SUPABASE_URL, env.SUPABASE_PUBLISHABLE_KEY);
 
-  const { data } = await supabase
+  const { data, error } = await supabase
     .from("profiles")
     .select("id")
     .ilike("username", username)
     .maybeSingle();
 
-  console.log("data", data);
+  if (error) {
+    return c.json({ available: false }, HttpStatusCodes.OK);
+  }
 
   return c.json({ available: !data }, HttpStatusCodes.OK);
 };
