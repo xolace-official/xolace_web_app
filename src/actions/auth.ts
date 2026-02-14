@@ -1,9 +1,10 @@
 "use server";
 
+import { headers } from "next/headers";
 import { createClient } from "@/lib/supabase/server";
 import {
-  type ForgotPasswordFormState,
   forgotPasswordSchema,
+  resetPasswordSchema,
   type SignInActionResult,
   signinSchema,
   type SignUpActionResult,
@@ -157,33 +158,75 @@ export async function resendOtpAction(data: {
   return { success: true, message: "A new code has been sent to your email." };
 }
 
-export async function forgotPasswordFormAction(
-  _prevState: ForgotPasswordFormState,
-  formData: FormData,
-) {
-  const values = {
-    email: formData.get("email") as string,
-  };
+export async function forgotPasswordAction(data: {
+  email: string;
+}): Promise<SignInActionResult> {
+  const parsed = forgotPasswordSchema.safeParse(data);
 
-  const result = forgotPasswordSchema.safeParse(values);
-
-  if (!result.success) {
+  if (!parsed.success) {
     return {
-      values,
       success: false,
-      errors: result.error.flatten().fieldErrors,
+      message: "Please enter a valid email address.",
     };
   }
 
-  // Do something with the values.
-  // Call your database or API here.
+  const supabase = await createClient();
+
+  const headersList = await headers();
+  const origin = headersList.get("origin") || headersList.get("referer") || "";
+
+  const { error } = await supabase.auth.resetPasswordForEmail(
+    parsed.data.email,
+    {
+      redirectTo: `${origin}/auth/callback?next=/reset-password`,
+    },
+  );
+
+  if (error) {
+    return {
+      success: false,
+      message: "Could not send reset link. Please try again later.",
+    };
+  }
+
+  // Always return success to prevent email enumeration
+  return {
+    success: true,
+    message:
+      "If an account exists with that email, you'll receive a password reset link.",
+  };
+}
+
+export async function resetPasswordAction(data: {
+  password: string;
+  confirmPassword: string;
+}): Promise<SignInActionResult> {
+  const parsed = resetPasswordSchema.safeParse(data);
+
+  if (!parsed.success) {
+    const firstError = parsed.error.issues[0]?.message;
+    return {
+      success: false,
+      message: firstError || "Please check your inputs.",
+    };
+  }
+
+  const supabase = await createClient();
+
+  const { error } = await supabase.auth.updateUser({
+    password: parsed.data.password,
+  });
+
+  if (error) {
+    return {
+      success: false,
+      message: "Could not update password. Please try again.",
+    };
+  }
 
   return {
-    values: {
-      email: "",
-    },
-    errors: null,
     success: true,
+    message: "Password updated successfully!",
   };
 }
 
