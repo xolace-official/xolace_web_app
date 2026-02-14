@@ -26,6 +26,11 @@ export type SignUpActionResult = {
   message: string;
 };
 
+export type SignInActionResult = {
+  success: boolean;
+  message: string;
+};
+
 export const signinSchema = z.object({
   email: z.email(),
   password: z

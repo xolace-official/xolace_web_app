@@ -4,43 +4,38 @@ import { createClient } from "@/lib/supabase/server";
 import {
   type ForgotPasswordFormState,
   forgotPasswordSchema,
-  type SigninFormState,
+  type SignInActionResult,
   type SignUpActionResult,
   signinSchema,
   signupSchema,
 } from "@/validation";
 import { type ContactFormState, contactSchema } from "@/validation/landing";
 
-export async function signinFormAction(
-  _prevState: SigninFormState,
-  formData: FormData,
-) {
-  const values = {
-    email: formData.get("email") as string,
-    password: formData.get("password") as string,
-  };
+export async function signInAction(data: {
+  email: string;
+  password: string;
+}): Promise<SignInActionResult> {
+  const parsed = signinSchema.safeParse(data);
 
-  const result = signinSchema.safeParse(values);
-
-  if (!result.success) {
+  if (!parsed.success) {
     return {
-      values,
       success: false,
-      errors: result.error.flatten().fieldErrors,
+      message: "Invalid credentials. Please check your inputs.",
     };
   }
 
-  // Do something with the values.
-  // Call your database or API here.
+  const supabase = await createClient();
 
-  return {
-    values: {
-      email: "",
-      password: "",
-    },
-    errors: null,
-    success: true,
-  };
+  const { error } = await supabase.auth.signInWithPassword({
+    email: parsed.data.email,
+    password: parsed.data.password,
+  });
+
+  if (error) {
+    return { success: false, message: error.message };
+  }
+
+  return { success: true, message: "Signed in successfully." };
 }
 
 export async function signUpAction(data: {
