@@ -65,9 +65,7 @@ export function UsernameSection() {
             <p className="mt-2 text-xs text-destructive">
               {username.length < 3
                 ? "Username must be at least 3 characters."
-                : username.length > 30
-                  ? "Username must be at most 30 characters."
-                  : "Only letters, numbers, underscores, and hyphens allowed."}
+                : "Only letters, numbers, underscores, and hyphens allowed."}
             </p>
           )}
         </div>

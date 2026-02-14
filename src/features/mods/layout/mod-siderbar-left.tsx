@@ -10,10 +10,10 @@ import { ModsNavMain } from "@/features/mods/layout/mods-main-nav";
  */
 export function ModsSidebarLeft() {
   return (
-    <SidebarMenu>
-      <SidebarContent>
+    <SidebarContent>
+      <SidebarMenu>
         <ModsNavMain />
-      </SidebarContent>
-    </SidebarMenu>
+      </SidebarMenu>
+    </SidebarContent>
   );
 }

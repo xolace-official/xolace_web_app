@@ -45,12 +45,19 @@ export function useProfileMutations() {
           getGetApiV1AuthProfileMeQueryKey(),
           context.previousProfile,
         );
+        updateProfile(context.previousProfile);
       }
     },
-    onSettled: () => {
-      queryClient.invalidateQueries({
+    onSettled: async () => {
+      await queryClient.invalidateQueries({
         queryKey: getGetApiV1AuthProfileMeQueryKey(),
       });
+      const latestProfile = queryClient.getQueryData(
+        getGetApiV1AuthProfileMeQueryKey(),
+      );
+      if (latestProfile) {
+        updateProfile(latestProfile);
+      }
     },
   });
 
