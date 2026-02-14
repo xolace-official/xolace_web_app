@@ -91,8 +91,13 @@ export default function VerifyOtpPage() {
   };
 
   // Redirect if no email present
+  useEffect(() => {
+    if (!email) {
+      router.replace("/sign-up");
+    }
+  }, [email, router]);
+
   if (!email) {
-    router.replace("/sign-up");
     return null;
   }
 
