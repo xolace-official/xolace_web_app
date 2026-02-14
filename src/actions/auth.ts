@@ -1,7 +1,7 @@
 "use server";
 
-import { headers } from "next/headers";
 import { createClient } from "@/lib/supabase/server";
+import { env } from "@/env/client";
 import {
   forgotPasswordSchema,
   resetPasswordSchema,
@@ -172,13 +172,10 @@ export async function forgotPasswordAction(data: {
 
   const supabase = await createClient();
 
-  const headersList = await headers();
-  const origin = headersList.get("origin") || headersList.get("referer") || "";
-
   const { error } = await supabase.auth.resetPasswordForEmail(
     parsed.data.email,
     {
-      redirectTo: `${origin}/auth/callback?next=/reset-password`,
+      redirectTo: `${env.NEXT_PUBLIC_SITE_URL}/auth/callback?next=/reset-password`,
     },
   );
 

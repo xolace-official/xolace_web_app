@@ -4,7 +4,13 @@ import { cn } from "@/lib/utils";
 import { OTPInput, OTPInputContext } from "input-otp";
 import { MinusIcon } from "lucide-react";
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
-import { type ReactNode, useContext, useEffect, useState } from "react";
+import {
+  type ReactNode,
+  useContext,
+  useEffect,
+  useMemo,
+  useState,
+} from "react";
 
 // Animation constants
 const EASE_OUT_QUINT_X1 = 0.22;
@@ -48,7 +54,9 @@ function AnimatedInputOTP({
   onComplete,
   maxLength = 6,
   children,
-  ...props
+  "aria-label": ariaLabel,
+  "aria-describedby": ariaDescribedby,
+  ...rest
 }: AnimatedInputOTPProps & { children: ReactNode }) {
   const handleChange = (newValue: string) => {
     // Only allow numeric characters
@@ -58,8 +66,8 @@ function AnimatedInputOTP({
 
   return (
     <OTPInput
-      aria-describedby={props["aria-describedby"]}
-      aria-label={props["aria-label"] || "One-time password input"}
+      aria-label={ariaLabel || "One-time password input"}
+      aria-describedby={ariaDescribedby}
       className={cn("disabled:cursor-not-allowed", className)}
       containerClassName={cn(
         "flex items-center gap-2 has-disabled:opacity-50",
@@ -70,7 +78,7 @@ function AnimatedInputOTP({
       onChange={handleChange}
       onComplete={onComplete}
       value={value}
-      {...props}
+      {...rest}
     >
       {children}
     </OTPInput>
@@ -140,7 +148,7 @@ function AnimatedInputOTPSlot({ index, className }: AnimatedInputOTPSlotProps) {
             }
       }
       className={cn(
-        "relative flex h-9 w-9 items-center justify-center rounded-md border border-zinc-300 bg-background text-sm shadow-sm outline-none transition-all aria-invalid:border-destructive data-[active=true]:z-10 data-[active=true]:border-ring data-[active=true]:ring-[3px] data-[active=true]:ring-ring/50 data-[active=true]:aria-invalid:border-destructive data-[active=true]:aria-invalid:ring-destructive/20 dark:border-zinc-700 dark:bg-input/30 dark:data-[active=true]:aria-invalid:ring-destructive/40",
+        "relative flex h-9 w-9 items-center justify-center rounded-md border border-input bg-background text-sm shadow-xs outline-none transition-all aria-invalid:border-destructive data-[active=true]:z-10 data-[active=true]:border-ring data-[active=true]:ring-[3px] data-[active=true]:ring-ring/50 data-[active=true]:aria-invalid:border-destructive data-[active=true]:aria-invalid:ring-destructive/20 dark:bg-input/30 dark:data-[active=true]:aria-invalid:ring-destructive/40",
         className,
       )}
       data-active={isActive}
@@ -278,6 +286,16 @@ export function AnimatedOTPInput({
   onComplete,
   ...props
 }: AnimatedInputOTPProps) {
+  const groups = useMemo(() => {
+    const mid = Math.ceil(maxLength / 2);
+    const firstGroup = Array.from({ length: mid }, (_, i) => i);
+    const secondGroup = Array.from(
+      { length: maxLength - mid },
+      (_, i) => mid + i,
+    );
+    return { firstGroup, secondGroup };
+  }, [maxLength]);
+
   return (
     <AnimatedInputOTP
       className={className}
@@ -288,16 +306,18 @@ export function AnimatedOTPInput({
       {...props}
     >
       <AnimatedInputOTPGroup>
-        <AnimatedInputOTPSlot index={0} />
-        <AnimatedInputOTPSlot index={1} />
-        <AnimatedInputOTPSlot index={2} />
+        {groups.firstGroup.map((i) => (
+          <AnimatedInputOTPSlot key={i} index={i} />
+        ))}
       </AnimatedInputOTPGroup>
-      <AnimatedInputOTPSeparator />
-      <AnimatedInputOTPGroup>
-        <AnimatedInputOTPSlot index={3} />
-        <AnimatedInputOTPSlot index={4} />
-        <AnimatedInputOTPSlot index={5} />
-      </AnimatedInputOTPGroup>
+      {groups.secondGroup.length > 0 && <AnimatedInputOTPSeparator />}
+      {groups.secondGroup.length > 0 && (
+        <AnimatedInputOTPGroup>
+          {groups.secondGroup.map((i) => (
+            <AnimatedInputOTPSlot key={i} index={i} />
+          ))}
+        </AnimatedInputOTPGroup>
+      )}
     </AnimatedInputOTP>
   );
 }
