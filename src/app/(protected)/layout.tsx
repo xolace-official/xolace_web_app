@@ -4,13 +4,13 @@ import { Suspense } from "react";
 import { AppSidebar } from "@/components/app/app-sidebar";
 import { MainContainer } from "@/components/app/main-container";
 import { SidebarProvider } from "@/components/ui/sidebar";
-import { QueryProvider } from "@/providers/query-provider";
-import { AppStoreProvider } from "@/providers/app-store-provider";
 import {
-  SaveToCollectionProvider,
   SaveToCollectionDrawer,
+  SaveToCollectionProvider,
 } from "@/features/collections";
 import { createClient } from "@/lib/supabase/server";
+import { AppStoreProvider } from "@/providers/app-store-provider";
+import { QueryProvider } from "@/providers/query-provider";
 
 export default async function ProtectedLayout({
   children,
