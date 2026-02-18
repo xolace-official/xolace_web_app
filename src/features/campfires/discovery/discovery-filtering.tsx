@@ -21,7 +21,6 @@ export const DiscoveryFiltering = () => {
   const session = useAppStore((s) => s.session);
   const [{ query, realm, lane }, setSearchParams] = useFiltersServer({
     limitUrlUpdates: debounce(250),
-    shallow: false,
   });
 
   const [showSearchBar, setShowSearchBar] = useState<boolean>(false);
