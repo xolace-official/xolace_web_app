@@ -10,14 +10,17 @@ import {
   Users,
 } from "lucide-react";
 import type {
-  GetApiV1AuthCampfireLanes200,
-  GetApiV1AuthCampfireRealms200,
+  GetApiV1AuthCampfireLanes200DataItem,
   GetApiV1AuthCampfireRealms200DataItem,
 } from "@/api-client";
 import {
   useGetApiV1AuthCampfireLanes,
   useGetApiV1AuthCampfireRealms,
 } from "@/api-client";
+import {
+  extractApiDataArray,
+  useAuthHeaders,
+} from "@/features/campfires/campfire-api-utils";
 import { useFiltersServer } from "@/components/shared/search-params";
 import {
   Card,
@@ -88,18 +91,12 @@ export const RealmOverview = () => {
 };
 
 const AllRealmsOverview = ({ accessToken }: { accessToken: string }) => {
-  const authHeaders = {
-    headers: { Authorization: `Bearer ${accessToken}` },
-  };
+  const authHeaders = useAuthHeaders(accessToken);
 
-  const realmsQuery = useGetApiV1AuthCampfireRealms({
-    fetch: authHeaders,
-  });
-
-  const realms =
-    realmsQuery.data?.status === 200
-      ? (realmsQuery.data.data as GetApiV1AuthCampfireRealms200).data
-      : [];
+  const realmsQuery = useGetApiV1AuthCampfireRealms({ fetch: authHeaders });
+  const realms = extractApiDataArray<GetApiV1AuthCampfireRealms200DataItem>(
+    realmsQuery.data,
+  );
 
   return (
     <div className="flex items-start flex-col gap-6 border-2 border-border p-4 md:p-6">
@@ -169,20 +166,13 @@ const RealmOverviewContent = ({
   realmKey: string;
   accessToken: string;
 }) => {
-  const authHeaders = {
-    headers: { Authorization: `Bearer ${accessToken}` },
-  };
+  const authHeaders = useAuthHeaders(accessToken);
 
   // Fetch realms (deduplicated with other components via React Query)
-  const realmsQuery = useGetApiV1AuthCampfireRealms({
-    fetch: authHeaders,
-  });
-
-  const realms =
-    realmsQuery.data?.status === 200
-      ? (realmsQuery.data.data as GetApiV1AuthCampfireRealms200).data
-      : [];
-
+  const realmsQuery = useGetApiV1AuthCampfireRealms({ fetch: authHeaders });
+  const realms = extractApiDataArray<GetApiV1AuthCampfireRealms200DataItem>(
+    realmsQuery.data,
+  );
   const realm = realms.find((r) => r.key === realmKey);
 
   // Fetch lanes for this realm
@@ -193,11 +183,9 @@ const RealmOverviewContent = ({
       fetch: authHeaders,
     },
   );
-
-  const lanes =
-    lanesQuery.data?.status === 200
-      ? (lanesQuery.data.data as GetApiV1AuthCampfireLanes200).data
-      : [];
+  const lanes = extractApiDataArray<GetApiV1AuthCampfireLanes200DataItem>(
+    lanesQuery.data,
+  );
 
   if (realmsQuery.isLoading) {
     return (

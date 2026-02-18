@@ -3,13 +3,17 @@ import { Search, SearchX } from "lucide-react";
 import { debounce } from "nuqs";
 import { useCallback, useState, useTransition } from "react";
 import type {
-  GetApiV1AuthCampfireLanes200,
-  GetApiV1AuthCampfireRealms200,
+  GetApiV1AuthCampfireLanes200DataItem,
+  GetApiV1AuthCampfireRealms200DataItem,
 } from "@/api-client";
 import {
   useGetApiV1AuthCampfireLanes,
   useGetApiV1AuthCampfireRealms,
 } from "@/api-client";
+import {
+  extractApiDataArray,
+  useAuthHeaders,
+} from "@/features/campfires/campfire-api-utils";
 import { ParamsSearchBar } from "@/components/shared/params-search-bar";
 import { useFiltersServer } from "@/components/shared/search-params";
 import { Button } from "@/components/ui/button";
@@ -26,19 +30,13 @@ export const DiscoveryFiltering = () => {
 
   const [showSearchBar, setShowSearchBar] = useState<boolean>(false);
 
-  // Fetch realms from API
-  const realmsQuery = useGetApiV1AuthCampfireRealms({
-    fetch: {
-      headers: {
-        Authorization: `Bearer ${session.access_token}`,
-      },
-    },
-  });
+  const authHeaders = useAuthHeaders(session.access_token);
 
-  const realms =
-    realmsQuery.data?.status === 200
-      ? (realmsQuery.data.data as GetApiV1AuthCampfireRealms200).data
-      : [];
+  // Fetch realms from API
+  const realmsQuery = useGetApiV1AuthCampfireRealms({ fetch: authHeaders });
+  const realms = extractApiDataArray<GetApiV1AuthCampfireRealms200DataItem>(
+    realmsQuery.data,
+  );
 
   // Derive the selected realm object from the URL param (key)
   const selectedRealm = realms.find((r) => r.key === realm);
@@ -47,21 +45,13 @@ export const DiscoveryFiltering = () => {
   const lanesQuery = useGetApiV1AuthCampfireLanes(
     { realmId: selectedRealm?.id ?? "" },
     {
-      query: {
-        enabled: !!selectedRealm?.id,
-      },
-      fetch: {
-        headers: {
-          Authorization: `Bearer ${session.access_token}`,
-        },
-      },
+      query: { enabled: !!selectedRealm?.id },
+      fetch: authHeaders,
     },
   );
-
-  const lanes =
-    lanesQuery.data?.status === 200
-      ? (lanesQuery.data.data as GetApiV1AuthCampfireLanes200).data
-      : [];
+  const lanes = extractApiDataArray<GetApiV1AuthCampfireLanes200DataItem>(
+    lanesQuery.data,
+  );
 
   // Handle realm click - update URL directly
   const handleRealmClick = useCallback(

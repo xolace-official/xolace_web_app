@@ -4,15 +4,19 @@ import { Loader2, SearchX } from "lucide-react";
 import { debounce } from "nuqs";
 import { useCallback, useTransition } from "react";
 import type {
-  GetApiV1AuthCampfireDiscovery200,
-  GetApiV1AuthCampfireLanes200,
-  GetApiV1AuthCampfireRealms200,
+  GetApiV1AuthCampfireDiscovery200DataItem,
+  GetApiV1AuthCampfireLanes200DataItem,
+  GetApiV1AuthCampfireRealms200DataItem,
 } from "@/api-client";
 import {
   useGetApiV1AuthCampfireDiscovery,
   useGetApiV1AuthCampfireLanes,
   useGetApiV1AuthCampfireRealms,
 } from "@/api-client";
+import {
+  extractApiDataArray,
+  useAuthHeaders,
+} from "@/features/campfires/campfire-api-utils";
 import { EmptyContent } from "@/components/app/empty-content";
 import { useFiltersServer } from "@/components/shared/search-params";
 import { Button } from "@/components/ui/button";
@@ -27,22 +31,13 @@ export const CampfireGrid = () => {
     limitUrlUpdates: debounce(250),
   });
 
-  const authHeaders = {
-    headers: {
-      Authorization: `Bearer ${session.access_token}`,
-    },
-  };
+  const authHeaders = useAuthHeaders(session.access_token);
 
   // Fetch realms to resolve realm key → realm_id (deduplicated via React Query)
-  const realmsQuery = useGetApiV1AuthCampfireRealms({
-    fetch: authHeaders,
-  });
-
-  const realms =
-    realmsQuery.data?.status === 200
-      ? (realmsQuery.data.data as GetApiV1AuthCampfireRealms200).data
-      : [];
-
+  const realmsQuery = useGetApiV1AuthCampfireRealms({ fetch: authHeaders });
+  const realms = extractApiDataArray<GetApiV1AuthCampfireRealms200DataItem>(
+    realmsQuery.data,
+  );
   const selectedRealm = realms.find((r) => r.key === realm);
 
   // Fetch lanes to resolve lane key → lane_id (deduplicated via React Query)
@@ -53,13 +48,10 @@ export const CampfireGrid = () => {
       fetch: authHeaders,
     },
   );
-
-  const selectedLane = (() => {
-    if (!lane || lanesQuery.data?.status !== 200) return undefined;
-    const lanesData = (lanesQuery.data.data as GetApiV1AuthCampfireLanes200)
-      .data;
-    return lanesData.find((l) => l.key === lane);
-  })();
+  const lanes = extractApiDataArray<GetApiV1AuthCampfireLanes200DataItem>(
+    lanesQuery.data,
+  );
+  const selectedLane = lane ? lanes.find((l) => l.key === lane) : undefined;
 
   // Don't fetch discovery until realm ID is resolved (when a realm is selected)
   const isRealmPending = !!realm && realm !== "all" && !selectedRealm;
@@ -73,16 +65,13 @@ export const CampfireGrid = () => {
 
   // Fetch campfires from discovery API (server handles filtering)
   const discoveryQuery = useGetApiV1AuthCampfireDiscovery(discoveryParams, {
-    query: {
-      enabled: !isRealmPending,
-    },
+    query: { enabled: !isRealmPending },
     fetch: authHeaders,
   });
-
   const campfires =
-    discoveryQuery.data?.status === 200
-      ? (discoveryQuery.data.data as GetApiV1AuthCampfireDiscovery200).data
-      : [];
+    extractApiDataArray<GetApiV1AuthCampfireDiscovery200DataItem>(
+      discoveryQuery.data,
+    );
 
   const isLoading =
     discoveryQuery.isLoading || isRealmPending || realmsQuery.isLoading;
