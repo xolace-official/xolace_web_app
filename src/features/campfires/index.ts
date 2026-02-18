@@ -1,18 +1,6 @@
-import {
-  Heart,
-  Lightbulb,
-  MessageCircle,
-  Palette,
-  Sprout,
-  Users,
-} from "lucide-react";
+import { Heart, Lightbulb, MessageCircle, Palette, Users } from "lucide-react";
 
-export type InteractionStyle =
-  | "collaborative"
-  | "supportive"
-  | "motivational"
-  | "educational"
-  | "expressive";
+export type InteractionStyle = "support" | "discussion" | "guided" | "creative";
 
 export type RealmKey = InteractionStyle | "all";
 
@@ -79,7 +67,7 @@ export const dummy_campfires: CampfireInterface[] = [
     icon_path: "/assets/icons/tech-hub.png",
     banner_path:
       "https://images.unsplash.com/photo-1768797767719-dad3da9a6e09?q=80&w=687&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-    interaction_style: "supportive",
+    interaction_style: "support",
     visibility: "public",
     member_count: 1247,
     memberRole: "camper",
@@ -117,7 +105,7 @@ export const dummy_campfires: CampfireInterface[] = [
     icon_path: "/assets/icons/writers-circle.png",
     banner_path:
       "https://images.unsplash.com/photo-1768797767719-dad3da9a6e09?q=80&w=687&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-    interaction_style: "collaborative",
+    interaction_style: "discussion",
     visibility: "private",
     member_count: 342,
     created_at: "2025-12-01T14:20:00.000Z",
@@ -154,7 +142,7 @@ export const dummy_campfires: CampfireInterface[] = [
     icon_path: "/assets/icons/fitness-warriors.png",
     banner_path:
       "https://images.unsplash.com/photo-1768797767719-dad3da9a6e09?q=80&w=687&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-    interaction_style: "educational",
+    interaction_style: "guided",
     visibility: "public",
     member_count: 2891,
     created_at: "2025-10-22T10:15:00.000Z",
@@ -190,7 +178,7 @@ export const dummy_campfires: CampfireInterface[] = [
     icon_path: "/assets/images/landing-page/x-logo-full.webp",
     banner_path:
       "https://images.unsplash.com/photo-1768797767719-dad3da9a6e09?q=80&w=687&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-    interaction_style: "collaborative",
+    interaction_style: "discussion",
     visibility: "public",
     member_count: 567,
     created_at: "2026-01-05T16:45:00.000Z",
@@ -226,7 +214,7 @@ export const dummy_campfires: CampfireInterface[] = [
     icon_path: null,
     banner_path:
       "https://images.unsplash.com/photo-1768797767719-dad3da9a6e09?q=80&w=687&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-    interaction_style: "expressive",
+    interaction_style: "creative",
     visibility: "public",
     member_count: 1823,
     created_at: "2025-09-18T09:00:00.000Z",
@@ -257,8 +245,8 @@ export const dummy_campfires: CampfireInterface[] = [
 export const campfire_realms: CampfireRealmInterface[] = [
   {
     id: "realm-1a2b3c4d-5e6f-7g8h-9i0j",
-    key: "collaborative",
-    name: "Collaborative",
+    key: "discussion",
+    name: "Discussion",
     description:
       "Spaces for working together, sharing ideas, and building projects as a team",
     sort_order: 1,
@@ -272,8 +260,8 @@ export const campfire_realms: CampfireRealmInterface[] = [
   },
   {
     id: "realm-2b3c4d5e-6f7g-8h9i-0j1k",
-    key: "supportive",
-    name: "Supportive",
+    key: "support",
+    name: "Support",
     description:
       "Communities focused on encouragement, advice, and helping each other through challenges",
     sort_order: 2,
@@ -287,8 +275,8 @@ export const campfire_realms: CampfireRealmInterface[] = [
   },
   {
     id: "realm-3c4d5e6f-7g8h-9i0j-1k2l",
-    key: "motivational",
-    name: "Motivational",
+    key: "guided",
+    name: "Guided",
     description:
       "Energizing spaces for goal-setting, progress sharing, and pushing each other forward",
     sort_order: 3,
@@ -302,26 +290,11 @@ export const campfire_realms: CampfireRealmInterface[] = [
   },
   {
     id: "realm-4d5e6f7g-8h9i-0j1k-2l3m",
-    key: "educational",
-    name: "Educational",
-    description:
-      "Learning-focused communities for sharing knowledge, tutorials, and skill development",
-    sort_order: 4,
-    is_high_safety: false,
-    lanes: [
-      ["tutorials", "Tutorials"],
-      ["guides", "Guides"],
-      ["resources", "Resources"],
-      ["qa", "Q&A"],
-    ],
-  },
-  {
-    id: "realm-5e6f7g8h-9i0j-1k2l-3m4n",
-    key: "expressive",
-    name: "Expressive",
+    key: "creative",
+    name: "Creative",
     description:
       "Creative spaces for self-expression, artistic sharing, and authentic connections",
-    sort_order: 5,
+    sort_order: 4,
     is_high_safety: false,
     lanes: [
       ["showcase", "Showcase"],
@@ -332,33 +305,28 @@ export const campfire_realms: CampfireRealmInterface[] = [
   },
 ];
 
-// Get the icon and it color base on the interaction style
+// Get the icon and its color based on the interaction style
 export const getInteractionConfig = (style: InteractionStyle) => {
   switch (style) {
-    case "collaborative":
-      return {
-        icon: Users,
-        iconColor: "text-accent",
-      };
-    case "supportive":
+    case "support":
       return {
         icon: Heart,
         iconColor: "text-chart-1",
       };
-    case "motivational":
+    case "discussion":
+      return {
+        icon: Users,
+        iconColor: "text-accent",
+      };
+    case "guided":
       return {
         icon: Lightbulb,
         iconColor: "text-chart-5",
       };
-    case "expressive":
+    case "creative":
       return {
         icon: Palette,
         iconColor: "text-chart-2",
-      };
-    case "educational":
-      return {
-        icon: Sprout,
-        iconColor: "text-chart-4",
       };
     default:
       return {

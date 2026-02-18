@@ -8,11 +8,10 @@ import { CampfireRealm, type FullFormType } from "@/validation/create-campfire";
 import TagCard from "./tag-card";
 
 const REALM_DISPLAY_MAP: Record<CampfireRealm, string> = {
-  [CampfireRealm.Collaborative]: "Collaborative",
-  [CampfireRealm.Supportive]: "Supportive",
-  [CampfireRealm.Educational]: "Educational",
-  [CampfireRealm.Expressive]: "Expressive",
-  [CampfireRealm.Motivational]: "Motivational",
+  [CampfireRealm.Support]: "Support",
+  [CampfireRealm.Discussion]: "Discussion",
+  [CampfireRealm.Guided]: "Guided",
+  [CampfireRealm.Creative]: "Creative",
 };
 
 interface CampfirePreviewCardProps {

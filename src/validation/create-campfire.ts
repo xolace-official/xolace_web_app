@@ -25,11 +25,10 @@ export enum CampfireVisibility {
 }
 
 export enum CampfireRealm {
-  Collaborative = "collaborative",
-  Supportive = "supportive",
-  Motivational = "motivational",
-  Educational = "educational",
-  Expressive = "expressive",
+  Support = "support",
+  Discussion = "discussion",
+  Guided = "guided",
+  Creative = "creative",
 }
 
 export enum CampfireLane {
@@ -210,11 +209,11 @@ export interface CampfireAvatarInterface {
 
 export const getBgSeverity = (purpose: string) => {
   switch (purpose) {
-    case CampfireRealm.Supportive:
+    case CampfireRealm.Support:
       return "bg-green-200 text-green-800";
-    case CampfireRealm.Motivational:
+    case CampfireRealm.Guided:
       return "bg-orange-200 text-orange-800";
-    case CampfireRealm.Collaborative:
+    case CampfireRealm.Discussion:
       return "bg-yellow-200 text-yellow-800";
     default:
       return "bg-neutral-200 text-neutral-800";

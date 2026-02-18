@@ -186,6 +186,8 @@ export const getDiscoveryCampfires: AppRouteHandler<
       },
     };
 
+    console.log("response ", response);
+
     return c.json(response, HttpStatusCodes.OK);
   } catch (error) {
     console.error("getDiscoveryCampfires exception:", error);
