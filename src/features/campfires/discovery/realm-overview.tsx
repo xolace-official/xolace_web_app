@@ -1,6 +1,7 @@
 "use client";
 
 import {
+  Flame,
   Heart,
   Lightbulb,
   type LucideIcon,
@@ -8,7 +9,6 @@ import {
   Palette,
   Users,
 } from "lucide-react";
-import { useMemo } from "react";
 import type {
   GetApiV1AuthCampfireLanes200,
   GetApiV1AuthCampfireRealms200,
@@ -62,9 +62,8 @@ export const RealmOverview = () => {
   const [{ realm: realmKey }] = useFiltersServer();
   const session = useAppStore((s) => s.session);
 
-  // Don't show card if "all" is selected
   if (realmKey === "all" || !realmKey) {
-    return null;
+    return <AllRealmsOverview accessToken={session.access_token} />;
   }
 
   return (
@@ -75,6 +74,79 @@ export const RealmOverview = () => {
   );
 };
 
+const AllRealmsOverview = ({ accessToken }: { accessToken: string }) => {
+  const authHeaders = {
+    headers: { Authorization: `Bearer ${accessToken}` },
+  };
+
+  const realmsQuery = useGetApiV1AuthCampfireRealms({
+    fetch: authHeaders,
+  });
+
+  const realms =
+    realmsQuery.data?.status === 200
+      ? (realmsQuery.data.data as GetApiV1AuthCampfireRealms200).data
+      : [];
+
+  return (
+    <div className="flex items-start flex-col gap-6 border-2 border-border p-4 md:p-6">
+      <div className="flex flex-col gap-3 w-full items-center justify-center">
+        <div className="p-3 rounded-full bg-primary/10">
+          <Flame className="w-8 h-8 text-primary" />
+        </div>
+        <h3 className="text-2xl font-bold">Welcome to Campfires</h3>
+        <p className="text-sm text-muted-foreground text-center max-w-xl leading-relaxed">
+          Campfires are safe, focused spaces where people gather around shared
+          experiences. No performance, no pressure — just honest conversations.
+        </p>
+      </div>
+
+      {realmsQuery.isLoading ? (
+        <div className="w-full grid grid-cols-2 gap-3 max-w-2xl mx-auto">
+          <Skeleton className="h-16 rounded-lg" />
+          <Skeleton className="h-16 rounded-lg" />
+          <Skeleton className="h-16 rounded-lg" />
+          <Skeleton className="h-16 rounded-lg" />
+        </div>
+      ) : realms.length > 0 ? (
+        <div className="w-full grid grid-cols-2 gap-3 max-w-2xl mx-auto">
+          {realms.map((realm) => {
+            const style = realm.key as InteractionStyle;
+            const Icon = interactionStyleIcons[style] ?? MessageCircle;
+            return (
+              <div
+                key={realm.id}
+                className={`flex items-center gap-3 p-3 rounded-lg border ${getRealmBorderColor(style)} bg-card`}
+              >
+                <div
+                  className={`p-1.5 rounded-md shrink-0 ${getRealmBgColor(style)}`}
+                >
+                  <Icon className="w-3.5 h-3.5" />
+                </div>
+                <div className="min-w-0">
+                  <p className="text-xs font-semibold truncate">{realm.name}</p>
+                  {realm.description ? (
+                    <p className="text-[10px] text-muted-foreground line-clamp-1">
+                      {realm.description}
+                    </p>
+                  ) : null}
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      ) : null}
+
+      <div className="text-center p-3 bg-muted/50 border border-border rounded-lg w-full max-w-2xl mx-auto">
+        <p className="text-xs text-muted-foreground">
+          Select a realm above to explore focused spaces, or browse all
+          campfires below.
+        </p>
+      </div>
+    </div>
+  );
+};
+
 const RealmOverviewContent = ({
   realmKey,
   accessToken,
@@ -82,14 +154,9 @@ const RealmOverviewContent = ({
   realmKey: string;
   accessToken: string;
 }) => {
-  const authHeaders = useMemo(
-    () => ({
-      headers: {
-        Authorization: `Bearer ${accessToken}`,
-      },
-    }),
-    [accessToken],
-  );
+  const authHeaders = {
+    headers: { Authorization: `Bearer ${accessToken}` },
+  };
 
   // Fetch realms (deduplicated with other components via React Query)
   const realmsQuery = useGetApiV1AuthCampfireRealms({
@@ -101,10 +168,7 @@ const RealmOverviewContent = ({
       ? (realmsQuery.data.data as GetApiV1AuthCampfireRealms200).data
       : [];
 
-  const realm = useMemo(
-    () => realms.find((r) => r.key === realmKey),
-    [realms, realmKey],
-  );
+  const realm = realms.find((r) => r.key === realmKey);
 
   // Fetch lanes for this realm
   const lanesQuery = useGetApiV1AuthCampfireLanes(
@@ -195,7 +259,7 @@ const RealmCard = ({
             "Discover and connect with communities that share your interests and values."}
         </CardDescription>
 
-        {lanes.length > 0 && (
+        {lanes.length > 0 ? (
           <div className="space-y-2">
             <h4 className="text-sm font-semibold">Available lanes:</h4>
             <div className="flex flex-wrap gap-2">
@@ -209,7 +273,7 @@ const RealmCard = ({
               ))}
             </div>
           </div>
-        )}
+        ) : null}
       </CardContent>
     </Card>
   );

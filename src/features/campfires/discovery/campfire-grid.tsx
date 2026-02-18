@@ -2,7 +2,7 @@
 
 import { Loader2, SearchX } from "lucide-react";
 import { debounce } from "nuqs";
-import { useCallback, useMemo, useTransition } from "react";
+import { useCallback, useTransition } from "react";
 import type {
   GetApiV1AuthCampfireDiscovery200,
   GetApiV1AuthCampfireLanes200,
@@ -27,14 +27,11 @@ export const CampfireGrid = () => {
     limitUrlUpdates: debounce(250),
   });
 
-  const authHeaders = useMemo(
-    () => ({
-      headers: {
-        Authorization: `Bearer ${session.access_token}`,
-      },
-    }),
-    [session.access_token],
-  );
+  const authHeaders = {
+    headers: {
+      Authorization: `Bearer ${session.access_token}`,
+    },
+  };
 
   // Fetch realms to resolve realm key → realm_id (deduplicated via React Query)
   const realmsQuery = useGetApiV1AuthCampfireRealms({
@@ -46,10 +43,7 @@ export const CampfireGrid = () => {
       ? (realmsQuery.data.data as GetApiV1AuthCampfireRealms200).data
       : [];
 
-  const selectedRealm = useMemo(
-    () => realms.find((r) => r.key === realm),
-    [realms, realm],
-  );
+  const selectedRealm = realms.find((r) => r.key === realm);
 
   // Fetch lanes to resolve lane key → lane_id (deduplicated via React Query)
   const lanesQuery = useGetApiV1AuthCampfireLanes(
@@ -60,25 +54,22 @@ export const CampfireGrid = () => {
     },
   );
 
-  const selectedLane = useMemo(() => {
+  const selectedLane = (() => {
     if (!lane || lanesQuery.data?.status !== 200) return undefined;
     const lanesData = (lanesQuery.data.data as GetApiV1AuthCampfireLanes200)
       .data;
     return lanesData.find((l) => l.key === lane);
-  }, [lane, lanesQuery.data]);
+  })();
 
   // Don't fetch discovery until realm ID is resolved (when a realm is selected)
   const isRealmPending = !!realm && realm !== "all" && !selectedRealm;
 
   // Build discovery API params from resolved IDs
-  const discoveryParams = useMemo(
-    () => ({
-      ...(selectedRealm?.id ? { realm_id: selectedRealm.id } : {}),
-      ...(selectedLane?.id ? { lane_id: selectedLane.id } : {}),
-      ...(query ? { search: query } : {}),
-    }),
-    [selectedRealm?.id, selectedLane?.id, query],
-  );
+  const discoveryParams = {
+    ...(selectedRealm?.id ? { realm_id: selectedRealm.id } : {}),
+    ...(selectedLane?.id ? { lane_id: selectedLane.id } : {}),
+    ...(query ? { search: query } : {}),
+  };
 
   // Fetch campfires from discovery API (server handles filtering)
   const discoveryQuery = useGetApiV1AuthCampfireDiscovery(discoveryParams, {
