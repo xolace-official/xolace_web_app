@@ -1,7 +1,7 @@
 "use client";
 import { Search, SearchX } from "lucide-react";
 import { debounce } from "nuqs";
-import { useCallback, useMemo, useState, useTransition } from "react";
+import { useCallback, useState, useTransition } from "react";
 import type {
   GetApiV1AuthCampfireLanes200,
   GetApiV1AuthCampfireRealms200,
@@ -41,10 +41,7 @@ export const DiscoveryFiltering = () => {
       : [];
 
   // Derive the selected realm object from the URL param (key)
-  const selectedRealm = useMemo(
-    () => realms.find((r) => r.key === realm),
-    [realms, realm],
-  );
+  const selectedRealm = realms.find((r) => r.key === realm);
 
   // Fetch lanes for the selected realm
   const lanesQuery = useGetApiV1AuthCampfireLanes(

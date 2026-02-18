@@ -215,8 +215,10 @@ export const getBgSeverity = (purpose: string) => {
       return "bg-orange-200 text-orange-800";
     case CampfireRealm.Discussion:
       return "bg-yellow-200 text-yellow-800";
+    case CampfireRealm.Creative:
+      return "bg-violet-200 text-violet-800";
     default:
-      return "bg-neutral-200 text-neutral-800";
+      return "bg-muted text-muted-foreground";
   }
 };
 

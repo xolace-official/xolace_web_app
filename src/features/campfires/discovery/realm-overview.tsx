@@ -30,6 +30,17 @@ import { Skeleton } from "@/components/ui/skeleton";
 import type { InteractionStyle } from "@/features/campfires";
 import { useAppStore } from "@/providers/app-store-provider";
 
+const VALID_INTERACTION_STYLES: ReadonlyArray<InteractionStyle> = [
+  "support",
+  "discussion",
+  "guided",
+  "creative",
+];
+
+function isValidInteractionStyle(value: string): value is InteractionStyle {
+  return (VALID_INTERACTION_STYLES as readonly string[]).includes(value);
+}
+
 // Map interaction styles to icons
 const interactionStyleIcons: Record<InteractionStyle, LucideIcon> = {
   discussion: Users,
@@ -38,24 +49,26 @@ const interactionStyleIcons: Record<InteractionStyle, LucideIcon> = {
   creative: Palette,
 };
 
-const getRealmBgColor = (style: InteractionStyle): string => {
+const getRealmBgColor = (style: InteractionStyle | undefined): string => {
+  if (!style) return "bg-muted text-muted-foreground";
   const colorMap: Record<InteractionStyle, string> = {
     discussion: "bg-chart-3/20 text-chart-3 dark:bg-chart-3/10",
     support: "bg-primary/20 text-primary dark:bg-primary/10",
     guided: "bg-destructive/20 text-destructive dark:bg-destructive/10",
     creative: "bg-chart-2/20 text-chart-2 dark:bg-chart-2/10",
   };
-  return colorMap[style] ?? "bg-muted text-muted-foreground";
+  return colorMap[style];
 };
 
-const getRealmBorderColor = (style: InteractionStyle): string => {
+const getRealmBorderColor = (style: InteractionStyle | undefined): string => {
+  if (!style) return "border-border";
   const colorMap: Record<InteractionStyle, string> = {
     discussion: "border-chart-3/30",
     support: "border-primary/30",
     guided: "border-destructive/30",
     creative: "border-chart-2/30",
   };
-  return colorMap[style] ?? "border-border";
+  return colorMap[style];
 };
 
 export const RealmOverview = () => {
@@ -111,8 +124,10 @@ const AllRealmsOverview = ({ accessToken }: { accessToken: string }) => {
       ) : realms.length > 0 ? (
         <div className="w-full grid grid-cols-2 gap-3 max-w-2xl mx-auto">
           {realms.map((realm) => {
-            const style = realm.key as InteractionStyle;
-            const Icon = interactionStyleIcons[style] ?? MessageCircle;
+            const style = isValidInteractionStyle(realm.key)
+              ? realm.key
+              : undefined;
+            const Icon = style ? interactionStyleIcons[style] : MessageCircle;
             return (
               <div
                 key={realm.id}
@@ -231,8 +246,8 @@ const RealmCard = ({
   realm: GetApiV1AuthCampfireRealms200DataItem;
   lanes: string[];
 }) => {
-  const style = realm.key as InteractionStyle;
-  const IconComponent = interactionStyleIcons[style] ?? MessageCircle;
+  const style = isValidInteractionStyle(realm.key) ? realm.key : undefined;
+  const IconComponent = style ? interactionStyleIcons[style] : MessageCircle;
 
   return (
     <Card
