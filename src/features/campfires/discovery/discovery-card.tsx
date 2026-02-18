@@ -2,6 +2,7 @@ import { Users } from "lucide-react";
 import Link from "next/link";
 import { memo } from "react";
 import type { GetApiV1AuthCampfireDiscovery200DataItem } from "@/api-client";
+import { cn } from "@/lib/utils";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import {
@@ -60,7 +61,10 @@ export const DiscoveryCard = memo(function DiscoveryCard({
 
           <div className="flex items-center justify-between pt-2 border-t border-border/20">
             <div
-              className={`flex items-center gap-1 text-xs font-medium ${config.iconColor}`}
+              className={cn(
+                "flex items-center gap-1 text-xs font-medium",
+                config.iconColor,
+              )}
             >
               <IconComponent size={12} />
               <span className="capitalize">{discovery.interaction_style}</span>
@@ -104,7 +108,10 @@ export const DiscoveryCard = memo(function DiscoveryCard({
                   </span>
                 </div>
                 <div
-                  className={`flex items-center gap-1 text-xs font-medium ${config.iconColor}`}
+                  className={cn(
+                    "flex items-center gap-1 text-xs font-medium",
+                    config.iconColor,
+                  )}
                 >
                   <IconComponent size={10} />
                   <span className="capitalize">

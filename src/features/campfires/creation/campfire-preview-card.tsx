@@ -37,7 +37,7 @@ export default function CampfirePreviewCard({
 
   const displayName = name?.trim() ? `x/${name.trim()}` : "x/campfire name";
   const displayDescription = description?.trim() || "Your campfire description";
-  const realmDisplayName = REALM_DISPLAY_MAP[realm] || "Expressive";
+  const realmDisplayName = REALM_DISPLAY_MAP[realm] || "Unknown";
   const hasIcon = iconUrl?.trim();
   const hasBanner = bannerUrl?.trim();
 

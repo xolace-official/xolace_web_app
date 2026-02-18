@@ -14,6 +14,7 @@ import { ParamsSearchBar } from "@/components/shared/params-search-bar";
 import { useFiltersServer } from "@/components/shared/search-params";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
+import { cn } from "@/lib/utils";
 import { useAppStore } from "@/providers/app-store-provider";
 
 export const DiscoveryFiltering = () => {
@@ -140,7 +141,12 @@ export const DiscoveryFiltering = () => {
         >
           <button
             type="button"
-            className={`${realm === "all" || !realm ? "border-b border-destructive text-destructive" : "hover:text-primary"} text-sm font-semibold px-1 md:px-2 cursor-pointer whitespace-nowrap shrink-0`}
+            className={cn(
+              realm === "all" || !realm
+                ? "border-b border-destructive text-destructive"
+                : "hover:text-primary",
+              "text-sm font-semibold px-1 md:px-2 cursor-pointer whitespace-nowrap shrink-0",
+            )}
             onClick={() => handleRealmClick("all")}
           >
             All
@@ -158,7 +164,12 @@ export const DiscoveryFiltering = () => {
                 <button
                   key={r.id}
                   type="button"
-                  className={`${active ? "border-b border-destructive text-destructive" : "hover:text-primary"} text-xs md:text-sm font-semibold px-1 md:px-2 cursor-pointer whitespace-nowrap shrink-0`}
+                  className={cn(
+                    active
+                      ? "border-b border-destructive text-destructive"
+                      : "hover:text-primary",
+                    "text-xs md:text-sm font-semibold px-1 md:px-2 cursor-pointer whitespace-nowrap shrink-0",
+                  )}
                   onClick={() => handleRealmClick(r.key)}
                 >
                   {r.name}
@@ -207,7 +218,12 @@ export const DiscoveryFiltering = () => {
                   <button
                     key={l.id}
                     type="button"
-                    className={`py-1 px-4 text-xs whitespace-nowrap shrink-0 border rounded-sm cursor-pointer ${active ? "border-destructive/20 bg-destructive text-destructive-foreground" : "border-border hover:bg-accent/20 hover:shadow-lg"}`}
+                    className={cn(
+                      "py-1 px-4 text-xs whitespace-nowrap shrink-0 border rounded-sm cursor-pointer",
+                      active
+                        ? "border-destructive/20 bg-destructive text-destructive-foreground"
+                        : "border-border hover:bg-accent/20 hover:shadow-lg",
+                    )}
                     onClick={() => handleLaneClick(l.key)}
                   >
                     {l.name}

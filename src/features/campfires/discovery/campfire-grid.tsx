@@ -110,7 +110,7 @@ export const CampfireGrid = () => {
           <DiscoveryCard key={discovery.id} discovery={discovery} />
         ))
       ) : (
-        <div className="col-span-1 md:col-span-3 lg:col-span-3 xl:col-span-4">
+        <div className="col-span-1 md:col-span-3 lg:col-span-3 2xl:col-span-4">
           <EmptyContent
             title={"No Campfires Here Yet"}
             description={
@@ -132,7 +132,7 @@ export const CampfireGrid = () => {
         </div>
       )}
       {discoveryQuery.isFetching && !discoveryQuery.isLoading && (
-        <div className="col-span-1 md:col-span-3 lg:col-span-3 xl:col-span-4 flex justify-center py-2">
+        <div className="col-span-1 md:col-span-3 lg:col-span-3 2xl:col-span-4 flex justify-center py-2">
           <Loader2 className="h-5 w-5 animate-spin text-muted-foreground" />
         </div>
       )}
@@ -142,7 +142,7 @@ export const CampfireGrid = () => {
 
 const DiscoveryListSkeleton = () => (
   <>
-    {Array.from({ length: 8 }).map((_, i) => (
+    {Array.from({ length: 6 }).map((_, i) => (
       <Skeleton
         key={`discovery-skeleton-${
           // biome-ignore lint/suspicious/noArrayIndexKey: skeleton items
