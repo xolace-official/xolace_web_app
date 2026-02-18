@@ -32,31 +32,25 @@ export enum CampfireRealm {
 }
 
 export enum CampfireLane {
-  // Collaborative lanes
+  // Discussion (Collaborative) lanes
   Projects = "projects",
   Resources = "resources",
   Feedback = "feedback",
   Partnerships = "partnerships",
 
-  // Supportive lanes
+  // Support (Supportive) lanes
   Advice = "advice",
   Encouragement = "encouragement",
   Experiences = "experiences",
   Questions = "questions",
 
-  // Motivational lanes
+  // Guided (Motivational) lanes
   Goals = "goals",
   Progress = "progress",
   Challenges = "challenges",
   Wins = "wins",
 
-  // Educational lanes
-  Tutorials = "tutorials",
-  Guides = "guides",
-  EducationalResources = "resources", // Note: duplicate key name with Collaborative
-  QA = "qa",
-
-  // Expressive lanes
+  // Creative (Expressive) lanes
   Showcase = "showcase",
   Creations = "creations",
   Discussion = "discussion",
