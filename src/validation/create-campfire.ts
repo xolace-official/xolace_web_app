@@ -25,39 +25,32 @@ export enum CampfireVisibility {
 }
 
 export enum CampfireRealm {
-  Collaborative = "collaborative",
-  Supportive = "supportive",
-  Motivational = "motivational",
-  Educational = "educational",
-  Expressive = "expressive",
+  Support = "support",
+  Discussion = "discussion",
+  Guided = "guided",
+  Creative = "creative",
 }
 
 export enum CampfireLane {
-  // Collaborative lanes
+  // Discussion (Collaborative) lanes
   Projects = "projects",
   Resources = "resources",
   Feedback = "feedback",
   Partnerships = "partnerships",
 
-  // Supportive lanes
+  // Support (Supportive) lanes
   Advice = "advice",
   Encouragement = "encouragement",
   Experiences = "experiences",
   Questions = "questions",
 
-  // Motivational lanes
+  // Guided (Motivational) lanes
   Goals = "goals",
   Progress = "progress",
   Challenges = "challenges",
   Wins = "wins",
 
-  // Educational lanes
-  Tutorials = "tutorials",
-  Guides = "guides",
-  EducationalResources = "resources", // Note: duplicate key name with Collaborative
-  QA = "qa",
-
-  // Expressive lanes
+  // Creative (Expressive) lanes
   Showcase = "showcase",
   Creations = "creations",
   Discussion = "discussion",
@@ -210,14 +203,16 @@ export interface CampfireAvatarInterface {
 
 export const getBgSeverity = (purpose: string) => {
   switch (purpose) {
-    case CampfireRealm.Supportive:
+    case CampfireRealm.Support:
       return "bg-green-200 text-green-800";
-    case CampfireRealm.Motivational:
+    case CampfireRealm.Guided:
       return "bg-orange-200 text-orange-800";
-    case CampfireRealm.Collaborative:
+    case CampfireRealm.Discussion:
       return "bg-yellow-200 text-yellow-800";
+    case CampfireRealm.Creative:
+      return "bg-violet-200 text-violet-800";
     default:
-      return "bg-neutral-200 text-neutral-800";
+      return "bg-muted text-muted-foreground";
   }
 };
 

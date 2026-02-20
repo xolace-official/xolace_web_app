@@ -8,11 +8,10 @@ import { CampfireRealm, type FullFormType } from "@/validation/create-campfire";
 import TagCard from "./tag-card";
 
 const REALM_DISPLAY_MAP: Record<CampfireRealm, string> = {
-  [CampfireRealm.Collaborative]: "Collaborative",
-  [CampfireRealm.Supportive]: "Supportive",
-  [CampfireRealm.Educational]: "Educational",
-  [CampfireRealm.Expressive]: "Expressive",
-  [CampfireRealm.Motivational]: "Motivational",
+  [CampfireRealm.Support]: "Support",
+  [CampfireRealm.Discussion]: "Discussion",
+  [CampfireRealm.Guided]: "Guided",
+  [CampfireRealm.Creative]: "Creative",
 };
 
 interface CampfirePreviewCardProps {
@@ -38,7 +37,7 @@ export default function CampfirePreviewCard({
 
   const displayName = name?.trim() ? `x/${name.trim()}` : "x/campfire name";
   const displayDescription = description?.trim() || "Your campfire description";
-  const realmDisplayName = REALM_DISPLAY_MAP[realm] || "Expressive";
+  const realmDisplayName = REALM_DISPLAY_MAP[realm] || "Unknown";
   const hasIcon = iconUrl?.trim();
   const hasBanner = bannerUrl?.trim();
 
