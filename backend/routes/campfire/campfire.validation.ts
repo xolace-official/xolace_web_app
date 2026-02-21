@@ -356,6 +356,18 @@ export const campfireDetailsResponse = z.object({
   data: campfireDetailsSchema,
 });
 
+export const toggleFavoriteParamsSchema = z.object({
+  campfireId: z.uuid().openapi({ param: { name: "campfireId", in: "path" } }),
+});
+
+export const toggleFavoriteBodySchema = z.object({
+  is_favorite: z.boolean(),
+});
+
+export const toggleFavoriteResponse = z.object({
+  data: z.object({ is_favorite: z.boolean() }),
+});
+
 export type ManageCampfireListItem = z.infer<
   typeof manageCampfireListItemSchema
 >;

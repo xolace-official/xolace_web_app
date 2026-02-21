@@ -2,18 +2,39 @@
 
 import { SquareDashedMousePointer, X } from "lucide-react";
 import { useState } from "react";
+import {
+  type GetApiV1AuthCampfireManage200DataItem,
+  useGetApiV1AuthCampfireManage,
+} from "@/api-client";
 import { AnimatedDrawer } from "@/components/builders/animated-drawer";
 import { Button } from "@/components/ui/button";
+import { Skeleton } from "@/components/ui/skeleton";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
+import {
+  extractApiDataArray,
+  useAuthHeaders,
+} from "@/features/campfires/campfire-api-utils";
+import { useAppStore } from "@/providers/app-store-provider";
+import { useManageCampfiresFilters } from "./manage-campfires-filter";
 import { tabOptions } from "./right-side-section";
+
+const PAGE_SIZE = "50";
 
 export const FilterDrawer = () => {
   const [isOpen, setIsOpen] = useState(false);
-  const [selectedTab, setSelectedTab] = useState("allCampfires");
+  const session = useAppStore((s) => s.session);
+  const authHeaders = useAuthHeaders(session.access_token);
+  const [{ tab }, setSearchParams] = useManageCampfiresFilters();
 
-  // Mock data lengths
-  const allFavoriteCampfires = [];
-  const allJoinedCampfires = [];
+  const { data, isLoading } = useGetApiV1AuthCampfireManage(
+    { page_size: PAGE_SIZE },
+    { fetch: authHeaders },
+  );
+
+  const allItems =
+    extractApiDataArray<GetApiV1AuthCampfireManage200DataItem>(data);
+  const allCount = allItems.length;
+  const favCount = allItems.filter((i) => i.is_favorite).length;
 
   return (
     <>
@@ -41,17 +62,17 @@ export const FilterDrawer = () => {
             </div>
             <ToggleGroup
               type="single"
-              value={selectedTab}
+              value={tab}
               onValueChange={(value) => {
-                if (value) setSelectedTab(value);
+                if (value) {
+                  setSearchParams({ tab: value });
+                  setIsOpen(false);
+                }
               }}
               className="flex flex-col gap-2 w-full"
             >
               {tabOptions.map((option) => {
-                const count =
-                  option.key === "favorites"
-                    ? allFavoriteCampfires.length
-                    : allJoinedCampfires.length;
+                const count = option.key === "favorites" ? favCount : allCount;
 
                 return (
                   <ToggleGroupItem
@@ -60,26 +81,18 @@ export const FilterDrawer = () => {
                     className="group flex w-full items-center justify-between rounded-lg! p-3 text-sm transition-colors h-auto data-[state=on]:bg-primary data-[state=on]:font-semibold data-[state=on]:text-primary-foreground dark:data-[state=on]:bg-primary dark:data-[state=on]:text-primary-foreground  dark:text-neutral-300 dark:hover:bg-primary/60 bg-secondary hover:bg-secondary/80 text-secondary-foreground"
                   >
                     <span>{option.label}</span>
-                    <span className="rounded-full px-2 py-1 text-xs text-foreground bg-slate-100 dark:bg-neutral-800 group-data-[state=on]:bg-background dark:group-data-[state=on]:bg-background">
-                      {count}
-                    </span>
+                    {isLoading ? (
+                      <Skeleton className="h-5 w-6 rounded-full" />
+                    ) : (
+                      <span className="rounded-full px-2 py-1 text-xs text-foreground bg-slate-100 dark:bg-neutral-800 group-data-[state=on]:bg-background dark:group-data-[state=on]:bg-background">
+                        {count}
+                      </span>
+                    )}
                   </ToggleGroupItem>
                 );
               })}
             </ToggleGroup>
           </AnimatedDrawer.Body>
-          {/* <AnimatedDrawer.Footer>
-            <Button
-              variant="secondary"
-              className="flex-1"
-              onClick={() => setIsOpen(false)}
-            >
-              Cancel
-            </Button>
-            <Button className="flex-1" onClick={() => setIsOpen(false)}>
-              Confirm
-            </Button>
-          </AnimatedDrawer.Footer> */}
         </AnimatedDrawer.Content>
       </AnimatedDrawer>
     </>

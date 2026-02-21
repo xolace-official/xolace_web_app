@@ -1,185 +1,91 @@
 "use client";
 
-import { useCallback, useState } from "react";
+import { Flame } from "lucide-react";
+import {
+  type GetApiV1AuthCampfireManage200DataItem,
+  useGetApiV1AuthCampfireManage,
+} from "@/api-client";
+import { EmptyContent } from "@/components/app/empty-content";
 import ManageCampfireCard, {
   type UserCampfireFavoriteJoin,
 } from "@/components/cards/campfires/manage-card";
+import { Skeleton } from "@/components/ui/skeleton";
+import {
+  extractApiDataArray,
+  useAuthHeaders,
+} from "@/features/campfires/campfire-api-utils";
+import { useToggleFavorite } from "@/hooks/campfires/use-toggle-favorite";
+import { useAppStore } from "@/providers/app-store-provider";
+import { useManageCampfiresFilters } from "./manage-campfires-filter";
 
-/**
- * Dummy campfire data for demonstration
- */
-const DUMMY_CAMPFIRES: UserCampfireFavoriteJoin[] = [
-  {
-    campfireId: "1",
-    name: "Web Development",
-    slug: "web-dev",
-    description:
-      "A community for web developers to share knowledge and collaborate on projects",
-    iconURL: "https://api.dicebear.com/7.x/shapes/svg?seed=web-dev",
-    isFavorite: true,
-    isJoined: true,
-  },
-  {
-    campfireId: "2",
-    name: "React Enthusiasts",
-    slug: "react-enthusiasts",
-    description:
-      "Everything React - hooks, components, state management, and more",
-    iconURL: "https://api.dicebear.com/7.x/shapes/svg?seed=react",
-    isFavorite: false,
-    isJoined: true,
-  },
-  {
-    campfireId: "3",
-    name: "TypeScript Wizards",
-    slug: "typescript-wizards",
-    description: "Master TypeScript with fellow type-safe enthusiasts",
-    iconURL: "https://api.dicebear.com/7.x/shapes/svg?seed=typescript",
-    isFavorite: true,
-    isJoined: false,
-  },
-  {
-    campfireId: "4",
-    name: "Design Systems",
-    slug: "design-systems",
-    description:
-      "Building scalable, maintainable design systems for modern applications,  maintainable design systems for modern applications  maintainable design systems for modern applications  maintainable design systems for modern applications",
-    isFavorite: false,
-    isJoined: false,
-  },
-  {
-    campfireId: "5",
-    name: "Next.js Developers",
-    slug: "nextjs-devs",
-    description: "Server components, app router, and everything Next.js 14+",
-    iconURL: "https://api.dicebear.com/7.x/shapes/svg?seed=nextjs",
-    isFavorite: false,
-    isJoined: true,
-  },
-  {
-    campfireId: "6",
-    name: "React Developers",
-    slug: "react-devs",
-    description: "Server components, app router, and everything Next.js 14+",
-    iconURL: "https://api.dicebear.com/7.x/shapes/svg?seed=nextjs",
-    isFavorite: false,
-    isJoined: true,
-  },
-  {
-    campfireId: "7",
-    name: "React Developers",
-    slug: "react-devs",
-    description: "Server components, app router, and everything Next.js 14+",
-    iconURL: "https://api.dicebear.com/7.x/shapes/svg?seed=nextjs",
-    isFavorite: false,
-    isJoined: true,
-  },
-  {
-    campfireId: "8",
-    name: "React Developers",
-    slug: "react-devs",
-    description: "Server components, app router, and everything Next.js 14+",
-    iconURL: "https://api.dicebear.com/7.x/shapes/svg?seed=nextjs",
-    isFavorite: false,
-    isJoined: true,
-  },
-  {
-    campfireId: "9",
-    name: "React Developers",
-    slug: "react-devs",
-    description: "Server components, app router, and everything Next.js 14+",
-    iconURL: "https://api.dicebear.com/7.x/shapes/svg?seed=nextjs",
-    isFavorite: false,
-    isJoined: true,
-  },
-  {
-    campfireId: "10",
-    name: "React Developers",
-    slug: "react-devs",
-    description: "Server components, app router, and everything Next.js 14+",
-    iconURL: "https://api.dicebear.com/7.x/shapes/svg?seed=nextjs",
-    isFavorite: false,
-    isJoined: true,
-  },
-  {
-    campfireId: "11",
-    name: "React Developers",
-    slug: "react-devs",
-    description: "Server components, app router, and everything Next.js 14+",
-    iconURL: "https://api.dicebear.com/7.x/shapes/svg?seed=nextjs",
-    isFavorite: false,
-    isJoined: true,
-  },
-  {
-    campfireId: "12",
-    name: "React Developers",
-    slug: "react-devs",
-    description: "Server components, app router, and everything Next.js 14+",
-    iconURL: "https://api.dicebear.com/7.x/shapes/svg?seed=nextjs",
-    isFavorite: false,
-    isJoined: true,
-  },
-  {
-    campfireId: "13",
-    name: "React Developers",
-    slug: "react-devs",
-    description: "Server components, app router, and everything Next.js 14+",
-    iconURL: "https://api.dicebear.com/7.x/shapes/svg?seed=nextjs",
-    isFavorite: false,
-    isJoined: true,
-  },
-  {
-    campfireId: "14",
-    name: "React Developers",
-    slug: "react-devs",
-    description: "Server components, app router, and everything Next.js 14+",
-    iconURL: "https://api.dicebear.com/7.x/shapes/svg?seed=nextjs",
-    isFavorite: false,
-    isJoined: true,
-  },
-];
+const PAGE_SIZE = "50";
 
 export function ManageCampfireList() {
-  const [campfires, setCampfires] = useState(DUMMY_CAMPFIRES);
-  const [togglingId, setTogglingId] = useState<string | null>(null);
-  const [joiningId, setJoiningId] = useState<string | null>(null);
+  const session = useAppStore((s) => s.session);
+  const authHeaders = useAuthHeaders(session.access_token);
+  const [{ tab, query }] = useManageCampfiresFilters();
 
-  const handleToggleFavorite = useCallback(
-    async (campfireId: string, currentState: boolean) => {
-      setTogglingId(campfireId);
-
-      // Simulate API call
-      await new Promise((resolve) => setTimeout(resolve, 500));
-
-      setCampfires((prev) =>
-        prev.map((campfire) =>
-          campfire.campfireId === campfireId
-            ? { ...campfire, isFavorite: !currentState }
-            : campfire,
-        ),
-      );
-
-      setTogglingId(null);
-    },
-    [],
+  const { data, isLoading } = useGetApiV1AuthCampfireManage(
+    { page_size: PAGE_SIZE },
+    { fetch: authHeaders },
   );
 
-  const handleJoinCampfire = useCallback(async (campfireId: string) => {
-    setJoiningId(campfireId);
+  const toggleFavMutation = useToggleFavorite();
 
-    // Simulate API call
-    await new Promise((resolve) => setTimeout(resolve, 800));
+  const allItems =
+    extractApiDataArray<GetApiV1AuthCampfireManage200DataItem>(data);
 
-    setCampfires((prev) =>
-      prev.map((campfire) =>
-        campfire.campfireId === campfireId
-          ? { ...campfire, isJoined: true }
-          : campfire,
-      ),
+  const filtered = allItems
+    .filter((item) => (tab === "favorites" ? item.is_favorite : true))
+    .filter(
+      (item) =>
+        !query ||
+        item.campfire.name.toLowerCase().includes(query.toLowerCase()),
     );
 
-    setJoiningId(null);
-  }, []);
+  const campfires: UserCampfireFavoriteJoin[] = filtered.map((item) => ({
+    campfireId: item.campfire_id,
+    name: item.campfire.name,
+    slug: item.campfire.slug,
+    description: item.campfire.description ?? undefined,
+    iconURL: item.campfire.icon_path ?? undefined,
+    isFavorite: item.is_favorite,
+    isJoined: true,
+  }));
+
+  if (isLoading) {
+    return (
+      <div className="flex flex-col gap-4">
+        {Array.from({ length: 6 }).map((_, i) => (
+          // biome-ignore lint/suspicious/noArrayIndexKey: skeleton rows
+          <div key={i} className="flex items-center gap-3">
+            <Skeleton className="size-8 rounded-full shrink-0" />
+            <div className="flex flex-col gap-1 flex-1">
+              <Skeleton className="h-4 w-32" />
+              <Skeleton className="h-3 w-48" />
+            </div>
+            <Skeleton className="h-8 w-20 rounded-full" />
+          </div>
+        ))}
+      </div>
+    );
+  }
+
+  if (campfires.length === 0) {
+    return (
+      <EmptyContent
+        icon={<Flame className="size-8 text-muted-foreground" />}
+        title={tab === "favorites" ? "No favorites yet" : "No campfires found"}
+        description={
+          tab === "favorites"
+            ? "Star a campfire to add it to your favorites."
+            : query
+              ? "No campfires match your search."
+              : "You haven't joined any campfires yet."
+        }
+      />
+    );
+  }
 
   return (
     <div className="flex flex-col gap-4 *:content-visibility-auto">
@@ -187,10 +93,13 @@ export function ManageCampfireList() {
         <ManageCampfireCard
           key={campfire.campfireId}
           {...campfire}
-          onToggleFavorite={handleToggleFavorite}
-          onJoinCampfire={handleJoinCampfire}
-          isTogglingFavorite={togglingId === campfire.campfireId}
-          isJoining={joiningId === campfire.campfireId}
+          onToggleFavorite={(id, current) =>
+            toggleFavMutation.mutate({ campfireId: id, is_favorite: !current })
+          }
+          isTogglingFavorite={
+            toggleFavMutation.isPending &&
+            toggleFavMutation.variables?.campfireId === campfire.campfireId
+          }
         />
       ))}
     </div>

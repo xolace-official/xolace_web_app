@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { Suspense } from "react";
 import { ManageCampfires } from "@/app/(protected)/user/x/campfires/manage-campfires";
 
 export const metadata: Metadata = {
@@ -7,7 +8,11 @@ export const metadata: Metadata = {
 };
 
 const ManageCampfiresPage = () => {
-  return <ManageCampfires />;
+  return (
+    <Suspense>
+      <ManageCampfires />
+    </Suspense>
+  );
 };
 
 export default ManageCampfiresPage;

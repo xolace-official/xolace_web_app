@@ -46,6 +46,8 @@ export type PostApiV1PublicSignin401 = {
 export type GetApiV1PublicUsernameCheckParams = {
   /**
    * @minLength 3
+   * @maxLength 30
+   * @pattern ^[a-zA-Z0-9_-]+$
    */
   username: string;
 };
@@ -672,6 +674,30 @@ export type GetApiV1AuthCampfireSlug404 = {
 };
 
 export type GetApiV1AuthCampfireSlug500 = {
+  message: string;
+};
+
+export type PatchApiV1AuthCampfireCampfireIdFavoriteBody = {
+  is_favorite: boolean;
+};
+
+export type PatchApiV1AuthCampfireCampfireIdFavorite200Data = {
+  is_favorite: boolean;
+};
+
+export type PatchApiV1AuthCampfireCampfireIdFavorite200 = {
+  data: PatchApiV1AuthCampfireCampfireIdFavorite200Data;
+};
+
+export type PatchApiV1AuthCampfireCampfireIdFavorite401 = {
+  message: string;
+};
+
+export type PatchApiV1AuthCampfireCampfireIdFavorite404 = {
+  message: string;
+};
+
+export type PatchApiV1AuthCampfireCampfireIdFavorite500 = {
   message: string;
 };
 
@@ -1909,6 +1935,10 @@ export type GetApiV1AuthPreferences200 = {
 };
 
 export type GetApiV1AuthPreferences401 = {
+  message: string;
+};
+
+export type GetApiV1AuthPreferences404 = {
   message: string;
 };
 
@@ -6453,6 +6483,170 @@ export function useGetApiV1AuthCampfireSlug<
 
   return query;
 }
+
+/**
+ * Sets the is_favorite flag on the user's campfire membership.
+ * @summary Toggle campfire favorite
+ */
+export type patchApiV1AuthCampfireCampfireIdFavoriteResponse200 = {
+  data: PatchApiV1AuthCampfireCampfireIdFavorite200;
+  status: 200;
+};
+
+export type patchApiV1AuthCampfireCampfireIdFavoriteResponse401 = {
+  data: PatchApiV1AuthCampfireCampfireIdFavorite401;
+  status: 401;
+};
+
+export type patchApiV1AuthCampfireCampfireIdFavoriteResponse404 = {
+  data: PatchApiV1AuthCampfireCampfireIdFavorite404;
+  status: 404;
+};
+
+export type patchApiV1AuthCampfireCampfireIdFavoriteResponse500 = {
+  data: PatchApiV1AuthCampfireCampfireIdFavorite500;
+  status: 500;
+};
+
+export type patchApiV1AuthCampfireCampfireIdFavoriteResponseSuccess =
+  patchApiV1AuthCampfireCampfireIdFavoriteResponse200 & {
+    headers: Headers;
+  };
+export type patchApiV1AuthCampfireCampfireIdFavoriteResponseError = (
+  | patchApiV1AuthCampfireCampfireIdFavoriteResponse401
+  | patchApiV1AuthCampfireCampfireIdFavoriteResponse404
+  | patchApiV1AuthCampfireCampfireIdFavoriteResponse500
+) & {
+  headers: Headers;
+};
+
+export type patchApiV1AuthCampfireCampfireIdFavoriteResponse =
+  | patchApiV1AuthCampfireCampfireIdFavoriteResponseSuccess
+  | patchApiV1AuthCampfireCampfireIdFavoriteResponseError;
+
+export const getPatchApiV1AuthCampfireCampfireIdFavoriteUrl = (
+  campfireId: string,
+) => {
+  return `/api/v1/auth/campfire/${campfireId}/favorite`;
+};
+
+export const patchApiV1AuthCampfireCampfireIdFavorite = async (
+  campfireId: string,
+  patchApiV1AuthCampfireCampfireIdFavoriteBody: PatchApiV1AuthCampfireCampfireIdFavoriteBody,
+  options?: RequestInit,
+): Promise<patchApiV1AuthCampfireCampfireIdFavoriteResponse> => {
+  const res = await fetch(
+    getPatchApiV1AuthCampfireCampfireIdFavoriteUrl(campfireId),
+    {
+      ...options,
+      method: "PATCH",
+      headers: { "Content-Type": "application/json", ...options?.headers },
+      body: JSON.stringify(patchApiV1AuthCampfireCampfireIdFavoriteBody),
+    },
+  );
+
+  const body = [204, 205, 304].includes(res.status) ? null : await res.text();
+
+  const data: patchApiV1AuthCampfireCampfireIdFavoriteResponse["data"] = body
+    ? JSON.parse(body)
+    : {};
+  return {
+    data,
+    status: res.status,
+    headers: res.headers,
+  } as patchApiV1AuthCampfireCampfireIdFavoriteResponse;
+};
+
+export const getPatchApiV1AuthCampfireCampfireIdFavoriteMutationOptions = <
+  TError =
+    | PatchApiV1AuthCampfireCampfireIdFavorite401
+    | PatchApiV1AuthCampfireCampfireIdFavorite404
+    | PatchApiV1AuthCampfireCampfireIdFavorite500,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof patchApiV1AuthCampfireCampfireIdFavorite>>,
+    TError,
+    { campfireId: string; data: PatchApiV1AuthCampfireCampfireIdFavoriteBody },
+    TContext
+  >;
+  fetch?: RequestInit;
+}): UseMutationOptions<
+  Awaited<ReturnType<typeof patchApiV1AuthCampfireCampfireIdFavorite>>,
+  TError,
+  { campfireId: string; data: PatchApiV1AuthCampfireCampfireIdFavoriteBody },
+  TContext
+> => {
+  const mutationKey = ["patchApiV1AuthCampfireCampfireIdFavorite"];
+  const { mutation: mutationOptions, fetch: fetchOptions } = options
+    ? options.mutation &&
+      "mutationKey" in options.mutation &&
+      options.mutation.mutationKey
+      ? options
+      : { ...options, mutation: { ...options.mutation, mutationKey } }
+    : { mutation: { mutationKey }, fetch: undefined };
+
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof patchApiV1AuthCampfireCampfireIdFavorite>>,
+    { campfireId: string; data: PatchApiV1AuthCampfireCampfireIdFavoriteBody }
+  > = (props) => {
+    const { campfireId, data } = props ?? {};
+
+    return patchApiV1AuthCampfireCampfireIdFavorite(
+      campfireId,
+      data,
+      fetchOptions,
+    );
+  };
+
+  return { mutationFn, ...mutationOptions };
+};
+
+export type PatchApiV1AuthCampfireCampfireIdFavoriteMutationResult =
+  NonNullable<
+    Awaited<ReturnType<typeof patchApiV1AuthCampfireCampfireIdFavorite>>
+  >;
+export type PatchApiV1AuthCampfireCampfireIdFavoriteMutationBody =
+  PatchApiV1AuthCampfireCampfireIdFavoriteBody;
+export type PatchApiV1AuthCampfireCampfireIdFavoriteMutationError =
+  | PatchApiV1AuthCampfireCampfireIdFavorite401
+  | PatchApiV1AuthCampfireCampfireIdFavorite404
+  | PatchApiV1AuthCampfireCampfireIdFavorite500;
+
+/**
+ * @summary Toggle campfire favorite
+ */
+export const usePatchApiV1AuthCampfireCampfireIdFavorite = <
+  TError =
+    | PatchApiV1AuthCampfireCampfireIdFavorite401
+    | PatchApiV1AuthCampfireCampfireIdFavorite404
+    | PatchApiV1AuthCampfireCampfireIdFavorite500,
+  TContext = unknown,
+>(
+  options?: {
+    mutation?: UseMutationOptions<
+      Awaited<ReturnType<typeof patchApiV1AuthCampfireCampfireIdFavorite>>,
+      TError,
+      {
+        campfireId: string;
+        data: PatchApiV1AuthCampfireCampfireIdFavoriteBody;
+      },
+      TContext
+    >;
+    fetch?: RequestInit;
+  },
+  queryClient?: QueryClient,
+): UseMutationResult<
+  Awaited<ReturnType<typeof patchApiV1AuthCampfireCampfireIdFavorite>>,
+  TError,
+  { campfireId: string; data: PatchApiV1AuthCampfireCampfireIdFavoriteBody },
+  TContext
+> => {
+  const mutationOptions =
+    getPatchApiV1AuthCampfireCampfireIdFavoriteMutationOptions(options);
+
+  return useMutation(mutationOptions, queryClient);
+};
 
 /**
  * Returns a paginated list of collections owned by the authenticated user. Collections are ordered by: pinned status (desc), position (asc), created_at (desc). Use the `limit` query param for sidebar preview (e.g., 3-5 items).
@@ -13020,6 +13214,11 @@ export type getApiV1AuthPreferencesResponse401 = {
   status: 401;
 };
 
+export type getApiV1AuthPreferencesResponse404 = {
+  data: GetApiV1AuthPreferences404;
+  status: 404;
+};
+
 export type getApiV1AuthPreferencesResponse500 = {
   data: GetApiV1AuthPreferences500;
   status: 500;
@@ -13031,6 +13230,7 @@ export type getApiV1AuthPreferencesResponseSuccess =
   };
 export type getApiV1AuthPreferencesResponseError = (
   | getApiV1AuthPreferencesResponse401
+  | getApiV1AuthPreferencesResponse404
   | getApiV1AuthPreferencesResponse500
 ) & {
   headers: Headers;
@@ -13074,7 +13274,10 @@ export const getGetApiV1AuthPreferencesQueryKey = () => {
 
 export const getGetApiV1AuthPreferencesInfiniteQueryOptions = <
   TData = InfiniteData<Awaited<ReturnType<typeof getApiV1AuthPreferences>>>,
-  TError = GetApiV1AuthPreferences401 | GetApiV1AuthPreferences500,
+  TError =
+    | GetApiV1AuthPreferences401
+    | GetApiV1AuthPreferences404
+    | GetApiV1AuthPreferences500,
 >(options?: {
   query?: Partial<
     UseInfiniteQueryOptions<
@@ -13106,11 +13309,15 @@ export type GetApiV1AuthPreferencesInfiniteQueryResult = NonNullable<
 >;
 export type GetApiV1AuthPreferencesInfiniteQueryError =
   | GetApiV1AuthPreferences401
+  | GetApiV1AuthPreferences404
   | GetApiV1AuthPreferences500;
 
 export function useGetApiV1AuthPreferencesInfinite<
   TData = InfiniteData<Awaited<ReturnType<typeof getApiV1AuthPreferences>>>,
-  TError = GetApiV1AuthPreferences401 | GetApiV1AuthPreferences500,
+  TError =
+    | GetApiV1AuthPreferences401
+    | GetApiV1AuthPreferences404
+    | GetApiV1AuthPreferences500,
 >(
   options: {
     query: Partial<
@@ -13136,7 +13343,10 @@ export function useGetApiV1AuthPreferencesInfinite<
 };
 export function useGetApiV1AuthPreferencesInfinite<
   TData = InfiniteData<Awaited<ReturnType<typeof getApiV1AuthPreferences>>>,
-  TError = GetApiV1AuthPreferences401 | GetApiV1AuthPreferences500,
+  TError =
+    | GetApiV1AuthPreferences401
+    | GetApiV1AuthPreferences404
+    | GetApiV1AuthPreferences500,
 >(
   options?: {
     query?: Partial<
@@ -13162,7 +13372,10 @@ export function useGetApiV1AuthPreferencesInfinite<
 };
 export function useGetApiV1AuthPreferencesInfinite<
   TData = InfiniteData<Awaited<ReturnType<typeof getApiV1AuthPreferences>>>,
-  TError = GetApiV1AuthPreferences401 | GetApiV1AuthPreferences500,
+  TError =
+    | GetApiV1AuthPreferences401
+    | GetApiV1AuthPreferences404
+    | GetApiV1AuthPreferences500,
 >(
   options?: {
     query?: Partial<
@@ -13184,7 +13397,10 @@ export function useGetApiV1AuthPreferencesInfinite<
 
 export function useGetApiV1AuthPreferencesInfinite<
   TData = InfiniteData<Awaited<ReturnType<typeof getApiV1AuthPreferences>>>,
-  TError = GetApiV1AuthPreferences401 | GetApiV1AuthPreferences500,
+  TError =
+    | GetApiV1AuthPreferences401
+    | GetApiV1AuthPreferences404
+    | GetApiV1AuthPreferences500,
 >(
   options?: {
     query?: Partial<
@@ -13216,7 +13432,10 @@ export function useGetApiV1AuthPreferencesInfinite<
 
 export const getGetApiV1AuthPreferencesQueryOptions = <
   TData = Awaited<ReturnType<typeof getApiV1AuthPreferences>>,
-  TError = GetApiV1AuthPreferences401 | GetApiV1AuthPreferences500,
+  TError =
+    | GetApiV1AuthPreferences401
+    | GetApiV1AuthPreferences404
+    | GetApiV1AuthPreferences500,
 >(options?: {
   query?: Partial<
     UseQueryOptions<
@@ -13248,11 +13467,15 @@ export type GetApiV1AuthPreferencesQueryResult = NonNullable<
 >;
 export type GetApiV1AuthPreferencesQueryError =
   | GetApiV1AuthPreferences401
+  | GetApiV1AuthPreferences404
   | GetApiV1AuthPreferences500;
 
 export function useGetApiV1AuthPreferences<
   TData = Awaited<ReturnType<typeof getApiV1AuthPreferences>>,
-  TError = GetApiV1AuthPreferences401 | GetApiV1AuthPreferences500,
+  TError =
+    | GetApiV1AuthPreferences401
+    | GetApiV1AuthPreferences404
+    | GetApiV1AuthPreferences500,
 >(
   options: {
     query: Partial<
@@ -13278,7 +13501,10 @@ export function useGetApiV1AuthPreferences<
 };
 export function useGetApiV1AuthPreferences<
   TData = Awaited<ReturnType<typeof getApiV1AuthPreferences>>,
-  TError = GetApiV1AuthPreferences401 | GetApiV1AuthPreferences500,
+  TError =
+    | GetApiV1AuthPreferences401
+    | GetApiV1AuthPreferences404
+    | GetApiV1AuthPreferences500,
 >(
   options?: {
     query?: Partial<
@@ -13304,7 +13530,10 @@ export function useGetApiV1AuthPreferences<
 };
 export function useGetApiV1AuthPreferences<
   TData = Awaited<ReturnType<typeof getApiV1AuthPreferences>>,
-  TError = GetApiV1AuthPreferences401 | GetApiV1AuthPreferences500,
+  TError =
+    | GetApiV1AuthPreferences401
+    | GetApiV1AuthPreferences404
+    | GetApiV1AuthPreferences500,
 >(
   options?: {
     query?: Partial<
@@ -13326,7 +13555,10 @@ export function useGetApiV1AuthPreferences<
 
 export function useGetApiV1AuthPreferences<
   TData = Awaited<ReturnType<typeof getApiV1AuthPreferences>>,
-  TError = GetApiV1AuthPreferences401 | GetApiV1AuthPreferences500,
+  TError =
+    | GetApiV1AuthPreferences401
+    | GetApiV1AuthPreferences404
+    | GetApiV1AuthPreferences500,
 >(
   options?: {
     query?: Partial<

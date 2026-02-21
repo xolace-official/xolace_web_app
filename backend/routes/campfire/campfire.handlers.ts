@@ -10,6 +10,7 @@ import type {
   GetCampfireRealmsRoute,
   GetDiscoveryCampfiresRoute,
   GetManageCampfiresRoute,
+  PatchCampfireFavoriteRoute,
 } from "./campfire.routes";
 import type {
   discoveryCampfiresResponse,
@@ -104,6 +105,8 @@ export const getManageCampfires: AppRouteHandler<
         hasNextPage: pageNumber < totalPages - 1,
       },
     };
+
+    console.log("response ", response);
 
     return c.json(response, HttpStatusCodes.OK);
   } catch (error) {
@@ -394,6 +397,43 @@ export const getCampfireLanes: AppRouteHandler<GetCampfireLanesRoute> = async (
   }
 
   return c.json({ data: data ?? [] }, HttpStatusCodes.OK);
+};
+
+export const patchCampfireFavorite: AppRouteHandler<
+  PatchCampfireFavoriteRoute
+> = async (c) => {
+  const userId = c.get("userId");
+  const supabase = c.get("supabase");
+  const { campfireId } = c.req.valid("param");
+  const { is_favorite } = c.req.valid("json");
+
+  const { data, error } = await supabase
+    .from("campfire_members")
+    .update({ is_favorite })
+    .eq("campfire_id", campfireId)
+    .eq("user_id", userId)
+    .eq("status", "approved")
+    .select("is_favorite")
+    .maybeSingle();
+  console.log("error ", error);
+  if (error) {
+    return c.json(
+      { message: "Failed to update favorite" },
+      HttpStatusCodes.INTERNAL_SERVER_ERROR,
+    );
+  }
+
+  if (!data) {
+    return c.json(
+      { message: "Membership not found" },
+      HttpStatusCodes.NOT_FOUND,
+    );
+  }
+
+  return c.json(
+    { data: { is_favorite: data.is_favorite } },
+    HttpStatusCodes.OK,
+  );
 };
 
 export const getCampfireDetails: AppRouteHandler<
