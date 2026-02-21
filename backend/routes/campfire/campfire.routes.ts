@@ -19,6 +19,9 @@ import {
   manageCampfiresPaginatedResponse,
   manageCampfiresQuery,
   manageCampfiresResponse,
+  toggleFavoriteBodySchema,
+  toggleFavoriteParamsSchema,
+  toggleFavoriteResponse,
 } from "./campfire.validation";
 
 const tags = ["Campfires"];
@@ -256,6 +259,36 @@ export const getCampfireDetails = createRoute({
   },
 });
 
+export const patchCampfireFavorite = createRoute({
+  method: "patch",
+  path: "/{campfireId}/favorite",
+  summary: "Toggle campfire favorite",
+  description: "Sets the is_favorite flag on the user's campfire membership.",
+  tags,
+  request: {
+    params: toggleFavoriteParamsSchema,
+    body: jsonContent(toggleFavoriteBodySchema, "Favorite state"),
+  },
+  responses: {
+    [HttpStatusCodes.OK]: jsonContent(
+      toggleFavoriteResponse,
+      "Updated favorite state",
+    ),
+    [HttpStatusCodes.UNAUTHORIZED]: jsonContent(
+      createMessageObjectSchema("Unauthorized"),
+      "Auth required",
+    ),
+    [HttpStatusCodes.NOT_FOUND]: jsonContent(
+      createMessageObjectSchema("Membership not found"),
+      "Not a member",
+    ),
+    [HttpStatusCodes.INTERNAL_SERVER_ERROR]: jsonContent(
+      internalServerErrorSchema,
+      "Server error",
+    ),
+  },
+});
+
 export type GetManageCampfiresRoute = typeof getManageCampfires;
 export type GetManageCampfiresSimpleRoute = typeof getManageCampfiresSimple;
 export type GetDiscoveryCampfiresRoute = typeof getDiscoveryCampfires;
@@ -264,3 +297,4 @@ export type GetCampfireRealmsRoute = typeof getCampfireRealms;
 export type GetCampfireLanesRoute = typeof getCampfireLanes;
 export type GetCampfireMembershipRoute = typeof getCampfireMembership;
 export type GetCampfireDetailsRoute = typeof getCampfireDetails;
+export type PatchCampfireFavoriteRoute = typeof patchCampfireFavorite;
