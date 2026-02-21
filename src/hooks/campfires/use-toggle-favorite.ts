@@ -62,7 +62,8 @@ export function useToggleFavorite() {
       return { previous };
     },
 
-    onError: (_err, _vars, context) => {
+    onError: (err, _vars, context) => {
+      console.error("useToggleFavorite error:", err);
       queryClient.setQueryData(queryKey, context?.previous);
       toast.error("Failed to update favorite");
     },

@@ -407,33 +407,42 @@ export const patchCampfireFavorite: AppRouteHandler<
   const { campfireId } = c.req.valid("param");
   const { is_favorite } = c.req.valid("json");
 
-  const { data, error } = await supabase
-    .from("campfire_members")
-    .update({ is_favorite })
-    .eq("campfire_id", campfireId)
-    .eq("user_id", userId)
-    .eq("status", "approved")
-    .select("is_favorite")
-    .maybeSingle();
-  console.log("error ", error);
-  if (error) {
+  try {
+    const { data, error } = await supabase
+      .from("campfire_members")
+      .update({ is_favorite })
+      .eq("campfire_id", campfireId)
+      .eq("user_id", userId)
+      .eq("status", "approved")
+      .select("is_favorite")
+      .maybeSingle();
+
+    if (error) {
+      return c.json(
+        { message: "Failed to update favorite" },
+        HttpStatusCodes.INTERNAL_SERVER_ERROR,
+      );
+    }
+
+    if (!data) {
+      return c.json(
+        { message: "Membership not found" },
+        HttpStatusCodes.NOT_FOUND,
+      );
+    }
+
+    return c.json(
+      { data: { is_favorite: data.is_favorite } },
+      HttpStatusCodes.OK,
+    );
+  } catch (error) {
+    console.error("patchCampfireFavorite exception:", error);
+
     return c.json(
       { message: "Failed to update favorite" },
       HttpStatusCodes.INTERNAL_SERVER_ERROR,
     );
   }
-
-  if (!data) {
-    return c.json(
-      { message: "Membership not found" },
-      HttpStatusCodes.NOT_FOUND,
-    );
-  }
-
-  return c.json(
-    { data: { is_favorite: data.is_favorite } },
-    HttpStatusCodes.OK,
-  );
 };
 
 export const getCampfireDetails: AppRouteHandler<
