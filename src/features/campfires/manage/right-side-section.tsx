@@ -1,17 +1,9 @@
 "use client";
 
-import {
-  type GetApiV1AuthCampfireManage200DataItem,
-  useGetApiV1AuthCampfireManage,
-} from "@/api-client";
 import { LegalFooter } from "@/components/shared/legal-footer";
 import { Skeleton } from "@/components/ui/skeleton";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
-import {
-  extractApiDataArray,
-  useAuthHeaders,
-} from "@/features/campfires/campfire-api-utils";
-import { useAppStore } from "@/providers/app-store-provider";
+import { useManageCampfireCounts } from "@/hooks/campfires/use-manage-campfire-counts";
 import { useManageCampfiresFilters } from "./manage-campfires-filter";
 
 export const tabOptions: { key: string; label: string }[] = [
@@ -19,22 +11,9 @@ export const tabOptions: { key: string; label: string }[] = [
   { key: "favorites", label: "Favorites" },
 ];
 
-const PAGE_SIZE = "50";
-
 export const RightSideSection = () => {
-  const session = useAppStore((s) => s.session);
-  const authHeaders = useAuthHeaders(session.access_token);
   const [{ tab }, setSearchParams] = useManageCampfiresFilters();
-
-  const { data, isLoading } = useGetApiV1AuthCampfireManage(
-    { page_size: PAGE_SIZE },
-    { fetch: authHeaders },
-  );
-
-  const allItems =
-    extractApiDataArray<GetApiV1AuthCampfireManage200DataItem>(data);
-  const allCount = allItems.length;
-  const favCount = allItems.filter((i) => i.is_favorite).length;
+  const { allCount, favCount, isLoading } = useManageCampfireCounts();
 
   return (
     <div className="flex flex-col gap-10">
@@ -64,7 +43,7 @@ export const RightSideSection = () => {
                 {isLoading ? (
                   <Skeleton className="h-5 w-6 rounded-full" />
                 ) : (
-                  <span className="rounded-full px-2 py-1 text-xs text-foreground bg-slate-100 dark:bg-neutral-800 group-data-[state=on]:bg-background dark:group-data-[state=on]:bg-background">
+                  <span className="rounded-full px-2 py-1 text-xs text-foreground bg-muted group-data-[state=on]:bg-background">
                     {count}
                   </span>
                 )}

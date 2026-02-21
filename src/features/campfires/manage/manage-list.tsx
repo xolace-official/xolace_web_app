@@ -16,21 +16,48 @@ import {
 } from "@/features/campfires/campfire-api-utils";
 import { useToggleFavorite } from "@/hooks/campfires/use-toggle-favorite";
 import { useAppStore } from "@/providers/app-store-provider";
+import { CAMPFIRE_PAGE_SIZE } from "@/features/campfires/campfire.constants";
 import { useManageCampfiresFilters } from "./manage-campfires-filter";
-
-const PAGE_SIZE = "50";
 
 export function ManageCampfireList() {
   const session = useAppStore((s) => s.session);
   const authHeaders = useAuthHeaders(session.access_token);
   const [{ tab, query }] = useManageCampfiresFilters();
 
-  const { data, isLoading } = useGetApiV1AuthCampfireManage(
-    { page_size: PAGE_SIZE },
+  const { data, isLoading, isError } = useGetApiV1AuthCampfireManage(
+    { page_size: CAMPFIRE_PAGE_SIZE },
     { fetch: authHeaders },
   );
 
   const toggleFavMutation = useToggleFavorite();
+
+  if (isLoading) {
+    return (
+      <div className="flex flex-col gap-4">
+        {Array.from({ length: 6 }).map((_, i) => (
+          // biome-ignore lint/suspicious/noArrayIndexKey: skeleton rows
+          <div key={i} className="flex items-center gap-3">
+            <Skeleton className="size-8 rounded-full shrink-0" />
+            <div className="flex flex-col gap-1 flex-1">
+              <Skeleton className="h-4 w-32" />
+              <Skeleton className="h-3 w-48" />
+            </div>
+            <Skeleton className="h-8 w-20 rounded-full" />
+          </div>
+        ))}
+      </div>
+    );
+  }
+
+  if (isError) {
+    return (
+      <EmptyContent
+        icon={<Flame className="size-8 text-muted-foreground" />}
+        title="Something went wrong"
+        description="We couldn't load your campfires. Please try again later."
+      />
+    );
+  }
 
   const allItems =
     extractApiDataArray<GetApiV1AuthCampfireManage200DataItem>(data);
@@ -52,24 +79,6 @@ export function ManageCampfireList() {
     isFavorite: item.is_favorite,
     isJoined: true,
   }));
-
-  if (isLoading) {
-    return (
-      <div className="flex flex-col gap-4">
-        {Array.from({ length: 6 }).map((_, i) => (
-          // biome-ignore lint/suspicious/noArrayIndexKey: skeleton rows
-          <div key={i} className="flex items-center gap-3">
-            <Skeleton className="size-8 rounded-full shrink-0" />
-            <div className="flex flex-col gap-1 flex-1">
-              <Skeleton className="h-4 w-32" />
-              <Skeleton className="h-3 w-48" />
-            </div>
-            <Skeleton className="h-8 w-20 rounded-full" />
-          </div>
-        ))}
-      </div>
-    );
-  }
 
   if (campfires.length === 0) {
     return (

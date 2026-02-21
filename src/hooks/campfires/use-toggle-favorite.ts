@@ -9,16 +9,15 @@ import {
   patchApiV1AuthCampfireCampfireIdFavorite,
 } from "@/api-client";
 import { useAuthHeaders } from "@/features/campfires/campfire-api-utils";
+import { CAMPFIRE_PAGE_SIZE } from "@/features/campfires/campfire.constants";
 import { useAppStore } from "@/providers/app-store-provider";
-
-const PAGE_SIZE = "50";
 
 export function useToggleFavorite() {
   const queryClient = useQueryClient();
   const session = useAppStore((s) => s.session);
   const authHeaders = useAuthHeaders(session.access_token);
   const queryKey = getGetApiV1AuthCampfireManageQueryKey({
-    page_size: PAGE_SIZE,
+    page_size: CAMPFIRE_PAGE_SIZE,
   });
 
   return useMutation({

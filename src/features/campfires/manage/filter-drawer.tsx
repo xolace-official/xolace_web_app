@@ -2,39 +2,18 @@
 
 import { SquareDashedMousePointer, X } from "lucide-react";
 import { useState } from "react";
-import {
-  type GetApiV1AuthCampfireManage200DataItem,
-  useGetApiV1AuthCampfireManage,
-} from "@/api-client";
 import { AnimatedDrawer } from "@/components/builders/animated-drawer";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
-import {
-  extractApiDataArray,
-  useAuthHeaders,
-} from "@/features/campfires/campfire-api-utils";
-import { useAppStore } from "@/providers/app-store-provider";
+import { useManageCampfireCounts } from "@/hooks/campfires/use-manage-campfire-counts";
 import { useManageCampfiresFilters } from "./manage-campfires-filter";
 import { tabOptions } from "./right-side-section";
 
-const PAGE_SIZE = "50";
-
 export const FilterDrawer = () => {
   const [isOpen, setIsOpen] = useState(false);
-  const session = useAppStore((s) => s.session);
-  const authHeaders = useAuthHeaders(session.access_token);
   const [{ tab }, setSearchParams] = useManageCampfiresFilters();
-
-  const { data, isLoading } = useGetApiV1AuthCampfireManage(
-    { page_size: PAGE_SIZE },
-    { fetch: authHeaders },
-  );
-
-  const allItems =
-    extractApiDataArray<GetApiV1AuthCampfireManage200DataItem>(data);
-  const allCount = allItems.length;
-  const favCount = allItems.filter((i) => i.is_favorite).length;
+  const { allCount, favCount, isLoading } = useManageCampfireCounts();
 
   return (
     <>
@@ -84,7 +63,7 @@ export const FilterDrawer = () => {
                     {isLoading ? (
                       <Skeleton className="h-5 w-6 rounded-full" />
                     ) : (
-                      <span className="rounded-full px-2 py-1 text-xs text-foreground bg-slate-100 dark:bg-neutral-800 group-data-[state=on]:bg-background dark:group-data-[state=on]:bg-background">
+                      <span className="rounded-full px-2 py-1 text-xs text-foreground bg-muted group-data-[state=on]:bg-background">
                         {count}
                       </span>
                     )}
