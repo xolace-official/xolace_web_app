@@ -11,6 +11,12 @@ interface Props {
   params: Promise<{ slug: string }>;
 }
 
+/**
+ * Render the health tip details page for the provided route parameters.
+ *
+ * @param params - Route parameters (includes `slug`) forwarded to HealthTipsDetailsPage
+ * @returns The JSX element rendering the HealthTipsDetailsPage with the given params
+ */
 export default function Page({ params }: Props) {
   return <HealthTipsDetailsPage params={params} />;
 }
