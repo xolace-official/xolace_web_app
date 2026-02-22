@@ -1,4 +1,4 @@
-import { Clock, User } from "lucide-react";
+import { Clock, Handshake, User } from "lucide-react";
 import type { GetApiV1AuthHealthTipBySlugSlug200 } from "@/api-client";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
@@ -10,7 +10,7 @@ export function HealthTipFullArticle({
   article: GetApiV1AuthHealthTipBySlugSlug200;
 }) {
   return (
-    <article className="mx-auto space-y-4 md:space-y-6">
+    <article className="space-y-4 md:space-y-6">
       <div className="flex items-center gap-2 md:gap-4 text-sm text-muted-foreground">
         {article.category ? (
           <span>{article.category.display_name}</span>
@@ -35,6 +35,19 @@ export function HealthTipFullArticle({
           </>
         )}
       </div>
+
+      {article.sponsor.is_sponsored && (
+        <div className="flex items-center gap-2.5 rounded-lg border border-dashed border-primary/30 bg-primary/5 px-3.5 py-2.5">
+          <Handshake className="h-4 w-4 shrink-0 text-primary/70" />
+          <p className="text-xs text-muted-foreground leading-relaxed">
+            {article.sponsor.sponsor_label ?? "Sponsored content"}{" "}
+            <span className="text-muted-foreground/60">
+              &mdash; This article is supported by a partner. Our editorial
+              standards remain independent.
+            </span>
+          </p>
+        </div>
+      )}
 
       {article.author && (
         <div className="flex items-center gap-2">
