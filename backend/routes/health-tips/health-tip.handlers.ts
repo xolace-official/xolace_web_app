@@ -43,7 +43,7 @@ export const getHealthTipCategories: AppRouteHandler<
     const response: z.infer<typeof healthTipCategoriesResponse> = {
       data: data || [],
     };
-
+    console.log("response ", response);
     return c.json(response, HttpStatusCodes.OK);
   } catch (error) {
     console.error("getHealthTipCategories exception:", error);
@@ -68,6 +68,18 @@ export const getHealthTipsFeed: AppRouteHandler<
   );
 
   try {
+    // Resolve category key → id so we can filter on the FK column directly
+    // (filtering on joined tables only narrows the join, not the parent rows)
+    let categoryId: string | undefined;
+    if (category) {
+      const { data: cat } = await supabase
+        .from("health_tip_categories")
+        .select("id")
+        .eq("key", category)
+        .single();
+      categoryId = cat?.id;
+    }
+
     let query = supabase
       .from("health_tips")
       .select(
@@ -104,7 +116,23 @@ export const getHealthTipsFeed: AppRouteHandler<
     }
 
     if (category) {
-      query = query.eq("health_tip_categories.key", category);
+      if (categoryId) {
+        query = query.eq("category_id", categoryId);
+      } else {
+        // Category key doesn't exist — return empty
+        return c.json(
+          {
+            data: [],
+            meta: {
+              totalCount: 0,
+              currentPage: pageNumber,
+              pageSize,
+              hasNextPage: false,
+            },
+          },
+          HttpStatusCodes.OK,
+        );
+      }
     }
 
     if (tag && tag.length > 0) {
@@ -144,7 +172,7 @@ export const getHealthTipsFeed: AppRouteHandler<
         hasNextPage: pageNumber < totalPages - 1,
       },
     };
-
+    console.log("response", response);
     return c.json(response, HttpStatusCodes.OK);
   } catch (error) {
     console.error("getHealthTipsFeed exception:", error);
