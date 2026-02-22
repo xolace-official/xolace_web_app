@@ -1,18 +1,22 @@
 import { Clock, User } from "lucide-react";
+import type { GetApiV1AuthHealthTipBySlugSlug200 } from "@/api-client";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
-import type { HealthArticleInterface } from "@/features/health-space/health-tips/index";
 
 export function HealthTipFullArticle({
   article,
 }: {
-  article: HealthArticleInterface;
+  article: GetApiV1AuthHealthTipBySlugSlug200;
 }) {
   return (
     <article className="mx-auto space-y-4 md:space-y-6">
       <div className="flex items-center gap-2 md:gap-4 text-sm text-muted-foreground">
-        <span>{article.category.display_name}</span>
+        {article.category ? (
+          <span>{article.category.display_name}</span>
+        ) : (
+          <span>Uncategorized</span>
+        )}
         <span>•</span>
         <span className="flex items-center gap-1">
           <Clock className="h-3 w-3" />
@@ -32,21 +36,22 @@ export function HealthTipFullArticle({
         )}
       </div>
 
-      {/* Author */}
-      <div className="flex items-center gap-2">
-        <Avatar className="h-12 w-12">
-          <AvatarImage src={article.author.avatar_url || undefined} />
-          <AvatarFallback>
-            <User className="h-6 w-6" />
-          </AvatarFallback>
-        </Avatar>
-        <div>
-          <p className="font-medium capitalize">
-            {article.author.username || "Anonymous"}
-          </p>
-          <p className="text-sm text-muted-foreground">Author</p>
+      {article.author && (
+        <div className="flex items-center gap-2">
+          <Avatar className="h-12 w-12">
+            <AvatarImage src={article.author.avatar_url ?? undefined} />
+            <AvatarFallback>
+              <User className="h-6 w-6" />
+            </AvatarFallback>
+          </Avatar>
+          <div>
+            <p className="font-medium capitalize">
+              {article.author.username ?? "Anonymous"}
+            </p>
+            <p className="text-sm text-muted-foreground">Author</p>
+          </div>
         </div>
-      </div>
+      )}
 
       <Separator />
       <div className="flex flex-col gap-4 prose prose-lg dark:prose-invert max-w-none">
