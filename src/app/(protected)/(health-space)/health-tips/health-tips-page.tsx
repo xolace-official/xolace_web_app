@@ -1,4 +1,3 @@
-import { RealmOverview } from "@/features/campfires/discovery/realm-overview";
 import { ThemeSwitcher } from "@/components/shared/theme-switcher";
 import { PageHeading } from "@/components/shared/layout/page-heading";
 import { PageContainer } from "@/components/app/page-container";
@@ -8,7 +7,6 @@ export const HealthTipsPage = () => {
   return (
     <PageContainer
       title="Health Tips"
-      externalContent={<RealmOverview />}
       actions={<ThemeSwitcher key={"theme-switcher"} />}
     >
       <PageHeading
