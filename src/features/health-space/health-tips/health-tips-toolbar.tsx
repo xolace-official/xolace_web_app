@@ -1,6 +1,6 @@
 "use client";
 
-import { Filter, Loader2, Search } from "lucide-react";
+import { Filter, Search } from "lucide-react";
 import { debounce } from "nuqs";
 import { useState, useTransition } from "react";
 import type { GetApiV1AuthHealthTipCategories200DataItem } from "@/api-client";
