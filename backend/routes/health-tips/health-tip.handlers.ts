@@ -59,7 +59,15 @@ export const getHealthTipsFeed: AppRouteHandler<
   GetHealthTipsFeedRoute
 > = async (c) => {
   const supabase = c.get("supabase");
-  const { category, tag, language, page, page_size } = c.req.valid("query");
+  const {
+    category,
+    sensitivity,
+    query: searchQuery,
+    tag,
+    language,
+    page,
+    page_size,
+  } = c.req.valid("query");
 
   const pageNumber = Number(page) || 0;
   const pageSize = Math.min(
@@ -145,6 +153,16 @@ export const getHealthTipsFeed: AppRouteHandler<
 
     if (tag && tag.length > 0) {
       query = query.in("tags.tag.name", tag);
+    }
+
+    if (sensitivity) {
+      query = query.eq("sensitive_level", sensitivity);
+    }
+
+    if (searchQuery) {
+      query = query.or(
+        `title.ilike.%${searchQuery}%,excerpt.ilike.%${searchQuery}%`,
+      );
     }
 
     // ─────────────────────────────

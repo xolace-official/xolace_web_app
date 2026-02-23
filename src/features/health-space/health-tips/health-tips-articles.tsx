@@ -2,9 +2,10 @@
 
 import { Loader2, SearchX } from "lucide-react";
 import { useRouter } from "next/navigation";
-import { useMemo, useRef, useTransition } from "react";
+import { useMemo, useTransition } from "react";
 import {
   type GetApiV1AuthHealthTip200DataItem,
+  type GetApiV1AuthHealthTipSensitivity,
   getApiV1AuthHealthTip,
   getGetApiV1AuthHealthTipInfiniteQueryKey,
   useGetApiV1AuthHealthTipInfinite,
@@ -31,6 +32,10 @@ export const HealthTipsArticles = () => {
 
   const filterParams = {
     ...(category && category !== "all" ? { category } : {}),
+    ...(sensitivity && sensitivity !== "all"
+      ? { sensitivity: sensitivity as GetApiV1AuthHealthTipSensitivity }
+      : {}),
+    ...(query ? { query } : {}),
     page_size: PAGE_SIZE,
   };
 
@@ -66,27 +71,6 @@ export const HealthTipsArticles = () => {
     return { allItems: items, totalCount: count };
   }, [feedQuery.data?.pages]);
 
-  // Reset infinite query when filters change
-  const filterKey = `${category}|${sensitivity}|${query}`;
-  const prevFilterKey = useRef(filterKey);
-  if (prevFilterKey.current !== filterKey) {
-    prevFilterKey.current = filterKey;
-  }
-
-  const filteredArticles = useMemo(() => {
-    return allItems.filter((article) => {
-      const matchesSearch =
-        query === "" ||
-        article.title.toLowerCase().includes(query.toLowerCase()) ||
-        article.excerpt?.toLowerCase().includes(query.toLowerCase());
-
-      const matchesSensitivity =
-        sensitivity === "all" || article.sensitive_level === sensitivity;
-
-      return matchesSearch && matchesSensitivity;
-    });
-  }, [allItems, query, sensitivity]);
-
   const handleClearFilters = () => {
     startTransition(async () => {
       await setSearchParams({
@@ -107,7 +91,7 @@ export const HealthTipsArticles = () => {
     );
   }
 
-  if (filteredArticles.length === 0) {
+  if (allItems.length === 0) {
     return (
       <EmptyContent
         title={"No article found"}
@@ -133,11 +117,11 @@ export const HealthTipsArticles = () => {
   return (
     <div className="grid grid-cols-1 gap-4 md:gap-8">
       <div className="text-sm text-muted-foreground">
-        Showing {filteredArticles.length}
+        Showing {allItems.length}
         {totalCount ? ` of ${totalCount}` : ""} articles
       </div>
 
-      {filteredArticles.map((article) => (
+      {allItems.map((article) => (
         <HealthTipCard
           key={article.id}
           tip={article}
