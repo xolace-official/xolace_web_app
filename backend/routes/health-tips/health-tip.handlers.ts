@@ -59,7 +59,15 @@ export const getHealthTipsFeed: AppRouteHandler<
   GetHealthTipsFeedRoute
 > = async (c) => {
   const supabase = c.get("supabase");
-  const { category, tag, language, page, page_size } = c.req.valid("query");
+  const {
+    category,
+    sensitivity,
+    query: searchQuery,
+    tag,
+    language,
+    page,
+    page_size,
+  } = c.req.valid("query");
 
   const pageNumber = Number(page) || 0;
   const pageSize = Math.min(
@@ -72,11 +80,19 @@ export const getHealthTipsFeed: AppRouteHandler<
     // (filtering on joined tables only narrows the join, not the parent rows)
     let categoryId: string | undefined;
     if (category) {
-      const { data: cat } = await supabase
+      const { data: cat, error: catError } = await supabase
         .from("health_tip_categories")
         .select("id")
         .eq("key", category)
         .single();
+
+      if (catError && catError.code !== "PGRST116") {
+        console.error("getHealthTipsFeed category lookup error:", catError);
+        return c.json(
+          { message: "Failed to resolve category" },
+          HttpStatusCodes.INTERNAL_SERVER_ERROR,
+        );
+      }
       categoryId = cat?.id;
     }
 
@@ -137,6 +153,16 @@ export const getHealthTipsFeed: AppRouteHandler<
 
     if (tag && tag.length > 0) {
       query = query.in("tags.tag.name", tag);
+    }
+
+    if (sensitivity) {
+      query = query.eq("sensitive_level", sensitivity);
+    }
+
+    if (searchQuery) {
+      query = query.or(
+        `title.ilike.%${searchQuery}%,excerpt.ilike.%${searchQuery}%`,
+      );
     }
 
     // ─────────────────────────────

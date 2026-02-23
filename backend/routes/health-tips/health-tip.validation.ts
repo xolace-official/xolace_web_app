@@ -215,6 +215,22 @@ export const healthTipsFeedQuery = z.object({
       example: "sleep",
     }),
 
+  sensitivity: healthTipSensitivityEnum.optional().openapi({
+    param: { name: "sensitivity", in: "query" },
+    description: "Filter by sensitivity level",
+    example: "general",
+  }),
+
+  query: z
+    .string()
+    .max(200)
+    .optional()
+    .openapi({
+      param: { name: "query", in: "query" },
+      description: "Search title and excerpt (case-insensitive partial match)",
+      example: "anxiety",
+    }),
+
   tag: z
     .array(z.string())
     .optional()
