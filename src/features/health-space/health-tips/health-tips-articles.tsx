@@ -2,8 +2,13 @@
 
 import { Loader2, SearchX } from "lucide-react";
 import { useRouter } from "next/navigation";
-import { useMemo, useRef, useState, useTransition } from "react";
-import { useGetApiV1AuthHealthTip } from "@/api-client";
+import { useMemo, useRef, useTransition } from "react";
+import {
+  type GetApiV1AuthHealthTip200DataItem,
+  getApiV1AuthHealthTip,
+  getGetApiV1AuthHealthTipInfiniteQueryKey,
+  useGetApiV1AuthHealthTipInfinite,
+} from "@/api-client";
 import { EmptyContent } from "@/components/app/empty-content";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -20,32 +25,53 @@ export const HealthTipsArticles = () => {
   const [isPending, startTransition] = useTransition();
   const [{ query, category, sensitivity }, setSearchParams] =
     useHealthTipsFiltersServer({ startTransition });
-  const [page, setPage] = useState(0);
 
   const session = useAppStore((s) => s.session);
   const authHeaders = useAuthHeaders(session.access_token);
 
-  // Reset page when filters change
+  const filterParams = {
+    ...(category && category !== "all" ? { category } : {}),
+    page_size: PAGE_SIZE,
+  };
+
+  const feedQuery = useGetApiV1AuthHealthTipInfinite(filterParams, {
+    query: {
+      queryKey: getGetApiV1AuthHealthTipInfiniteQueryKey(filterParams),
+      queryFn: ({ signal, pageParam }) =>
+        getApiV1AuthHealthTip(
+          { ...filterParams, page: String(pageParam) },
+          { signal, ...authHeaders },
+        ),
+      initialPageParam: 0,
+      getNextPageParam: (lastPage) => {
+        if (lastPage.status !== 200) return undefined;
+        const meta = lastPage.data.meta;
+        return meta.hasNextPage ? meta.currentPage + 1 : undefined;
+      },
+    },
+    fetch: authHeaders,
+  });
+
+  // Flatten all pages into a single array
+  const { allItems, totalCount } = useMemo(() => {
+    const pages = feedQuery.data?.pages ?? [];
+    const items: GetApiV1AuthHealthTip200DataItem[] = [];
+    let count = 0;
+    for (const page of pages) {
+      if (page.status === 200) {
+        items.push(...page.data.data);
+        count = page.data.meta.totalCount;
+      }
+    }
+    return { allItems: items, totalCount: count };
+  }, [feedQuery.data?.pages]);
+
+  // Reset infinite query when filters change
   const filterKey = `${category}|${sensitivity}|${query}`;
   const prevFilterKey = useRef(filterKey);
   if (prevFilterKey.current !== filterKey) {
     prevFilterKey.current = filterKey;
-    setPage(0);
   }
-
-  const feedQuery = useGetApiV1AuthHealthTip(
-    {
-      ...(category && category !== "all" ? { category } : {}),
-      page: String(page),
-      page_size: PAGE_SIZE,
-    },
-    { fetch: authHeaders },
-  );
-
-  const feedData =
-    feedQuery.data?.status === 200 ? feedQuery.data.data : undefined;
-  const allItems = feedData?.data ?? [];
-  const meta = feedData?.meta;
 
   const filteredArticles = useMemo(() => {
     return allItems.filter((article) => {
@@ -60,8 +86,6 @@ export const HealthTipsArticles = () => {
       return matchesSearch && matchesSensitivity;
     });
   }, [allItems, query, sensitivity]);
-
-  const isRefetching = feedQuery.isRefetching && !feedQuery.isLoading;
 
   const handleClearFilters = () => {
     startTransition(async () => {
@@ -108,15 +132,9 @@ export const HealthTipsArticles = () => {
 
   return (
     <div className="grid grid-cols-1 gap-4 md:gap-8">
-      {isRefetching && (
-        <div className="flex justify-center">
-          <Loader2 className="h-4 w-4 animate-spin text-muted-foreground" />
-        </div>
-      )}
-
       <div className="text-sm text-muted-foreground">
         Showing {filteredArticles.length}
-        {meta ? ` of ${meta.totalCount}` : ""} articles
+        {totalCount ? ` of ${totalCount}` : ""} articles
       </div>
 
       {filteredArticles.map((article) => (
@@ -129,14 +147,14 @@ export const HealthTipsArticles = () => {
         />
       ))}
 
-      {meta?.hasNextPage && (
+      {feedQuery.hasNextPage && (
         <div className="flex justify-center py-4">
           <Button
             variant="outline"
-            onClick={() => setPage((prev) => prev + 1)}
-            disabled={feedQuery.isFetching}
+            onClick={() => feedQuery.fetchNextPage()}
+            disabled={feedQuery.isFetchingNextPage}
           >
-            {feedQuery.isFetching ? (
+            {feedQuery.isFetchingNextPage ? (
               <>
                 <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                 Loading...
