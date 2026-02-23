@@ -72,11 +72,19 @@ export const getHealthTipsFeed: AppRouteHandler<
     // (filtering on joined tables only narrows the join, not the parent rows)
     let categoryId: string | undefined;
     if (category) {
-      const { data: cat } = await supabase
+      const { data: cat, error: catError } = await supabase
         .from("health_tip_categories")
         .select("id")
         .eq("key", category)
         .single();
+
+      if (catError && catError.code !== "PGRST116") {
+        console.error("getHealthTipsFeed category lookup error:", catError);
+        return c.json(
+          { message: "Failed to resolve category" },
+          HttpStatusCodes.INTERNAL_SERVER_ERROR,
+        );
+      }
       categoryId = cat?.id;
     }
 

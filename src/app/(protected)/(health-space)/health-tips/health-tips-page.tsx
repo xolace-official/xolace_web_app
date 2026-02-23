@@ -1,6 +1,6 @@
-import { ThemeSwitcher } from "@/components/shared/theme-switcher";
-import { PageHeading } from "@/components/shared/layout/page-heading";
 import { PageContainer } from "@/components/app/page-container";
+import { PageHeading } from "@/components/shared/layout/page-heading";
+import { ThemeSwitcher } from "@/components/shared/theme-switcher";
 import { HealthTipsList } from "@/features/health-space/health-tips/health-tips-list";
 
 export const HealthTipsPage = () => {
