@@ -160,8 +160,10 @@ export const getHealthTipsFeed: AppRouteHandler<
     }
 
     if (searchQuery) {
+      // Escape SQL LIKE wildcards and PostgREST filter-syntax characters
+      const safeSearch = searchQuery.replace(/[\\%_,.()"]/g, "\\$&");
       query = query.or(
-        `title.ilike.%${searchQuery}%,excerpt.ilike.%${searchQuery}%`,
+        `title.ilike.%${safeSearch}%,excerpt.ilike.%${safeSearch}%`,
       );
     }
 
