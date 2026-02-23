@@ -4,6 +4,12 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
 
+/**
+ * Render a full health tip article showing metadata, optional sponsorship and author blocks, the article body, and tags.
+ *
+ * @param article - Health tip data from the `GetApiV1AuthHealthTipBySlugSlug200` API response used to populate the view.
+ * @returns The JSX element representing the complete article layout.
+ */
 export function HealthTipFullArticle({
   article,
 }: {
