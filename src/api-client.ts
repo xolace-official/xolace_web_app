@@ -1084,171 +1084,20 @@ export type DeleteApiV1AuthCollectionCollectionId500 = {
   message: string;
 };
 
-export type GetApiV1AuthHealthTipId200SensitiveLevel =
-  (typeof GetApiV1AuthHealthTipId200SensitiveLevel)[keyof typeof GetApiV1AuthHealthTipId200SensitiveLevel];
-
-// eslint-disable-next-line @typescript-eslint/no-redeclare
-export const GetApiV1AuthHealthTipId200SensitiveLevel = {
-  general: "general",
-  mild: "mild",
-  sensitive: "sensitive",
-} as const;
-
-/**
- * @nullable
- */
-export type GetApiV1AuthHealthTipId200Category = {
-  /** Stable category key used for filtering and routing */
-  key: string;
-  /** Human-readable category name */
-  display_name: string;
-} | null;
-
-export type GetApiV1AuthHealthTipId200TagsItem = {
-  name: string;
-};
-
-/**
- * @nullable
- */
-export type GetApiV1AuthHealthTipId200Author = {
-  id: string;
-  /** @nullable */
-  username: string | null;
-  /** @nullable */
-  avatar_url: string | null;
-} | null;
-
-export type GetApiV1AuthHealthTipId200Sponsor = {
-  is_sponsored: boolean;
-  /** @nullable */
-  sponsor_label: string | null;
-};
-
-export type GetApiV1AuthHealthTipId200 = {
-  id: string;
-  title: string;
-  /** @pattern ^[a-z0-9]+(?:-[a-z0-9]+)*$ */
-  slug: string;
-  /** @nullable */
-  excerpt: string | null;
-  content: string;
-  content_format: string;
-  /** @minimum 1 */
-  read_time_minutes: number;
-  language_code: string;
-  /** @nullable */
-  published_at: string | null;
-  sensitive_level: GetApiV1AuthHealthTipId200SensitiveLevel;
-  /** @nullable */
-  category: GetApiV1AuthHealthTipId200Category;
-  tags: GetApiV1AuthHealthTipId200TagsItem[];
-  /** @nullable */
-  author: GetApiV1AuthHealthTipId200Author;
-  sponsor: GetApiV1AuthHealthTipId200Sponsor;
-};
-
-export type GetApiV1AuthHealthTipId400 = {
-  message: string;
-};
-
-export type GetApiV1AuthHealthTipId401 = {
-  message: string;
-};
-
-export type GetApiV1AuthHealthTipId404 = {
-  message: string;
-};
-
-export type GetApiV1AuthHealthTipId500 = {
-  message: string;
-};
-
-export type GetApiV1AuthHealthTipBySlugSlug200SensitiveLevel =
-  (typeof GetApiV1AuthHealthTipBySlugSlug200SensitiveLevel)[keyof typeof GetApiV1AuthHealthTipBySlugSlug200SensitiveLevel];
-
-// eslint-disable-next-line @typescript-eslint/no-redeclare
-export const GetApiV1AuthHealthTipBySlugSlug200SensitiveLevel = {
-  general: "general",
-  mild: "mild",
-  sensitive: "sensitive",
-} as const;
-
-/**
- * @nullable
- */
-export type GetApiV1AuthHealthTipBySlugSlug200Category = {
-  /** Stable category key used for filtering and routing */
-  key: string;
-  /** Human-readable category name */
-  display_name: string;
-} | null;
-
-export type GetApiV1AuthHealthTipBySlugSlug200TagsItem = {
-  name: string;
-};
-
-/**
- * @nullable
- */
-export type GetApiV1AuthHealthTipBySlugSlug200Author = {
-  id: string;
-  /** @nullable */
-  username: string | null;
-  /** @nullable */
-  avatar_url: string | null;
-} | null;
-
-export type GetApiV1AuthHealthTipBySlugSlug200Sponsor = {
-  is_sponsored: boolean;
-  /** @nullable */
-  sponsor_label: string | null;
-};
-
-export type GetApiV1AuthHealthTipBySlugSlug200 = {
-  id: string;
-  title: string;
-  /** @pattern ^[a-z0-9]+(?:-[a-z0-9]+)*$ */
-  slug: string;
-  /** @nullable */
-  excerpt: string | null;
-  content: string;
-  content_format: string;
-  /** @minimum 1 */
-  read_time_minutes: number;
-  language_code: string;
-  /** @nullable */
-  published_at: string | null;
-  sensitive_level: GetApiV1AuthHealthTipBySlugSlug200SensitiveLevel;
-  /** @nullable */
-  category: GetApiV1AuthHealthTipBySlugSlug200Category;
-  tags: GetApiV1AuthHealthTipBySlugSlug200TagsItem[];
-  /** @nullable */
-  author: GetApiV1AuthHealthTipBySlugSlug200Author;
-  sponsor: GetApiV1AuthHealthTipBySlugSlug200Sponsor;
-};
-
-export type GetApiV1AuthHealthTipBySlugSlug400 = {
-  message: string;
-};
-
-export type GetApiV1AuthHealthTipBySlugSlug401 = {
-  message: string;
-};
-
-export type GetApiV1AuthHealthTipBySlugSlug404 = {
-  message: string;
-};
-
-export type GetApiV1AuthHealthTipBySlugSlug500 = {
-  message: string;
-};
-
 export type GetApiV1AuthHealthTipParams = {
   /**
    * Filter by category key
    */
   category?: string;
+  /**
+   * Filter by sensitivity level
+   */
+  sensitivity?: GetApiV1AuthHealthTipSensitivity;
+  /**
+   * Search title and excerpt (case-insensitive partial match)
+   * @maxLength 200
+   */
+  query?: string;
   /**
    * Filter by one or more tag slugs
    */
@@ -1262,6 +1111,16 @@ export type GetApiV1AuthHealthTipParams = {
   page?: string;
   page_size?: string;
 };
+
+export type GetApiV1AuthHealthTipSensitivity =
+  (typeof GetApiV1AuthHealthTipSensitivity)[keyof typeof GetApiV1AuthHealthTipSensitivity];
+
+// eslint-disable-next-line @typescript-eslint/no-redeclare
+export const GetApiV1AuthHealthTipSensitivity = {
+  general: "general",
+  mild: "mild",
+  sensitive: "sensitive",
+} as const;
 
 /**
  * @nullable
@@ -1354,6 +1213,86 @@ export type GetApiV1AuthHealthTipCategories500 = {
   message: string;
 };
 
+export type GetApiV1AuthHealthTipBySlugSlug200SensitiveLevel =
+  (typeof GetApiV1AuthHealthTipBySlugSlug200SensitiveLevel)[keyof typeof GetApiV1AuthHealthTipBySlugSlug200SensitiveLevel];
+
+// eslint-disable-next-line @typescript-eslint/no-redeclare
+export const GetApiV1AuthHealthTipBySlugSlug200SensitiveLevel = {
+  general: "general",
+  mild: "mild",
+  sensitive: "sensitive",
+} as const;
+
+/**
+ * @nullable
+ */
+export type GetApiV1AuthHealthTipBySlugSlug200Category = {
+  /** Stable category key used for filtering and routing */
+  key: string;
+  /** Human-readable category name */
+  display_name: string;
+} | null;
+
+export type GetApiV1AuthHealthTipBySlugSlug200TagsItem = {
+  name: string;
+};
+
+/**
+ * @nullable
+ */
+export type GetApiV1AuthHealthTipBySlugSlug200Author = {
+  id: string;
+  /** @nullable */
+  username: string | null;
+  /** @nullable */
+  avatar_url: string | null;
+} | null;
+
+export type GetApiV1AuthHealthTipBySlugSlug200Sponsor = {
+  is_sponsored: boolean;
+  /** @nullable */
+  sponsor_label: string | null;
+};
+
+export type GetApiV1AuthHealthTipBySlugSlug200 = {
+  id: string;
+  title: string;
+  /** @pattern ^[a-z0-9]+(?:-[a-z0-9]+)*$ */
+  slug: string;
+  /** @nullable */
+  excerpt: string | null;
+  content: string;
+  content_format: string;
+  /** @minimum 1 */
+  read_time_minutes: number;
+  language_code: string;
+  /** @nullable */
+  published_at: string | null;
+  sensitive_level: GetApiV1AuthHealthTipBySlugSlug200SensitiveLevel;
+  /** @nullable */
+  category: GetApiV1AuthHealthTipBySlugSlug200Category;
+  tags: GetApiV1AuthHealthTipBySlugSlug200TagsItem[];
+  /** @nullable */
+  author: GetApiV1AuthHealthTipBySlugSlug200Author;
+  sponsor: GetApiV1AuthHealthTipBySlugSlug200Sponsor;
+};
+
+export type GetApiV1AuthHealthTipBySlugSlug400 = {
+  message: string;
+};
+
+export type GetApiV1AuthHealthTipBySlugSlug401 = {
+  message: string;
+};
+
+export type GetApiV1AuthHealthTipBySlugSlug404 = {
+  message: string;
+};
+
+export type GetApiV1AuthHealthTipBySlugSlug500 = {
+  message: string;
+};
+
 export type GetApiV1AuthHealthTipIdSources200DataItemSourceType =
   (typeof GetApiV1AuthHealthTipIdSources200DataItemSourceType)[keyof typeof GetApiV1AuthHealthTipIdSources200DataItemSourceType];
 
@@ -1401,6 +1340,86 @@ export type GetApiV1AuthHealthTipIdSources404 = {
 };
 
 export type GetApiV1AuthHealthTipIdSources500 = {
+  message: string;
+};
+
+export type GetApiV1AuthHealthTipId200SensitiveLevel =
+  (typeof GetApiV1AuthHealthTipId200SensitiveLevel)[keyof typeof GetApiV1AuthHealthTipId200SensitiveLevel];
+
+// eslint-disable-next-line @typescript-eslint/no-redeclare
+export const GetApiV1AuthHealthTipId200SensitiveLevel = {
+  general: "general",
+  mild: "mild",
+  sensitive: "sensitive",
+} as const;
+
+/**
+ * @nullable
+ */
+export type GetApiV1AuthHealthTipId200Category = {
+  /** Stable category key used for filtering and routing */
+  key: string;
+  /** Human-readable category name */
+  display_name: string;
+} | null;
+
+export type GetApiV1AuthHealthTipId200TagsItem = {
+  name: string;
+};
+
+/**
+ * @nullable
+ */
+export type GetApiV1AuthHealthTipId200Author = {
+  id: string;
+  /** @nullable */
+  username: string | null;
+  /** @nullable */
+  avatar_url: string | null;
+} | null;
+
+export type GetApiV1AuthHealthTipId200Sponsor = {
+  is_sponsored: boolean;
+  /** @nullable */
+  sponsor_label: string | null;
+};
+
+export type GetApiV1AuthHealthTipId200 = {
+  id: string;
+  title: string;
+  /** @pattern ^[a-z0-9]+(?:-[a-z0-9]+)*$ */
+  slug: string;
+  /** @nullable */
+  excerpt: string | null;
+  content: string;
+  content_format: string;
+  /** @minimum 1 */
+  read_time_minutes: number;
+  language_code: string;
+  /** @nullable */
+  published_at: string | null;
+  sensitive_level: GetApiV1AuthHealthTipId200SensitiveLevel;
+  /** @nullable */
+  category: GetApiV1AuthHealthTipId200Category;
+  tags: GetApiV1AuthHealthTipId200TagsItem[];
+  /** @nullable */
+  author: GetApiV1AuthHealthTipId200Author;
+  sponsor: GetApiV1AuthHealthTipId200Sponsor;
+};
+
+export type GetApiV1AuthHealthTipId400 = {
+  message: string;
+};
+
+export type GetApiV1AuthHealthTipId401 = {
+  message: string;
+};
+
+export type GetApiV1AuthHealthTipId404 = {
+  message: string;
+};
+
+export type GetApiV1AuthHealthTipId500 = {
   message: string;
 };
 
@@ -8588,888 +8607,6 @@ export const useDeleteApiV1AuthCollectionCollectionId = <
 };
 
 /**
- * Returns the full content of a published health tip by ID.
- * @summary Get health tip by ID
- */
-export type getApiV1AuthHealthTipIdResponse200 = {
-  data: GetApiV1AuthHealthTipId200;
-  status: 200;
-};
-
-export type getApiV1AuthHealthTipIdResponse400 = {
-  data: GetApiV1AuthHealthTipId400;
-  status: 400;
-};
-
-export type getApiV1AuthHealthTipIdResponse401 = {
-  data: GetApiV1AuthHealthTipId401;
-  status: 401;
-};
-
-export type getApiV1AuthHealthTipIdResponse404 = {
-  data: GetApiV1AuthHealthTipId404;
-  status: 404;
-};
-
-export type getApiV1AuthHealthTipIdResponse500 = {
-  data: GetApiV1AuthHealthTipId500;
-  status: 500;
-};
-
-export type getApiV1AuthHealthTipIdResponseSuccess =
-  getApiV1AuthHealthTipIdResponse200 & {
-    headers: Headers;
-  };
-export type getApiV1AuthHealthTipIdResponseError = (
-  | getApiV1AuthHealthTipIdResponse400
-  | getApiV1AuthHealthTipIdResponse401
-  | getApiV1AuthHealthTipIdResponse404
-  | getApiV1AuthHealthTipIdResponse500
-) & {
-  headers: Headers;
-};
-
-export type getApiV1AuthHealthTipIdResponse =
-  | getApiV1AuthHealthTipIdResponseSuccess
-  | getApiV1AuthHealthTipIdResponseError;
-
-export const getGetApiV1AuthHealthTipIdUrl = (id: string) => {
-  return `/api/v1/auth/health-tip/${id}`;
-};
-
-export const getApiV1AuthHealthTipId = async (
-  id: string,
-  options?: RequestInit,
-): Promise<getApiV1AuthHealthTipIdResponse> => {
-  const res = await fetch(getGetApiV1AuthHealthTipIdUrl(id), {
-    ...options,
-    method: "GET",
-  });
-
-  const body = [204, 205, 304].includes(res.status) ? null : await res.text();
-
-  const data: getApiV1AuthHealthTipIdResponse["data"] = body
-    ? JSON.parse(body)
-    : {};
-  return {
-    data,
-    status: res.status,
-    headers: res.headers,
-  } as getApiV1AuthHealthTipIdResponse;
-};
-
-export const getGetApiV1AuthHealthTipIdInfiniteQueryKey = (id?: string) => {
-  return ["infinite", `/api/v1/auth/health-tip/${id}`] as const;
-};
-
-export const getGetApiV1AuthHealthTipIdQueryKey = (id?: string) => {
-  return [`/api/v1/auth/health-tip/${id}`] as const;
-};
-
-export const getGetApiV1AuthHealthTipIdInfiniteQueryOptions = <
-  TData = InfiniteData<Awaited<ReturnType<typeof getApiV1AuthHealthTipId>>>,
-  TError =
-    | GetApiV1AuthHealthTipId400
-    | GetApiV1AuthHealthTipId401
-    | GetApiV1AuthHealthTipId404
-    | GetApiV1AuthHealthTipId500,
->(
-  id: string,
-  options?: {
-    query?: Partial<
-      UseInfiniteQueryOptions<
-        Awaited<ReturnType<typeof getApiV1AuthHealthTipId>>,
-        TError,
-        TData
-      >
-    >;
-    fetch?: RequestInit;
-  },
-) => {
-  const { query: queryOptions, fetch: fetchOptions } = options ?? {};
-
-  const queryKey =
-    queryOptions?.queryKey ?? getGetApiV1AuthHealthTipIdInfiniteQueryKey(id);
-
-  const queryFn: QueryFunction<
-    Awaited<ReturnType<typeof getApiV1AuthHealthTipId>>
-  > = ({ signal }) => getApiV1AuthHealthTipId(id, { signal, ...fetchOptions });
-
-  return {
-    queryKey,
-    queryFn,
-    enabled: !!id,
-    ...queryOptions,
-  } as UseInfiniteQueryOptions<
-    Awaited<ReturnType<typeof getApiV1AuthHealthTipId>>,
-    TError,
-    TData
-  > & { queryKey: DataTag<QueryKey, TData, TError> };
-};
-
-export type GetApiV1AuthHealthTipIdInfiniteQueryResult = NonNullable<
-  Awaited<ReturnType<typeof getApiV1AuthHealthTipId>>
->;
-export type GetApiV1AuthHealthTipIdInfiniteQueryError =
-  | GetApiV1AuthHealthTipId400
-  | GetApiV1AuthHealthTipId401
-  | GetApiV1AuthHealthTipId404
-  | GetApiV1AuthHealthTipId500;
-
-export function useGetApiV1AuthHealthTipIdInfinite<
-  TData = InfiniteData<Awaited<ReturnType<typeof getApiV1AuthHealthTipId>>>,
-  TError =
-    | GetApiV1AuthHealthTipId400
-    | GetApiV1AuthHealthTipId401
-    | GetApiV1AuthHealthTipId404
-    | GetApiV1AuthHealthTipId500,
->(
-  id: string,
-  options: {
-    query: Partial<
-      UseInfiniteQueryOptions<
-        Awaited<ReturnType<typeof getApiV1AuthHealthTipId>>,
-        TError,
-        TData
-      >
-    > &
-      Pick<
-        DefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getApiV1AuthHealthTipId>>,
-          TError,
-          Awaited<ReturnType<typeof getApiV1AuthHealthTipId>>
-        >,
-        "initialData"
-      >;
-    fetch?: RequestInit;
-  },
-  queryClient?: QueryClient,
-): DefinedUseInfiniteQueryResult<TData, TError> & {
-  queryKey: DataTag<QueryKey, TData, TError>;
-};
-export function useGetApiV1AuthHealthTipIdInfinite<
-  TData = InfiniteData<Awaited<ReturnType<typeof getApiV1AuthHealthTipId>>>,
-  TError =
-    | GetApiV1AuthHealthTipId400
-    | GetApiV1AuthHealthTipId401
-    | GetApiV1AuthHealthTipId404
-    | GetApiV1AuthHealthTipId500,
->(
-  id: string,
-  options?: {
-    query?: Partial<
-      UseInfiniteQueryOptions<
-        Awaited<ReturnType<typeof getApiV1AuthHealthTipId>>,
-        TError,
-        TData
-      >
-    > &
-      Pick<
-        UndefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getApiV1AuthHealthTipId>>,
-          TError,
-          Awaited<ReturnType<typeof getApiV1AuthHealthTipId>>
-        >,
-        "initialData"
-      >;
-    fetch?: RequestInit;
-  },
-  queryClient?: QueryClient,
-): UseInfiniteQueryResult<TData, TError> & {
-  queryKey: DataTag<QueryKey, TData, TError>;
-};
-export function useGetApiV1AuthHealthTipIdInfinite<
-  TData = InfiniteData<Awaited<ReturnType<typeof getApiV1AuthHealthTipId>>>,
-  TError =
-    | GetApiV1AuthHealthTipId400
-    | GetApiV1AuthHealthTipId401
-    | GetApiV1AuthHealthTipId404
-    | GetApiV1AuthHealthTipId500,
->(
-  id: string,
-  options?: {
-    query?: Partial<
-      UseInfiniteQueryOptions<
-        Awaited<ReturnType<typeof getApiV1AuthHealthTipId>>,
-        TError,
-        TData
-      >
-    >;
-    fetch?: RequestInit;
-  },
-  queryClient?: QueryClient,
-): UseInfiniteQueryResult<TData, TError> & {
-  queryKey: DataTag<QueryKey, TData, TError>;
-};
-/**
- * @summary Get health tip by ID
- */
-
-export function useGetApiV1AuthHealthTipIdInfinite<
-  TData = InfiniteData<Awaited<ReturnType<typeof getApiV1AuthHealthTipId>>>,
-  TError =
-    | GetApiV1AuthHealthTipId400
-    | GetApiV1AuthHealthTipId401
-    | GetApiV1AuthHealthTipId404
-    | GetApiV1AuthHealthTipId500,
->(
-  id: string,
-  options?: {
-    query?: Partial<
-      UseInfiniteQueryOptions<
-        Awaited<ReturnType<typeof getApiV1AuthHealthTipId>>,
-        TError,
-        TData
-      >
-    >;
-    fetch?: RequestInit;
-  },
-  queryClient?: QueryClient,
-): UseInfiniteQueryResult<TData, TError> & {
-  queryKey: DataTag<QueryKey, TData, TError>;
-} {
-  const queryOptions = getGetApiV1AuthHealthTipIdInfiniteQueryOptions(
-    id,
-    options,
-  );
-
-  const query = useInfiniteQuery(
-    queryOptions,
-    queryClient,
-  ) as UseInfiniteQueryResult<TData, TError> & {
-    queryKey: DataTag<QueryKey, TData, TError>;
-  };
-
-  query.queryKey = queryOptions.queryKey;
-
-  return query;
-}
-
-export const getGetApiV1AuthHealthTipIdQueryOptions = <
-  TData = Awaited<ReturnType<typeof getApiV1AuthHealthTipId>>,
-  TError =
-    | GetApiV1AuthHealthTipId400
-    | GetApiV1AuthHealthTipId401
-    | GetApiV1AuthHealthTipId404
-    | GetApiV1AuthHealthTipId500,
->(
-  id: string,
-  options?: {
-    query?: Partial<
-      UseQueryOptions<
-        Awaited<ReturnType<typeof getApiV1AuthHealthTipId>>,
-        TError,
-        TData
-      >
-    >;
-    fetch?: RequestInit;
-  },
-) => {
-  const { query: queryOptions, fetch: fetchOptions } = options ?? {};
-
-  const queryKey =
-    queryOptions?.queryKey ?? getGetApiV1AuthHealthTipIdQueryKey(id);
-
-  const queryFn: QueryFunction<
-    Awaited<ReturnType<typeof getApiV1AuthHealthTipId>>
-  > = ({ signal }) => getApiV1AuthHealthTipId(id, { signal, ...fetchOptions });
-
-  return {
-    queryKey,
-    queryFn,
-    enabled: !!id,
-    ...queryOptions,
-  } as UseQueryOptions<
-    Awaited<ReturnType<typeof getApiV1AuthHealthTipId>>,
-    TError,
-    TData
-  > & { queryKey: DataTag<QueryKey, TData, TError> };
-};
-
-export type GetApiV1AuthHealthTipIdQueryResult = NonNullable<
-  Awaited<ReturnType<typeof getApiV1AuthHealthTipId>>
->;
-export type GetApiV1AuthHealthTipIdQueryError =
-  | GetApiV1AuthHealthTipId400
-  | GetApiV1AuthHealthTipId401
-  | GetApiV1AuthHealthTipId404
-  | GetApiV1AuthHealthTipId500;
-
-export function useGetApiV1AuthHealthTipId<
-  TData = Awaited<ReturnType<typeof getApiV1AuthHealthTipId>>,
-  TError =
-    | GetApiV1AuthHealthTipId400
-    | GetApiV1AuthHealthTipId401
-    | GetApiV1AuthHealthTipId404
-    | GetApiV1AuthHealthTipId500,
->(
-  id: string,
-  options: {
-    query: Partial<
-      UseQueryOptions<
-        Awaited<ReturnType<typeof getApiV1AuthHealthTipId>>,
-        TError,
-        TData
-      >
-    > &
-      Pick<
-        DefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getApiV1AuthHealthTipId>>,
-          TError,
-          Awaited<ReturnType<typeof getApiV1AuthHealthTipId>>
-        >,
-        "initialData"
-      >;
-    fetch?: RequestInit;
-  },
-  queryClient?: QueryClient,
-): DefinedUseQueryResult<TData, TError> & {
-  queryKey: DataTag<QueryKey, TData, TError>;
-};
-export function useGetApiV1AuthHealthTipId<
-  TData = Awaited<ReturnType<typeof getApiV1AuthHealthTipId>>,
-  TError =
-    | GetApiV1AuthHealthTipId400
-    | GetApiV1AuthHealthTipId401
-    | GetApiV1AuthHealthTipId404
-    | GetApiV1AuthHealthTipId500,
->(
-  id: string,
-  options?: {
-    query?: Partial<
-      UseQueryOptions<
-        Awaited<ReturnType<typeof getApiV1AuthHealthTipId>>,
-        TError,
-        TData
-      >
-    > &
-      Pick<
-        UndefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getApiV1AuthHealthTipId>>,
-          TError,
-          Awaited<ReturnType<typeof getApiV1AuthHealthTipId>>
-        >,
-        "initialData"
-      >;
-    fetch?: RequestInit;
-  },
-  queryClient?: QueryClient,
-): UseQueryResult<TData, TError> & {
-  queryKey: DataTag<QueryKey, TData, TError>;
-};
-export function useGetApiV1AuthHealthTipId<
-  TData = Awaited<ReturnType<typeof getApiV1AuthHealthTipId>>,
-  TError =
-    | GetApiV1AuthHealthTipId400
-    | GetApiV1AuthHealthTipId401
-    | GetApiV1AuthHealthTipId404
-    | GetApiV1AuthHealthTipId500,
->(
-  id: string,
-  options?: {
-    query?: Partial<
-      UseQueryOptions<
-        Awaited<ReturnType<typeof getApiV1AuthHealthTipId>>,
-        TError,
-        TData
-      >
-    >;
-    fetch?: RequestInit;
-  },
-  queryClient?: QueryClient,
-): UseQueryResult<TData, TError> & {
-  queryKey: DataTag<QueryKey, TData, TError>;
-};
-/**
- * @summary Get health tip by ID
- */
-
-export function useGetApiV1AuthHealthTipId<
-  TData = Awaited<ReturnType<typeof getApiV1AuthHealthTipId>>,
-  TError =
-    | GetApiV1AuthHealthTipId400
-    | GetApiV1AuthHealthTipId401
-    | GetApiV1AuthHealthTipId404
-    | GetApiV1AuthHealthTipId500,
->(
-  id: string,
-  options?: {
-    query?: Partial<
-      UseQueryOptions<
-        Awaited<ReturnType<typeof getApiV1AuthHealthTipId>>,
-        TError,
-        TData
-      >
-    >;
-    fetch?: RequestInit;
-  },
-  queryClient?: QueryClient,
-): UseQueryResult<TData, TError> & {
-  queryKey: DataTag<QueryKey, TData, TError>;
-} {
-  const queryOptions = getGetApiV1AuthHealthTipIdQueryOptions(id, options);
-
-  const query = useQuery(queryOptions, queryClient) as UseQueryResult<
-    TData,
-    TError
-  > & { queryKey: DataTag<QueryKey, TData, TError> };
-
-  query.queryKey = queryOptions.queryKey;
-
-  return query;
-}
-
-/**
- * Returns the full content of a published health tip by slug.
- * @summary Get health tip by slug
- */
-export type getApiV1AuthHealthTipBySlugSlugResponse200 = {
-  data: GetApiV1AuthHealthTipBySlugSlug200;
-  status: 200;
-};
-
-export type getApiV1AuthHealthTipBySlugSlugResponse400 = {
-  data: GetApiV1AuthHealthTipBySlugSlug400;
-  status: 400;
-};
-
-export type getApiV1AuthHealthTipBySlugSlugResponse401 = {
-  data: GetApiV1AuthHealthTipBySlugSlug401;
-  status: 401;
-};
-
-export type getApiV1AuthHealthTipBySlugSlugResponse404 = {
-  data: GetApiV1AuthHealthTipBySlugSlug404;
-  status: 404;
-};
-
-export type getApiV1AuthHealthTipBySlugSlugResponse500 = {
-  data: GetApiV1AuthHealthTipBySlugSlug500;
-  status: 500;
-};
-
-export type getApiV1AuthHealthTipBySlugSlugResponseSuccess =
-  getApiV1AuthHealthTipBySlugSlugResponse200 & {
-    headers: Headers;
-  };
-export type getApiV1AuthHealthTipBySlugSlugResponseError = (
-  | getApiV1AuthHealthTipBySlugSlugResponse400
-  | getApiV1AuthHealthTipBySlugSlugResponse401
-  | getApiV1AuthHealthTipBySlugSlugResponse404
-  | getApiV1AuthHealthTipBySlugSlugResponse500
-) & {
-  headers: Headers;
-};
-
-export type getApiV1AuthHealthTipBySlugSlugResponse =
-  | getApiV1AuthHealthTipBySlugSlugResponseSuccess
-  | getApiV1AuthHealthTipBySlugSlugResponseError;
-
-export const getGetApiV1AuthHealthTipBySlugSlugUrl = (slug: string) => {
-  return `/api/v1/auth/health-tip/by-slug/${slug}`;
-};
-
-export const getApiV1AuthHealthTipBySlugSlug = async (
-  slug: string,
-  options?: RequestInit,
-): Promise<getApiV1AuthHealthTipBySlugSlugResponse> => {
-  const res = await fetch(getGetApiV1AuthHealthTipBySlugSlugUrl(slug), {
-    ...options,
-    method: "GET",
-  });
-
-  const body = [204, 205, 304].includes(res.status) ? null : await res.text();
-
-  const data: getApiV1AuthHealthTipBySlugSlugResponse["data"] = body
-    ? JSON.parse(body)
-    : {};
-  return {
-    data,
-    status: res.status,
-    headers: res.headers,
-  } as getApiV1AuthHealthTipBySlugSlugResponse;
-};
-
-export const getGetApiV1AuthHealthTipBySlugSlugInfiniteQueryKey = (
-  slug?: string,
-) => {
-  return ["infinite", `/api/v1/auth/health-tip/by-slug/${slug}`] as const;
-};
-
-export const getGetApiV1AuthHealthTipBySlugSlugQueryKey = (slug?: string) => {
-  return [`/api/v1/auth/health-tip/by-slug/${slug}`] as const;
-};
-
-export const getGetApiV1AuthHealthTipBySlugSlugInfiniteQueryOptions = <
-  TData = InfiniteData<
-    Awaited<ReturnType<typeof getApiV1AuthHealthTipBySlugSlug>>
-  >,
-  TError =
-    | GetApiV1AuthHealthTipBySlugSlug400
-    | GetApiV1AuthHealthTipBySlugSlug401
-    | GetApiV1AuthHealthTipBySlugSlug404
-    | GetApiV1AuthHealthTipBySlugSlug500,
->(
-  slug: string,
-  options?: {
-    query?: Partial<
-      UseInfiniteQueryOptions<
-        Awaited<ReturnType<typeof getApiV1AuthHealthTipBySlugSlug>>,
-        TError,
-        TData
-      >
-    >;
-    fetch?: RequestInit;
-  },
-) => {
-  const { query: queryOptions, fetch: fetchOptions } = options ?? {};
-
-  const queryKey =
-    queryOptions?.queryKey ??
-    getGetApiV1AuthHealthTipBySlugSlugInfiniteQueryKey(slug);
-
-  const queryFn: QueryFunction<
-    Awaited<ReturnType<typeof getApiV1AuthHealthTipBySlugSlug>>
-  > = ({ signal }) =>
-    getApiV1AuthHealthTipBySlugSlug(slug, { signal, ...fetchOptions });
-
-  return {
-    queryKey,
-    queryFn,
-    enabled: !!slug,
-    ...queryOptions,
-  } as UseInfiniteQueryOptions<
-    Awaited<ReturnType<typeof getApiV1AuthHealthTipBySlugSlug>>,
-    TError,
-    TData
-  > & { queryKey: DataTag<QueryKey, TData, TError> };
-};
-
-export type GetApiV1AuthHealthTipBySlugSlugInfiniteQueryResult = NonNullable<
-  Awaited<ReturnType<typeof getApiV1AuthHealthTipBySlugSlug>>
->;
-export type GetApiV1AuthHealthTipBySlugSlugInfiniteQueryError =
-  | GetApiV1AuthHealthTipBySlugSlug400
-  | GetApiV1AuthHealthTipBySlugSlug401
-  | GetApiV1AuthHealthTipBySlugSlug404
-  | GetApiV1AuthHealthTipBySlugSlug500;
-
-export function useGetApiV1AuthHealthTipBySlugSlugInfinite<
-  TData = InfiniteData<
-    Awaited<ReturnType<typeof getApiV1AuthHealthTipBySlugSlug>>
-  >,
-  TError =
-    | GetApiV1AuthHealthTipBySlugSlug400
-    | GetApiV1AuthHealthTipBySlugSlug401
-    | GetApiV1AuthHealthTipBySlugSlug404
-    | GetApiV1AuthHealthTipBySlugSlug500,
->(
-  slug: string,
-  options: {
-    query: Partial<
-      UseInfiniteQueryOptions<
-        Awaited<ReturnType<typeof getApiV1AuthHealthTipBySlugSlug>>,
-        TError,
-        TData
-      >
-    > &
-      Pick<
-        DefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getApiV1AuthHealthTipBySlugSlug>>,
-          TError,
-          Awaited<ReturnType<typeof getApiV1AuthHealthTipBySlugSlug>>
-        >,
-        "initialData"
-      >;
-    fetch?: RequestInit;
-  },
-  queryClient?: QueryClient,
-): DefinedUseInfiniteQueryResult<TData, TError> & {
-  queryKey: DataTag<QueryKey, TData, TError>;
-};
-export function useGetApiV1AuthHealthTipBySlugSlugInfinite<
-  TData = InfiniteData<
-    Awaited<ReturnType<typeof getApiV1AuthHealthTipBySlugSlug>>
-  >,
-  TError =
-    | GetApiV1AuthHealthTipBySlugSlug400
-    | GetApiV1AuthHealthTipBySlugSlug401
-    | GetApiV1AuthHealthTipBySlugSlug404
-    | GetApiV1AuthHealthTipBySlugSlug500,
->(
-  slug: string,
-  options?: {
-    query?: Partial<
-      UseInfiniteQueryOptions<
-        Awaited<ReturnType<typeof getApiV1AuthHealthTipBySlugSlug>>,
-        TError,
-        TData
-      >
-    > &
-      Pick<
-        UndefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getApiV1AuthHealthTipBySlugSlug>>,
-          TError,
-          Awaited<ReturnType<typeof getApiV1AuthHealthTipBySlugSlug>>
-        >,
-        "initialData"
-      >;
-    fetch?: RequestInit;
-  },
-  queryClient?: QueryClient,
-): UseInfiniteQueryResult<TData, TError> & {
-  queryKey: DataTag<QueryKey, TData, TError>;
-};
-export function useGetApiV1AuthHealthTipBySlugSlugInfinite<
-  TData = InfiniteData<
-    Awaited<ReturnType<typeof getApiV1AuthHealthTipBySlugSlug>>
-  >,
-  TError =
-    | GetApiV1AuthHealthTipBySlugSlug400
-    | GetApiV1AuthHealthTipBySlugSlug401
-    | GetApiV1AuthHealthTipBySlugSlug404
-    | GetApiV1AuthHealthTipBySlugSlug500,
->(
-  slug: string,
-  options?: {
-    query?: Partial<
-      UseInfiniteQueryOptions<
-        Awaited<ReturnType<typeof getApiV1AuthHealthTipBySlugSlug>>,
-        TError,
-        TData
-      >
-    >;
-    fetch?: RequestInit;
-  },
-  queryClient?: QueryClient,
-): UseInfiniteQueryResult<TData, TError> & {
-  queryKey: DataTag<QueryKey, TData, TError>;
-};
-/**
- * @summary Get health tip by slug
- */
-
-export function useGetApiV1AuthHealthTipBySlugSlugInfinite<
-  TData = InfiniteData<
-    Awaited<ReturnType<typeof getApiV1AuthHealthTipBySlugSlug>>
-  >,
-  TError =
-    | GetApiV1AuthHealthTipBySlugSlug400
-    | GetApiV1AuthHealthTipBySlugSlug401
-    | GetApiV1AuthHealthTipBySlugSlug404
-    | GetApiV1AuthHealthTipBySlugSlug500,
->(
-  slug: string,
-  options?: {
-    query?: Partial<
-      UseInfiniteQueryOptions<
-        Awaited<ReturnType<typeof getApiV1AuthHealthTipBySlugSlug>>,
-        TError,
-        TData
-      >
-    >;
-    fetch?: RequestInit;
-  },
-  queryClient?: QueryClient,
-): UseInfiniteQueryResult<TData, TError> & {
-  queryKey: DataTag<QueryKey, TData, TError>;
-} {
-  const queryOptions = getGetApiV1AuthHealthTipBySlugSlugInfiniteQueryOptions(
-    slug,
-    options,
-  );
-
-  const query = useInfiniteQuery(
-    queryOptions,
-    queryClient,
-  ) as UseInfiniteQueryResult<TData, TError> & {
-    queryKey: DataTag<QueryKey, TData, TError>;
-  };
-
-  query.queryKey = queryOptions.queryKey;
-
-  return query;
-}
-
-export const getGetApiV1AuthHealthTipBySlugSlugQueryOptions = <
-  TData = Awaited<ReturnType<typeof getApiV1AuthHealthTipBySlugSlug>>,
-  TError =
-    | GetApiV1AuthHealthTipBySlugSlug400
-    | GetApiV1AuthHealthTipBySlugSlug401
-    | GetApiV1AuthHealthTipBySlugSlug404
-    | GetApiV1AuthHealthTipBySlugSlug500,
->(
-  slug: string,
-  options?: {
-    query?: Partial<
-      UseQueryOptions<
-        Awaited<ReturnType<typeof getApiV1AuthHealthTipBySlugSlug>>,
-        TError,
-        TData
-      >
-    >;
-    fetch?: RequestInit;
-  },
-) => {
-  const { query: queryOptions, fetch: fetchOptions } = options ?? {};
-
-  const queryKey =
-    queryOptions?.queryKey ?? getGetApiV1AuthHealthTipBySlugSlugQueryKey(slug);
-
-  const queryFn: QueryFunction<
-    Awaited<ReturnType<typeof getApiV1AuthHealthTipBySlugSlug>>
-  > = ({ signal }) =>
-    getApiV1AuthHealthTipBySlugSlug(slug, { signal, ...fetchOptions });
-
-  return {
-    queryKey,
-    queryFn,
-    enabled: !!slug,
-    ...queryOptions,
-  } as UseQueryOptions<
-    Awaited<ReturnType<typeof getApiV1AuthHealthTipBySlugSlug>>,
-    TError,
-    TData
-  > & { queryKey: DataTag<QueryKey, TData, TError> };
-};
-
-export type GetApiV1AuthHealthTipBySlugSlugQueryResult = NonNullable<
-  Awaited<ReturnType<typeof getApiV1AuthHealthTipBySlugSlug>>
->;
-export type GetApiV1AuthHealthTipBySlugSlugQueryError =
-  | GetApiV1AuthHealthTipBySlugSlug400
-  | GetApiV1AuthHealthTipBySlugSlug401
-  | GetApiV1AuthHealthTipBySlugSlug404
-  | GetApiV1AuthHealthTipBySlugSlug500;
-
-export function useGetApiV1AuthHealthTipBySlugSlug<
-  TData = Awaited<ReturnType<typeof getApiV1AuthHealthTipBySlugSlug>>,
-  TError =
-    | GetApiV1AuthHealthTipBySlugSlug400
-    | GetApiV1AuthHealthTipBySlugSlug401
-    | GetApiV1AuthHealthTipBySlugSlug404
-    | GetApiV1AuthHealthTipBySlugSlug500,
->(
-  slug: string,
-  options: {
-    query: Partial<
-      UseQueryOptions<
-        Awaited<ReturnType<typeof getApiV1AuthHealthTipBySlugSlug>>,
-        TError,
-        TData
-      >
-    > &
-      Pick<
-        DefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getApiV1AuthHealthTipBySlugSlug>>,
-          TError,
-          Awaited<ReturnType<typeof getApiV1AuthHealthTipBySlugSlug>>
-        >,
-        "initialData"
-      >;
-    fetch?: RequestInit;
-  },
-  queryClient?: QueryClient,
-): DefinedUseQueryResult<TData, TError> & {
-  queryKey: DataTag<QueryKey, TData, TError>;
-};
-export function useGetApiV1AuthHealthTipBySlugSlug<
-  TData = Awaited<ReturnType<typeof getApiV1AuthHealthTipBySlugSlug>>,
-  TError =
-    | GetApiV1AuthHealthTipBySlugSlug400
-    | GetApiV1AuthHealthTipBySlugSlug401
-    | GetApiV1AuthHealthTipBySlugSlug404
-    | GetApiV1AuthHealthTipBySlugSlug500,
->(
-  slug: string,
-  options?: {
-    query?: Partial<
-      UseQueryOptions<
-        Awaited<ReturnType<typeof getApiV1AuthHealthTipBySlugSlug>>,
-        TError,
-        TData
-      >
-    > &
-      Pick<
-        UndefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getApiV1AuthHealthTipBySlugSlug>>,
-          TError,
-          Awaited<ReturnType<typeof getApiV1AuthHealthTipBySlugSlug>>
-        >,
-        "initialData"
-      >;
-    fetch?: RequestInit;
-  },
-  queryClient?: QueryClient,
-): UseQueryResult<TData, TError> & {
-  queryKey: DataTag<QueryKey, TData, TError>;
-};
-export function useGetApiV1AuthHealthTipBySlugSlug<
-  TData = Awaited<ReturnType<typeof getApiV1AuthHealthTipBySlugSlug>>,
-  TError =
-    | GetApiV1AuthHealthTipBySlugSlug400
-    | GetApiV1AuthHealthTipBySlugSlug401
-    | GetApiV1AuthHealthTipBySlugSlug404
-    | GetApiV1AuthHealthTipBySlugSlug500,
->(
-  slug: string,
-  options?: {
-    query?: Partial<
-      UseQueryOptions<
-        Awaited<ReturnType<typeof getApiV1AuthHealthTipBySlugSlug>>,
-        TError,
-        TData
-      >
-    >;
-    fetch?: RequestInit;
-  },
-  queryClient?: QueryClient,
-): UseQueryResult<TData, TError> & {
-  queryKey: DataTag<QueryKey, TData, TError>;
-};
-/**
- * @summary Get health tip by slug
- */
-
-export function useGetApiV1AuthHealthTipBySlugSlug<
-  TData = Awaited<ReturnType<typeof getApiV1AuthHealthTipBySlugSlug>>,
-  TError =
-    | GetApiV1AuthHealthTipBySlugSlug400
-    | GetApiV1AuthHealthTipBySlugSlug401
-    | GetApiV1AuthHealthTipBySlugSlug404
-    | GetApiV1AuthHealthTipBySlugSlug500,
->(
-  slug: string,
-  options?: {
-    query?: Partial<
-      UseQueryOptions<
-        Awaited<ReturnType<typeof getApiV1AuthHealthTipBySlugSlug>>,
-        TError,
-        TData
-      >
-    >;
-    fetch?: RequestInit;
-  },
-  queryClient?: QueryClient,
-): UseQueryResult<TData, TError> & {
-  queryKey: DataTag<QueryKey, TData, TError>;
-} {
-  const queryOptions = getGetApiV1AuthHealthTipBySlugSlugQueryOptions(
-    slug,
-    options,
-  );
-
-  const query = useQuery(queryOptions, queryClient) as UseQueryResult<
-    TData,
-    TError
-  > & { queryKey: DataTag<QueryKey, TData, TError> };
-
-  query.queryKey = queryOptions.queryKey;
-
-  return query;
-}
-
-/**
  * Returns a paginated list of published health tips. Supports category, tag, and language filtering.
  * @summary Get health tips feed
  */
@@ -10307,6 +9444,456 @@ export function useGetApiV1AuthHealthTipCategories<
 }
 
 /**
+ * Returns the full content of a published health tip by slug.
+ * @summary Get health tip by slug
+ */
+export type getApiV1AuthHealthTipBySlugSlugResponse200 = {
+  data: GetApiV1AuthHealthTipBySlugSlug200;
+  status: 200;
+};
+
+export type getApiV1AuthHealthTipBySlugSlugResponse400 = {
+  data: GetApiV1AuthHealthTipBySlugSlug400;
+  status: 400;
+};
+
+export type getApiV1AuthHealthTipBySlugSlugResponse401 = {
+  data: GetApiV1AuthHealthTipBySlugSlug401;
+  status: 401;
+};
+
+export type getApiV1AuthHealthTipBySlugSlugResponse404 = {
+  data: GetApiV1AuthHealthTipBySlugSlug404;
+  status: 404;
+};
+
+export type getApiV1AuthHealthTipBySlugSlugResponse500 = {
+  data: GetApiV1AuthHealthTipBySlugSlug500;
+  status: 500;
+};
+
+export type getApiV1AuthHealthTipBySlugSlugResponseSuccess =
+  getApiV1AuthHealthTipBySlugSlugResponse200 & {
+    headers: Headers;
+  };
+export type getApiV1AuthHealthTipBySlugSlugResponseError = (
+  | getApiV1AuthHealthTipBySlugSlugResponse400
+  | getApiV1AuthHealthTipBySlugSlugResponse401
+  | getApiV1AuthHealthTipBySlugSlugResponse404
+  | getApiV1AuthHealthTipBySlugSlugResponse500
+) & {
+  headers: Headers;
+};
+
+export type getApiV1AuthHealthTipBySlugSlugResponse =
+  | getApiV1AuthHealthTipBySlugSlugResponseSuccess
+  | getApiV1AuthHealthTipBySlugSlugResponseError;
+
+export const getGetApiV1AuthHealthTipBySlugSlugUrl = (slug: string) => {
+  return `/api/v1/auth/health-tip/by-slug/${slug}`;
+};
+
+export const getApiV1AuthHealthTipBySlugSlug = async (
+  slug: string,
+  options?: RequestInit,
+): Promise<getApiV1AuthHealthTipBySlugSlugResponse> => {
+  const res = await fetch(getGetApiV1AuthHealthTipBySlugSlugUrl(slug), {
+    ...options,
+    method: "GET",
+  });
+
+  const body = [204, 205, 304].includes(res.status) ? null : await res.text();
+
+  const data: getApiV1AuthHealthTipBySlugSlugResponse["data"] = body
+    ? JSON.parse(body)
+    : {};
+  return {
+    data,
+    status: res.status,
+    headers: res.headers,
+  } as getApiV1AuthHealthTipBySlugSlugResponse;
+};
+
+export const getGetApiV1AuthHealthTipBySlugSlugInfiniteQueryKey = (
+  slug?: string,
+) => {
+  return ["infinite", `/api/v1/auth/health-tip/by-slug/${slug}`] as const;
+};
+
+export const getGetApiV1AuthHealthTipBySlugSlugQueryKey = (slug?: string) => {
+  return [`/api/v1/auth/health-tip/by-slug/${slug}`] as const;
+};
+
+export const getGetApiV1AuthHealthTipBySlugSlugInfiniteQueryOptions = <
+  TData = InfiniteData<
+    Awaited<ReturnType<typeof getApiV1AuthHealthTipBySlugSlug>>
+  >,
+  TError =
+    | GetApiV1AuthHealthTipBySlugSlug400
+    | GetApiV1AuthHealthTipBySlugSlug401
+    | GetApiV1AuthHealthTipBySlugSlug404
+    | GetApiV1AuthHealthTipBySlugSlug500,
+>(
+  slug: string,
+  options?: {
+    query?: Partial<
+      UseInfiniteQueryOptions<
+        Awaited<ReturnType<typeof getApiV1AuthHealthTipBySlugSlug>>,
+        TError,
+        TData
+      >
+    >;
+    fetch?: RequestInit;
+  },
+) => {
+  const { query: queryOptions, fetch: fetchOptions } = options ?? {};
+
+  const queryKey =
+    queryOptions?.queryKey ??
+    getGetApiV1AuthHealthTipBySlugSlugInfiniteQueryKey(slug);
+
+  const queryFn: QueryFunction<
+    Awaited<ReturnType<typeof getApiV1AuthHealthTipBySlugSlug>>
+  > = ({ signal }) =>
+    getApiV1AuthHealthTipBySlugSlug(slug, { signal, ...fetchOptions });
+
+  return {
+    queryKey,
+    queryFn,
+    enabled: !!slug,
+    ...queryOptions,
+  } as UseInfiniteQueryOptions<
+    Awaited<ReturnType<typeof getApiV1AuthHealthTipBySlugSlug>>,
+    TError,
+    TData
+  > & { queryKey: DataTag<QueryKey, TData, TError> };
+};
+
+export type GetApiV1AuthHealthTipBySlugSlugInfiniteQueryResult = NonNullable<
+  Awaited<ReturnType<typeof getApiV1AuthHealthTipBySlugSlug>>
+>;
+export type GetApiV1AuthHealthTipBySlugSlugInfiniteQueryError =
+  | GetApiV1AuthHealthTipBySlugSlug400
+  | GetApiV1AuthHealthTipBySlugSlug401
+  | GetApiV1AuthHealthTipBySlugSlug404
+  | GetApiV1AuthHealthTipBySlugSlug500;
+
+export function useGetApiV1AuthHealthTipBySlugSlugInfinite<
+  TData = InfiniteData<
+    Awaited<ReturnType<typeof getApiV1AuthHealthTipBySlugSlug>>
+  >,
+  TError =
+    | GetApiV1AuthHealthTipBySlugSlug400
+    | GetApiV1AuthHealthTipBySlugSlug401
+    | GetApiV1AuthHealthTipBySlugSlug404
+    | GetApiV1AuthHealthTipBySlugSlug500,
+>(
+  slug: string,
+  options: {
+    query: Partial<
+      UseInfiniteQueryOptions<
+        Awaited<ReturnType<typeof getApiV1AuthHealthTipBySlugSlug>>,
+        TError,
+        TData
+      >
+    > &
+      Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getApiV1AuthHealthTipBySlugSlug>>,
+          TError,
+          Awaited<ReturnType<typeof getApiV1AuthHealthTipBySlugSlug>>
+        >,
+        "initialData"
+      >;
+    fetch?: RequestInit;
+  },
+  queryClient?: QueryClient,
+): DefinedUseInfiniteQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>;
+};
+export function useGetApiV1AuthHealthTipBySlugSlugInfinite<
+  TData = InfiniteData<
+    Awaited<ReturnType<typeof getApiV1AuthHealthTipBySlugSlug>>
+  >,
+  TError =
+    | GetApiV1AuthHealthTipBySlugSlug400
+    | GetApiV1AuthHealthTipBySlugSlug401
+    | GetApiV1AuthHealthTipBySlugSlug404
+    | GetApiV1AuthHealthTipBySlugSlug500,
+>(
+  slug: string,
+  options?: {
+    query?: Partial<
+      UseInfiniteQueryOptions<
+        Awaited<ReturnType<typeof getApiV1AuthHealthTipBySlugSlug>>,
+        TError,
+        TData
+      >
+    > &
+      Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getApiV1AuthHealthTipBySlugSlug>>,
+          TError,
+          Awaited<ReturnType<typeof getApiV1AuthHealthTipBySlugSlug>>
+        >,
+        "initialData"
+      >;
+    fetch?: RequestInit;
+  },
+  queryClient?: QueryClient,
+): UseInfiniteQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>;
+};
+export function useGetApiV1AuthHealthTipBySlugSlugInfinite<
+  TData = InfiniteData<
+    Awaited<ReturnType<typeof getApiV1AuthHealthTipBySlugSlug>>
+  >,
+  TError =
+    | GetApiV1AuthHealthTipBySlugSlug400
+    | GetApiV1AuthHealthTipBySlugSlug401
+    | GetApiV1AuthHealthTipBySlugSlug404
+    | GetApiV1AuthHealthTipBySlugSlug500,
+>(
+  slug: string,
+  options?: {
+    query?: Partial<
+      UseInfiniteQueryOptions<
+        Awaited<ReturnType<typeof getApiV1AuthHealthTipBySlugSlug>>,
+        TError,
+        TData
+      >
+    >;
+    fetch?: RequestInit;
+  },
+  queryClient?: QueryClient,
+): UseInfiniteQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>;
+};
+/**
+ * @summary Get health tip by slug
+ */
+
+export function useGetApiV1AuthHealthTipBySlugSlugInfinite<
+  TData = InfiniteData<
+    Awaited<ReturnType<typeof getApiV1AuthHealthTipBySlugSlug>>
+  >,
+  TError =
+    | GetApiV1AuthHealthTipBySlugSlug400
+    | GetApiV1AuthHealthTipBySlugSlug401
+    | GetApiV1AuthHealthTipBySlugSlug404
+    | GetApiV1AuthHealthTipBySlugSlug500,
+>(
+  slug: string,
+  options?: {
+    query?: Partial<
+      UseInfiniteQueryOptions<
+        Awaited<ReturnType<typeof getApiV1AuthHealthTipBySlugSlug>>,
+        TError,
+        TData
+      >
+    >;
+    fetch?: RequestInit;
+  },
+  queryClient?: QueryClient,
+): UseInfiniteQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>;
+} {
+  const queryOptions = getGetApiV1AuthHealthTipBySlugSlugInfiniteQueryOptions(
+    slug,
+    options,
+  );
+
+  const query = useInfiniteQuery(
+    queryOptions,
+    queryClient,
+  ) as UseInfiniteQueryResult<TData, TError> & {
+    queryKey: DataTag<QueryKey, TData, TError>;
+  };
+
+  query.queryKey = queryOptions.queryKey;
+
+  return query;
+}
+
+export const getGetApiV1AuthHealthTipBySlugSlugQueryOptions = <
+  TData = Awaited<ReturnType<typeof getApiV1AuthHealthTipBySlugSlug>>,
+  TError =
+    | GetApiV1AuthHealthTipBySlugSlug400
+    | GetApiV1AuthHealthTipBySlugSlug401
+    | GetApiV1AuthHealthTipBySlugSlug404
+    | GetApiV1AuthHealthTipBySlugSlug500,
+>(
+  slug: string,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof getApiV1AuthHealthTipBySlugSlug>>,
+        TError,
+        TData
+      >
+    >;
+    fetch?: RequestInit;
+  },
+) => {
+  const { query: queryOptions, fetch: fetchOptions } = options ?? {};
+
+  const queryKey =
+    queryOptions?.queryKey ?? getGetApiV1AuthHealthTipBySlugSlugQueryKey(slug);
+
+  const queryFn: QueryFunction<
+    Awaited<ReturnType<typeof getApiV1AuthHealthTipBySlugSlug>>
+  > = ({ signal }) =>
+    getApiV1AuthHealthTipBySlugSlug(slug, { signal, ...fetchOptions });
+
+  return {
+    queryKey,
+    queryFn,
+    enabled: !!slug,
+    ...queryOptions,
+  } as UseQueryOptions<
+    Awaited<ReturnType<typeof getApiV1AuthHealthTipBySlugSlug>>,
+    TError,
+    TData
+  > & { queryKey: DataTag<QueryKey, TData, TError> };
+};
+
+export type GetApiV1AuthHealthTipBySlugSlugQueryResult = NonNullable<
+  Awaited<ReturnType<typeof getApiV1AuthHealthTipBySlugSlug>>
+>;
+export type GetApiV1AuthHealthTipBySlugSlugQueryError =
+  | GetApiV1AuthHealthTipBySlugSlug400
+  | GetApiV1AuthHealthTipBySlugSlug401
+  | GetApiV1AuthHealthTipBySlugSlug404
+  | GetApiV1AuthHealthTipBySlugSlug500;
+
+export function useGetApiV1AuthHealthTipBySlugSlug<
+  TData = Awaited<ReturnType<typeof getApiV1AuthHealthTipBySlugSlug>>,
+  TError =
+    | GetApiV1AuthHealthTipBySlugSlug400
+    | GetApiV1AuthHealthTipBySlugSlug401
+    | GetApiV1AuthHealthTipBySlugSlug404
+    | GetApiV1AuthHealthTipBySlugSlug500,
+>(
+  slug: string,
+  options: {
+    query: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof getApiV1AuthHealthTipBySlugSlug>>,
+        TError,
+        TData
+      >
+    > &
+      Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getApiV1AuthHealthTipBySlugSlug>>,
+          TError,
+          Awaited<ReturnType<typeof getApiV1AuthHealthTipBySlugSlug>>
+        >,
+        "initialData"
+      >;
+    fetch?: RequestInit;
+  },
+  queryClient?: QueryClient,
+): DefinedUseQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>;
+};
+export function useGetApiV1AuthHealthTipBySlugSlug<
+  TData = Awaited<ReturnType<typeof getApiV1AuthHealthTipBySlugSlug>>,
+  TError =
+    | GetApiV1AuthHealthTipBySlugSlug400
+    | GetApiV1AuthHealthTipBySlugSlug401
+    | GetApiV1AuthHealthTipBySlugSlug404
+    | GetApiV1AuthHealthTipBySlugSlug500,
+>(
+  slug: string,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof getApiV1AuthHealthTipBySlugSlug>>,
+        TError,
+        TData
+      >
+    > &
+      Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getApiV1AuthHealthTipBySlugSlug>>,
+          TError,
+          Awaited<ReturnType<typeof getApiV1AuthHealthTipBySlugSlug>>
+        >,
+        "initialData"
+      >;
+    fetch?: RequestInit;
+  },
+  queryClient?: QueryClient,
+): UseQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>;
+};
+export function useGetApiV1AuthHealthTipBySlugSlug<
+  TData = Awaited<ReturnType<typeof getApiV1AuthHealthTipBySlugSlug>>,
+  TError =
+    | GetApiV1AuthHealthTipBySlugSlug400
+    | GetApiV1AuthHealthTipBySlugSlug401
+    | GetApiV1AuthHealthTipBySlugSlug404
+    | GetApiV1AuthHealthTipBySlugSlug500,
+>(
+  slug: string,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof getApiV1AuthHealthTipBySlugSlug>>,
+        TError,
+        TData
+      >
+    >;
+    fetch?: RequestInit;
+  },
+  queryClient?: QueryClient,
+): UseQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>;
+};
+/**
+ * @summary Get health tip by slug
+ */
+
+export function useGetApiV1AuthHealthTipBySlugSlug<
+  TData = Awaited<ReturnType<typeof getApiV1AuthHealthTipBySlugSlug>>,
+  TError =
+    | GetApiV1AuthHealthTipBySlugSlug400
+    | GetApiV1AuthHealthTipBySlugSlug401
+    | GetApiV1AuthHealthTipBySlugSlug404
+    | GetApiV1AuthHealthTipBySlugSlug500,
+>(
+  slug: string,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof getApiV1AuthHealthTipBySlugSlug>>,
+        TError,
+        TData
+      >
+    >;
+    fetch?: RequestInit;
+  },
+  queryClient?: QueryClient,
+): UseQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>;
+} {
+  const queryOptions = getGetApiV1AuthHealthTipBySlugSlugQueryOptions(
+    slug,
+    options,
+  );
+
+  const query = useQuery(queryOptions, queryClient) as UseQueryResult<
+    TData,
+    TError
+  > & { queryKey: DataTag<QueryKey, TData, TError> };
+
+  query.queryKey = queryOptions.queryKey;
+
+  return query;
+}
+
+/**
  * Returns sources and references used for a specific health tip.
  * @summary Get health tip sources
  */
@@ -10745,6 +10332,438 @@ export function useGetApiV1AuthHealthTipIdSources<
     id,
     options,
   );
+
+  const query = useQuery(queryOptions, queryClient) as UseQueryResult<
+    TData,
+    TError
+  > & { queryKey: DataTag<QueryKey, TData, TError> };
+
+  query.queryKey = queryOptions.queryKey;
+
+  return query;
+}
+
+/**
+ * Returns the full content of a published health tip by ID.
+ * @summary Get health tip by ID
+ */
+export type getApiV1AuthHealthTipIdResponse200 = {
+  data: GetApiV1AuthHealthTipId200;
+  status: 200;
+};
+
+export type getApiV1AuthHealthTipIdResponse400 = {
+  data: GetApiV1AuthHealthTipId400;
+  status: 400;
+};
+
+export type getApiV1AuthHealthTipIdResponse401 = {
+  data: GetApiV1AuthHealthTipId401;
+  status: 401;
+};
+
+export type getApiV1AuthHealthTipIdResponse404 = {
+  data: GetApiV1AuthHealthTipId404;
+  status: 404;
+};
+
+export type getApiV1AuthHealthTipIdResponse500 = {
+  data: GetApiV1AuthHealthTipId500;
+  status: 500;
+};
+
+export type getApiV1AuthHealthTipIdResponseSuccess =
+  getApiV1AuthHealthTipIdResponse200 & {
+    headers: Headers;
+  };
+export type getApiV1AuthHealthTipIdResponseError = (
+  | getApiV1AuthHealthTipIdResponse400
+  | getApiV1AuthHealthTipIdResponse401
+  | getApiV1AuthHealthTipIdResponse404
+  | getApiV1AuthHealthTipIdResponse500
+) & {
+  headers: Headers;
+};
+
+export type getApiV1AuthHealthTipIdResponse =
+  | getApiV1AuthHealthTipIdResponseSuccess
+  | getApiV1AuthHealthTipIdResponseError;
+
+export const getGetApiV1AuthHealthTipIdUrl = (id: string) => {
+  return `/api/v1/auth/health-tip/${id}`;
+};
+
+export const getApiV1AuthHealthTipId = async (
+  id: string,
+  options?: RequestInit,
+): Promise<getApiV1AuthHealthTipIdResponse> => {
+  const res = await fetch(getGetApiV1AuthHealthTipIdUrl(id), {
+    ...options,
+    method: "GET",
+  });
+
+  const body = [204, 205, 304].includes(res.status) ? null : await res.text();
+
+  const data: getApiV1AuthHealthTipIdResponse["data"] = body
+    ? JSON.parse(body)
+    : {};
+  return {
+    data,
+    status: res.status,
+    headers: res.headers,
+  } as getApiV1AuthHealthTipIdResponse;
+};
+
+export const getGetApiV1AuthHealthTipIdInfiniteQueryKey = (id?: string) => {
+  return ["infinite", `/api/v1/auth/health-tip/${id}`] as const;
+};
+
+export const getGetApiV1AuthHealthTipIdQueryKey = (id?: string) => {
+  return [`/api/v1/auth/health-tip/${id}`] as const;
+};
+
+export const getGetApiV1AuthHealthTipIdInfiniteQueryOptions = <
+  TData = InfiniteData<Awaited<ReturnType<typeof getApiV1AuthHealthTipId>>>,
+  TError =
+    | GetApiV1AuthHealthTipId400
+    | GetApiV1AuthHealthTipId401
+    | GetApiV1AuthHealthTipId404
+    | GetApiV1AuthHealthTipId500,
+>(
+  id: string,
+  options?: {
+    query?: Partial<
+      UseInfiniteQueryOptions<
+        Awaited<ReturnType<typeof getApiV1AuthHealthTipId>>,
+        TError,
+        TData
+      >
+    >;
+    fetch?: RequestInit;
+  },
+) => {
+  const { query: queryOptions, fetch: fetchOptions } = options ?? {};
+
+  const queryKey =
+    queryOptions?.queryKey ?? getGetApiV1AuthHealthTipIdInfiniteQueryKey(id);
+
+  const queryFn: QueryFunction<
+    Awaited<ReturnType<typeof getApiV1AuthHealthTipId>>
+  > = ({ signal }) => getApiV1AuthHealthTipId(id, { signal, ...fetchOptions });
+
+  return {
+    queryKey,
+    queryFn,
+    enabled: !!id,
+    ...queryOptions,
+  } as UseInfiniteQueryOptions<
+    Awaited<ReturnType<typeof getApiV1AuthHealthTipId>>,
+    TError,
+    TData
+  > & { queryKey: DataTag<QueryKey, TData, TError> };
+};
+
+export type GetApiV1AuthHealthTipIdInfiniteQueryResult = NonNullable<
+  Awaited<ReturnType<typeof getApiV1AuthHealthTipId>>
+>;
+export type GetApiV1AuthHealthTipIdInfiniteQueryError =
+  | GetApiV1AuthHealthTipId400
+  | GetApiV1AuthHealthTipId401
+  | GetApiV1AuthHealthTipId404
+  | GetApiV1AuthHealthTipId500;
+
+export function useGetApiV1AuthHealthTipIdInfinite<
+  TData = InfiniteData<Awaited<ReturnType<typeof getApiV1AuthHealthTipId>>>,
+  TError =
+    | GetApiV1AuthHealthTipId400
+    | GetApiV1AuthHealthTipId401
+    | GetApiV1AuthHealthTipId404
+    | GetApiV1AuthHealthTipId500,
+>(
+  id: string,
+  options: {
+    query: Partial<
+      UseInfiniteQueryOptions<
+        Awaited<ReturnType<typeof getApiV1AuthHealthTipId>>,
+        TError,
+        TData
+      >
+    > &
+      Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getApiV1AuthHealthTipId>>,
+          TError,
+          Awaited<ReturnType<typeof getApiV1AuthHealthTipId>>
+        >,
+        "initialData"
+      >;
+    fetch?: RequestInit;
+  },
+  queryClient?: QueryClient,
+): DefinedUseInfiniteQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>;
+};
+export function useGetApiV1AuthHealthTipIdInfinite<
+  TData = InfiniteData<Awaited<ReturnType<typeof getApiV1AuthHealthTipId>>>,
+  TError =
+    | GetApiV1AuthHealthTipId400
+    | GetApiV1AuthHealthTipId401
+    | GetApiV1AuthHealthTipId404
+    | GetApiV1AuthHealthTipId500,
+>(
+  id: string,
+  options?: {
+    query?: Partial<
+      UseInfiniteQueryOptions<
+        Awaited<ReturnType<typeof getApiV1AuthHealthTipId>>,
+        TError,
+        TData
+      >
+    > &
+      Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getApiV1AuthHealthTipId>>,
+          TError,
+          Awaited<ReturnType<typeof getApiV1AuthHealthTipId>>
+        >,
+        "initialData"
+      >;
+    fetch?: RequestInit;
+  },
+  queryClient?: QueryClient,
+): UseInfiniteQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>;
+};
+export function useGetApiV1AuthHealthTipIdInfinite<
+  TData = InfiniteData<Awaited<ReturnType<typeof getApiV1AuthHealthTipId>>>,
+  TError =
+    | GetApiV1AuthHealthTipId400
+    | GetApiV1AuthHealthTipId401
+    | GetApiV1AuthHealthTipId404
+    | GetApiV1AuthHealthTipId500,
+>(
+  id: string,
+  options?: {
+    query?: Partial<
+      UseInfiniteQueryOptions<
+        Awaited<ReturnType<typeof getApiV1AuthHealthTipId>>,
+        TError,
+        TData
+      >
+    >;
+    fetch?: RequestInit;
+  },
+  queryClient?: QueryClient,
+): UseInfiniteQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>;
+};
+/**
+ * @summary Get health tip by ID
+ */
+
+export function useGetApiV1AuthHealthTipIdInfinite<
+  TData = InfiniteData<Awaited<ReturnType<typeof getApiV1AuthHealthTipId>>>,
+  TError =
+    | GetApiV1AuthHealthTipId400
+    | GetApiV1AuthHealthTipId401
+    | GetApiV1AuthHealthTipId404
+    | GetApiV1AuthHealthTipId500,
+>(
+  id: string,
+  options?: {
+    query?: Partial<
+      UseInfiniteQueryOptions<
+        Awaited<ReturnType<typeof getApiV1AuthHealthTipId>>,
+        TError,
+        TData
+      >
+    >;
+    fetch?: RequestInit;
+  },
+  queryClient?: QueryClient,
+): UseInfiniteQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>;
+} {
+  const queryOptions = getGetApiV1AuthHealthTipIdInfiniteQueryOptions(
+    id,
+    options,
+  );
+
+  const query = useInfiniteQuery(
+    queryOptions,
+    queryClient,
+  ) as UseInfiniteQueryResult<TData, TError> & {
+    queryKey: DataTag<QueryKey, TData, TError>;
+  };
+
+  query.queryKey = queryOptions.queryKey;
+
+  return query;
+}
+
+export const getGetApiV1AuthHealthTipIdQueryOptions = <
+  TData = Awaited<ReturnType<typeof getApiV1AuthHealthTipId>>,
+  TError =
+    | GetApiV1AuthHealthTipId400
+    | GetApiV1AuthHealthTipId401
+    | GetApiV1AuthHealthTipId404
+    | GetApiV1AuthHealthTipId500,
+>(
+  id: string,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof getApiV1AuthHealthTipId>>,
+        TError,
+        TData
+      >
+    >;
+    fetch?: RequestInit;
+  },
+) => {
+  const { query: queryOptions, fetch: fetchOptions } = options ?? {};
+
+  const queryKey =
+    queryOptions?.queryKey ?? getGetApiV1AuthHealthTipIdQueryKey(id);
+
+  const queryFn: QueryFunction<
+    Awaited<ReturnType<typeof getApiV1AuthHealthTipId>>
+  > = ({ signal }) => getApiV1AuthHealthTipId(id, { signal, ...fetchOptions });
+
+  return {
+    queryKey,
+    queryFn,
+    enabled: !!id,
+    ...queryOptions,
+  } as UseQueryOptions<
+    Awaited<ReturnType<typeof getApiV1AuthHealthTipId>>,
+    TError,
+    TData
+  > & { queryKey: DataTag<QueryKey, TData, TError> };
+};
+
+export type GetApiV1AuthHealthTipIdQueryResult = NonNullable<
+  Awaited<ReturnType<typeof getApiV1AuthHealthTipId>>
+>;
+export type GetApiV1AuthHealthTipIdQueryError =
+  | GetApiV1AuthHealthTipId400
+  | GetApiV1AuthHealthTipId401
+  | GetApiV1AuthHealthTipId404
+  | GetApiV1AuthHealthTipId500;
+
+export function useGetApiV1AuthHealthTipId<
+  TData = Awaited<ReturnType<typeof getApiV1AuthHealthTipId>>,
+  TError =
+    | GetApiV1AuthHealthTipId400
+    | GetApiV1AuthHealthTipId401
+    | GetApiV1AuthHealthTipId404
+    | GetApiV1AuthHealthTipId500,
+>(
+  id: string,
+  options: {
+    query: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof getApiV1AuthHealthTipId>>,
+        TError,
+        TData
+      >
+    > &
+      Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getApiV1AuthHealthTipId>>,
+          TError,
+          Awaited<ReturnType<typeof getApiV1AuthHealthTipId>>
+        >,
+        "initialData"
+      >;
+    fetch?: RequestInit;
+  },
+  queryClient?: QueryClient,
+): DefinedUseQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>;
+};
+export function useGetApiV1AuthHealthTipId<
+  TData = Awaited<ReturnType<typeof getApiV1AuthHealthTipId>>,
+  TError =
+    | GetApiV1AuthHealthTipId400
+    | GetApiV1AuthHealthTipId401
+    | GetApiV1AuthHealthTipId404
+    | GetApiV1AuthHealthTipId500,
+>(
+  id: string,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof getApiV1AuthHealthTipId>>,
+        TError,
+        TData
+      >
+    > &
+      Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getApiV1AuthHealthTipId>>,
+          TError,
+          Awaited<ReturnType<typeof getApiV1AuthHealthTipId>>
+        >,
+        "initialData"
+      >;
+    fetch?: RequestInit;
+  },
+  queryClient?: QueryClient,
+): UseQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>;
+};
+export function useGetApiV1AuthHealthTipId<
+  TData = Awaited<ReturnType<typeof getApiV1AuthHealthTipId>>,
+  TError =
+    | GetApiV1AuthHealthTipId400
+    | GetApiV1AuthHealthTipId401
+    | GetApiV1AuthHealthTipId404
+    | GetApiV1AuthHealthTipId500,
+>(
+  id: string,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof getApiV1AuthHealthTipId>>,
+        TError,
+        TData
+      >
+    >;
+    fetch?: RequestInit;
+  },
+  queryClient?: QueryClient,
+): UseQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>;
+};
+/**
+ * @summary Get health tip by ID
+ */
+
+export function useGetApiV1AuthHealthTipId<
+  TData = Awaited<ReturnType<typeof getApiV1AuthHealthTipId>>,
+  TError =
+    | GetApiV1AuthHealthTipId400
+    | GetApiV1AuthHealthTipId401
+    | GetApiV1AuthHealthTipId404
+    | GetApiV1AuthHealthTipId500,
+>(
+  id: string,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof getApiV1AuthHealthTipId>>,
+        TError,
+        TData
+      >
+    >;
+    fetch?: RequestInit;
+  },
+  queryClient?: QueryClient,
+): UseQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>;
+} {
+  const queryOptions = getGetApiV1AuthHealthTipIdQueryOptions(id, options);
 
   const query = useQuery(queryOptions, queryClient) as UseQueryResult<
     TData,

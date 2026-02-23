@@ -1,30 +1,23 @@
-import { ThemeSwitcher } from "@/components/shared/theme-switcher";
-import { PageHeading } from "@/components/shared/layout/page-heading";
+"use client";
+
+import { Suspense } from "react";
 import { PageContainer } from "@/components/app/page-container";
-import { HealthTipFullArticle } from "@/features/health-space/health-tips/health-tip-full-article";
-import { healthArticles } from "@/features/health-space/health-tips";
-import { notFound } from "next/navigation";
+import { ThemeSwitcher } from "@/components/shared/theme-switcher";
+import { HealthTipDetailContent } from "@/features/health-space/health-tips/health-tip-detail-content";
 
-export const HealthTipsDetailsPage = ({ slug }: { slug: string }) => {
-  const article = healthArticles.find((article) => article.slug === slug);
-
-  if (!article) {
-    notFound();
-  }
-
+export const HealthTipsDetailsPage = ({
+  params,
+}: {
+  params: Promise<{ slug: string }>;
+}) => {
   return (
     <PageContainer
-      title={article.title}
+      title="Health Tip"
       actions={<ThemeSwitcher key={"theme-switcher"} />}
     >
-      <PageHeading
-        title={article.title}
-        className="px-2 md:px-0"
-        showBackButton
-      />
-      <div className="flex flex-col gap-4 px-2 md:px-0">
-        <HealthTipFullArticle article={article} />
-      </div>
+      <Suspense fallback={null}>
+        <HealthTipDetailContent params={params} />
+      </Suspense>
     </PageContainer>
   );
 };

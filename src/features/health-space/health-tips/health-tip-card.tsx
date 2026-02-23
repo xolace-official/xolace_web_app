@@ -1,5 +1,5 @@
-import { CircleArrowRight, Clock, Sparkles, Tag, User } from "lucide-react";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { CircleArrowRight, Clock, Sparkles, Tag } from "lucide-react";
+import type { GetApiV1AuthHealthTip200DataItem } from "@/api-client";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
@@ -8,13 +8,12 @@ import {
   CardFooter,
   CardHeader,
 } from "@/components/ui/card";
-import type { HealthArticleInterface } from "@/features/health-space/health-tips/index";
 
 export const HealthTipCard = ({
   tip,
   onFullArticle,
 }: {
-  tip: HealthArticleInterface;
+  tip: GetApiV1AuthHealthTip200DataItem;
   onFullArticle: () => void;
 }) => {
   const getSensitivityVariant = (
@@ -40,7 +39,7 @@ export const HealthTipCard = ({
             variant={getSensitivityVariant(tip.sensitive_level)}
             className="font-medium"
           >
-            {tip.category.display_name}
+            {tip.category?.display_name ?? "Uncategorized"}
           </Badge>
           <div className="flex items-center gap-1 text-xs text-muted-foreground">
             <Clock className="w-3 h-3" />
@@ -60,8 +59,6 @@ export const HealthTipCard = ({
           )}
         </div>
       </CardHeader>
-
-      {/*<Separator />*/}
 
       <CardContent className="flex-1 space-y-2">
         {tip.tags.length > 0 && (
@@ -86,24 +83,7 @@ export const HealthTipCard = ({
       </CardContent>
 
       <CardFooter className="flex-col gap-2 ">
-        <div className="w-full flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <Avatar className="h-8 w-8">
-              <AvatarImage
-                src={tip.author.avatar_url || undefined}
-                alt={tip.author.username || "Author"}
-              />
-              <AvatarFallback className="text-xs">
-                <User className="h-4 w-4" />
-              </AvatarFallback>
-            </Avatar>
-            <div className="flex flex-col">
-              <span className="text-sm font-medium">
-                {tip.author.username || "Anonymous"}
-              </span>
-            </div>
-          </div>
-
+        <div className="w-full flex items-center justify-end">
           <Button
             variant={"link"}
             onClick={onFullArticle}
@@ -118,11 +98,11 @@ export const HealthTipCard = ({
           </Button>
         </div>
 
-        {tip.sponsor.is_sponsored && (
+        {tip.is_sponsored && (
           <div className="w-full">
             <div className="flex items-center gap-1 text-xs text-muted-foreground ">
               <Sparkles className="w-4 h-4" />
-              <span>{tip.sponsor.sponsor_label || "Sponsored content"}</span>
+              <span>{tip.sponsor_label ?? "Sponsored content"}</span>
             </div>
           </div>
         )}

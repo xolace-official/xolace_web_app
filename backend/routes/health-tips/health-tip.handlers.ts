@@ -43,7 +43,7 @@ export const getHealthTipCategories: AppRouteHandler<
     const response: z.infer<typeof healthTipCategoriesResponse> = {
       data: data || [],
     };
-
+    console.log("response ", response);
     return c.json(response, HttpStatusCodes.OK);
   } catch (error) {
     console.error("getHealthTipCategories exception:", error);
@@ -59,7 +59,15 @@ export const getHealthTipsFeed: AppRouteHandler<
   GetHealthTipsFeedRoute
 > = async (c) => {
   const supabase = c.get("supabase");
-  const { category, tag, language, page, page_size } = c.req.valid("query");
+  const {
+    category,
+    sensitivity,
+    query: searchQuery,
+    tag,
+    language,
+    page,
+    page_size,
+  } = c.req.valid("query");
 
   const pageNumber = Number(page) || 0;
   const pageSize = Math.min(
@@ -68,6 +76,26 @@ export const getHealthTipsFeed: AppRouteHandler<
   );
 
   try {
+    // Resolve category key → id so we can filter on the FK column directly
+    // (filtering on joined tables only narrows the join, not the parent rows)
+    let categoryId: string | undefined;
+    if (category) {
+      const { data: cat, error: catError } = await supabase
+        .from("health_tip_categories")
+        .select("id")
+        .eq("key", category)
+        .single();
+
+      if (catError && catError.code !== "PGRST116") {
+        console.error("getHealthTipsFeed category lookup error:", catError);
+        return c.json(
+          { message: "Failed to resolve category" },
+          HttpStatusCodes.INTERNAL_SERVER_ERROR,
+        );
+      }
+      categoryId = cat?.id;
+    }
+
     let query = supabase
       .from("health_tips")
       .select(
@@ -104,11 +132,39 @@ export const getHealthTipsFeed: AppRouteHandler<
     }
 
     if (category) {
-      query = query.eq("health_tip_categories.key", category);
+      if (categoryId) {
+        query = query.eq("category_id", categoryId);
+      } else {
+        // Category key doesn't exist — return empty
+        return c.json(
+          {
+            data: [],
+            meta: {
+              totalCount: 0,
+              currentPage: pageNumber,
+              pageSize,
+              hasNextPage: false,
+            },
+          },
+          HttpStatusCodes.OK,
+        );
+      }
     }
 
     if (tag && tag.length > 0) {
       query = query.in("tags.tag.name", tag);
+    }
+
+    if (sensitivity) {
+      query = query.eq("sensitive_level", sensitivity);
+    }
+
+    if (searchQuery) {
+      // Escape SQL LIKE wildcards and PostgREST filter-syntax characters
+      const safeSearch = searchQuery.replace(/[\\%_,.()"]/g, "\\$&");
+      query = query.or(
+        `title.ilike.%${safeSearch}%,excerpt.ilike.%${safeSearch}%`,
+      );
     }
 
     // ─────────────────────────────
@@ -144,7 +200,7 @@ export const getHealthTipsFeed: AppRouteHandler<
         hasNextPage: pageNumber < totalPages - 1,
       },
     };
-
+    console.log("response", response);
     return c.json(response, HttpStatusCodes.OK);
   } catch (error) {
     console.error("getHealthTipsFeed exception:", error);
