@@ -6,7 +6,7 @@ import { useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 import {
   type DeleteApiV1AuthCollectionItemsBody,
-  getGetApiV1AuthCollectionCollectionIdItemsQueryKey,
+  getGetApiV1AuthCollectionCollectionIdItemsInfiniteQueryKey,
   getGetApiV1AuthCollectionQueryKey,
   getGetApiV1AuthCollectionSimpleQueryKey,
   useDeleteApiV1AuthCollectionItems,
@@ -50,9 +50,10 @@ export function useUnsaveItem(options: UseUnsaveItemOptions = {}) {
         });
         if (variables?.data?.collection_id) {
           queryClient.invalidateQueries({
-            queryKey: getGetApiV1AuthCollectionCollectionIdItemsQueryKey(
-              variables.data.collection_id,
-            ),
+            queryKey:
+              getGetApiV1AuthCollectionCollectionIdItemsInfiniteQueryKey(
+                variables.data.collection_id,
+              ),
           });
         }
       },

@@ -1,16 +1,14 @@
 /**
  * Hook for fetching items in a collection with infinite scrolling.
  *
- * Uses useInfiniteQuery directly (rather than the generated infinite hook)
- * because the Orval-generated queryFn does not inject pageParam into the
- * request params – we need the page to advance with each fetch.
+ * Uses the Orval-generated infinite hook and overrides its queryFn so that
+ * pageParam is forwarded as the `page` search-param on every fetch.
  */
 
-import { useInfiniteQuery } from "@tanstack/react-query";
 import {
   type GetApiV1AuthCollectionCollectionIdItemsEntityType,
   getApiV1AuthCollectionCollectionIdItems,
-  getGetApiV1AuthCollectionCollectionIdItemsQueryKey,
+  useGetApiV1AuthCollectionCollectionIdItemsInfinite,
 } from "@/api-client";
 import { useAuthHeaders } from "@/features/campfires/campfire-api-utils";
 import { useAppStore } from "@/providers/app-store-provider";
@@ -36,31 +34,30 @@ export function useCollectionItems({
     ...(pageSize !== undefined ? { page_size: String(pageSize) } : {}),
   };
 
-  const query = useInfiniteQuery({
-    queryKey: [
-      ...getGetApiV1AuthCollectionCollectionIdItemsQueryKey(
-        collectionId,
-        baseParams,
-      ),
-      "infinite",
-    ],
-    queryFn: async ({ pageParam, signal }) => {
-      const params = { ...baseParams, page: String(pageParam) };
-      const response = await getApiV1AuthCollectionCollectionIdItems(
-        collectionId,
-        params,
-        { signal, ...authHeaders },
-      );
-      return response;
+  const query = useGetApiV1AuthCollectionCollectionIdItemsInfinite(
+    collectionId,
+    baseParams,
+    {
+      query: {
+        enabled: enabled && !!collectionId,
+        initialPageParam: 0,
+        getNextPageParam: (lastPage) => {
+          if (lastPage.status !== 200) return undefined;
+          const meta = lastPage.data.meta;
+          return meta.hasNextPage ? meta.currentPage + 1 : undefined;
+        },
+        // Override the generated queryFn so pageParam is forwarded as `page`
+        queryFn: async ({ pageParam, signal }) => {
+          const params = { ...baseParams, page: String(pageParam) };
+          return getApiV1AuthCollectionCollectionIdItems(collectionId, params, {
+            signal,
+            ...authHeaders,
+          });
+        },
+      },
+      fetch: authHeaders,
     },
-    initialPageParam: 0,
-    getNextPageParam: (lastPage) => {
-      if (lastPage.status !== 200) return undefined;
-      const meta = lastPage.data.meta;
-      return meta.hasNextPage ? meta.currentPage + 1 : undefined;
-    },
-    enabled: enabled && !!collectionId,
-  });
+  );
 
   // Flatten all pages into a single items array and extract collection/meta
   const firstPage =
