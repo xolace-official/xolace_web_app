@@ -1,22 +1,20 @@
 /**
- * Hook for fetching user's collections
+ * Hook for fetching user's collections using the generated api-client.
  */
 
-import { useQuery } from "@tanstack/react-query";
 import {
-  COLLECTION_KEYS,
-  DEFAULT_SIDEBAR_LIMIT,
-} from "../collections.constants";
-import {
-  fetchCollections,
-  fetchCollectionsSimple,
-} from "../lib/collections-api";
-import type { GetCollectionsParams } from "../collections.types";
+  type GetApiV1AuthCollectionParams,
+  type GetApiV1AuthCollectionSimpleParams,
+  useGetApiV1AuthCollection,
+  useGetApiV1AuthCollectionSimple,
+} from "@/api-client";
+import { useAuthHeaders } from "@/features/campfires/campfire-api-utils";
+import { useAppStore } from "@/providers/app-store-provider";
 
 interface UseCollectionsOptions {
   /** Use simple endpoint (no pagination meta, for sidebar/drawer) */
   simple?: boolean;
-  /** Limit number of collections (for simple mode) */
+  /** Limit number of collections */
   limit?: number;
   /** Filter to pinned only */
   pinnedOnly?: boolean;
@@ -31,31 +29,52 @@ interface UseCollectionsOptions {
 export function useCollections(options: UseCollectionsOptions = {}) {
   const {
     simple = false,
-    limit = DEFAULT_SIDEBAR_LIMIT,
+    limit,
     pinnedOnly = false,
-    page = 0,
-    pageSize = 20,
+    page,
+    pageSize,
     enabled = true,
   } = options;
 
-  return useQuery({
-    queryKey: simple ? COLLECTION_KEYS.simple() : COLLECTION_KEYS.lists(),
-    queryFn: () => {
-      if (simple) {
-        return fetchCollectionsSimple(limit);
-      }
+  const session = useAppStore((s) => s.session);
+  const authHeaders = useAuthHeaders(session.access_token);
 
-      const params: GetCollectionsParams = {
-        page,
-        page_size: pageSize,
-      };
+  const params: GetApiV1AuthCollectionParams = {
+    ...(limit !== undefined ? { limit: String(limit) } : {}),
+    ...(pinnedOnly ? { pinned_only: "true" } : {}),
+    ...(page !== undefined ? { page: String(page) } : {}),
+    ...(pageSize !== undefined ? { page_size: String(pageSize) } : {}),
+  };
 
-      if (pinnedOnly) {
-        params.pinned_only = true;
-      }
+  const simpleParams: GetApiV1AuthCollectionSimpleParams = {
+    ...(limit !== undefined ? { limit: String(limit) } : {}),
+    ...(pinnedOnly ? { pinned_only: "true" } : {}),
+  };
 
-      return fetchCollections(params);
-    },
-    enabled,
+  const fullQuery = useGetApiV1AuthCollection(params, {
+    query: { enabled: enabled && !simple },
+    fetch: authHeaders,
   });
+
+  const simpleQuery = useGetApiV1AuthCollectionSimple(simpleParams, {
+    query: { enabled: enabled && simple },
+    fetch: authHeaders,
+  });
+
+  if (simple) {
+    const responseData =
+      simpleQuery.data?.status === 200 ? simpleQuery.data.data : undefined;
+    return {
+      ...simpleQuery,
+      collections: responseData?.data ?? [],
+    };
+  }
+
+  const responseData =
+    fullQuery.data?.status === 200 ? fullQuery.data.data : undefined;
+  return {
+    ...fullQuery,
+    collections: responseData?.data ?? [],
+    meta: responseData?.meta,
+  };
 }

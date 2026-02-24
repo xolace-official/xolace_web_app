@@ -1,107 +1,69 @@
 /**
- * Hook for removing an item from a collection with optimistic updates
+ * Hook for removing an item from a collection using the generated api-client.
  */
 
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
-import { COLLECTION_KEYS } from "../collections.constants";
-import { unsaveItem } from "../lib/collections-api";
-import type {
-  CollectionItemsResponse,
-  CollectionsSimpleResponse,
-  UnsaveItemBody,
-} from "../collections.types";
+import {
+  type DeleteApiV1AuthCollectionItemsBody,
+  getGetApiV1AuthCollectionCollectionIdItemsInfiniteQueryKey,
+  getGetApiV1AuthCollectionQueryKey,
+  getGetApiV1AuthCollectionSimpleQueryKey,
+  useDeleteApiV1AuthCollectionItems,
+} from "@/api-client";
+import { useAuthHeaders } from "@/features/campfires/campfire-api-utils";
+import { useAppStore } from "@/providers/app-store-provider";
 
 interface UseUnsaveItemOptions {
   onSuccess?: () => void;
-  onError?: (error: Error) => void;
+  onError?: (error: unknown) => void;
 }
 
 export function useUnsaveItem(options: UseUnsaveItemOptions = {}) {
   const queryClient = useQueryClient();
+  const session = useAppStore((s) => s.session);
+  const authHeaders = useAuthHeaders(session.access_token);
 
-  return useMutation({
-    mutationFn: (body: UnsaveItemBody) => unsaveItem(body),
-
-    onMutate: async (variables) => {
-      // Cancel any outgoing refetches
-      await queryClient.cancelQueries({ queryKey: COLLECTION_KEYS.all });
-
-      // Snapshot previous values
-      const previousCollections =
-        queryClient.getQueryData<CollectionsSimpleResponse>(
-          COLLECTION_KEYS.simple(),
-        );
-
-      // Get all matching item queries to update
-      const itemsQueryKey = COLLECTION_KEYS.items(variables.collection_id, {});
-
-      // Optimistically update collection item count
-      if (previousCollections) {
-        queryClient.setQueryData<CollectionsSimpleResponse>(
-          COLLECTION_KEYS.simple(),
-          {
-            ...previousCollections,
-            data: previousCollections.data.map((collection) =>
-              collection.id === variables.collection_id
-                ? {
-                    ...collection,
-                    item_count: Math.max(0, collection.item_count - 1),
-                  }
-                : collection,
-            ),
-          },
-        );
-      }
-
-      // Optimistically remove item from items list
-      queryClient.setQueriesData<CollectionItemsResponse>(
-        { queryKey: itemsQueryKey, exact: false },
-        (old) => {
-          if (!old) return old;
-          return {
-            ...old,
-            data: old.data.filter(
-              (item) =>
-                !(
-                  item.entity_type === variables.entity_type &&
-                  item.entity_id === variables.entity_id
-                ),
-            ),
-            meta: {
-              ...old.meta,
-              totalCount: Math.max(0, old.meta.totalCount - 1),
-            },
-          };
-        },
-      );
-
-      return { previousCollections };
-    },
-
-    onError: (error, _variables, context) => {
-      // Rollback
-      if (context?.previousCollections) {
-        queryClient.setQueryData(
-          COLLECTION_KEYS.simple(),
-          context.previousCollections,
-        );
-      }
-
-      toast.error("Failed to remove item", {
-        description: error.message,
-      });
-
-      options.onError?.(error);
-    },
-
-    onSuccess: () => {
-      toast.success("Item removed");
-      options.onSuccess?.();
-    },
-
-    onSettled: () => {
-      queryClient.invalidateQueries({ queryKey: COLLECTION_KEYS.all });
+  const mutation = useDeleteApiV1AuthCollectionItems({
+    fetch: authHeaders,
+    mutation: {
+      onSuccess: () => {
+        toast.success("Item removed");
+        options.onSuccess?.();
+      },
+      onError: (error) => {
+        toast.error("Failed to remove item", {
+          description:
+            error && typeof error === "object" && "message" in error
+              ? (error as { message: string }).message
+              : "Something went wrong",
+        });
+        options.onError?.(error);
+      },
+      onSettled: (_data, _error, variables) => {
+        // Invalidate both the collection list and the specific collection's items
+        queryClient.invalidateQueries({
+          queryKey: getGetApiV1AuthCollectionQueryKey(),
+        });
+        queryClient.invalidateQueries({
+          queryKey: getGetApiV1AuthCollectionSimpleQueryKey(),
+        });
+        if (variables?.data?.collection_id) {
+          queryClient.invalidateQueries({
+            queryKey:
+              getGetApiV1AuthCollectionCollectionIdItemsInfiniteQueryKey(
+                variables.data.collection_id,
+              ),
+          });
+        }
+      },
     },
   });
+
+  return {
+    ...mutation,
+    mutate: (body: DeleteApiV1AuthCollectionItemsBody) =>
+      mutation.mutate({ data: body }),
+    variables: mutation.variables?.data,
+  };
 }

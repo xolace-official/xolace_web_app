@@ -1,10 +1,9 @@
 "use client";
 
 import { Plus } from "lucide-react";
-import * as React from "react";
+import { type ReactNode, useState } from "react";
 import { AnimatedDrawer } from "@/components/builders/animated-drawer";
 import { Button } from "@/components/ui/button";
-import { DUMMY_COLLECTIONS } from "../collections.constants";
 import type { CreateCollectionFormValues } from "../collections.schema";
 import { useCollections } from "../hooks/use-collections";
 import { useCreateCollection } from "../hooks/use-create-collection";
@@ -13,19 +12,10 @@ import { CollectionEmptyState } from "./collection-empty-state";
 import { CollectionSkeletonGrid } from "./collection-skeleton";
 import { CreateCollectionForm } from "./create-collection-form";
 
-interface CollectionsGridProps {
-  /** Use dummy data instead of fetching from API */
-  useDummyData?: boolean;
-}
+export function CollectionsGrid() {
+  const [isCreateOpen, setIsCreateOpen] = useState(false);
 
-export function CollectionsGrid({ useDummyData = true }: CollectionsGridProps) {
-  const [isCreateOpen, setIsCreateOpen] = React.useState(false);
-
-  // Hooks remain implemented for future use
-  const { data, isLoading } = useCollections({
-    simple: false,
-    enabled: !useDummyData,
-  });
+  const { collections, isLoading } = useCollections({ simple: false });
 
   const { mutate: createCollection, isPending: isCreating } =
     useCreateCollection({
@@ -34,15 +24,11 @@ export function CollectionsGrid({ useDummyData = true }: CollectionsGridProps) {
       },
     });
 
-  // Use dummy data or API data based on prop
-  const collections = useDummyData ? DUMMY_COLLECTIONS : (data?.data ?? []);
-
   const handleCreate = (values: CreateCollectionFormValues) => {
     createCollection(values);
   };
 
-  // Show loading state only when fetching real data
-  if (!useDummyData && isLoading) {
+  if (isLoading) {
     return (
       <CollectionsGridLayout onCreateClick={() => setIsCreateOpen(true)}>
         <CollectionSkeletonGrid />
@@ -89,7 +75,7 @@ export function CollectionsGrid({ useDummyData = true }: CollectionsGridProps) {
 
 // Internal layout component with header action
 interface CollectionsGridLayoutProps {
-  children: React.ReactNode;
+  children: ReactNode;
   onCreateClick: () => void;
 }
 

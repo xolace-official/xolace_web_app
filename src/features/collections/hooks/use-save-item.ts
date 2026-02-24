@@ -1,85 +1,71 @@
 /**
- * Hook for saving an item to a collection with optimistic updates
+ * Hook for saving an item to a collection using the generated api-client.
  */
 
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
-import { COLLECTION_KEYS } from "../collections.constants";
-import { saveItem } from "../lib/collections-api";
-import type {
-  CollectionsSimpleResponse,
-  SaveItemBody,
-  SaveItemResponse,
-} from "../collections.types";
+import {
+  getGetApiV1AuthCollectionQueryKey,
+  getGetApiV1AuthCollectionSimpleQueryKey,
+  type PostApiV1AuthCollectionItemsBody,
+  usePostApiV1AuthCollectionItems,
+} from "@/api-client";
+import { useAuthHeaders } from "@/features/campfires/campfire-api-utils";
+import { useAppStore } from "@/providers/app-store-provider";
 
 interface UseSaveItemOptions {
-  onSuccess?: (data: SaveItemResponse) => void;
-  onError?: (error: Error) => void;
+  onSuccess?: (data: {
+    collection_item_id: string;
+    collection_id: string;
+    collection_name: string;
+    is_new_collection: boolean;
+    already_saved: boolean;
+  }) => void;
+  onError?: (error: unknown) => void;
 }
 
 export function useSaveItem(options: UseSaveItemOptions = {}) {
   const queryClient = useQueryClient();
+  const session = useAppStore((s) => s.session);
+  const authHeaders = useAuthHeaders(session.access_token);
 
-  return useMutation({
-    mutationFn: (body: SaveItemBody) => saveItem(body),
-
-    onMutate: async (variables) => {
-      // Cancel any outgoing refetches
-      await queryClient.cancelQueries({ queryKey: COLLECTION_KEYS.all });
-
-      // Snapshot the previous value
-      const previousCollections =
-        queryClient.getQueryData<CollectionsSimpleResponse>(
-          COLLECTION_KEYS.simple(),
-        );
-
-      // Optimistically update collection item count if we know the collection_id
-      if (variables.collection_id && previousCollections) {
-        queryClient.setQueryData<CollectionsSimpleResponse>(
-          COLLECTION_KEYS.simple(),
-          {
-            ...previousCollections,
-            data: previousCollections.data.map((collection) =>
-              collection.id === variables.collection_id
-                ? { ...collection, item_count: collection.item_count + 1 }
-                : collection,
-            ),
-          },
-        );
-      }
-
-      return { previousCollections };
-    },
-
-    onError: (error, _variables, context) => {
-      // Rollback to the previous value
-      if (context?.previousCollections) {
-        queryClient.setQueryData(
-          COLLECTION_KEYS.simple(),
-          context.previousCollections,
-        );
-      }
-
-      toast.error("Failed to save item", {
-        description: error.message,
-      });
-
-      options.onError?.(error);
-    },
-
-    onSuccess: (data) => {
-      if (data.already_saved) {
-        toast.info(`Already in ${data.collection_name}`);
-      } else {
-        toast.success(`Saved to ${data.collection_name}`);
-      }
-
-      options.onSuccess?.(data);
-    },
-
-    onSettled: () => {
-      // Always refetch to ensure consistency
-      queryClient.invalidateQueries({ queryKey: COLLECTION_KEYS.all });
+  const mutation = usePostApiV1AuthCollectionItems({
+    fetch: authHeaders,
+    mutation: {
+      onSuccess: (response) => {
+        if (response.status === 200) {
+          const { data } = response;
+          if (data.already_saved) {
+            toast.info(`Already in ${data.collection_name}`);
+          } else {
+            toast.success(`Saved to ${data.collection_name}`);
+          }
+          options.onSuccess?.(data);
+        }
+      },
+      onError: (error) => {
+        toast.error("Failed to save item", {
+          description:
+            error && typeof error === "object" && "message" in error
+              ? (error as { message: string }).message
+              : "Something went wrong",
+        });
+        options.onError?.(error);
+      },
+      onSettled: () => {
+        queryClient.invalidateQueries({
+          queryKey: getGetApiV1AuthCollectionQueryKey(),
+        });
+        queryClient.invalidateQueries({
+          queryKey: getGetApiV1AuthCollectionSimpleQueryKey(),
+        });
+      },
     },
   });
+
+  return {
+    ...mutation,
+    mutate: (body: PostApiV1AuthCollectionItemsBody) =>
+      mutation.mutate({ data: body }),
+  };
 }
