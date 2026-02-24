@@ -1,12 +1,12 @@
 "use client";
 
+import { Loader2, Plus, Star } from "lucide-react";
+import { useMemo, useState } from "react";
 import {
   AnimatedDrawer,
   useAnimatedDrawer,
 } from "@/components/builders/animated-drawer";
 import { Button } from "@/components/ui/button";
-import { Loader2, Plus, Star } from "lucide-react";
-import * as React from "react";
 import { DRAWER_STEPS, type DrawerStep } from "../collections.constants";
 import type { CreateCollectionFormValues } from "../collections.schema";
 import { useSaveToCollection } from "../context/save-to-collection-context";
@@ -37,7 +37,7 @@ const STEPS = [
 // ============================================================================
 
 export function SaveToCollectionDrawer() {
-  const { isOpen, closeSaveDrawer, target } = useSaveToCollection();
+  const { isOpen, closeSaveDrawer } = useSaveToCollection();
 
   return (
     <AnimatedDrawer<DrawerStep>
@@ -69,9 +69,9 @@ export function SaveToCollectionDrawer() {
 function SelectStep() {
   const { goToStep } = useAnimatedDrawer<DrawerStep>();
   const { target, closeSaveDrawer } = useSaveToCollection();
-  const [savingToId, setSavingToId] = React.useState<string | null>(null);
+  const [savingToId, setSavingToId] = useState<string | null>(null);
 
-  const { data, isLoading: isLoadingCollections } = useCollections({
+  const { collections, isLoading: isLoadingCollections } = useCollections({
     simple: true,
     limit: 20,
   });
@@ -86,10 +86,8 @@ function SelectStep() {
     },
   });
 
-  const collections = data?.data ?? [];
-
   // Sort to put Favorites first
-  const sortedCollections = React.useMemo(() => {
+  const sortedCollections = useMemo(() => {
     return [...collections].sort((a, b) => {
       const aIsFavorites = a.name.toLowerCase() === "favorites";
       const bIsFavorites = b.name.toLowerCase() === "favorites";

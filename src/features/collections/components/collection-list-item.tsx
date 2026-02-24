@@ -1,7 +1,7 @@
 "use client";
 
-import { cn } from "@/lib/utils";
 import { Check, Loader2, Pin, Star } from "lucide-react";
+import { cn } from "@/lib/utils";
 import type { CollectionListItem as CollectionListItemType } from "../collections.types";
 
 interface CollectionListItemProps {

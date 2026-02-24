@@ -1,8 +1,8 @@
 "use client";
 
-import { cn } from "@/lib/utils";
 import { Pin, Star } from "lucide-react";
 import Link from "next/link";
+import { cn } from "@/lib/utils";
 import type { CollectionListItem } from "../collections.types";
 
 interface CollectionCardProps {

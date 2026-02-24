@@ -1,15 +1,17 @@
 /**
- * Hook for fetching items in a collection
+ * Hook for fetching items in a collection using the generated api-client.
  */
 
-import { useQuery } from "@tanstack/react-query";
-import { COLLECTION_KEYS } from "../collections.constants";
-import { fetchCollectionItems } from "../lib/collections-api";
-import type { CollectionEntityType } from "../collections.types";
+import {
+  type GetApiV1AuthCollectionCollectionIdItemsEntityType,
+  useGetApiV1AuthCollectionCollectionIdItems,
+} from "@/api-client";
+import { useAuthHeaders } from "@/features/campfires/campfire-api-utils";
+import { useAppStore } from "@/providers/app-store-provider";
 
 interface UseCollectionItemsOptions {
   collectionId: string;
-  entityType?: CollectionEntityType;
+  entityType?: GetApiV1AuthCollectionCollectionIdItemsEntityType;
   page?: number;
   pageSize?: number;
   enabled?: boolean;
@@ -18,22 +20,34 @@ interface UseCollectionItemsOptions {
 export function useCollectionItems({
   collectionId,
   entityType,
-  page = 0,
-  pageSize = 20,
+  page,
+  pageSize,
   enabled = true,
 }: UseCollectionItemsOptions) {
-  return useQuery({
-    queryKey: COLLECTION_KEYS.items(collectionId, {
-      entityType,
-      page,
-      pageSize,
-    }),
-    queryFn: () =>
-      fetchCollectionItems(collectionId, {
-        entity_type: entityType,
-        page,
-        page_size: pageSize,
-      }),
-    enabled: enabled && !!collectionId,
-  });
+  const session = useAppStore((s) => s.session);
+  const authHeaders = useAuthHeaders(session.access_token);
+
+  const params = {
+    ...(entityType ? { entity_type: entityType } : {}),
+    ...(page !== undefined ? { page: String(page) } : {}),
+    ...(pageSize !== undefined ? { page_size: String(pageSize) } : {}),
+  };
+
+  const query = useGetApiV1AuthCollectionCollectionIdItems(
+    collectionId,
+    params,
+    {
+      query: { enabled: enabled && !!collectionId },
+      fetch: authHeaders,
+    },
+  );
+
+  const responseData = query.data?.status === 200 ? query.data.data : undefined;
+
+  return {
+    ...query,
+    collection: responseData?.collection,
+    items: responseData?.data ?? [],
+    meta: responseData?.meta,
+  };
 }

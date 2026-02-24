@@ -1,6 +1,17 @@
 "use client";
 
 import { MoreHorizontal, Pin, PinOff, Star, Trash2 } from "lucide-react";
+import { useState } from "react";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -28,6 +39,7 @@ export function CollectionHeader({
   isDeleting = false,
 }: CollectionHeaderProps) {
   const isFavorites = collection.name.toLowerCase() === "favorites";
+  const [showDeleteDialog, setShowDeleteDialog] = useState(false);
 
   return (
     <div className="flex items-start justify-between gap-4">
@@ -94,7 +106,10 @@ export function CollectionHeader({
             <>
               {onTogglePin && <DropdownMenuSeparator />}
               <DropdownMenuItem
-                onClick={onDelete}
+                onSelect={(e) => {
+                  e.preventDefault();
+                  setShowDeleteDialog(true);
+                }}
                 disabled={isDeleting}
                 className="text-destructive focus:text-destructive"
               >
@@ -105,6 +120,30 @@ export function CollectionHeader({
           )}
         </DropdownMenuContent>
       </DropdownMenu>
+
+      {/* Delete confirmation */}
+      {onDelete && (
+        <AlertDialog open={showDeleteDialog} onOpenChange={setShowDeleteDialog}>
+          <AlertDialogContent>
+            <AlertDialogHeader>
+              <AlertDialogTitle>Delete "{collection.name}"?</AlertDialogTitle>
+              <AlertDialogDescription>
+                This will permanently delete this collection and remove all
+                saved items from it. This action cannot be undone.
+              </AlertDialogDescription>
+            </AlertDialogHeader>
+            <AlertDialogFooter>
+              <AlertDialogCancel>Cancel</AlertDialogCancel>
+              <AlertDialogAction
+                onClick={onDelete}
+                className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+              >
+                Delete
+              </AlertDialogAction>
+            </AlertDialogFooter>
+          </AlertDialogContent>
+        </AlertDialog>
+      )}
     </div>
   );
 }
