@@ -55,7 +55,6 @@ export function useCollectionItems({
           });
         },
       },
-      fetch: authHeaders,
     },
   );
 
