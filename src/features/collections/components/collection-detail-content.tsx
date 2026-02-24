@@ -29,7 +29,6 @@ export function CollectionDetailContent({
   const router = useRouter();
   const { id } = use(params);
   const [filter, setFilter] = useState<FilterOption>("all");
-  const [page, setPage] = useState(0);
 
   const entityTypeFilter =
     filter === "all"
@@ -41,10 +40,12 @@ export function CollectionDetailContent({
     items: rawItems,
     meta,
     isLoading,
+    isFetchingNextPage,
+    hasNextPage,
+    fetchNextPage,
   } = useCollectionItems({
     collectionId: id,
     entityType: entityTypeFilter,
-    page,
   });
 
   const { mutate: deleteCollection, isPending: isDeleting } =
@@ -88,15 +89,9 @@ export function CollectionDetailContent({
   };
 
   const handleLoadMore = () => {
-    if (meta?.hasNextPage) {
-      setPage((prev) => prev + 1);
+    if (hasNextPage) {
+      fetchNextPage();
     }
-  };
-
-  // Reset page when filter changes
-  const handleFilterChange = (newFilter: FilterOption) => {
-    setFilter(newFilter);
-    setPage(0);
   };
 
   if (isLoading && !collection) {
@@ -124,14 +119,14 @@ export function CollectionDetailContent({
         isDeleting={isDeleting}
       />
 
-      <CollectionTypeFilter value={filter} onChange={handleFilterChange} />
+      <CollectionTypeFilter value={filter} onChange={setFilter} />
 
       <CollectionItemsList
         items={items}
         onUnsave={handleUnsave}
         isUnsaving={unsavingId}
-        isLoading={isLoading}
-        hasNextPage={meta?.hasNextPage}
+        isLoading={isFetchingNextPage}
+        hasNextPage={hasNextPage}
         onLoadMore={handleLoadMore}
       />
     </div>
