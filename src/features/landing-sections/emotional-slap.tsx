@@ -1,87 +1,49 @@
 "use client";
 
-import {
-  DoorOpen,
-  Goal,
-  MonitorSmartphone,
-  Newspaper,
-  PictureInPicture,
-  Users,
-} from "lucide-react";
-import type React from "react";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-
-interface SlapProps {
-  icon: React.ComponentType<React.SVGProps<SVGSVGElement>>;
-  title: string;
-  description: string;
-}
-
-const slapList: SlapProps[] = [
-  {
-    icon: MonitorSmartphone,
-    title: "Designed For Real Life",
-    description: `Healing doesn't schedule itself. So we shaped Xolace to follow you from sunrise thoughts to the quiet questions that find you at night.`,
-  },
-  {
-    icon: Users,
-    title: "You're Not Alone",
-    description: `Every whisper, every confession, every trembling truth someone out there carries a piece of your story too. Here, your echoes return as understanding.`,
-  },
-  {
-    icon: Goal,
-    title: "Built Around Your Journey",
-    description: `No noise, no clutter. Only the words, voices, and guidance that lift your spirit gently back into its own light.`,
-  },
-  {
-    icon: PictureInPicture,
-    title: "Calm You Can Feel",
-    description: `Soft colors, grounded visuals, spaces that feel like exhaling. Design that holds you, not overwhelms you.`,
-  },
-  {
-    icon: DoorOpen,
-    title: "A Door You Only Need to Open Once",
-    description: `One step toward clarity. One moment of courage. One breath that begins again.`,
-  },
-  {
-    icon: Newspaper,
-    title: "Honesty at First Sight",
-    description: `We speak plainly, because healing blooms where truth is allowed to grow.`,
-  },
-];
-
 export const EmotionalSlapSection = () => {
   return (
-    <section id="emotionalSlap" className="section">
-      <div className={"section-parent-header"}>
-        <h2 className="section-header text-center">
-          The Internet Was Never Built For Your Heart
+    <section
+      id="emotionalSlap"
+      className="w-full px-4 md:px-8 py-20 md:py-36 bg-muted/50 dark:bg-card/40"
+    >
+      <div className="max-w-4xl mx-auto">
+        <h2 className="text-4xl md:text-6xl font-bold mb-20 md:mb-28">
+          You&apos;ve felt this
         </h2>
-        <h3 className="md:w-1/2 mx-auto text-xl text-center text-muted-foreground ">
-          You weren’t meant to heal on platforms built to distract you. You
-          weren’t meant to open your heart inside places made to break it. So we
-          built something different.
-        </h3>
-      </div>
 
-      <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
-        {slapList.map(({ icon: IconComponent, title, description }) => (
-          <div key={title}>
-            <Card className="h-full bg-background border-0 shadow-none">
-              <CardHeader className="flex justify-center items-center">
-                <div className="bg-primary/20 p-2 rounded-full ring-8 ring-primary/10">
-                  <IconComponent className="w-10 h-10" />
-                </div>
-
-                <CardTitle>{title}</CardTitle>
-              </CardHeader>
-
-              <CardContent className="text-muted-foreground text-center">
-                {description}
-              </CardContent>
-            </Card>
+        <div className="space-y-20 md:space-y-28">
+          <div className="flex flex-col gap-5">
+            <span className="text-xs font-mono text-muted-foreground tracking-[0.2em] uppercase">
+              Monday · 11:00 PM
+            </span>
+            <p className="text-2xl md:text-3xl font-light italic leading-relaxed text-foreground/75 max-w-2xl">
+              &ldquo;There&apos;s this tightness in your chest that won&apos;t
+              go away. You don&apos;t know if you&apos;re anxious or sad or just
+              tired. You open your phone and scroll, but nothing helps. You
+              close it. The tightness is still there.&rdquo;
+            </p>
           </div>
-        ))}
+
+          <div className="flex flex-col items-start md:items-end gap-5">
+            <span className="text-xs font-mono text-muted-foreground tracking-[0.2em] uppercase">
+              Friday · 10:30 PM
+            </span>
+            <p className="text-2xl md:text-3xl font-light italic leading-relaxed text-foreground/75 max-w-2xl md:text-right">
+              &ldquo;You&apos;ve been scrolling for an hour. Not looking for
+              anything. Just… not ready to be alone with your thoughts. Everyone
+              else seems fine. You wonder why you&apos;re not.&rdquo;
+            </p>
+          </div>
+        </div>
+
+        <div className="mt-24 md:mt-32 border-t border-border pt-10">
+          <p className="text-xl md:text-2xl text-muted-foreground">
+            That space.{" "}
+            <span className="text-foreground font-medium">
+              That&apos;s where Xolace lives.
+            </span>
+          </p>
+        </div>
       </div>
     </section>
   );

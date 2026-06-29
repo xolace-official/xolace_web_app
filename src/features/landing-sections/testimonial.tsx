@@ -1,181 +1,177 @@
 "use client";
-import { ChevronLeft, ChevronRight, Star } from "lucide-react";
-import Image from "next/image";
-import { useState } from "react";
-import { CtaButton } from "@/components/shared/layout/cta-button";
-import { useRouter } from "next/navigation";
 
-interface Props {
-  id: string;
-  quote: string;
-  name: string;
-  role: string;
-  image: string;
-  rating: number;
-}
-//Hardcoded testimonials
-const testimonials: Props[] = [
+import { ChevronLeft, ChevronRight, Star } from "lucide-react";
+import { useState } from "react";
+import { DownloadButtons } from "@/components/shared/layout/download-buttons";
+
+const reviews = [
   {
-    id: "animaK",
-    quote:
-      "I came here carrying things I never had words for. Somehow, strangers felt like warm lanterns—reflecting me back to myself with honesty and grace.",
-    name: "Amina K.",
-    role: "Fire starter",
-    image: "https://i.pravatar.cc/150?img=47",
+    id: "r1",
+    initials: "SK",
+    name: "S.K.",
+    time: "2:14 AM",
     rating: 5,
+    quote:
+      "I didn't expect to cry. I just typed something I'd been carrying for months and it… understood. Not in a robotic way. In a human way.",
   },
   {
-    id: "danielO",
-    quote:
-      "The first Spark I shared felt scary. But the response… it was like someone cupped their hands around my fear and whispered, 'You’re not alone.'",
-    name: "Daniel O.",
-    role: "Kindler",
-    image: "https://i.pravatar.cc/150?img=32",
+    id: "r2",
+    initials: "AM",
+    name: "A.M.",
+    time: "11:08 PM",
     rating: 5,
+    quote:
+      "No sign-up pressure. No profile. I just opened it and felt like I could breathe for a second.",
   },
   {
-    id: "linaS",
-    quote:
-      "Every Ember I received carried a softness I didn’t know I needed. This isn’t an app—it’s a living, breathing circle of people who actually care.",
-    name: "Lina S.",
-    role: "Guide",
-    image: "https://i.pravatar.cc/150?img=21",
+    id: "r3",
+    initials: "DO",
+    name: "D.O.",
+    time: "1:22 AM",
     rating: 5,
+    quote:
+      "The Echo feature broke me open in the best way. Knowing someone else felt exactly this, at 1am, alone — that changed something.",
   },
   {
-    id: "kwesiA",
-    quote:
-      "There’s something rare here. No noise. No judgment. Just humans meeting humans in the quiet places we usually hide.",
-    name: "Kwesi A.",
-    role: "Circle Member",
-    image: "https://i.pravatar.cc/150?img=14",
+    id: "r4",
+    initials: "LT",
+    name: "L.T.",
+    time: "9:45 PM",
     rating: 5,
+    quote:
+      "I've tried journaling apps. This is different. It doesn't ask me to perform wellness. It just holds what I bring.",
   },
   {
-    id: "mayaF",
-    quote:
-      "The mini-campfires changed everything. I finally saw my experience reflected by others walking their own difficult roads—and somehow my path felt lighter.",
-    name: "Maya F.",
-    role: "Camper",
-    image: "https://i.pravatar.cc/150?img=55",
+    id: "r5",
+    initials: "MF",
+    name: "M.F.",
+    time: "11:38 PM",
     rating: 5,
+    quote:
+      "Three minutes. That's all it took to feel less alone than I had in weeks.",
   },
 ];
 
 export const TestimonialSection = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
-  const router = useRouter();
 
-  const next = () => {
-    setCurrentIndex((prev) => (prev + 1) % testimonials.length);
-  };
-
-  const prev = () => {
-    setCurrentIndex(
-      (prev) => (prev - 1 + testimonials.length) % testimonials.length,
-    );
-  };
+  const next = () => setCurrentIndex((prev) => (prev + 1) % reviews.length);
+  const prev = () =>
+    setCurrentIndex((prev) => (prev - 1 + reviews.length) % reviews.length);
 
   const getCardStyle = (index: number) => {
-    const diff =
-      (index - currentIndex + testimonials.length) % testimonials.length;
+    const diff = (index - currentIndex + reviews.length) % reviews.length;
 
     if (diff === 0) {
-      // Current card - on top, centered
       return {
         transform: "translateX(0%) translateY(0%) scale(1) rotate(0deg)",
         opacity: 1,
         zIndex: 30,
       };
-    } else if (diff === 1) {
-      // Next card - behind, slightly to the right and rotated
+    }
+    if (diff === 1) {
       return {
-        transform: "translateX(60%) translateY(8%) scale(0.92) rotate(8deg)",
-        opacity: 0.6,
+        transform: "translateX(55%) translateY(6%) scale(0.93) rotate(6deg)",
+        opacity: 0.5,
         zIndex: 20,
-      };
-    } else if (diff === testimonials.length - 1) {
-      // Previous card - behind, slightly to the left and rotated
-      return {
-        transform: "translateX(-60%) translateY(8%) scale(0.92) rotate(-8deg)",
-        opacity: 0.6,
-        zIndex: 20,
-      };
-    } else {
-      // Hidden cards
-      return {
-        transform: "translateX(0%) translateY(20%) scale(0.85)",
-        opacity: 0,
-        zIndex: 10,
       };
     }
+    if (diff === reviews.length - 1) {
+      return {
+        transform: "translateX(-55%) translateY(6%) scale(0.93) rotate(-6deg)",
+        opacity: 0.5,
+        zIndex: 20,
+      };
+    }
+    return {
+      transform: "translateX(0%) translateY(18%) scale(0.86)",
+      opacity: 0,
+      zIndex: 10,
+    };
   };
 
   return (
     <section id="testimonials" className="section">
-      <div className="w-full max-w-6xl mx-auto">
-        <h2 className="section-header text-center">
-          Hear What Our 150+ Campers Say
-        </h2>
+      <div className="max-w-6xl mx-auto">
+        {/* Header */}
+        <div className="mb-12 flex flex-col sm:flex-row sm:items-end sm:justify-between gap-6">
+          <div>
+            <p className="text-xs font-semibold text-primary uppercase tracking-[0.2em] mb-4">
+              Real voices
+            </p>
+            <h2 className="text-4xl md:text-6xl font-bold leading-tight">
+              What they found
+            </h2>
+          </div>
+          <div className="flex items-center gap-2 shrink-0">
+            <div className="flex">
+              {[...Array(5)].map((_, i) => (
+                <Star
+                  key={`star-${i}`}
+                  className="w-4 h-4 fill-primary text-primary"
+                />
+              ))}
+            </div>
+            <span className="font-bold text-lg">4.9</span>
+            <span className="text-muted-foreground text-sm">
+              · App Store &amp; Google Play
+            </span>
+          </div>
+        </div>
 
-        <div className="relative h-[550px] md:h-[500px] flex items-center justify-center  overflow-hidden">
+        {/* Carousel */}
+        <div className="relative h-[480px] md:h-[420px] flex items-center justify-center overflow-hidden">
           <button
             onClick={prev}
-            type={"button"}
-            className="absolute left-0 md:left-4 z-40 w-12 h-12 md:w-14 md:h-14 rounded-full bg-background shadow-lg hover:shadow-xl transition-all duration-300 flex items-center justify-center hover:scale-110"
-            aria-label="Previous testimonial"
+            type="button"
+            className="absolute left-0 md:left-2 z-40 w-11 h-11 rounded-full bg-background border border-border shadow hover:shadow-md transition-all flex items-center justify-center hover:scale-105"
+            aria-label="Previous"
           >
-            <ChevronLeft className="w-5 h-5 md:w-6 md:h-6" />
+            <ChevronLeft className="w-5 h-5" />
           </button>
 
           <button
             onClick={next}
-            type={"button"}
-            className="absolute right-0 md:right-4 z-40 w-12 h-12 md:w-14 md:h-14 rounded-full bg-background shadow-lg hover:shadow-xl transition-all duration-300 flex items-center justify-center hover:scale-110"
-            aria-label="Next testimonial"
+            type="button"
+            className="absolute right-0 md:right-2 z-40 w-11 h-11 rounded-full bg-background border border-border shadow hover:shadow-md transition-all flex items-center justify-center hover:scale-105"
+            aria-label="Next"
           >
-            <ChevronRight className="w-5 h-5 md:w-6 md:h-6" />
+            <ChevronRight className="w-5 h-5" />
           </button>
 
-          {/* Cards Stack */}
-          <div className="relative w-full max-w-3xl h-full flex items-center justify-center overflow-hidden md:overflow-visible">
-            {testimonials.map((testimonial, index) => (
+          <div className="relative w-full max-w-2xl h-full flex items-center justify-center">
+            {reviews.map((review, index) => (
               <div
-                key={testimonial.id}
-                className="absolute w-full max-w-xl md:max-w-xl transition-all duration-700 ease-out "
+                key={review.id}
+                className="absolute w-full max-w-xl transition-all duration-700 ease-out"
                 style={getCardStyle(index)}
               >
-                <div className="bg-card rounded-2xl md:rounded-3xl shadow-2xl p-8 md:p-12 min-h-[420px] flex flex-col border">
-                  {/*Rating stars */}
-                  <div className="flex gap-1 mb-6">
-                    {[...Array(testimonial.rating)].map((_, i) => (
+                <div className="bg-card rounded-2xl border shadow-xl p-8 md:p-10 min-h-[360px] flex flex-col gap-6">
+                  <div className="flex gap-1">
+                    {[...Array(review.rating)].map((_, i) => (
                       <Star
-                        key={`${testimonial.name}-star-${i}`}
-                        className="w-5 h-5 fill-primary text-primary"
+                        key={`${review.id}-star-${i}`}
+                        className="w-4 h-4 fill-primary text-primary"
                       />
                     ))}
                   </div>
 
-                  {/* Quote */}
-                  <p className="text-xl font-medium leading-relaxed mb-4 grow">
-                    "{testimonial.quote}"
+                  <p className="text-xl md:text-2xl font-medium leading-relaxed grow">
+                    &ldquo;{review.quote}&rdquo;
                   </p>
 
-                  {/* Author Info */}
-                  <div className="flex items-center gap-4 mt-auto">
-                    <Image
-                      src={testimonial.image}
-                      alt={testimonial.name}
-                      height={20}
-                      width={20}
-                      className="w-14 h-14 md:w-16 md:h-16 rounded-full object-cover border-2"
-                    />
-                    <div className="flex flex-col">
-                      <h4 className="text-lg font-bold">{testimonial.name}</h4>
-                      <p className="text-sm text-muted-foreground">
-                        {testimonial.role}
-                      </p>
+                  <div className="flex items-center justify-between pt-4 border-t border-border">
+                    <div className="flex items-center gap-3">
+                      <div className="w-9 h-9 rounded-full bg-primary/10 flex items-center justify-center text-xs font-bold text-primary">
+                        {review.initials}
+                      </div>
+                      <span className="font-semibold text-sm">
+                        {review.name}
+                      </span>
                     </div>
+                    <span className="text-xs text-muted-foreground font-mono">
+                      {review.time}
+                    </span>
                   </div>
                 </div>
               </div>
@@ -183,27 +179,29 @@ export const TestimonialSection = () => {
           </div>
         </div>
 
-        {/* Pagination Dots */}
-        <div className="flex justify-center gap-2 ">
-          {testimonials.map(({ id }, index) => (
+        {/* Dots */}
+        <div className="flex justify-center gap-2 mt-2">
+          {reviews.map(({ id }, index) => (
             <button
               key={id}
-              type={"button"}
+              type="button"
               onClick={() => setCurrentIndex(index)}
               className={`h-2 rounded-full transition-all duration-300 ${
                 index === currentIndex
                   ? "w-8 bg-primary"
                   : "w-2 bg-muted-foreground/30 hover:bg-muted-foreground/50"
               }`}
-              aria-label={`Go to testimonial ${index + 1}`}
+              aria-label={`Go to review ${index + 1}`}
             />
           ))}
         </div>
-        <div className={"pt-4 md:pt-8 flex items-end justify-end mx-auto"}>
-          <CtaButton
-            label={"Read More Here"}
-            onClick={() => router.push("/feed")}
-          />
+
+        <p className="text-center text-sm text-muted-foreground mt-6 italic">
+          Every word here is real.
+        </p>
+
+        <div className="mt-8 flex justify-center">
+          <DownloadButtons />
         </div>
       </div>
     </section>

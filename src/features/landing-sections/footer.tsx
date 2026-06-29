@@ -5,34 +5,29 @@ import {
   IconBrandLinkedin,
   IconBrandWhatsapp,
 } from "@tabler/icons-react";
-import { ChevronsDown } from "lucide-react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { XolaceLogo } from "@/components/shared/layout/xolace-logo";
 import type React from "react";
 import { Suspense } from "react";
-import { CtaButton } from "@/components/shared/layout/cta-button";
+import { DownloadButtons } from "@/components/shared/layout/download-buttons";
 import { Separator } from "@/components/ui/separator";
 
 const footerColumns = [
   {
-    title: "Industries",
-    links: ["Health Service", "Software", "Mental Health"],
+    title: "About",
+    links: ["Our Story", "Mental Health", "Privacy Promise"],
   },
   {
     title: "Resources",
-    links: ["Help Center", "FAQ", "Tutorials", "Blog"],
+    links: ["Help Center", "FAQ", "Blog"],
   },
   {
-    title: "Comparisons",
-    links: [
-      "Heyflow alternative",
-      "Google Forms Alternative",
-      "ClickFunnels Alternative",
-    ],
+    title: "Download",
+    links: ["App Store", "Google Play"],
   },
   {
     title: "Legal",
-    links: ["About Us", "Imprint", "Terms & Conditions", "Payment Terms"],
+    links: ["About Us", "Terms & Conditions", "Privacy Policy"],
   },
 ];
 
@@ -65,25 +60,28 @@ export function CurrentYear() {
 }
 
 export const FooterSection = () => {
-  const router = useRouter();
-  //const currentYear = <CurrentYear />;
-
   return (
     <footer id={"footer"} className="relative w-full">
       {/* CTA Card */}
       <div className="relative z-40 px-4 md:px-8 lg:px-16 max-w-7xl mx-auto -mb-32">
         <div className="bg-linear-to-br from-accent via-accent/90 to-accent/80 rounded-3xl shadow-2xl p-8 md:p-16 border">
-          <div className="text-center max-w-3xl mx-auto">
-            <p className="text-sm md:text-base text-foreground mb-4">
-              Try xolace.app now
+          <div className="text-center max-w-3xl mx-auto space-y-6">
+            <p className="text-sm md:text-base text-foreground">
+              Available on iOS &amp; Android
             </p>
-            <h2 className="text-3xl md:text-5xl lg:text-6xl font-bold text-foreground mb-8">
-              Start involving your thought today.
+            <h2 className="text-3xl md:text-5xl lg:text-6xl font-bold text-foreground">
+              A quiet place to be human.
             </h2>
-            <CtaButton
-              label={"Get started for free"}
-              onClick={() => router.push("/sign-up")}
-            />
+            <DownloadButtons />
+            <p className="text-sm text-foreground/60">
+              Or{" "}
+              <Link
+                href="/sign-up"
+                className="underline underline-offset-4 hover:text-foreground transition-colors"
+              >
+                continue to the web app
+              </Link>
+            </p>
           </div>
         </div>
       </div>
@@ -92,9 +90,8 @@ export const FooterSection = () => {
       <div className="w-full pt-48 pb-4 bg-muted dark:bg-card px-4 md:px-8">
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-8 md:gap-12 mb-12">
           <div className="col-span-2 md:col-span-3 lg:col-span-1">
-            <Link href="/" className="font-bold text-lg flex items-center">
-              <ChevronsDown className="bg-linear-to-tr border-secondary from-primary via-primary/70 to-primary rounded-lg w-9 h-9 mr-2 border" />
-              XOLACE
+            <Link href="/" aria-label="Xolace home">
+              <XolaceLogo size="sm" />
             </Link>
             <p className="text-sm text-foreground/70 mt-2 flex gap-1">
               <span>&copy;</span>
@@ -112,7 +109,7 @@ export const FooterSection = () => {
                 <Link
                   key={link}
                   href="#"
-                  className="text-sm text-foreground/70 hover:text-foreground-100 transition-colors mb-2"
+                  className="text-sm text-foreground/70 hover:text-foreground transition-colors mb-2"
                 >
                   {link}
                 </Link>
@@ -126,14 +123,14 @@ export const FooterSection = () => {
         {/* Bottom Bar */}
         <div className="flex flex-row justify-between items-center gap-4">
           <div className="flex gap-2">
-            <p className="px-4 py-2 text-sm  rounded-md border border-foreground/50">
+            <p className="px-4 py-2 text-sm rounded-md border border-foreground/50">
               EN
             </p>
           </div>
 
           <div className="flex gap-4">
             {socialPlatforms.map((platform) => (
-              <Link key={platform.name} href={platform.url} className="">
+              <Link key={platform.name} href={platform.url}>
                 {platform.icon}
               </Link>
             ))}

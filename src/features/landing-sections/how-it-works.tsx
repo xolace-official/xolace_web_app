@@ -1,110 +1,81 @@
 "use client";
 
-import Image from "next/image";
-import { useRouter } from "next/navigation";
-import { CtaButton } from "@/components/shared/layout/cta-button";
+import { DownloadButtons } from "@/components/shared/layout/download-buttons";
 
-interface HowItWorksItem {
-  id: string;
-  title: string;
-  description: string[];
-  image: string;
-  cta: string;
-  imagePosition: "left" | "right";
-}
-
-const howItWorksList: HowItWorksItem[] = [
+const features = [
   {
-    id: "spark",
-    title: "From Spark to Strength",
-    description: [
-      "A thought. A confession. A moment too heavy to hold alone. You release it into the circle, and the fire catches it with quiet understanding. Kindlers and Guides turn your Spark into an Ember reflecting back lived wisdom, warmth, and perspective that helps you breathe easier.",
-      "Mini-campfires form around shared experiences. You’re not posting for attention you’re gathering with people who genuinely resonate.",
-      "Daily prompts, gentle emotional wins, and a space built for resilience help you strengthen your inner world one ember at a time.",
-    ],
-    image:
-      "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80",
-    cta: "Make A Spark",
-    imagePosition: "left",
+    id: "mirror",
+    number: "01",
+    name: "Mirror",
+    subheading: "Words for what you couldn't say",
+    description:
+      "Type a fragment. Speak out loud. Mirror reflects back structured emotional language so you can name what you're carrying.",
   },
   {
-    id: "deeper",
-    title: "Go Deeper When Ready",
-    description: [
-      "When you’re ready to go further, private 1-on-1 sessions open a deeper layer of support. Connect with licensed professionals and experienced guides including therapists, counselors, mentors, and wellness practitioners who help reduce stress and support mental and emotional wellbeing.",
-      "These conversations are human, grounded, and pressure-free, meeting you exactly where you are. There’s no timeline and no expectation just a confidential space to explore, heal, and grow with guidance you can trust.",
-    ],
-    image:
-      "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80",
-    cta: "Explore Guided Support",
-    imagePosition: "right",
+    id: "echo",
+    number: "02",
+    name: "Echo",
+    subheading: "Someone else carried this too",
+    description:
+      "After Mirror, Echo surfaces anonymous moments from others who felt something similar. Not advice — just proof you were never alone in this.",
+  },
+  {
+    id: "safety",
+    number: "03",
+    name: "Safety",
+    subheading: "Held, even when it's heavier",
+    description:
+      "When something you share suggests danger, Xolace responds gently — and connects you with real help.",
   },
 ];
 
 export function HowItWorksSection() {
-  const router = useRouter();
-
   return (
     <section id="howItWorks" className="section">
-      <div className="section-parent-header">
-        <h2 className="section-header text-center">
-          Built With the Architecture of Empathy.
-        </h2>
-        <h3 className="md:w-1/2 mx-auto text-xl text-center text-muted-foreground mb-8">
-          Healing isn’t linear. Connection isn’t loud. Here, every step is
-          gentle, intentional, and shaped around what your heart can carry
-          today.
-        </h3>
-      </div>
+      <div className="max-w-5xl mx-auto">
+        <div className="mb-16 md:mb-20">
+          <p className="text-xs font-semibold text-primary uppercase tracking-[0.2em] mb-5">
+            How it works
+          </p>
+          <h2 className="text-4xl md:text-6xl font-bold leading-tight">
+            Three quiet things
+          </h2>
+          <p className="text-muted-foreground text-xl mt-4 max-w-md">
+            You don&apos;t have to know what you&apos;re feeling to begin.
+          </p>
+        </div>
 
-      <div className="flex flex-col gap-8 md:gap-12">
-        {howItWorksList.map((step) => {
-          const isImageLeft = step.imagePosition === "left";
-
-          return (
+        <div className="divide-y divide-border">
+          {features.map(({ id, number, name, subheading, description }) => (
             <div
-              key={step.id}
-              className="flex flex-col items-center justify-center md:flex-row gap-2 md:gap-8"
+              key={id}
+              className="py-10 md:py-14 grid grid-cols-1 md:grid-cols-[100px_1fr_1fr] gap-6 md:gap-12 items-start group"
             >
-              <div
-                className={`w-full md:w-1/2 ${isImageLeft ? "flex " : "flex md:hidden"}`}
-              >
-                <Image
-                  src={step.image}
-                  alt={step.title}
-                  width={400}
-                  height={400}
-                  className="w-full h-[400px] object-cover rounded-xl"
-                />
-              </div>
-
-              <div className="w-full md:w-1/2 space-y-4 md:space-y-8">
-                <h3 className="text-3xl md:text-4xl font-bold">{step.title}</h3>
-                <p className="text-muted-foreground flex flex-col gap-4 md:gap-8">
-                  {step.description.map((desc) => (
-                    <span key={desc}>{desc}</span>
-                  ))}
+              <span className="text-5xl md:text-8xl font-bold text-foreground/10 group-hover:text-primary/15 transition-colors duration-700 leading-none select-none">
+                {number}
+              </span>
+              <div className="space-y-2">
+                <p className="text-xs font-semibold text-primary uppercase tracking-[0.2em]">
+                  {name}
                 </p>
-                <CtaButton
-                  label={step.cta}
-                  onClick={() => router.push("/feed")}
-                />
+                <h3 className="text-2xl md:text-3xl font-bold leading-snug">
+                  {subheading}
+                </h3>
               </div>
-
-              <div
-                className={`w-full md:w-1/2 ${!isImageLeft ? "hidden md:flex" : "hidden"}`}
-              >
-                <Image
-                  src={step.image}
-                  alt={step.title}
-                  width={400}
-                  height={400}
-                  className="w-full h-[400px] object-cover rounded-xl"
-                />
-              </div>
+              <p className="text-muted-foreground text-lg leading-relaxed md:pt-8">
+                {description}
+              </p>
             </div>
-          );
-        })}
+          ))}
+        </div>
+
+        <div className="mt-14 md:mt-20 flex flex-col gap-8 md:flex-row md:items-center md:justify-between border-t border-border pt-10 md:pt-12">
+          <p className="text-base md:text-lg text-muted-foreground italic max-w-lg">
+            &ldquo;Not therapy. Not a chatbot. Not a social platform. The space
+            before, between, and outside all of those.&rdquo;
+          </p>
+          <DownloadButtons align="start" />
+        </div>
       </div>
     </section>
   );

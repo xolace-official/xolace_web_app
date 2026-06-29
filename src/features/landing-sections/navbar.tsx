@@ -1,8 +1,9 @@
 "use client";
 
-import { ChevronsDown, Menu } from "lucide-react";
+import { Menu } from "lucide-react";
 import Link from "next/link";
 import React from "react";
+import { XolaceLogo } from "@/components/shared/layout/xolace-logo";
 import { ModeToggle } from "@/components/theme-switcher";
 import { Button } from "@/components/ui/button";
 import {
@@ -20,6 +21,8 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
+
+const APP_STORE_URL = "https://apps.apple.com/gh/app/xolace/id6761601429";
 
 interface RouteProps {
   href: string;
@@ -53,9 +56,8 @@ export const Navbar = () => {
   const [isOpen, setIsOpen] = React.useState(false);
   return (
     <header className="shadow-inner bg-opacity-15 w-full top-0 left-0 right-0 sticky border border-secondary z-80 flex justify-between items-center py-3 px-4 md:px-8 bg-muted dark:bg-card">
-      <Link href="/" className="font-bold text-lg flex items-center">
-        <ChevronsDown className="bg-gradient-to-tr border-secondary from-primary via-primary/70 to-primary rounded-lg w-9 h-9 mr-2 border text-white" />
-        XOLACE
+      <Link href="/" aria-label="Xolace home">
+        <XolaceLogo size="sm" priority />
       </Link>
       {/* <!-- Mobile --> */}
       <div className="flex items-center lg:hidden">
@@ -73,10 +75,9 @@ export const Navbar = () => {
           >
             <div>
               <SheetHeader className="mb-4 ml-4">
-                <SheetTitle className="flex items-center">
-                  <Link href="/" className="flex items-center">
-                    <ChevronsDown className="bg-gradient-to-tr border-secondary from-primary via-primary/70 to-primary rounded-lg w-9 h-9 mr-2 border text-white" />
-                    XOLACE
+                <SheetTitle>
+                  <Link href="/" aria-label="Xolace home">
+                    <XolaceLogo size="sm" />
                   </Link>
                 </SheetTitle>
               </SheetHeader>
@@ -98,9 +99,18 @@ export const Navbar = () => {
               </div>
             </div>
 
-            <SheetFooter className="flex-col sm:flex-col justify-start items-start">
+            <SheetFooter className="flex-col sm:flex-col justify-start items-start gap-3">
               <Separator className="mb-2" />
-
+              <Button asChild className="w-full font-semibold">
+                <Link
+                  href={APP_STORE_URL}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  onClick={() => setIsOpen(false)}
+                >
+                  Get the App
+                </Link>
+              </Button>
               <ModeToggle />
             </SheetFooter>
           </SheetContent>
@@ -122,8 +132,13 @@ export const Navbar = () => {
         </NavigationMenuList>
       </NavigationMenu>
 
-      <div className="hidden lg:flex">
+      <div className="hidden lg:flex items-center gap-3">
         <ModeToggle />
+        <Button asChild size="sm" className="font-semibold">
+          <Link href={APP_STORE_URL} target="_blank" rel="noopener noreferrer">
+            Get the App
+          </Link>
+        </Button>
       </div>
     </header>
   );

@@ -15,9 +15,9 @@ export default function Home() {
       <div className="flex flex-col items-center overflow-x-hidden">
         <HeroSection />
         <EmotionalSlapSection />
-        <BenefitsSection />
         <HowItWorksSection />
         <FeaturesSection />
+        <BenefitsSection />
         <TestimonialSection />
         <FAQSection />
         <FooterSection />

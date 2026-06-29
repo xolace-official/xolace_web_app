@@ -1,77 +1,53 @@
 "use client";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
-import { CtaButton } from "@/components/shared/layout/cta-button";
+import { DownloadButtons } from "@/components/shared/layout/download-buttons";
 import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import { Safari } from "@/components/ui/safari";
-import { Iphone } from "@/components/ui/iphone";
 
 export const HeroSection = () => {
-  const router = useRouter();
   return (
     <section id={"hero"} className="w-full relative">
       <div className="sticky top-0 flex overflow-hidden section mb-24">
         <div className="absolute inset-0 pointer-events-none">
-          <div className="absolute -top-20 -left-20 w-[400px] h-[400px] bg-primary/20 rounded-full blur-3xl"></div>
-          <div className="absolute top-10 right-10 w-[500px] h-[500px] bg-secondary/20 rounded-full blur-2xl"></div>
+          <div className="absolute -top-20 -left-20 w-[400px] h-[400px] bg-primary/20 rounded-full blur-3xl" />
+          <div className="absolute top-10 right-10 w-[500px] h-[500px] bg-secondary/20 rounded-full blur-2xl" />
         </div>
         <div className="text-center space-y-8 max-w-3xl mx-auto py-6 md:py-12 px-4 z-10 relative">
           <Badge variant="outline" className="text-sm py-2">
             <span className="mr-2 text-primary">
               <Badge>New</Badge>
             </span>
-            <span> Feature is out now! </span>
+            <span>Now on iOS &amp; Android</span>
           </Badge>
 
-          <h1 className="text-4xl md:text-6xl font-bold flex flex-wrap items-center justify-center gap-x-3">
-            The Internet <span className={"text-primary"}>Inner</span> Voice
+          <h1 className="text-4xl md:text-6xl font-bold leading-tight">
+            For the moments that{" "}
+            <span className="text-primary">don't have a name</span> yet
           </h1>
 
           <p className="max-w-screen-sm mx-auto text-xl text-muted-foreground">
-            A Place That Feels Like Exhaling. Not a feed. Not a clinic. A
-            digital campfire built for the moments you never say out loud.
+            A quiet place to say what's true, when you can't find the words. Not
+            therapy. Not a chatbot. Not a social platform.
           </p>
 
-          <div className="flex flex-col md:flex-row place-items-center justify-center gap-4">
-            <CtaButton
-              label={"Join the Circle"}
-              onClick={() => router.push("/sign-up")}
-              className="w-5/6 md:w-1/4 font-bold"
-            />
+          <DownloadButtons />
 
-            <Button
-              asChild
-              variant="secondary"
-              className="w-5/6 md:w-1/4 font-bold"
+          <p className="text-sm text-muted-foreground">
+            Or{" "}
+            <Link
+              href="/sign-up"
+              className="underline underline-offset-4 hover:text-foreground transition-colors"
             >
-              <Link
-                href="https://github.com/nobruf/shadcn-landing-page.git"
-                target="_blank"
-              >
-                Learn How It Works
-              </Link>
-            </Button>
-          </div>
+              continue to the web app
+            </Link>
+          </p>
         </div>
       </div>
 
       <div className="relative z-20 bg-background">
         <div className="lg:max-w-7xl mx-auto px-4 -mt-18">
           <div className="relative group">
-            <div className="absolute top-2 lg:-top-8 left-1/2 transform -translate-x-1/2 w-[80%] mx-auto h-24 lg:h-80 bg-primary/20 rounded-full blur-3xl pointer-events-none"></div>
-            <div className="hidden md:block bg-card rounded-3xl p-8">
-              <Safari
-                url="xolace.app"
-                className={"flex w-full "}
-                mode={"default"}
-                videoSrc="https://videos.pexels.com/video-files/27180348/12091515_2560_1440_50fps.mp4"
-              />
-            </div>
-            <div className={"flex md:hidden items-center justify-center "}>
-              <Iphone videoSrc="https://videos.pexels.com/video-files/27180348/12091515_2560_1440_50fps.mp4" />
-            </div>
-            <div className="absolute bottom-0 left-0 w-full h-20 md:h-28 bg-linear-to-b from-background/0 via-background/50 to-background rounded-b-xl pointer-events-none"></div>
+            <div className="absolute top-2 lg:-top-8 left-1/2 transform -translate-x-1/2 w-[80%] mx-auto h-24 lg:h-80 bg-primary/20 rounded-full blur-3xl pointer-events-none" />
+            <div className="absolute bottom-0 left-0 w-full h-20 md:h-28 bg-linear-to-b from-background/0 via-background/50 to-background rounded-b-xl pointer-events-none" />
           </div>
         </div>
       </div>

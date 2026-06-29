@@ -16,37 +16,36 @@ interface FAQProps {
   value: string;
 }
 
-// Hardcoded frequently asked questions.
 const FAQList: FAQProps[] = [
   {
-    question: "What exactly is Xolace?",
+    question: "What is Xolace?",
     answer:
-      "It’s a quiet circle built for emotional clarity, reflection, and connection. You share a Spark, the community responds with Embers, and you grow from the warmth of perspectives rooted in lived experience not algorithms.",
+      "Xolace is a free emotional wellness app that gives you a quiet, private space to name what you feel — even when you don’t have the words for it yet. It’s not therapy. It’s not a social platform. It’s the space before, between, and outside all of those.",
     value: "item-1",
   },
   {
-    question: "Who gets to see my Spark?",
+    question: "Who is this for?",
     answer:
-      "Only your Circle real people intentionally gathered around shared experiences. Nothing is public, nothing is broadcast for attention. Your words glow where they’re held with care.",
+      "Xolace is for anyone who has ever felt something they couldn’t name, or carried something they couldn’t say out loud. You don’t need to be in crisis, and you don’t need to have it figured out. You just need to show up.",
     value: "item-3",
   },
   {
-    question: "What makes Xolace different from social media?",
+    question: "Is it really anonymous?",
     answer:
-      "No noise. No performance. No chasing attention. Instead, you get slow conversation, thoughtful reflections, tiny emotional wins, and a community that listens instead of reacts.",
+      "Yes. Your name is never attached to what you feel. You are not profiled or tracked based on what you share. Everything is encrypted in transit and at rest, and no one on the Xolace team reads your sessions.",
+    value: "item-4",
+  },
+  {
+    question: "How does Mirror work?",
+    answer:
+      "You type a word, a fragment, or speak out loud — whatever you can manage. Mirror reflects back structured emotional language to help you understand what you’re feeling. No clinical vocabulary required. No journaling expertise needed.",
     value: "item-5",
   },
   {
-    question: "How does safety and anonymity work?",
+    question: "Is Xolace free?",
     answer:
-      "You choose what you reveal and when. Your identity is protected, and every Spark is moderated through intention, not surveillance. Respect is the law of the circle.",
+      "Yes. Xolace is free to download and your first session takes about 3 minutes. The core experience is always free.",
     value: "item-6",
-  },
-  {
-    question: "Does Xolace cost anything?",
-    answer:
-      "The core experience Sparks, Embers, and Circles is free. Optional deeper sessions with Guides may have a fee, but only if you choose them.",
-    value: "item-7",
   },
 ];
 
@@ -59,9 +58,12 @@ export const FAQSection = () => {
           <div className={"flex flex-col gap-4"}>
             <div className={"section-parent-header gap-4"}>
               <h2 className="text-lg text-primary tracking-wider font-semibold">
-                FAQS
+                FAQ
               </h2>
-              <h1 className="section-header">Common Questions</h1>
+              <h1 className="section-header">
+                Everything you&apos;d want to know before you trust a space like
+                this
+              </h1>
             </div>
 
             <Accordion type="single" collapsible className="space-y-2">
@@ -85,11 +87,10 @@ export const FAQSection = () => {
             </Accordion>
           </div>
 
-          {/*Right side - contact us form*/}
-          <div className="relative">
-            <div className="absolute -inset-8 bg-gradient-to-br from-primary/20 via-accent/20 to-primary/20 rounded-3xl blur-3xl opacity-60"></div>
-
-            <div className="relative bg-card border-2 border-border rounded-2xl overflow-hidden shadow-2xl">
+          {/* Right side - contact us form */}
+          <div className="relative w-full overflow-hidden rounded-2xl">
+            <div className="absolute inset-0 bg-gradient-to-br from-primary/15 via-accent/15 to-primary/15 blur-2xl opacity-60 pointer-events-none" />
+            <div className="relative bg-card border-2 border-border rounded-2xl overflow-hidden shadow-xl">
               <Suspense fallback={<div className="p-6">Loading form...</div>}>
                 <ContactUsForm />
               </Suspense>

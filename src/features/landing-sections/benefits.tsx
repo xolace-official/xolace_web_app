@@ -1,75 +1,83 @@
 "use client";
 
-import Image from "next/image";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-
-interface BenefitsProps {
-  icon: string;
-  title: string;
-  description: string;
-}
-
-const benefitList: BenefitsProps[] = [
+const promises = [
   {
-    icon: "UserCheck",
-    title: "Anonymous by Design",
+    id: "private",
+    title: ["Private", "by design"],
     description:
-      "Share as yourself or stay hidden. Sparks let you express raw, honest moments without pressure, persona, or judgment.",
+      "Encrypted in transit and at rest. No one on the team reads your sessions. Ever.",
   },
   {
-    icon: "Users",
-    title: "Community That Leans In",
+    id: "anon",
+    title: ["Anonymous,", "always"],
     description:
-      "Kindlers gather around your story, not your image. Real support, real understanding, real connection—no performance.",
+      "Your name is never attached to what you feel. You are not profiled, tracked, or targeted.",
   },
   {
-    icon: "HeartHandshake",
-    title: "Guides Who Feel Human",
+    id: "feed",
+    title: ["No followers,", "no feed"],
     description:
-      "Verified professionals sit in the circle with you. No ads, no scripts, no sponsorships—just presence and empathy.",
+      "No audience. No performance. You show up for yourself — not for anyone watching.",
   },
   {
-    icon: "Video",
-    title: "A Feed That Teaches",
-    description:
-      "Experience Stories from vetted Mentors offer real wisdom and lived insight. Not algorithm bait—just resonance.",
+    id: "ads",
+    title: ["No ads,", "no data sold"],
+    description: "Your trust is the product — not your data.",
   },
 ];
 
 export const BenefitsSection = () => {
   return (
-    <section id="benefits" className="section">
-      <div className="flex flex-col gap-4">
-        <h2 className={"section-parent-header section-header text-center"}>
-          At The Heart Of Xolace
+    <section id="benefits" className="w-full py-16 md:py-28">
+      {/* Header */}
+      <div className="max-w-5xl mx-auto px-4 md:px-8 mb-14 md:mb-20">
+        <p className="text-xs font-semibold text-primary uppercase tracking-[0.2em] mb-5">
+          Sealed
+        </p>
+        <h2 className="text-4xl md:text-6xl font-bold leading-tight">
+          Our promises
+          <br />
+          to you
         </h2>
+        <p className="text-xl text-muted-foreground mt-4 max-w-sm">
+          When you&apos;re at your most honest, you deserve to feel safe.
+        </p>
+      </div>
 
-        <div className="grid md:grid-cols-4 gap-4 md:gap-8 w-full">
-          {benefitList.map(({ title, description }) => (
-            <Card
-              key={title}
-              className="bg-muted/50 dark:bg-card hover:bg-background transition-all delay-75 group/number"
-            >
-              <CardHeader className={"space-y-2"}>
-                <div className="flex justify-between">
-                  <Image
-                    src="/vercel.svg"
-                    alt="RadixLogo"
-                    className="h-full w-full rounded-md object-cover"
-                    width={200}
-                    height={200}
-                  />
-                </div>
+      {/* Full-width bands */}
+      <div className="border-t border-border">
+        {promises.map(({ id, title, description }, i) => (
+          <div
+            key={id}
+            className={`border-b border-border py-10 md:py-14 px-4 md:px-8 lg:px-16 xl:px-24 flex flex-col md:flex-row md:items-center gap-8 transition-colors duration-300 hover:bg-muted/30 dark:hover:bg-card/30 ${
+              i % 2 === 1 ? "bg-muted/20 dark:bg-card/20" : ""
+            }`}
+          >
+            <div className="md:w-5/12">
+              <h3 className="text-3xl md:text-4xl lg:text-5xl font-bold leading-tight">
+                {title[0]}
+                <br />
+                {title[1]}
+              </h3>
+            </div>
 
-                <CardTitle>{title}</CardTitle>
-              </CardHeader>
+            <div className="hidden md:block w-px h-16 bg-border shrink-0" />
 
-              <CardContent className="text-muted-foreground">
+            <div className="md:w-7/12 md:pl-8">
+              <p className="text-lg md:text-xl text-muted-foreground leading-relaxed">
                 {description}
-              </CardContent>
-            </Card>
-          ))}
-        </div>
+              </p>
+            </div>
+          </div>
+        ))}
+      </div>
+
+      {/* Footer note */}
+      <div className="max-w-5xl mx-auto px-4 md:px-8 mt-8">
+        <p className="text-sm text-muted-foreground italic">
+          The foundation, not a feature.{" "}
+          <span className="not-italic">Signed, in good faith. v 1.0</span>
+        </p>
       </div>
     </section>
   );
